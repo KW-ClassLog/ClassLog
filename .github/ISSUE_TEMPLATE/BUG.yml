@@ -1,0 +1,37 @@
+name: "🐛 Bug"
+description: "버그 발견"
+labels: ["🐛 Bug"]
+body:
+  - type: textarea
+    attributes:
+      label: 🐞 버그 설명
+      description: 어떤 문제가 발생했는지 구체적으로 적어주세요.
+      placeholder: 예) 버튼을 눌렀을 때 예상과 다른 동작을 합니다.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: ✅ 재현 방법
+      description: 버그를 재현하는 방법을 단계별로 적어주세요.
+      placeholder: |
+        1. 특정 페이지에 접속합니다.
+        2. XXX 버튼을 클릭합니다.
+        3. 오류 메시지가 표시됩니다.
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: 📌 기대하는 동작
+      description: 정상적으로 동작해야 하는 방식은 무엇인가요?
+      placeholder: 예) 버튼 클릭 시 페이지가 이동해야 합니다.
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: 🌐 환경 정보
+      description: 사용한 브라우저, OS 등의 정보를 입력해주세요.
+      placeholder: Chrome 110, Windows 10
+  - type: textarea
+    attributes:
+      label: 📸 스크린샷 또는 로그
+      description: 가능하면 스크린샷이나 에러 로그를 첨부해주세요.

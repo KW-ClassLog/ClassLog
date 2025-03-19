@@ -1,0 +1,32 @@
+name: "♻️ Refactor"
+description: "코드 리팩토링"
+labels: ["♻️ Refactor"]
+body:
+  - type: textarea
+    attributes:
+      label: ✨ 리팩토링 대상
+      description: 어떤 코드 또는 모듈을 리팩토링해야 하는지 설명해주세요.
+      placeholder: 예) UserService의 중복 로직 정리
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: 🚀 리팩토링 목표
+      description: 리팩토링을 통해 달성하고 싶은 목표를 설명해주세요.
+      placeholder: 예) 코드 가독성 향상, 성능 최적화, 유지보수성 개선
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: ✅ 작업 내용
+      description: 리팩토링할 내용을 체크리스트 형태로 작성해주세요.
+      placeholder: |
+        - [ ] 중복 함수 제거
+        - [ ] 변수명 가독성 개선
+        - [ ] API 응답 최적화
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: 📌 참고 사항
+      description: 참고할 자료나 관련 이슈가 있다면 입력해주세요.
