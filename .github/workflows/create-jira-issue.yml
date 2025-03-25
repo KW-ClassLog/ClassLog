@@ -24,7 +24,7 @@ jobs:
         uses: stefanbuck/github-issue-praser@v3
         id: issue-parser
         with:
-          template-path: .github/ISSUE_TEMPLATE/issue_form.yml
+          template-path: .github/ISSUE_TEMPLAT/FEAT.yml
 
       - name: Log Issue Parser
         run: |
@@ -49,12 +49,6 @@ jobs:
           issuetype: Task
           summary: "${{ github.event.issue.title }}"
           description: "${{ steps.md2jira.outputs.output-text }}"
-          fields: |
-            {
-              "parent": {
-                "key": "${{ steps.issue-parser.outputs.issueparser_parentKey }}"
-              }
-            }
 
       - name: Log created issue
         run: echo "Jira Issue ${{ steps.issue-parser.outputs.parentKey }}/${{ steps.create.outputs.issue }} was created"
