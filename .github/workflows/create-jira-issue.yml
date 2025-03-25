@@ -24,7 +24,10 @@ jobs:
         uses: stefanbuck/github-issue-praser@v3
         id: issue-parser
         with:
-          template-path: .github/ISSUE_TEMPLAT/FEAT.yml
+          template-paths: |
+            .github/ISSUE_TEMPLATE/FEAT.yml
+            .github/ISSUE_TEMPLATE/BUG.yml
+            .github/ISSUE_TEMPLATE/REFACTOR.yml
 
       - name: Log Issue Parser
         run: |
@@ -51,23 +54,7 @@ jobs:
           description: "${{ steps.md2jira.outputs.output-text }}"
 
       - name: Log created issue
-        run: echo "Jira Issue ${{ steps.issue-parser.outputs.parentKey }}/${{ steps.create.outputs.issue }} was created"
-
-      - name: Checkout develop code
-        uses: actions/checkout@v4
-        with:
-          ref: dev
-
-      - name: Create branch with Ticket number
-        run: |
-          # GitHub 이슈 제목에서 특수 문자 제거 및 공백을 하이픈으로 변경
-          CLEANED_TITLE=$(echo "${{ github.event.issue.title }}" | LC_CTYPE=C sed 's/[^a-zA-Z0-9가-힣 ]//g' | sed 's/ /-/g')
-          BRANCH_NAME="feat/${{ steps.create.outputs.issue }}-${CLEANED_TITLE}"
-      
-          # 브랜치 생성 및 push
-          git checkout -b "$BRANCH_NAME"
-          git push origin "$BRANCH_NAME"
-
+        run: echo "Jira Issue ${{steps.create.outputs.issue }} was created"
 
       - name: Update issue title
         uses: actions-cool/issues-helper@v3
