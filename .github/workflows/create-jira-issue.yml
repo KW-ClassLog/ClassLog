@@ -3,6 +3,11 @@ on:
   issues:
     types:
       - opened
+      
+permissions:
+  issues: write   
+  contents: read        
+  
 jobs:
   create-issue:
     name: Create Jira issue
