@@ -12,6 +12,9 @@ const nextConfig: NextConfig = {
     config.cache = false;
     return config;
   },
+  sassOptions: {
+    prependData: `@use "@/styles/_variables.scss" as *; @use "@/styles/_mixins.scss" as *;`,
+  },
 };
 
 export default nextPWA(nextConfig);
