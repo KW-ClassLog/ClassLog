@@ -6,7 +6,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="ko">
       <head>
         <link rel="manifest" href="./manifest.webmanifest" />
         <title>ClassLog</title>
@@ -26,7 +26,7 @@ export default function RootLayout({
         <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
         <link rel="shortcut icon" href="/favicon/favicon.ico" />
       </head>
-      <body>{children}</body>
+      {children}
     </html>
   );
 }
