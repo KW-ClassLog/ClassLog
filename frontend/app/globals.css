@@ -45,13 +45,6 @@ body.student-body > div {
 }
 
 body.teacher-body {
-  background-color: #f2f2f2;
-}
-
-body.teacher-body > div {
-  max-width: 1280px;
-  margin: 0 auto;
-  width: 100%;
   background-color: #ffffff;
 }
 
