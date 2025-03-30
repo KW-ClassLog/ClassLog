@@ -1,4 +1,51 @@
 package org.example.backend.domain.user.entity;
 
+import jakarta.persistence.*;
+import lombok.*;
+import java.time.LocalDateTime;
+import java.util.List;
+
+import org.example.backend.domain.accountKakao.entity.AccountKakao;
+import org.example.backend.domain.accountLocal.entity.AccountLocal;
+import org.example.backend.domain.notification.entity.Notification;
+import org.example.backend.domain.quizAnswer.entity.QuizAnswer;
+
+
+@Entity
+@Table(name = "User")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class User {
+
+    @Id
+    private String id;
+
+    @Column(nullable = false)
+    private String name;
+
+    @Column(nullable = false)
+    private String organization;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
+
+    @Column(name = "phone_number", nullable = false)
+    private String phoneNumber;
+
+    private LocalDateTime deletedAt;
+
+    @OneToOne(mappedBy = "user")
+    private AccountKakao accountKakao;
+
+    @OneToOne(mappedBy = "user")
+    private AccountLocal accountLocal;
+
+    @OneToMany(mappedBy = "user")
+    private List<QuizAnswer> quizAnswers;
+
+    @OneToMany(mappedBy = "user")
+    private List<Notification> notifications;
 }
