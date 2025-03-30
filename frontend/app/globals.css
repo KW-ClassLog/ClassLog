@@ -1,0 +1,53 @@
+@import url("./fonts.css");
+
+/* ===== Global Reset & Base Styles ===== */
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  max-width: 100vw;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Paperlogy", Arial, Helvetica, sans-serif;
+  font-weight: 500;
+  font-display: swap;
+  color: #000000;
+  background: #ffffff;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ===== Role-Based Body Styles ===== */
+body.student-body {
+  background-color: #f2f2f2;
+}
+
+body.student-body > div {
+  max-width: 390px;
+  margin: 0 auto;
+  width: 100%;
+  background-color: #ffffff;
+  min-height: 100vh;
+}
+
+body.teacher-body {
+  background-color: #ffffff;
+}
+
+body.non-login-body {
+  background-color: #ffffff;
+}
