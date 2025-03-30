@@ -33,6 +33,48 @@
 
 <br>
 
+## 🛠️ 설치 및 실행 가이드
+### 🔧 BE (Spring Boot - Java)
+
+1. Java 설치 (최초 1회만)
+```bash
+brew install openjdk@17
+
+sudo ln -sfn /opt/homebrew/opt/openjdk@17/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk-17.jdk
+
+touch ~/.zshrc
+echo 'export JAVA_HOME="/opt/homebrew/opt/openjdk@17"' >> ~/.zshrc
+echo 'export PATH="$JAVA_HOME/bin:$PATH"' >> ~/.zshrc
+source ~/.zshrc
+
+java -version  # Java 17 설치 확인
+```
+2. 서버 빌드 및 실행
+```bash
+cd backend              # 백엔드 폴더로 이동
+chmod +x ./gradlew      # 실행 권한 부여
+./gradlew build         # 프로젝트 빌드
+
+cd build/libs
+ls -arlth               # JAR 파일 이름 확인
+java -jar [JAR 파일명]  # 예: java -jar backend-0.0.1-SNAPSHOT.jar
+```
+
+### 💻 FE (Next.js + TypeScript)
+1. 프론트엔드 폴더로 이동
+   ```bash
+   cd frontend
+   ```
+2. 의존성 및 라이브러리 설치
+    ```bash
+    npm install
+    ```
+3. 실행
+   ```bash
+   npm run dev
+   ```
+   
+
 ## 🎥 시연 영상
 
 <br />
