@@ -15,8 +15,8 @@
 
 이 시스템은 강사의 강의 운영 최적화와 학생의 학습 효과 극대화를 목표로 하며, 다음과 같은 핵심 기능을 제공합니다:
 
-1️⃣ 강사 중심 기능: 강의 준비, 교안 및 퀴즈 업로드, 실시간 강의 녹음 및 강의자료 위 필기 기능, 퀴즈 자동 생성, 학생 이해도 분석 및 피드백 관리  
- 2️⃣ 학생 중심 기능: 강의 자료 다운로드, 실시간 강의 참여, 퀴즈 및 복습 기능, 개별 피드백 확인 및 설문 제출
+> 1️⃣ **강사 중심 기능**: 강의 준비, 교안 및 퀴즈 업로드, 실시간 강의 녹음 및 강의자료 위 필기 기능, 퀴즈 자동 생성, 학생 이해도 분석 및 피드백 관리  
+ 2️⃣ **학생 중심 기능**: 강의 자료 다운로드, 실시간 강의 참여, 퀴즈 및 복습 기능, 개별 피드백 확인 및 설문 제출
 
 특히, 강사는 학생들의 퀴즈 결과, 질문, 피드백 데이터를 시각적으로 확인하여 강의 운영에 반영할 수 있으며, 학생들은 개별 맞춤 학습 경험을 통해 보다 체계적인 학습을 진행할 수 있습니다.
 
@@ -26,10 +26,11 @@
 
 ## 💻 기술 스택
 
-<img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white"> <img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React">
-<img src="https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white"> <img src="https://img.shields.io/badge/Zustand-5A31F4?style=for-the-badge&logo=zustand&logoColor=white"> <img src="https://img.shields.io/badge/SCSS-CC6699?style=for-the-badge&logo=sass&logoColor=white">
+| Back-End | Front-End | 배포 | 협업 툴 |
+|----------|-----------|------|----------|
+| <img src="https://img.shields.io/badge/SpringBoot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white">  <img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white"> <br> <img src="https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white">  <img src="https://img.shields.io/badge/Amazon S3-569A31?style=for-the-badge&logo=amazonaws&logoColor=white"> | <img src="https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white">  <img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black"> <br> <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white"> <img src="https://img.shields.io/badge/Zustand-5A31F4?style=for-the-badge&logo=zustand&logoColor=white"> <br> <img src="https://img.shields.io/badge/SCSS-CC6699?style=for-the-badge&logo=sass&logoColor=white">  <img src="https://img.shields.io/badge/PWA-4285F4?style=for-the-badge&logo=google-chrome&logoColor=white"> | <img src="https://img.shields.io/badge/AWS-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white"> | <img src="https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=notion&logoColor=white"> <img src="https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white"> <br> <img src="https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white"> <img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white"> |
 
-<img src="https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white"> <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white"> <img src="https://img.shields.io/badge/PWA-4285F4?style=for-the-badge&logo=google-chrome&logoColor=white">
+
 
 <br>
 
