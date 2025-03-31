@@ -3,6 +3,7 @@ package org.example.backend.domain.accountLocal.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.example.backend.domain.user.entity.User;
+import org.example.backend.global.entitiy.BaseEntity;
 
 @Entity
 @Table(name = "account_local")
@@ -10,7 +11,7 @@ import org.example.backend.domain.user.entity.User;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class AccountLocal {
+public class AccountLocal extends BaseEntity {
 
     @Id
     @Column(name = "user_id")

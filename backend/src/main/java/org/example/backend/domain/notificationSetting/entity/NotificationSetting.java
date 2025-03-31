@@ -2,6 +2,7 @@ package org.example.backend.domain.notificationSetting.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.example.backend.global.entitiy.BaseEntity;
 
 @Entity
 @Table(name = "notification_setting")
@@ -9,7 +10,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class NotificationSetting {
+public class NotificationSetting extends BaseEntity {
 
     @Id
     @Column(name = "user_id")

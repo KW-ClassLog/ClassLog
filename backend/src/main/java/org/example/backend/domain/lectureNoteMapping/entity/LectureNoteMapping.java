@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.example.backend.domain.lecture.entity.Lecture;
 import org.example.backend.domain.lectureNote.entity.LectureNote;
+import org.example.backend.global.entitiy.BaseEntity;
 
 @Entity
 @Table(name = "lecture_note_mapping")
@@ -11,7 +12,7 @@ import org.example.backend.domain.lectureNote.entity.LectureNote;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class LectureNoteMapping {
+public class LectureNoteMapping extends BaseEntity {
 
     @Id
     private String id;

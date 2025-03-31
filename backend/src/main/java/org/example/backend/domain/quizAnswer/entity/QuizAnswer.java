@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.example.backend.domain.quiz.entity.Quiz;
 import org.example.backend.domain.user.entity.User;
+import org.example.backend.global.entitiy.BaseEntity;
 
 @Entity
 @Table(name = "quiz_answer")
@@ -11,7 +12,7 @@ import org.example.backend.domain.user.entity.User;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class QuizAnswer {
+public class QuizAnswer extends BaseEntity {
 
     @Id
     private String id;

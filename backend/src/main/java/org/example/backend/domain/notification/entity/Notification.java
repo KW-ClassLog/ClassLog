@@ -4,8 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.example.backend.domain.lecture.entity.Lecture;
 import org.example.backend.domain.user.entity.User;
+import org.example.backend.global.entitiy.BaseEntity;
 
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "notification")
@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Notification {
+public class Notification extends BaseEntity {
 
     @Id
     private String id;
@@ -33,8 +33,6 @@ public class Notification {
     @Column(name = "is_read", nullable = false)
     private boolean isRead;
 
-    @Column(name = "create_at", nullable = false)
-    private LocalDateTime createAt;
 
 }
 

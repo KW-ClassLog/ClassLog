@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
 import org.example.backend.domain.user.entity.User;
+import org.example.backend.global.entitiy.BaseEntity;
 
 @Entity
 @Table(name = "classroom")
@@ -11,7 +12,7 @@ import org.example.backend.domain.user.entity.User;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Classroom {
+public class Classroom extends BaseEntity {
 
     @Id
     private String id;

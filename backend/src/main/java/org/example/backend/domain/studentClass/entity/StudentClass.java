@@ -3,6 +3,7 @@ package org.example.backend.domain.studentClass.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.example.backend.domain.studentClass.entity.id.StudentClassId;
+import org.example.backend.global.entitiy.BaseEntity;
 
 @Entity
 @Table(name = "student_class")
@@ -11,7 +12,7 @@ import org.example.backend.domain.studentClass.entity.id.StudentClassId;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class StudentClass {
+public class StudentClass extends BaseEntity {
 
     @Id
     @Column(name = "user_id")

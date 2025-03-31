@@ -3,6 +3,7 @@ package org.example.backend.domain.quiz.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.example.backend.domain.lecture.entity.Lecture;
+import org.example.backend.global.entitiy.BaseEntity;
 
 @Entity
 @Table(name = "quiz")
@@ -10,7 +11,7 @@ import org.example.backend.domain.lecture.entity.Lecture;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Quiz {
+public class Quiz extends BaseEntity {
 
     @Id
     private String id;
