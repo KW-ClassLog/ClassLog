@@ -52,13 +52,14 @@ java -version  # Java 17 설치 확인
 ```
 2. 서버 빌드 및 실행
 ```bash
-cd backend              # 백엔드 폴더로 이동
-chmod +x ./gradlew      # 실행 권한 부여
-./gradlew build         # 프로젝트 빌드
+cd backend                  # 백엔드 폴더로 이동
+chmod +x ./gradlew          # 실행 권한 부여
+export $(cat .env | xargs)  # .env 파일을 로드하여 환경 변수로 설정
+./gradlew build             # 프로젝트 빌드
 
 cd build/libs
 ls -arlth               # JAR 파일 이름 확인
-java -jar [JAR 파일명]  # 예: java -jar backend-0.0.1-SNAPSHOT.jar
+java -jar [JAR 파일명]    # 예: java -jar backend-0.0.1-SNAPSHOT.jar
 ```
 
 ### 💻 FE (Next.js + TypeScript)
