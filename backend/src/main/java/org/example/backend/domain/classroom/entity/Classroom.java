@@ -3,6 +3,8 @@ package org.example.backend.domain.classroom.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
+import java.util.UUID;
+
 import org.example.backend.domain.user.entity.User;
 import org.example.backend.global.entitiy.BaseEntity;
 
@@ -15,7 +17,9 @@ import org.example.backend.global.entitiy.BaseEntity;
 public class Classroom extends BaseEntity {
 
     @Id
-    private String id;
+    @GeneratedValue
+    @Column(columnDefinition = "BINARY(16)")
+    private UUID id;
 
     @Column(name = "class_name", nullable = false)
     private String className;

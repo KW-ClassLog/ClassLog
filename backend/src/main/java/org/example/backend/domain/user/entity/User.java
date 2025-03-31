@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 import org.example.backend.domain.accountKakao.entity.AccountKakao;
 import org.example.backend.domain.accountLocal.entity.AccountLocal;
@@ -20,7 +21,9 @@ import org.example.backend.domain.quizAnswer.entity.QuizAnswer;
 public class User {
 
     @Id
-    private String id;
+    @GeneratedValue
+    @Column(columnDefinition = "BINARY(16)")
+    private UUID id;
 
     @Column(nullable = false)
     private String name;

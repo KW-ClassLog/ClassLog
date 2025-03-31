@@ -3,6 +3,8 @@ package org.example.backend.domain.lecture.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
+import java.util.UUID;
+
 import org.example.backend.domain.classroom.entity.Classroom;
 import org.example.backend.global.entitiy.BaseEntity;
 
@@ -15,7 +17,9 @@ import org.example.backend.global.entitiy.BaseEntity;
 public class Lecture extends BaseEntity {
 
     @Id
-    private String id;
+    @GeneratedValue
+    @Column(columnDefinition = "BINARY(16)")
+    private UUID id;
 
     @ManyToOne
     @JoinColumn(name = "class_id", nullable = false)

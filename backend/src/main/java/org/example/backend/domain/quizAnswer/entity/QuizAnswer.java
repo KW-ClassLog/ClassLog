@@ -6,6 +6,8 @@ import org.example.backend.domain.quiz.entity.Quiz;
 import org.example.backend.domain.user.entity.User;
 import org.example.backend.global.entitiy.BaseEntity;
 
+import java.util.UUID;
+
 @Entity
 @Table(name = "quiz_answer")
 @Data
@@ -15,7 +17,9 @@ import org.example.backend.global.entitiy.BaseEntity;
 public class QuizAnswer extends BaseEntity {
 
     @Id
-    private String id;
+    @GeneratedValue
+    @Column(columnDefinition = "BINARY(16)")
+    private UUID id;
 
     @ManyToOne
     @JoinColumn(name = "quiz_id", nullable = false)

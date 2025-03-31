@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.example.backend.domain.lecture.entity.Lecture;
 import org.example.backend.global.entitiy.BaseEntity;
+import java.util.UUID;
 
 @Entity
 @Table(name = "quiz")
@@ -14,7 +15,9 @@ import org.example.backend.global.entitiy.BaseEntity;
 public class Quiz extends BaseEntity {
 
     @Id
-    private String id;
+    @GeneratedValue
+    @Column(columnDefinition = "BINARY(16)")
+    private UUID id;
 
     @ManyToOne
     @JoinColumn(name = "lecture_id", nullable = false)
