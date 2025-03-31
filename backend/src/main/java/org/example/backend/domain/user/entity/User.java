@@ -39,6 +39,8 @@ public class User {
 
     private LocalDateTime deletedAt;
 
+    private String profile;
+
     @OneToOne(mappedBy = "user")
     private AccountKakao accountKakao;
 
