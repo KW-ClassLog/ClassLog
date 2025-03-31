@@ -21,7 +21,7 @@ public class Classroom extends BaseEntity {
     private String className;
 
     @Column(name = "class_date", nullable = false)
-    private LocalDateTime classDate;
+    private String classDate;
 
     @Column(name = "start_date", nullable = false)
     private LocalDateTime startDate;
