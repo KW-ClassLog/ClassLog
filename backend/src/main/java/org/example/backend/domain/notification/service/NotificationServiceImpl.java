@@ -1,4 +1,4 @@
 package org.example.backend.domain.notification.service;
 
-public interface NotificationServicelmpl {
+public interface NotificationServiceImpl {
 }
