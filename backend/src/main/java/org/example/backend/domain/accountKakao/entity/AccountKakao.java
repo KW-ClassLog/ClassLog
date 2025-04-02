@@ -5,6 +5,8 @@ import lombok.*;
 import org.example.backend.domain.user.entity.User;
 import org.example.backend.global.entitiy.BaseEntity;
 
+import java.util.UUID;
+
 @Entity
 @Table(name = "account_kakao")
 @Data
@@ -15,7 +17,7 @@ public class AccountKakao extends BaseEntity {
 
     @Id
     @Column(name = "user_id")
-    private String userId;
+    private UUID userId;
 
     @Column(name = "kakao_key", nullable = false)
     private String kakaoKey;
