@@ -2,7 +2,8 @@ package org.example.backend.domain.lecture.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.UUID;
 
 import org.example.backend.domain.classroom.entity.Classroom;
@@ -35,6 +36,12 @@ public class Lecture extends BaseEntity {
 
     private Boolean saveAudio;
 
-    @Column(nullable = false)
-    private LocalDateTime lectureDate;
+    @Column(name = "lecture_date", nullable = false)
+    private LocalDate lectureDate;
+
+    @Column(name = "start_time")
+    private LocalTime startTime;
+
+    @Column(name = "end_time")
+    private LocalTime endTime;
 }
