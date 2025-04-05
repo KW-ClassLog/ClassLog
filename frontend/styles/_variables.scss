@@ -1,0 +1,106 @@
+// ==============================
+// Color Tokens
+// ==============================
+
+// Primary Colors
+$color-blue: #4894fe;
+$color-lightblue: #63b4ff;
+$color-skyblue: #eff7ff;
+$color-mutedblue: #8696bb;
+$color-danger: #ea4335;
+
+// Neutral Colors
+$color-neutral-1: #272727;
+$color-neutral-2: #2d2d2d;
+$color-neutral-3: #404040;
+$color-neutral-4: #606060;
+$color-neutral-5: #909090;
+$color-neutral-6: #b1b1b1;
+$color-neutral-7: #ececec;
+$color-neutral-8: #fafafa;
+
+$color-black: $color-neutral-1;
+$color-white: #ffffff;
+
+// ==============================
+// Typography
+// ==============================
+
+$font-default: "Paperlogy", sans-serif;
+$font-logo: "Bristol", serif;
+
+// Font Sizes
+$font-size-xs: clamp(11px, 1.1vw, 12px);
+$font-size-sm: clamp(13px, 1.3vw, 14px);
+$font-size-md: clamp(14px, 1.6vw, 16px);
+$font-size-lg: clamp(16px, 2vw, 20px);
+$font-size-xl: clamp(18px, 2.4vw, 24px);
+$font-size-2xl: clamp(24px, 3.2vw, 32px);
+$font-size-3xl: clamp(30px, 4vw, 40px);
+$font-size-4xl: clamp(36px, 4.8vw, 48px);
+$font-size-5xl: clamp(48px, 6vw, 64px);
+$font-size-6xl: clamp(60px, 7.5vw, 80px);
+
+// Font Weights
+$font-weight-thin: 100;
+$font-weight-light: 300;
+$font-weight-regular: 400;
+$font-weight-medium: 500;
+$font-weight-bold: 700;
+$font-weight-black: 900;
+
+// ==============================
+// Spacing Tokens
+// ==============================
+
+$spacing-xxs: 4px;
+$spacing-xs: 8px;
+$spacing-sm: 12px;
+$spacing-md: 16px;
+$spacing-lg: 24px;
+$spacing-xl: 32px;
+$spacing-2xl: 40px;
+$spacing-3xl: 48px;
+
+// ==============================
+// Border Radius
+// ==============================
+
+$radius-sm: 4px;
+$radius-md: 8px;
+$radius-lg: 12px;
+$radius-xl: 16px;
+$radius-2xl: 20px;
+$radius-full: 9999px;
+
+// ==============================
+// Shadow
+// ==============================
+
+$shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+$shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+$shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.2);
+
+// ==============================
+// z-index
+// ==============================
+$z-header: 1000;
+$z-modal: 1050;
+$z-tooltip: 1100;
+$z-backdrop: 900;
+
+// ==============================
+// animation
+// ==============================
+$transition-default: all 0.3s ease;
+$transition-fast: all 0.15s ease-in-out;
+
+// ==============================
+// Breakpoints
+// ==============================
+
+$breakpoint-xs: 480px; // Mobile
+$breakpoint-sm: 768px; // Tablet
+$breakpoint-md: 1024px; // Small Desktop
+$breakpoint-lg: 1280px; // Large Desktop
+$breakpoint-xl: 1440px; // Extra Large Desktop
