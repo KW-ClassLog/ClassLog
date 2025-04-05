@@ -17,11 +17,11 @@ body {
 body {
   margin: 0;
   padding: 0;
-  font-family: "Paperlogy", Arial, Helvetica, sans-serif;
-  font-weight: 500;
+  font-family: $font-default;
+  font-weight: $font-weight-medium;
   font-display: swap;
-  color: #000000;
-  background: #ffffff;
+  color: $color-black;
+  background: $color-white;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -33,21 +33,21 @@ a {
 
 /* ===== Role-Based Body Styles ===== */
 body.student-body {
-  background-color: #f2f2f2;
+  background-color: $color-neutral-7;
 }
 
 body.student-body > div {
   max-width: 390px;
   margin: 0 auto;
   width: 100%;
-  background-color: #ffffff;
+  background-color: $color-white;
   min-height: 100vh;
 }
 
 body.teacher-body {
-  background-color: #ffffff;
+  background-color: $color-white;
 }
 
 body.non-login-body {
-  background-color: #ffffff;
+  background-color: $color-white;
 }
