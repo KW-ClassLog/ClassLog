@@ -39,6 +39,7 @@ public class ApiResponse<T> {
 
     public static <T> ApiResponse<T> onFailure(String code, String message) {
         return ApiResponse.<T>builder()
+                .isSuccess(false)
                 .code(code)
                 .message(message)
                 .build();
