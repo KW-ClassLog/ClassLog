@@ -1,0 +1,92 @@
+.wrapper {
+  width: 100%;
+}
+
+.label {
+  display: block;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $color-neutral-3;
+  margin-bottom: $spacing-xxs;
+
+  @include respond-up(sm) {
+    font-size: $font-size-md;
+  }
+}
+
+.inputBox {
+  display: flex;
+  align-items: center;
+  padding: $spacing-sm $spacing-md;
+  border: 1px solid $color-neutral-6;
+  border-radius: $radius-md;
+  background-color: $color-white;
+  min-height: 48px;
+  transition: $transition-default;
+
+  &:focus-within {
+    border: 2px solid $color-blue;
+  }
+}
+
+.input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: $font-size-sm;
+  color: $color-neutral-2;
+  background-color: transparent;
+  font-family: $font-default;
+  @include respond-up(sm) {
+    font-size: $font-size-md;
+  }
+
+  &::placeholder {
+    color: $color-neutral-6;
+  }
+
+  &:disabled {
+    background-color: $color-neutral-7;
+    cursor: not-allowed;
+  }
+}
+
+.iconLeft,
+.iconRight {
+  margin: 0 $spacing-xs;
+  display: flex;
+  align-items: center;
+  color: $color-neutral-6; // 기본 회색
+  transition: color $transition-fast;
+
+  // 버튼 리셋
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+// focus 상태일 때만 파란색
+.inputBox:focus-within {
+  .iconLeft,
+  .iconRight {
+    color: $color-blue;
+  }
+}
+
+.error {
+  border-color: $color-danger;
+}
+
+.errorMessage {
+  color: $color-danger;
+  font-size: $font-size-xs;
+  margin-top: $spacing-xxs;
+
+  @include respond-up(sm) {
+    font-size: $font-size-sm;
+  }
+}
+
+.disabled {
+  background-color: $color-neutral-7;
+}
