@@ -13,7 +13,9 @@ const nextConfig: NextConfig = {
     return config;
   },
   sassOptions: {
-    prependData: `@use "@/styles/_variables.scss" as *; @use "@/styles/_mixins.scss" as *;`,
+    prependData: `
+    @use "@/styles/_variables.scss" as *;
+    @use "@/styles/_mixins.scss" as *;`,
   },
 };
 
