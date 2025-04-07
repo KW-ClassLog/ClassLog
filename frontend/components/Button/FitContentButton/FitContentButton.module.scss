@@ -1,5 +1,7 @@
 .button {
   @include common-input-button-style;
+  width: fit-content;
+
   background-color: $color-blue;
   color: $color-white;
   border: none;
