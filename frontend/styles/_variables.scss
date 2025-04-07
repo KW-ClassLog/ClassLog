@@ -53,14 +53,14 @@ $font-weight-black: 900;
 // Spacing Tokens
 // ==============================
 
-$spacing-xxs: 4px;
-$spacing-xs: 8px;
-$spacing-sm: 12px;
-$spacing-md: 16px;
-$spacing-lg: 24px;
-$spacing-xl: 32px;
-$spacing-2xl: 40px;
-$spacing-3xl: 48px;
+$spacing-xxs: clamp(2px, 1.5vw, 4px);
+$spacing-xs: clamp(6px, 2vw, 8px);
+$spacing-sm: clamp(8px, 2.5vw, 12px);
+$spacing-md: clamp(12px, 3vw, 16px);
+$spacing-lg: clamp(16px, 4vw, 24px);
+$spacing-xl: clamp(20px, 5vw, 32px);
+$spacing-2xl: clamp(24px, 6vw, 40px);
+$spacing-3xl: clamp(28px, 7vw, 48px);
 
 // ==============================
 // Border Radius
