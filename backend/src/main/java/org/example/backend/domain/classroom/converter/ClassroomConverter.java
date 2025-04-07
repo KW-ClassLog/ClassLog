@@ -2,6 +2,8 @@ package org.example.backend.domain.classroom.converter;
 
 import org.example.backend.domain.classroom.dto.request.ClassroomRequestDTO;
 import org.example.backend.domain.classroom.entity.Classroom;
+import org.example.backend.domain.classroom.exception.ClassroomErrorCode;
+import org.example.backend.domain.classroom.exception.ClassroomException;
 import org.example.backend.domain.user.entity.User;
 import org.example.backend.domain.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +17,7 @@ public class ClassroomConverter {
 
     public Classroom toEntity(ClassroomRequestDTO classroomRequestDTO) {
         User professor = userRepository.findById(classroomRequestDTO.getProfessorId())
-                .orElseThrow(() -> new IllegalArgumentException("Professor not found"));
+                .orElseThrow(() -> new ClassroomException(ClassroomErrorCode.PROFESSOR_NOT_FOUND));
         return Classroom.builder()
                 .className(classroomRequestDTO.getClassName())
                 .classDate(classroomRequestDTO.getClassDate())

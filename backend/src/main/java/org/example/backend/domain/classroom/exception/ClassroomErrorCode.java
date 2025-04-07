@@ -12,6 +12,8 @@ public enum ClassroomErrorCode implements BaseErrorCode {
 
     CLASS_NOT_FOUND(HttpStatus.NOT_FOUND,
             "CLASS404_1", "존재하지 않는 클래스입니다."),
+    PROFESSOR_NOT_FOUND(HttpStatus.NOT_FOUND,
+            "CLASS404_2", "존재하지 않는 사용자입니다."),
     ;
     private final HttpStatus status;
     private final String code;
