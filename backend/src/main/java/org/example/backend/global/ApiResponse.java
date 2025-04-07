@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import org.example.backend.global.code.BaseCode;
+import org.example.backend.global.code.ErrorReasonDTO;
 import org.example.backend.global.code.ReasonDTO;
 import org.example.backend.global.code.base.SuccessCode;
 
@@ -37,11 +38,11 @@ public class ApiResponse<T> {
         return new ApiResponse<>(false, code, message, data);
     }
 
-    public static <T> ApiResponse<T> onFailure(String code, String message) {
+    public static <T> ApiResponse<T> onFailure(ErrorReasonDTO errorReason) {
         return ApiResponse.<T>builder()
                 .isSuccess(false)
-                .code(code)
-                .message(message)
+                .code(errorReason.getCode())
+                .message(errorReason.getMessage())
                 .build();
     }
 
