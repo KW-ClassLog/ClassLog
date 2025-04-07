@@ -1,7 +1,6 @@
 .button {
   display: inline-block;
   padding: $spacing-xs $spacing-md;
-  font-size: $font-size-md;
   font-weight: $font-weight-bold;
   color: $color-white;
   background-color: $color-blue;
@@ -11,6 +10,11 @@
   text-align: center;
   transition: background-color $transition-fast, transform $transition-fast;
   margin: $spacing-xs 0;
+  font-size: $font-size-sm;
+
+  @include respond-up(sm) {
+    font-size: $font-size-md;
+  }
 
   &:hover {
     background-color: $color-lightblue;
