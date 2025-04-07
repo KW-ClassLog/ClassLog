@@ -1,3 +1,5 @@
+@use "./_variables" as *;
+
 // 모바일부터 적용 (특정 크기 이하에서 적용되는 것)
 @mixin respond-to($breakpoint) {
   @if $breakpoint == xs {
