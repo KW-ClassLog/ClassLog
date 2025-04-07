@@ -11,6 +11,7 @@
   transition: background-color $transition-fast, transform $transition-fast;
   margin: $spacing-xs 0;
   font-size: $font-size-sm;
+  width: fit-content;
 
   @include respond-up(sm) {
     font-size: $font-size-md;
