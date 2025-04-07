@@ -1,7 +1,7 @@
 package org.example.backend.domain.user.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.example.backend.domain.user.dto.request.UserRegisterDTO;
+import org.example.backend.domain.user.dto.request.RegisterRequestDTO;
 import org.example.backend.domain.user.service.UserService;
 import org.example.backend.global.ApiResponse;
 import org.example.backend.global.code.base.SuccessCode;
@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/users")
@@ -20,7 +21,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    public ResponseEntity<ApiResponse<Void>> register(@RequestBody UserRegisterDTO request){
+    public ResponseEntity<ApiResponse<Void>> register(@RequestBody RegisterRequestDTO request){
         userService.registerUser(request);
         return ResponseEntity
                 .status(HttpStatus.CREATED)

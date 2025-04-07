@@ -4,7 +4,7 @@ import lombok.Data;
 import org.example.backend.domain.user.entity.Role;
 
 @Data
-public class UserRegisterDTO {
+public class RegisterRequestDTO {
 
     private String email;
     private String password;

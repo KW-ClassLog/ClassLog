@@ -3,33 +3,28 @@ package org.example.backend.domain.user.service;
 import lombok.RequiredArgsConstructor;
 import org.example.backend.domain.accountLocal.entity.AccountLocal;
 import org.example.backend.domain.accountLocal.repository.AccountLocalRepository;
-import org.example.backend.domain.user.UserErrorCode;
-import org.example.backend.domain.user.dto.request.UserRegisterDTO;
+import org.example.backend.domain.user.exception.UserErrorCode;
+import org.example.backend.domain.user.dto.request.RegisterRequestDTO;
 import org.example.backend.domain.user.entity.User;
+import org.example.backend.domain.user.exception.UserException;
 import org.example.backend.domain.user.repository.UserRepository;
-import org.example.backend.global.code.base.FailureCode;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final AccountLocalRepository accountLocalRepository;
-    private final BCryptPasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     //회원가입
     @Override
-    public void registerUser(UserRegisterDTO request) {
+    public void registerUser(RegisterRequestDTO request) {
 
         //이메일 중복 체크
         if(accountLocalRepository.existsByEmail(request.getEmail())){
-            throw new ResponseStatusException(
-                    FailureCode._BAD_REQUEST.getReasonHttpStatus().getHttpStatus(),
-                    FailureCode._BAD_REQUEST.getReasonHttpStatus().getMessage()
-            );
+            throw new UserException(UserErrorCode._EMAIL_ALREADY_EXISTS);
         }
 
         //user 생성
