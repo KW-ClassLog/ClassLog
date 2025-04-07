@@ -1,0 +1,48 @@
+.button {
+  width: 100%;
+  display: flex;
+  align-items: center; /* 세로 중앙 정렬 */
+  justify-content: space-between; /* label과 count를 양끝에 배치 */
+  color: $color-neutral-2;
+  background-color: $color-white;
+  border: 1px solid $color-neutral-6;
+  cursor: pointer;
+
+  @include common-input-button-style; // 믹스인 적용
+
+  &:hover {
+    background-color: $color-skyblue;
+  }
+
+  &:active {
+    background-color: $color-blue;
+    color: $color-white;
+  }
+
+  &:disabled {
+    background-color: $color-white;
+    cursor: default;
+  }
+}
+
+.selected {
+  border: 2px solid $color-blue;
+}
+
+.correct {
+  background-color: $color-blue !important;
+  color: $color-white;
+  border-color: $color-blue;
+  .count {
+    color: $color-neutral-7;
+  }
+}
+
+.incorrect {
+  color: $color-black;
+  border: 2px solid $color-danger;
+}
+
+.count {
+  color: $color-neutral-5;
+}
