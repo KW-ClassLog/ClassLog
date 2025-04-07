@@ -1,0 +1,44 @@
+.button {
+  display: inline-block;
+  padding: $spacing-xs $spacing-md;
+  font-size: $font-size-md;
+  font-weight: $font-weight-bold;
+  color: $color-white;
+  background-color: $color-blue;
+  border: none;
+  border-radius: $radius-full;
+  cursor: pointer;
+  text-align: center;
+  transition: background-color $transition-fast, transform $transition-fast;
+  margin: $spacing-xs 0;
+
+  &:hover {
+    background-color: $color-lightblue;
+  }
+
+  &:active {
+    background-color: $color-blue;
+  }
+
+  &:disabled {
+    background-color: $color-neutral-6; // 비활성화 버튼 배경색
+    cursor: not-allowed;
+    opacity: 0.5; // 비활성화된 버튼의 투명도
+  }
+}
+
+.selected {
+  background-color: $color-neutral-7; // 선택된 상태 배경색
+  color: $color-neutral-6; // 선택된 상태 텍스트 색상
+
+  &:hover {
+    color: $color-white; // 선택된 상태에서 hover 시 텍스트 색상
+    background-color: $color-neutral-6; // 선택된 상태에서 hover 시 배경색
+  }
+}
+
+.disabled {
+  background-color: $color-neutral-6;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
