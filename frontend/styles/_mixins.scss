@@ -45,3 +45,17 @@
     }
   }
 }
+
+// input, button 공통 스타일
+@mixin common-input-button-style {
+  min-height: 48px;
+  border-radius: $radius-md;
+  padding: $spacing-xxs $spacing-xs;
+  transition: $transition-fast;
+  font-family: $font-default;
+  font-size: $font-size-sm;
+
+  @include respond-up(sm) {
+    font-size: $font-size-md;
+  }
+}
