@@ -10,7 +10,8 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public enum UserErrorCode implements BaseErrorCode {
 
-    _EMAIL_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "SIGNUP400_1", "이미 사용 중인 이메일입니다.");
+    _EMAIL_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "SIGNUP400_1", "이미 사용 중인 이메일입니다."),
+    _TOKEN_MISSING(HttpStatus.UNAUTHORIZED, "TOKEN401", "토큰이 존재하지 않습니다.");
 
     private final HttpStatus httpStatus;
     private final String code;

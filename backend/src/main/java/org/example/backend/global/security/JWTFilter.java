@@ -1,5 +1,6 @@
 package org.example.backend.global.security;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -7,7 +8,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.example.backend.domain.accountLocal.entity.AccountLocal;
 import org.example.backend.domain.user.entity.Role;
 import org.example.backend.domain.user.entity.User;
+import org.example.backend.domain.user.exception.UserErrorCode;
 import org.example.backend.domain.user.service.CustomUserDetails;
+import org.example.backend.global.ApiResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,61 +27,74 @@ public class JWTFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
+        String uri = request.getRequestURI();
+
+        // 로그인, 회원가입에 대해 필터링 제외
+        if (uri.equals("/api/users/login") || uri.equals("/api/users")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         // request에서 Authorization 헤더를 찾음
         String authorization = request.getHeader("Authorization");
 
         // Authorization 헤더 검증
         if(authorization == null || !authorization.startsWith("Bearer ")){
             System.out.println("token null or invalid");
-            filterChain.doFilter(request, response);
+            setErrorResponse(response, UserErrorCode._TOKEN_MISSING);
 
             // 조건이 해당되면 메소드 종료
             return;
         }
 
-        System.out.println("authorization now");
         // Bearer 제외하고 토큰만 획득
         String token = authorization.substring(7);
         System.out.println(token);
 
         // 토큰 소멸 시간 검증
         if(jwtUtil.isExpired(token)){
-
             System.out.println("token expired");
-            filterChain.doFilter(request,response);
 
             // 조건에 해당되면 메소드 종료
             return;
         }
 
         // 토큰에서 email, username, role 획득
-        String email = jwtUtil.getEmail(token);
-        String roleString = jwtUtil.getRole(token);
-        String name = jwtUtil.getName(token);
+        String email, roleString, name;
+            email = jwtUtil.getEmail(token);
+            roleString = jwtUtil.getRole(token);
+            name = jwtUtil.getName(token);
 
-        System.out.println("name = " + name);
-        System.out.println("roleString = " + roleString);
-        System.out.println("email = " + email);
+            // entity를 생성해서 값 세팅
+            User user = new User();
+            AccountLocal accountLocal = new AccountLocal();
 
-        // entity를 생성해서 값 세팅
-        User user = new User();
-        AccountLocal accountLocal = new AccountLocal();
+            accountLocal.setEmail(email);
+            user.setName(name);
+            Role role = Role.valueOf(roleString); // Role enum으로 변환
+            user.setRole(role);
 
-        accountLocal.setEmail(email);
-        user.setName(name);
-        Role role = Role.valueOf(roleString); // Role enum으로 변환
-        user.setRole(role);
+            // UserDetail에 회원정보 객체 담기
+            CustomUserDetails customUserDetails = new CustomUserDetails(user,accountLocal);
 
-        // UserDetail에 회원정보 객체 담기
-        CustomUserDetails customUserDetails = new CustomUserDetails(user,accountLocal);
+            // 스프링 시큐리티 인증 토큰 생성
+            Authentication authToken = new UsernamePasswordAuthenticationToken(customUserDetails,null,customUserDetails.getAuthorities());
 
-        // 스프링 시큐리티 인증 토큰 생성
-        Authentication authToken = new UsernamePasswordAuthenticationToken(customUserDetails,null,customUserDetails.getAuthorities());
+            // 세션에 사용자 등록
+            SecurityContextHolder.getContext().setAuthentication(authToken);
 
-        // 세션에 사용자 등록
-        SecurityContextHolder.getContext().setAuthentication(authToken);
-
-        filterChain.doFilter(request, response);
+            filterChain.doFilter(request, response);
 
     }
+
+    private void setErrorResponse(HttpServletResponse response, UserErrorCode errorCode) throws IOException {
+        response.setStatus(errorCode.getReasonHttpStatus().getHttpStatus().value());
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
+        ApiResponse<Object> apiResponse = ApiResponse.onFailure(errorCode);
+        String json = new ObjectMapper().writeValueAsString(apiResponse);
+        response.getWriter().write(json);
+    }
+
 }
