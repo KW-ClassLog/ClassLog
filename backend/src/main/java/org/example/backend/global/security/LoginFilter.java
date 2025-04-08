@@ -65,15 +65,15 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException {
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
 
-        String email = customUserDetails.getUsername();
+        String email = customUserDetails.getEmail();
 
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         Iterator<? extends  GrantedAuthority> iterator = authorities.iterator();
         GrantedAuthority auth = iterator.next();
-
+        String name = customUserDetails.getUsername();
         String role = auth.getAuthority();
 
-        String token = jwtUtil.createJwt(email,role,60*60*10L);
+        String token = jwtUtil.createJwt(email, name, role,60*60*2L);
 
         // 응답 Header
         response.addHeader("Authorization","Bearer"+token);
