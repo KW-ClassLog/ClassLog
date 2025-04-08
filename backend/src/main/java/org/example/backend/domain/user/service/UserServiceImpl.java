@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 
 @Service
 @RequiredArgsConstructor
@@ -40,7 +42,8 @@ public class UserServiceImpl implements UserService {
     public void registerUser(RegisterRequestDTO registerRequestDTO) {
 
         // 이메일 중복 인증
-        if(accountLocalRepository.existsByEmail(registerRequestDTO.getEmail())){
+        Optional<AccountLocal> existingAccount = accountLocalRepository.findByEmail(registerRequestDTO.getEmail());
+        if (existingAccount.isPresent()) {
             throw new UserException(UserErrorCode._EMAIL_ALREADY_EXISTS);
         }
 

@@ -20,6 +20,7 @@ public class BackendApplication {
 		System.setProperty("DB_PORT", dotenv.get("DB_PORT"));
 		System.setProperty("REDIS_HOST", dotenv.get("REDIS_HOST"));
 		System.setProperty("REDIS_PORT", dotenv.get("REDIS_PORT"));
+		System.setProperty("JWT_SECRET", dotenv.get("JWT_SECRET"));
 
 		SpringApplication.run(BackendApplication.class, args);
 	}

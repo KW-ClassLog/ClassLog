@@ -2,12 +2,8 @@ package org.example.backend.domain.user.converter;
 
 
 import org.example.backend.domain.accountLocal.entity.AccountLocal;
-import org.example.backend.domain.accountLocal.repository.AccountLocalRepository;
 import org.example.backend.domain.user.dto.request.RegisterRequestDTO;
 import org.example.backend.domain.user.entity.User;
-import org.example.backend.domain.user.exception.UserErrorCode;
-import org.example.backend.domain.user.exception.UserException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
