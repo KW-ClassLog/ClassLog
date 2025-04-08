@@ -53,6 +53,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests((auth)->auth
                         .requestMatchers("/api/users","/","/api/users/login").permitAll()
                         .anyRequest().authenticated());
+        // custom한 jwtfilter 추가
+        http
+                .addFilterBefore(new JWTFilter(jwtUtil),LoginFilter.class);
         // custom한 login필터 추가
         LoginFilter loginFilter = new LoginFilter(authenticationManager(authenticationConfiguration),jwtUtil);
         loginFilter.setFilterProcessesUrl("/api/users/login");
