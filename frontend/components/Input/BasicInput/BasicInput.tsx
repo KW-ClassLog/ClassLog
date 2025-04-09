@@ -24,7 +24,7 @@ interface BasicInputProps {
   autoFocus?: boolean;
 }
 
-const Input: React.FC<BasicInputProps> = ({
+const BasicInput: React.FC<BasicInputProps> = ({
   value,
   onChange,
   placeholder,
@@ -97,4 +97,4 @@ const Input: React.FC<BasicInputProps> = ({
   );
 };
 
-export default Input;
+export default BasicInput;
