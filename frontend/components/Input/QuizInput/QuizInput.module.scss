@@ -11,9 +11,15 @@
   border: 1px solid $color-neutral-6;
   box-sizing: border-box;
   background-color: $color-white;
+  color: $color-black;
 
   // 믹스인 적용
   @include common-input-button-style;
+
+  &:focus {
+    border: 2px solid $color-blue; // 포커스될 때 색상 변경
+    outline: none; // 기본 outline 제거 (원하는 스타일로 설정 가능)
+  }
 }
 
 .grayBorder {
