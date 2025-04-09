@@ -3,40 +3,75 @@
 import React from "react";
 import styles from "./QuizChoiceButton.module.scss";
 
-interface QuizChoiceButtonProps {
-  label: string; // 버튼에 들어갈 텍스트
-  selected?: boolean; // 선택 상태
-  correct?: boolean; // 정답 여부
-  incorrect?: boolean; // 오답 여부
-  count?: number; // 선택한 사람 수
-  onSelect?: (label: string) => void; // 선택 상태를 부모에게 전달하는 콜백 함수
-}
+type QuizModeProps = {
+  mode: "quiz";
+  label: string;
+  selected: boolean;
+  onSelect: (label: string) => void;
+};
 
-const QuizChoiceButton: React.FC<QuizChoiceButtonProps> = ({
-  label,
-  selected,
-  correct,
-  incorrect,
-  count,
-  onSelect,
-}) => {
-  // 버튼 스타일 동적으로 적용
-  const buttonClassNames = [
-    styles.button,
-    selected ? styles.selected : "",
-    correct ? styles.correct : "",
-    incorrect ? styles.incorrect : "",
-  ].join(" ");
+type AnswerModeProps = {
+  mode: "answer";
+  label: string;
+  userAnswer: string; // 사용자 답변
+  correctAnswer: string; // 정답
+  count: number; // 선택한 사람 수
+};
 
-  // 비활성화 로직: 정답/오답이 있는 경우 비활성화
-  const isDisabled =
-    correct !== undefined || incorrect !== undefined || count !== undefined;
+type QuizChoiceButtonProps = QuizModeProps | AnswerModeProps;
 
+const QuizChoiceButton: React.FC<QuizChoiceButtonProps> = (props) => {
+  const isQuizMode = (props: QuizChoiceButtonProps): props is QuizModeProps => {
+    return props.mode === "quiz";
+  };
+
+  const isAnswerMode = (
+    props: QuizChoiceButtonProps
+  ): props is AnswerModeProps => {
+    return props.mode === "answer";
+  };
+
+  // 버튼 클릭 핸들러
   const handleClick = () => {
-    if (!isDisabled) {
-      onSelect?.(label); // 버튼 클릭 시 선택된 정보를 부모에게 전달
+    if (isQuizMode(props) && props.onSelect) {
+      props.onSelect(props.label);
     }
   };
+
+  // 스타일 동적 처리
+  const getInputStyles = () => {
+    if (isAnswerMode(props)) {
+      if (
+        props.userAnswer === props.correctAnswer &&
+        props.label === props.userAnswer
+      ) {
+        return styles.correct; // 정답일 때
+      } else if (
+        props.userAnswer !== props.correctAnswer &&
+        props.label === props.correctAnswer
+      ) {
+        return styles.correct; // 오답일 때
+      } else if (
+        props.userAnswer !== props.correctAnswer &&
+        props.label === props.userAnswer
+      ) {
+        return styles.incorrect; // 오답일 때
+      } else {
+        return ""; // 나머지 경우
+      }
+    }
+    return "";
+  };
+
+  // 클래스 이름 동적 처리
+  const buttonClassNames = [
+    styles.button,
+    isQuizMode(props) && props.selected ? styles.selected : "",
+    getInputStyles(),
+  ].join(" ");
+
+  // 비활성화 여부
+  const isDisabled = isAnswerMode(props);
 
   return (
     <button
@@ -44,8 +79,10 @@ const QuizChoiceButton: React.FC<QuizChoiceButtonProps> = ({
       onClick={handleClick}
       disabled={isDisabled}
     >
-      {label}
-      {count !== undefined && <span className={styles.count}>({count}명)</span>}
+      {props.label}
+      {isAnswerMode(props) && props.count !== undefined && (
+        <span className={styles.count}>({props.count}명)</span>
+      )}
     </button>
   );
 };
