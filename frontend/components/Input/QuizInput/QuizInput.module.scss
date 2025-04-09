@@ -1,0 +1,53 @@
+.wrapper {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+}
+
+.input {
+  width: 100%;
+  border: 1px solid $color-neutral-6;
+  box-sizing: border-box;
+  background-color: $color-white;
+
+  // 믹스인 적용
+  @include common-input-button-style;
+}
+
+.grayBorder {
+  border: 1px solid $color-neutral-6;
+}
+
+.blueBorder {
+  border: 2px solid $color-blue;
+}
+
+.redBorder {
+  border: 2px solid $color-danger;
+}
+
+.answerInfo {
+  display: flex;
+  gap: $spacing-xxs;
+  align-items: center;
+}
+
+.correctAnswer {
+  color: $color-blue;
+  font-size: $font-size-sm;
+
+  @include respond-up(sm) {
+    font-size: $font-size-md;
+  }
+}
+
+.count {
+  color: $color-neutral-6;
+  font-size: $font-size-sm;
+
+  @include respond-up(sm) {
+    font-size: $font-size-md;
+  }
+}
