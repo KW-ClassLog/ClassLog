@@ -17,15 +17,29 @@
 .inputBox {
   display: flex;
   align-items: center;
-  padding: $spacing-sm $spacing-md;
   border: 1px solid $color-neutral-6;
-  border-radius: $radius-md;
   background-color: $color-white;
-  min-height: 48px;
-  transition: $transition-default;
+  @include common-input-button-style;
 
   &:focus-within {
     border: 2px solid $color-blue;
+
+    .iconLeft,
+    .iconRight {
+      color: $color-blue;
+    }
+  }
+
+  &.error {
+    border: 1px solid $color-danger;
+
+    &:focus-within {
+      border: 2px solid $color-danger;
+      .iconLeft,
+      .iconRight {
+        color: $color-danger;
+      }
+    }
   }
 }
 
@@ -33,13 +47,9 @@
   flex: 1;
   border: none;
   outline: none;
-  font-size: $font-size-sm;
   color: $color-neutral-2;
   background-color: transparent;
-  font-family: $font-default;
-  @include respond-up(sm) {
-    font-size: $font-size-md;
-  }
+  @include common-input-button-style;
 
   &::placeholder {
     color: $color-neutral-6;
