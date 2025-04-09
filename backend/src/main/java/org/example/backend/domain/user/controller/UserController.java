@@ -22,6 +22,7 @@ public class UserController {
         return ApiResponse.onSuccess("Register successfully");
     }
 
+    // 개인정보조회
     @GetMapping("/me")
     public ApiResponse<String> profile(){
         return ApiResponse.onSuccess("개인정보 조회 성공");
