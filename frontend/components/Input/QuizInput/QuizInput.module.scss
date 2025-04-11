@@ -1,0 +1,59 @@
+.wrapper {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+}
+
+.input {
+  width: 100%;
+  border: 1px solid $color-neutral-6;
+  box-sizing: border-box;
+  background-color: $color-white;
+  color: $color-black;
+
+  // 믹스인 적용
+  @include common-input-button-style;
+
+  &:focus {
+    border: 2px solid $color-blue; // 포커스될 때 색상 변경
+    outline: none; // 기본 outline 제거 (원하는 스타일로 설정 가능)
+  }
+}
+
+.grayBorder {
+  border: 1px solid $color-neutral-6;
+}
+
+.blueBorder {
+  border: 2px solid $color-blue;
+}
+
+.redBorder {
+  border: 2px solid $color-danger;
+}
+
+.answerInfo {
+  display: flex;
+  gap: $spacing-xxs;
+  align-items: center;
+}
+
+.correctAnswer {
+  color: $color-blue;
+  font-size: $font-size-sm;
+
+  @include respond-up(sm) {
+    font-size: $font-size-md;
+  }
+}
+
+.count {
+  color: $color-neutral-6;
+  font-size: $font-size-sm;
+
+  @include respond-up(sm) {
+    font-size: $font-size-md;
+  }
+}

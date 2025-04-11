@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
-import styles from "./input.module.scss";
+import styles from "./BasicInput.module.scss";
 import { Eye, EyeOff } from "lucide-react";
 
-interface InputProps {
+interface BasicInputProps {
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
@@ -24,7 +24,7 @@ interface InputProps {
   autoFocus?: boolean;
 }
 
-const Input: React.FC<InputProps> = ({
+const BasicInput: React.FC<BasicInputProps> = ({
   value,
   onChange,
   placeholder,
@@ -97,4 +97,4 @@ const Input: React.FC<InputProps> = ({
   );
 };
 
-export default Input;
+export default BasicInput;
