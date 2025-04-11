@@ -1,0 +1,23 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* 수직 중앙 정렬 */
+  align-items: center; /* 수평 중앙 정렬 */
+  height: 100vh;
+  padding: $spacing-md; /* 여백 (필요에 따라 조절) */
+  gap: $spacing-md; /* 자식 요소들 간의 간격 (원하는 값으로 조절) */
+
+  @include respond-up(sm) {
+    padding: $spacing-2xl; /* 큰 화면에서 여백 더 넓히기 */
+    gap: $spacing-2xl; /* 자식 요소 간의 간격 */
+  }
+
+  @include respond-up(lg) {
+    padding: $spacing-3xl; /* 큰 화면에서 여백 더 넓히기 */
+    gap: $spacing-3xl; /* 자식 요소 간의 간격 */
+  }
+}
+
+.container > * {
+  width: 100%; /* 자식 요소의 너비를 100%로 설정 */
+}
