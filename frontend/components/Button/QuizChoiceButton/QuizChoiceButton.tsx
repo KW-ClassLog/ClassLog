@@ -10,25 +10,25 @@ type QuizModeProps = {
   onSelect: (label: string) => void;
 };
 
-type AnswerModeProps = {
-  mode: "answer";
+type ResultModeProps = {
+  mode: "result";
   label: string;
   userAnswer: string; // 사용자 답변
   correctAnswer: string; // 정답
   count: number; // 선택한 사람 수
 };
 
-type QuizChoiceButtonProps = QuizModeProps | AnswerModeProps;
+type QuizChoiceButtonProps = QuizModeProps | ResultModeProps;
 
 const QuizChoiceButton: React.FC<QuizChoiceButtonProps> = (props) => {
   const isQuizMode = (props: QuizChoiceButtonProps): props is QuizModeProps => {
     return props.mode === "quiz";
   };
 
-  const isAnswerMode = (
+  const isResultMode = (
     props: QuizChoiceButtonProps
-  ): props is AnswerModeProps => {
-    return props.mode === "answer";
+  ): props is ResultModeProps => {
+    return props.mode === "result";
   };
 
   // 버튼 클릭 핸들러
@@ -40,7 +40,7 @@ const QuizChoiceButton: React.FC<QuizChoiceButtonProps> = (props) => {
 
   // 스타일 동적 처리
   const getInputStyles = () => {
-    if (isAnswerMode(props)) {
+    if (isResultMode(props)) {
       if (
         props.userAnswer === props.correctAnswer &&
         props.label === props.userAnswer
@@ -71,7 +71,7 @@ const QuizChoiceButton: React.FC<QuizChoiceButtonProps> = (props) => {
   ].join(" ");
 
   // 비활성화 여부
-  const isDisabled = isAnswerMode(props);
+  const isDisabled = isResultMode(props);
 
   return (
     <button
@@ -80,7 +80,7 @@ const QuizChoiceButton: React.FC<QuizChoiceButtonProps> = (props) => {
       disabled={isDisabled}
     >
       {props.label}
-      {isAnswerMode(props) && props.count !== undefined && (
+      {isResultMode(props) && props.count !== undefined && (
         <span className={styles.count}>({props.count}명)</span>
       )}
     </button>
