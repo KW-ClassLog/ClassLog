@@ -1,0 +1,38 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* 반투명 배경 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal {
+  background-color: white;
+  border-radius: $radius-xl;
+  padding: 20px;
+  min-width: 500px;
+  min-height: 700px;
+  text-align: center;
+  .message {
+    font-size: $font-size-md;
+    padding: $spacing-sm 0 $spacing-xl 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    gap: $spacing-sm;
+
+    h1 {
+      font-size: $font-size-lg;
+      font-weight: $font-weight-medium;
+    }
+  }
+  .closeButton {
+    width: 100%;
+    text-align: start;
+  }
+}
