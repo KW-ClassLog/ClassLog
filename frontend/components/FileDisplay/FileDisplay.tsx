@@ -31,10 +31,17 @@ const FileDisplay: React.FC<FileDisplayProps> = ({ fileName }) => {
   const getIcon = (ext: string | undefined) => {
     if (!ext) return fileIcons.none;
 
-    if (["doc", "docx"].includes(ext)) return fileIcons.word; // doc, docx
+    if (["doc", "docx", "hwp"].includes(ext)) return fileIcons.word; // doc, docx
     if (["ppt", "pptx"].includes(ext)) return fileIcons.ppt; // ppt, pptx
+    if (["mp3"].includes(ext)) return fileIcons.music; // mp3
+    if (["mp4", "avi", "mov"].includes(ext)) return fileIcons.video; // mp4, avi, mov
+    if (["zip", "rar"].includes(ext)) return fileIcons.zip; // zip, rar
+    if (["pdf"].includes(ext)) return fileIcons.pdf; // pdf
+    if (["txt", "csv", "json", "xml", "md"].includes(ext))
+      return fileIcons.text; // csv, json, xml
     if (["xls", "xlsx"].includes(ext)) return fileIcons.excel; // xls, xlsx
-    if (["jpg", "jpeg", "png"].includes(ext)) return fileIcons.img; // 이미지 파일
+    if (["jpg", "jpeg", "png", "gif", "bmp", "webp"].includes(ext))
+      return fileIcons.img; // 이미지 파일
     if (
       [
         "js",
