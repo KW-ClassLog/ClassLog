@@ -1,0 +1,68 @@
+.card {
+  background-color: $color-white;
+  border-radius: $radius-md;
+  padding: $spacing-lg;
+  transition: $transition-fast;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  border: 1px solid $color-neutral-7;
+
+  &.open {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    transition: $transition-fast;
+  }
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  font-weight: 600;
+  color: $color-neutral-1;
+
+  .index {
+    font-size: $font-size-md;
+
+    font-weight: 600;
+  }
+
+  .checkIcon {
+    font-size: 18px;
+    color: $color-blue; // 정답일 때 색상
+  }
+
+  .correctRate {
+    color: $color-neutral-6;
+  }
+
+  .toggleButton {
+    cursor: pointer;
+    transition: $transition-default;
+    &.open {
+      transform: rotate(180deg); /* 열렸을 때 180도 회전 */
+    }
+  }
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+  max-height: 0; // 기본적으로 내용은 숨김
+  overflow: hidden; // 내용이 넘치면 숨김
+  transition: $transition-slow;
+  &.open {
+    max-height: 1000px; // 최대 높이를 늘려서 카드 펼치기
+  }
+
+  .quizTitle {
+    margin-top: $spacing-md;
+    padding-top: $spacing-md;
+    border-top: 1px solid $color-neutral-7;
+    font-size: $font-size-md;
+
+    font-weight: $font-weight-regular;
+    word-wrap: break-word;
+    color: $color-neutral-1; // 퀴즈 제목의 색상
+  }
+}
