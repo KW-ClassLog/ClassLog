@@ -63,13 +63,16 @@ const FileDisplay: React.FC<FileDisplayProps> = ({ fileName }) => {
 
   return (
     <div className="mixed-layout-2">
-      <Image
-        src={icon}
-        alt={fileExtension || "file icon"}
-        className={styles.icon}
-        width={24}
-        height={24}
-      />
+      <div className={styles.fileIconContainer}>
+        <Image
+          src={icon}
+          alt={fileExtension || "file icon"}
+          className={styles.icon}
+          width={24}
+          height={24}
+        />
+      </div>
+
       <span className={styles.fileName}>{fileName}</span>
     </div>
   );
