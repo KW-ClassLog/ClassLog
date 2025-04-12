@@ -59,3 +59,54 @@
     font-size: $font-size-md;
   }
 }
+
+// 레이아웃 정의용 Mixin
+@mixin layout-flex($direction, $align, $justify, $gap: 0) {
+  display: flex;
+  flex-direction: $direction;
+  align-items: $align;
+  justify-content: $justify;
+  gap: $gap;
+  transition: $transition-fast;
+
+  // 모바일 및 데스크탑에서 다른 gap 적용
+  @include respond-to(xs) {
+    gap: $spacing-xs; // 모바일에서 적용할 gap
+  }
+
+  @include respond-up(sm) {
+    gap: $spacing-sm; // 작은 화면에서 적용할 gap
+  }
+
+  @include respond-up(md) {
+    gap: $spacing-md; // 중간 화면에서 적용할 gap
+  }
+
+  @include respond-up(lg) {
+    gap: $spacing-lg; // 큰 화면에서 적용할 gap
+  }
+}
+
+// 1. 100% 너비로 자식들이 일정한 간격으로 가로 배치
+.mixed-layout-1 {
+  @include layout-flex(row, center, space-between);
+  width: 100%;
+}
+
+// 2. fit-content 너비로 자식들이 특정 간격을 가지며 가로 배치
+.mixed-layout-2 {
+  @include layout-flex(row, center, flex-start, 20px);
+  width: fit-content;
+}
+
+// 3. 100% 높이로 자식들이 일정한 간격으로 세로 배치
+.mixed-layout-3 {
+  @include layout-flex(column, center, space-between);
+  height: 100%;
+}
+
+// 4. fit-content 높이로 자식들이 특정 간격을 가지며 세로 배치
+.mixed-layout-4 {
+  @include layout-flex(column, center, flex-start, 20px);
+  height: fit-content;
+}
