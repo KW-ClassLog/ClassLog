@@ -74,6 +74,10 @@
     gap: $spacing-xs; // 모바일에서 적용할 gap
   }
 
+  @include respond-to(sm) {
+    gap: $spacing-sm; // 모바일에서 적용할 gap
+  }
+
   @include respond-up(sm) {
     gap: $spacing-sm; // 작은 화면에서 적용할 gap
   }
