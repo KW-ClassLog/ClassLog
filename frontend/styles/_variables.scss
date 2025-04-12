@@ -92,7 +92,8 @@ $z-backdrop: 900;
 // ==============================
 // animation
 // ==============================
-$transition-default: all 0.3s ease;
+$transition-slow: all 0.5s ease-in-out;
+$transition-default: all 0.3s ease-in-out;
 $transition-fast: all 0.15s ease-in-out;
 
 // ==============================
