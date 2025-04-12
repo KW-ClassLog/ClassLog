@@ -26,6 +26,7 @@ type ResultModeProps = {
   userAnswer: string; // 사용자 답변
   correctAnswer: string; // 정답
   counts: { [key: string]: number }; // 각 라벨에 대한 선택자 수
+  correctRate: number; // 정답률
 };
 
 type TeacherModeProps = {
@@ -37,6 +38,7 @@ type TeacherModeProps = {
   labels?: string[]; // multipleChoice 타입일때만 필요
   correctAnswer: string; // 정답
   counts: { [key: string]: number }; // 각 라벨에 대한 선택자 수
+  correctRate: number; // 정답률
 };
 
 type QuizToggleCardProps = QuizModeProps | ResultModeProps | TeacherModeProps;
@@ -47,6 +49,14 @@ const QuizToggleCard: React.FC<QuizToggleCardProps> = (props) => {
   const [inputAnswer, setInputAnswer] = useState<string>(""); // QuizInput에서 입력된 답을 추적
   const [isCardOpen, setIsCardOpen] = useState(false);
 
+  const circleCheckColor = () => {
+    if (props.mode === "quiz") {
+      return selectedAnswer || inputAnswer ? "#4894FE" : "#ccc"; // quiz 모드일 경우
+    } else if (props.mode === "result") {
+      return props.userAnswer === props.correctAnswer ? "#4894FE" : "#ea4335"; // result 모드일 경우 정답이면 파란색, 오답이면 빨간색
+    }
+    return "#ccc"; // 기본값
+  };
   const handleSelect = (label: string) => {
     setSelectedAnswer(label);
     if (props.mode === "quiz" && props.onSelect) {
@@ -160,7 +170,7 @@ const QuizToggleCard: React.FC<QuizToggleCardProps> = (props) => {
             <CircleCheck
               className={styles.checkIcon}
               size={24}
-              color={selectedAnswer || inputAnswer ? "#4894FE" : "#ccc"}
+              color={circleCheckColor()}
               style={{
                 transition: "color 0.3s ease", // 부드러운 색상 변화
               }}
@@ -168,19 +178,15 @@ const QuizToggleCard: React.FC<QuizToggleCardProps> = (props) => {
           )}
           <h1 className={styles.index}>퀴즈 {props.quizIndex}</h1>
           {(props.mode === "result" || props.mode === "teacher") && (
-            <p className={styles.correctRate}>정답률: </p>
+            <p className={styles.correctRate}>정답률: {props.correctRate}%</p>
           )}
         </div>
 
-        {(props.mode === "quiz" || props.mode === "result") && (
-          <div
-            className={`${styles.toggleButton} ${
-              isCardOpen ? styles.open : ""
-            }`}
-          >
-            <ChevronDown size={24} color="#909090" />
-          </div>
-        )}
+        <div
+          className={`${styles.toggleButton} ${isCardOpen ? styles.open : ""}`}
+        >
+          <ChevronDown size={24} color="#909090" />
+        </div>
       </div>
       <div className={`${styles.content} ${isCardOpen ? styles.open : ""}`}>
         <h2 className={styles.quizTitle}>{props.question}</h2>

@@ -16,14 +16,11 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-
-  font-weight: 600;
   color: $color-neutral-1;
 
   .index {
     font-size: $font-size-md;
-
-    font-weight: 600;
+    font-weight: $font-weight-medium;
   }
 
   .checkIcon {
@@ -32,7 +29,8 @@
   }
 
   .correctRate {
-    color: $color-neutral-6;
+    font-size: $font-size-md;
+    font-weight: $font-weight-regular;
   }
 
   .toggleButton {
