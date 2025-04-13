@@ -1,31 +1,35 @@
 .overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5); /* 반투명 배경 */
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  @include modal-overlay; // 공통 배경 및 중앙 정렬
 }
 
 .modal {
-  background-color: white;
-  border-radius: $radius-xl;
-  padding: 20px;
+  @include modal-base; // 공통 스타일
+
   min-width: 30vw;
   min-height: 60vh;
-  text-align: center;
 
   @include respond-to(sm) {
     max-width: 90vw;
     min-height: 30vh;
   }
 
-  .message {
+  .closeButton {
+    width: 100%;
+    text-align: start;
+
+    .button {
+      cursor: pointer;
+      transition: $transition-fast;
+
+      &:hover {
+        transform: scale(1.1); /* 살짝 커지는 효과 */
+      }
+    }
+  }
+
+  .content {
     font-size: $font-size-md;
-    padding: $spacing-sm 0 $spacing-xl 0;
+    padding: $spacing-sm 0;
     width: 100%;
     display: flex;
     justify-content: center;
@@ -35,18 +39,6 @@
     h1 {
       font-size: $font-size-lg;
       font-weight: $font-weight-medium;
-    }
-  }
-  .closeButton {
-    width: 100%;
-    text-align: start;
-    .button {
-      cursor: pointer;
-      transition: $transition-fast;
-
-      &:hover {
-        transform: scale(1.1); /* 살짝 커지는 효과 */
-      }
     }
   }
 }
