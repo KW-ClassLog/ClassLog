@@ -69,7 +69,7 @@ const FileDisplay: React.FC<FileDisplayProps> = ({ fileName }) => {
   const icon = getIcon(fileExtension);
 
   return (
-    <div className="mixed-layout-2" style={{ gap: "10px" }}>
+    <div className={`${styles.fileDisplayContainer} mixed-layout-2`}>
       <div className={styles.fileIconContainer}>
         <Image
           src={icon}

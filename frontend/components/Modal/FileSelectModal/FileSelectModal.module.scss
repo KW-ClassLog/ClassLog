@@ -1,0 +1,74 @@
+.modalContent {
+  text-align: center;
+  width: 50vw;
+
+  @include respond-to(lg) {
+    width: 90vw;
+  }
+
+  .description {
+    width: 100%;
+    text-align: end;
+    font-weight: $font-weight-regular;
+    .uploadLink {
+      color: $color-blue;
+      cursor: pointer;
+    }
+  }
+
+  .selectedFiles {
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap; /* 아이템들이 줄 바꿈 되도록 설정 */
+    gap: 10px; /* 아이템들 간의 간격 */
+    width: 100%;
+    max-height: 200px; /* 원하는 최대 높이 설정 */
+    overflow-y: auto; /* 내용이 넘칠 경우 세로 스크롤을 추가 */
+
+    .selectedFileItem {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 5px;
+      background-color: $color-skyblue;
+      border-radius: $radius-full;
+      padding: 5px 10px;
+      min-width: 120px;
+      .delelteIcon {
+        cursor: pointer;
+      }
+    }
+  }
+  .fileList {
+    margin-top: $spacing-xs;
+    max-height: 300px;
+    overflow-y: auto;
+    width: 100%;
+    .fileItem {
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid $color-neutral-7;
+      width: 100%; /* 부모의 너비를 100%로 설정 */
+      gap: 10px; /* 아이템 간의 간격을 추가 */
+      .fileDisplay {
+        flex: 0 0 70%; /* FileDisplay는 70% 너비를 차지 */
+        @include respond-to(lg) {
+          flex: 0 0 40%; /* FileDisplay는 70% 너비를 차지 */
+        }
+        overflow: hidden;
+      }
+
+      .fileSize {
+        flex: 1; /* fileSize는 나머지 공간을 차지 */
+        text-align: left; /* 오른쪽 정렬 */
+        margin-right: 10px;
+        font-size: $font-size-sm;
+        color: $color-neutral-5;
+      }
+    }
+  }
+  .buttonContainer {
+    width: 100%;
+    margin-top: $spacing-xl;
+  }
+}
