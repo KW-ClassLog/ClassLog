@@ -126,6 +126,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 100vh; /* overlay가 화면 전체를 덮도록 설정 */
 }
 
 // 공통적인 모달 스타일
