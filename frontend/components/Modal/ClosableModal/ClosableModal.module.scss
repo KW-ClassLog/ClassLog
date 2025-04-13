@@ -1,13 +1,15 @@
 .overlay {
   @include modal-overlay; // 공통 배경 및 중앙 정렬
+  height: 100%;
 }
 
 .modal {
   @include modal-base; // 공통 스타일
 
   min-width: 30vw;
-  min-height: 60vh;
-
+  height: 60vh;
+  display: flex;
+  flex-direction: column; /* 세로 정렬 */
   @include respond-to(sm) {
     max-width: 90vw;
     min-height: 30vh;
@@ -29,12 +31,12 @@
 
   .content {
     font-size: $font-size-md;
-    padding: $spacing-sm 0;
     width: 100%;
     display: flex;
     justify-content: center;
     flex-direction: column;
     gap: $spacing-sm;
+    flex-grow: 1;
 
     h1 {
       font-size: $font-size-lg;
