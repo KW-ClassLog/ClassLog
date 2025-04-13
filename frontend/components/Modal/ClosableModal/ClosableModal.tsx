@@ -20,7 +20,7 @@ const ClosableModal: React.FC<ClosableModalProps> = ({ children, onClose }) => {
     <div className={styles.overlay} onClick={handleOverlayClick}>
       <div className={styles.modal}>
         <div className={styles.closeButton}>
-          <X onClick={onClose} size={24} />
+          <X onClick={onClose} size={24} className={styles.button} />
         </div>
         <div className={styles.message}>{children}</div>
       </div>

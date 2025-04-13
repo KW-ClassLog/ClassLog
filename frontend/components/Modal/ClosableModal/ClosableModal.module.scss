@@ -14,9 +14,15 @@
   background-color: white;
   border-radius: $radius-xl;
   padding: 20px;
-  min-width: 500px;
-  min-height: 700px;
+  min-width: 30vw;
+  min-height: 60vh;
   text-align: center;
+
+  @include respond-to(sm) {
+    max-width: 90vw;
+    min-height: 30vh;
+  }
+
   .message {
     font-size: $font-size-md;
     padding: $spacing-sm 0 $spacing-xl 0;
@@ -34,5 +40,13 @@
   .closeButton {
     width: 100%;
     text-align: start;
+    .button {
+      cursor: pointer;
+      transition: $transition-fast;
+
+      &:hover {
+        transform: scale(1.1); /* 살짝 커지는 효과 */
+      }
+    }
   }
 }
