@@ -8,7 +8,10 @@ import org.example.backend.domain.user.exception.UserException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring6.SpringTemplateEngine;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -20,6 +23,7 @@ public class MailServiceImpl implements MailService{
     private String senderEmail;
 
     private final JavaMailSender mailSender;
+    private final SpringTemplateEngine templateEngine;
 
     // 인증 코드 생성 및 이메일 전송
     @Override
@@ -41,21 +45,18 @@ public class MailServiceImpl implements MailService{
     private MimeMessage createEmailForm(String email,int authCode) throws MessagingException{
 
         MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message,true,"UTF-8");
+
         message.setFrom(senderEmail);
         message.setRecipients(MimeMessage.RecipientType.TO,email);
-        message.setSubject("ClassLog 인증코드");
-        message.setText(setContext(String.valueOf(authCode)),"utf-8","html");
+        message.setSubject("[ClassLog] 이메일 인증을 위한 인증번호 안내 드립니다.");
 
+        Context context = new Context();
+        context.setVariable("authCode",authCode);
+
+        String htmlContent = templateEngine.process("index",context);
+        helper.setText(htmlContent,true);
         return message;
-    }
-
-    // 본문 생성
-    private String setContext(String authCode){
-        String body = "";
-        body += "<h4>" + "인증번호를 입력하세요." +"</h4>";
-        body += "<h2>" + "[" + authCode +"]" + "</h2>";
-
-        return body;
     }
 
 
