@@ -1,4 +1,8 @@
 package org.example.backend.domain.lecture.service;
 
-public class LectureService {
+import org.example.backend.domain.lecture.dto.request.LectureRequestDTO;
+import org.example.backend.domain.lecture.entity.Lecture;
+
+public interface LectureService {
+    void createLecture(LectureRequestDTO dto);
 }
