@@ -1,0 +1,46 @@
+.chatBox {
+  .messageContainer {
+    display: flex;
+    align-items: flex-start;
+    gap: $spacing-sm;
+    border: 1px solid $color-neutral-6;
+    border-radius: $radius-lg;
+    background-color: $color-white;
+    padding: $spacing-sm;
+
+    .profilePicture {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid $color-neutral-7;
+    }
+
+    .textContainer {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      .header {
+        display: flex;
+        justify-content: space-between;
+        font-size: $font-size-md;
+        color: $color-neutral-6;
+
+        .nickname {
+          font-weight: $font-weight-bold;
+          color: $color-black;
+        }
+        .timestamp {
+          font-size: $font-size-sm;
+          color: $color-neutral-5;
+        }
+      }
+      .message {
+        margin-top: 5px;
+        color: $color-black;
+        font-size: $font-size-md;
+        font-weight: $font-weight-regular;
+      }
+    }
+  }
+}
