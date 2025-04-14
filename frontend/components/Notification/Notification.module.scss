@@ -1,0 +1,61 @@
+.notification {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid $color-neutral-7;
+  font-size: $font-size-md;
+  color: $color-neutral-6;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  .leftSide {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-sm;
+
+    .className {
+      font-weight: $font-weight-bold;
+      color: $color-black;
+    }
+
+    .notificationComment {
+      color: $color-neutral-5;
+      font-weight: $font-weight-regular;
+    }
+  }
+
+  .rightSide {
+    display: flex;
+    flex-direction: column;
+    text-align: right;
+
+    .notificationDate {
+      font-size: $font-size-sm;
+      color: $color-neutral-4;
+    }
+
+    .unreadDot {
+      font-size: 20px;
+      color: $color-danger;
+      margin-top: 2px;
+    }
+    .readDot {
+      font-size: 20px;
+      color: $color-white;
+      margin-top: 2px;
+    }
+  }
+
+  &:hover {
+    background-color: $color-skyblue;
+  }
+
+  &.read {
+    opacity: 0.35;
+  }
+
+  &.unread {
+    opacity: 1;
+  }
+}
