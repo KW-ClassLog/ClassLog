@@ -9,7 +9,7 @@
     font-size: $font-size-md;
     cursor: pointer;
     width: 100%;
-    padding: 10px 0;
+    padding: $spacing-md 0;
     text-align: center;
     position: relative;
     color: $color-neutral-6;
@@ -42,5 +42,8 @@
   .active {
     color: $color-blue;
     transition: color 0.3s ease;
+    &:hover {
+      color: $color-blue;
+    }
   }
 }
