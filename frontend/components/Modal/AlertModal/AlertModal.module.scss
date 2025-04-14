@@ -1,0 +1,9 @@
+.overlay {
+  @include modal-overlay;
+}
+
+.modal {
+  @include modal-base; // 공통 스타일
+  width: 300px;
+  height: fit-content;
+}

@@ -1,0 +1,46 @@
+.overlay {
+  @include modal-overlay; // 공통 배경 및 중앙 정렬
+  height: 100%;
+}
+
+.modal {
+  @include modal-base; // 공통 스타일
+
+  min-width: 30vw;
+  height: 60vh;
+  display: flex;
+  flex-direction: column; /* 세로 정렬 */
+  @include respond-to(sm) {
+    max-width: 90vw;
+    min-height: 30vh;
+  }
+
+  .closeButton {
+    width: 100%;
+    text-align: start;
+
+    .button {
+      cursor: pointer;
+      transition: $transition-fast;
+
+      &:hover {
+        transform: scale(1.1); /* 살짝 커지는 효과 */
+      }
+    }
+  }
+
+  .content {
+    font-size: $font-size-md;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    gap: $spacing-sm;
+    flex-grow: 1;
+
+    h1 {
+      font-size: $font-size-lg;
+      font-weight: $font-weight-medium;
+    }
+  }
+}

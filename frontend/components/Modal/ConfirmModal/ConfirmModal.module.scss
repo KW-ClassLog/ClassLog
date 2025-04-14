@@ -1,0 +1,9 @@
+.overlay {
+  @include modal-overlay; // 공통 배경 및 중앙 정렬
+}
+
+.modal {
+  @include modal-base; // 공통 스타일
+  width: 300px;
+  height: fit-content;
+}
