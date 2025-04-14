@@ -56,4 +56,15 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
         accountLocalRepository.save(accountLocal);
     }
+
+    // 이메일 중복 인증
+    @Override
+    public void validateEmailDuplication(String email) {
+
+        Optional<AccountLocal> existingAccount = accountLocalRepository.findByEmail(email);
+        if (existingAccount.isPresent()) {
+            throw new UserException(UserErrorCode._EMAIL_ALREADY_EXISTS);
+        }
+    }
+
 }

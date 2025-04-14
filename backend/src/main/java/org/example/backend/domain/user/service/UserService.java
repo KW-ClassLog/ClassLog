@@ -6,4 +6,8 @@ public interface UserService {
 
     //회원가입
     void registerUser(RegisterRequestDTO request);
+
+    // 이메일 중복 체크
+    void validateEmailDuplication(String email);
+
 }
