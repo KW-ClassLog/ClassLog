@@ -37,15 +37,15 @@ body.student-body {
 }
 
 body.student-body > div {
-  max-width: 700px;
+  max-width: 600px;
   margin: 0 auto;
   width: 100%;
   background-color: $color-white;
   min-height: 100vh;
 }
 
-body.teacher-body {
-  background-color: $color-white;
+body.student-body.show-nav > div {
+  flex: 1;
 }
 
 body.non-login-body {
