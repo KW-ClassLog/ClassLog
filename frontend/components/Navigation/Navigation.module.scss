@@ -1,0 +1,44 @@
+.navigation {
+  max-width: 600px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 8vh;
+  margin: 0 auto;
+
+  background-color: $color-white;
+  border-top: 1px solid $color-neutral-7;
+
+  .tab {
+    margin: $spacing-sm;
+    width: 25%;
+    display: flex;
+    gap: $spacing-xs;
+    align-items: center;
+    cursor: pointer;
+    justify-content: center;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    color: $color-mutedblue;
+    border-radius: $radius-md;
+    font-weight: $font-weight-medium;
+    font-size: $font-size-md;
+
+    .icon {
+      width: clamp(18px, 4vw, 26px);
+    }
+
+    &.active {
+      background-color: $color-skyblue;
+      color: $color-lightblue;
+      font-weight: $font-weight-bold;
+    }
+
+    &:hover {
+      background-color: $color-neutral-7;
+    }
+  }
+}
