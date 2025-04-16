@@ -10,7 +10,7 @@ export default function RootLayout({
       <head>
         <link rel="manifest" href="./manifest.webmanifest" />
         <title>ClassLog</title>
-        <meta name="theme-color" content="#000000" />
+        <meta name="theme-color" content="#ffffff" />
         <meta name="apple-mobile-web-app-title" content="ClassLog" />
         <link
           rel="apple-touch-icon"
