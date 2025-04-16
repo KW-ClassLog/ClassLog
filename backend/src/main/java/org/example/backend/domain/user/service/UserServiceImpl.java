@@ -67,4 +67,11 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    // 이메일이 존재 여부 확인 - 임시 비번 발급용
+    @Override
+    public boolean existEmail(String email) {
+        Optional<AccountLocal> existingAccount = accountLocalRepository.findByEmail(email);
+        return existingAccount.isPresent();
+    }
+
 }
