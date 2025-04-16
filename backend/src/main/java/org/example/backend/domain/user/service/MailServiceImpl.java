@@ -32,7 +32,8 @@ public class MailServiceImpl implements MailService{
         int authCode = ThreadLocalRandom.current().nextInt(100000, 1000000);
 
         try{
-            MimeMessage emailForm = createEmailForm(email,authCode);
+            MimeMessage emailForm = createEmailForm(email,authCode,
+                    "[ClassLog] 이메일 인증을 위한 인증번호 안내 드립니다.","index");
             mailSender.send(emailForm);
         } catch (MessagingException | MailSendException e){
             throw new UserException(UserErrorCode._EMAIL_SEND_FAILURE);
@@ -42,19 +43,19 @@ public class MailServiceImpl implements MailService{
     }
 
     // 메시지 생성
-    private MimeMessage createEmailForm(String email,int authCode) throws MessagingException{
+    private MimeMessage createEmailForm(String email,int authCode, String subject, String templateName) throws MessagingException{
 
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message,true,"UTF-8");
 
         message.setFrom(senderEmail);
         message.setRecipients(MimeMessage.RecipientType.TO,email);
-        message.setSubject("[ClassLog] 이메일 인증을 위한 인증번호 안내 드립니다.");
+        message.setSubject(subject);
 
         Context context = new Context();
         context.setVariable("authCode",authCode);
 
-        String htmlContent = templateEngine.process("index",context);
+        String htmlContent = templateEngine.process(templateName,context);
         helper.setText(htmlContent,true);
         return message;
     }
