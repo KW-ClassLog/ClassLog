@@ -1,0 +1,39 @@
+.studentClassDetailHeader {
+  max-width: 600px;
+  width: 100%;
+  display: flex;
+  justify-content: center; /* 중앙 정렬 */
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 6vh;
+  margin: 0 auto;
+  background-color: $color-white;
+  border-bottom: 1px solid $color-neutral-7;
+  z-index: 10;
+  padding: 0 10px;
+
+  h1 {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-medium;
+    flex-grow: 1;
+    text-align: center;
+  }
+
+  .chevronIcon {
+    position: absolute;
+    left: 10px;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.2s ease;
+
+    &:hover {
+      transform: scale(1.2);
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+  }
+}
