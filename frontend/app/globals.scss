@@ -48,6 +48,15 @@ body.student-body.show-nav > div {
   flex: 1;
 }
 
+body.student-body.show-header > div {
+  flex: 1;
+  min-height: 87vh;
+  position: absolute;
+  top: 6vh;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
 body.non-login-body {
   background-color: $color-white;
 }
