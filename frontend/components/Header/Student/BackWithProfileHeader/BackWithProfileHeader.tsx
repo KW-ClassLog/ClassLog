@@ -1,19 +1,14 @@
 "use client";
 
 import styles from "./BackWithProfileHeader.module.scss";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, User } from "lucide-react";
 
-type BackWithProfileHeaderProps = {
-  title: string; // title을 props로 받기 위한 타입 정의
-};
-
-const BackWithProfileHeader: React.FC<BackWithProfileHeaderProps> = ({
-  title,
-}) => {
+const BackWithProfileHeader: React.FC = () => {
   return (
     <section className={styles.studentHeader}>
-      <ChevronLeft className={styles.chevronIcon} />
-      <h1>{title}</h1>
+      <ChevronLeft className={styles.icon} />
+
+      <User className={styles.icon} />
     </section>
   );
 };
