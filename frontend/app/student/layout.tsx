@@ -1,8 +1,14 @@
 "use client";
 import { usePathname } from "next/navigation";
+import { STUDENT_ROUTE_CONFIG } from "@/config/studentRouteConfig";
+import { StudentHeaderType } from "@/config/headerType";
+import { NavigationType } from "@/config/navigationType";
+
+import BackWithProfileHeader from "@/components/Header/Student/BackWithProfileHeader/BackWithProfileHeader";
+import BackWithTitleHeader from "@/components/Header/Student/BackWithTitleHeader/BackWithTitleHeader";
+import TitleHeader from "@/components/Header/Student/TitleHeader/TitleHeader";
+
 import Navigation from "@/components/Navigation/Navigation";
-import { ROUTES } from "@/constants/routes";
-import StudentPageTitleHeader from "@/components/Header/StudentPageTitleHeader/StudentPageTitleHeader";
 
 export default function StudentLayout({
   children,
@@ -11,42 +17,48 @@ export default function StudentLayout({
 }) {
   const pathname = usePathname();
 
-  // 네비게이션을 표시할 페이지 경로 목록
-  const navigationPages = [
-    ROUTES.studentHome,
-    ROUTES.studentClass,
-    ROUTES.studentNotification,
-    ROUTES.studentProfile,
-  ];
+  // 현재 경로에 해당하는 라우트 설정 찾기
+  const currentRoute = Object.values(STUDENT_ROUTE_CONFIG).find((config) => {
+    // path가 함수인 경우 (동적 라우트)
+    if (typeof config.path === "function") {
+      // 패턴 매칭으로 확인 (예: /student/class/123 → /student/class/[id])
+      const pathPattern = config.path("[^/]+");
+      return new RegExp(`^${pathPattern}$`).test(pathname);
+    }
+    return config.path === pathname;
+  });
 
-  const titleHeaderPages = [
-    ROUTES.studentClass,
-    ROUTES.studentNotification,
-    ROUTES.studentProfile,
-  ];
+  // 헤더 렌더링 함수
+  const renderHeader = () => {
+    if (!currentRoute) return null;
 
-  // 각 페이지에 대한 타이틀 설정
-  const pageTitles: { [key: string]: string } = {
-    [ROUTES.studentClass]: "클래스",
-    [ROUTES.studentNotification]: "알림",
-    [ROUTES.studentProfile]: "프로필",
-    // 추가적인 경로 및 타이틀을 설정할 수 있습니다
+    switch (currentRoute.headerType) {
+      case StudentHeaderType.NONE:
+        return null;
+      case StudentHeaderType.TITLE:
+        return <TitleHeader title={currentRoute.title || ""} />;
+      case StudentHeaderType.BACK_WITH_TITLE:
+        return <BackWithTitleHeader title={currentRoute.title || ""} />;
+      case StudentHeaderType.BACK_WITH_PROFILE:
+        return <BackWithProfileHeader />;
+      default:
+        return null;
+    }
   };
 
-  // 네비게이션을 해당 경로에서만 표시
-  const showNavigation = navigationPages.includes(pathname);
-  const showTitleHeader = titleHeaderPages.includes(pathname);
+  // TODO: dynamicTitle일 경우에는 스토어에 저장된 타이틀 가져와서 적용하는 부분 추후 추가
 
-  const pageTitle = pageTitles[pathname] || "기본 타이틀"; // 기본 타이틀을 설정할 수도 있습니다.
+  // 네비게이션 표시 여부
+  const showNavigation = currentRoute?.navType === NavigationType.DEFAULT;
 
   return (
     <body
       className={`student-body ${showNavigation ? "show-nav" : ""} ${
-        showTitleHeader ? "show-header" : ""
+        currentRoute?.headerType !== StudentHeaderType.NONE ? "show-header" : ""
       }`}
     >
-      {showTitleHeader && <StudentPageTitleHeader title={pageTitle} />}
-      {children}
+      {renderHeader()}
+      <div className="content">{children}</div>
       {showNavigation && <Navigation />}
     </body>
   );
