@@ -11,7 +11,7 @@ const BackWithProfileHeader: React.FC<BackWithProfileHeaderProps> = ({
   title,
 }) => {
   return (
-    <section className={styles.section}>
+    <section className={styles.studentHeader}>
       <ChevronLeft className={styles.chevronIcon} />
       <h1>{title}</h1>
     </section>

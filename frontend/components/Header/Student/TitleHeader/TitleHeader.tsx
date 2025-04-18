@@ -8,7 +8,7 @@ type TitleHeaderProps = {
 
 const TitleHeader: React.FC<TitleHeaderProps> = ({ title }) => {
   return (
-    <section className={styles.section}>
+    <section className={styles.studentHeader}>
       <h1>{title}</h1>
     </section>
   );

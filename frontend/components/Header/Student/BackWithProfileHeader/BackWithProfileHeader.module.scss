@@ -1,19 +1,19 @@
-.section {
+.studentHeader {
   max-width: 600px;
   width: 100%;
   display: flex;
-  justify-content: center; /* 중앙 정렬 */
+  justify-content: center;
   align-items: center;
-  position: fixed;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
   height: 6vh;
   margin: 0 auto;
   background-color: $color-white;
   border-bottom: 1px solid $color-neutral-7;
-  z-index: 10;
   padding: 0 10px;
+
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
 
   h1 {
     font-size: $font-size-lg;

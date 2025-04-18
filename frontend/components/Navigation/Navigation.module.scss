@@ -3,16 +3,15 @@
   width: 100%;
   display: flex;
   justify-content: space-between;
+  height: 8vh;
+  margin: 0 auto;
+  background-color: $color-white;
+  border-top: 1px solid $color-neutral-7;
+
   position: fixed;
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  height: 8vh;
-  margin: 0 auto;
-  z-index: 10;
-
-  background-color: $color-white;
-  border-top: 1px solid $color-neutral-7;
 
   .tab {
     margin: $spacing-sm;
