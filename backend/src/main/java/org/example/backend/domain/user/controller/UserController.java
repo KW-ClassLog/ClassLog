@@ -3,6 +3,7 @@ package org.example.backend.domain.user.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.backend.domain.accountLocal.dto.request.EmailRequestDTO;
+import org.example.backend.domain.accountLocal.dto.request.ResetPwdRequestDTO;
 import org.example.backend.domain.user.dto.request.RegisterRequestDTO;
 import org.example.backend.domain.accountLocal.dto.response.EmailResponseDTO;
 import org.example.backend.domain.user.exception.UserErrorCode;
@@ -70,4 +71,11 @@ public class UserController {
         return ApiResponse.onSuccess("임시 비밀번호 발급 성공");
     }
 
+    // 비밀번호 재설정
+    @PatchMapping("/password/reset")
+    public ApiResponse<String> updatePwd(@RequestBody @Valid ResetPwdRequestDTO resetPwdRequestDTO){
+        userService.updatePassword(resetPwdRequestDTO.getPassword(),resetPwdRequestDTO.getNewPassword());
+
+        return ApiResponse.onSuccess("비밀번호 재설정 성공");
+    }
 }

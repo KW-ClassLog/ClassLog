@@ -15,4 +15,7 @@ public interface UserService {
 
     // 임시비번 업데이트
     void updateTempPassword(String email, String tempPassword);
+
+    // 비번 재설정
+    void updatePassword(String currentPassword,String newPassword);
 }
