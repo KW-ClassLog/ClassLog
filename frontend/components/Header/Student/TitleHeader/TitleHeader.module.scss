@@ -1,0 +1,22 @@
+.studentHeader {
+  max-width: 600px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 6vh;
+  margin: 0 auto;
+  background-color: $color-white;
+  border-bottom: 1px solid $color-neutral-7;
+  padding: 0px auto;
+
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+
+  h1 {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-medium;
+  }
+}

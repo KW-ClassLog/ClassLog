@@ -34,18 +34,24 @@ a {
 /* ===== Role-Based Body Styles ===== */
 body.student-body {
   background-color: $color-neutral-7;
+  overflow-y: hidden;
+
+  .content {
+    max-width: 600px;
+    margin: 0 auto;
+    width: 100%;
+    background-color: $color-white;
+    min-height: 100vh;
+    overflow-y: auto;
+  }
 }
 
-body.student-body > div {
-  max-width: 700px;
-  margin: 0 auto;
-  width: 100%;
-  background-color: $color-white;
-  min-height: 100vh;
+body.student-body.show-nav > .content {
+  padding-bottom: 8vh; /* Navigation 높이 만큼 여백 추가 */
 }
 
-body.teacher-body {
-  background-color: $color-white;
+body.student-body.show-header > .content {
+  padding-top: 6vh; /* 타이틀 헤더 높이 만큼 여백 추가 */
 }
 
 body.non-login-body {

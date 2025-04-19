@@ -1,0 +1,31 @@
+.studentHeader {
+  max-width: 600px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 6vh;
+  margin: 0 auto;
+  background-color: $color-blue;
+  border-bottom: 1px solid $color-neutral-7;
+  padding: 0 10px;
+
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+
+  .icon {
+    color: $color-white;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.2s ease;
+
+    &:hover {
+      transform: scale(1.2);
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+  }
+}
