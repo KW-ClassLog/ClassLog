@@ -28,7 +28,7 @@ export default function TeacherLayout({
   return (
     <body className={`teacher-body ${showSidebar ? "show-sidebar" : ""}`}>
       {showSidebar && <SideBar />}
-      {children}
+      <div className="content">{children}</div>
     </body>
   );
 }

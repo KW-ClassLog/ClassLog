@@ -54,6 +54,32 @@ body.student-body.show-header > .content {
   padding-top: 6vh; /* 타이틀 헤더 높이 만큼 여백 추가 */
 }
 
+body.teacher-body {
+  background-color: $color-neutral-7;
+  overflow-y: hidden;
+
+  .content {
+    height: 100vh;
+    width: 100%;
+    margin: 0 auto;
+
+    background-color: $color-white;
+
+    overflow-y: auto;
+  }
+}
+
+body.teacher-body.show-sidebar > .content {
+  padding-left: 260px;
+  @include respond-to(lg) {
+    padding-left: 110px;
+  }
+}
+
+// body.teacher-body.show-header > .content {
+//   padding-top: 6vh; /* 타이틀 헤더 높이 만큼 여백 추가 */
+// }
+
 body.non-login-body {
   background-color: $color-white;
 }

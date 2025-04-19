@@ -36,11 +36,11 @@ const SideBar = () => {
     if (tab === "home") {
       router.push(ROUTES.teacherHome);
     } else if (tab === "class-management") {
-      router.push(ROUTES.teacherLectureManagement);
+      router.push(ROUTES.teacherClassManagement);
     } else if (tab === "lecture-management") {
-      router.push(ROUTES.teacherLectureNoteManagement);
+      router.push(ROUTES.teacherLectureManagement);
     } else if (tab === "lecturenote-management") {
-      router.push(ROUTES.teacherStudentManagement);
+      router.push(ROUTES.teacherLectureNoteManagement);
     } else if (tab === "student-management") {
       router.push(ROUTES.teacherStudentManagement);
     }
