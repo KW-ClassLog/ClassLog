@@ -1,3 +1,3 @@
-export default function TeacherLectureDetailPage() {
-  return <div>teacher home</div>;
+export default function TeacherLectureManagementPage() {
+  return <div>강의 관리</div>;
 }
