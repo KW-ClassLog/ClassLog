@@ -1,0 +1,59 @@
+.sidebar {
+  width: 12vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: $color-white;
+  border-right: 1px solid $color-neutral-7;
+  position: fixed;
+  left: 0;
+  height: 100%;
+
+  .tab {
+    width: 100%;
+    gap: $spacing-xs;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    color: $color-mutedblue;
+    font-weight: $font-weight-medium;
+    font-size: $font-size-md;
+    padding: 0 $spacing-lg;
+    transition: $transition-default;
+
+    .tabItem {
+      border-radius: $radius-md;
+      width: 100%;
+      padding: $spacing-sm $spacing-lg;
+      display: flex;
+      align-items: center;
+      gap: $spacing-xs;
+      transition: $transition-default;
+    }
+
+    .icon {
+      width: clamp(18px, 4vw, 26px);
+    }
+
+    &.active {
+      .tabItem {
+        border-radius: $radius-md;
+        background-color: $color-skyblue;
+        color: $color-lightblue;
+        font-weight: $font-weight-bold;
+      }
+      border-left: 3px solid $color-blue;
+
+      &:hover {
+        .tabItem {
+          background-color: $color-skyblue;
+        }
+      }
+    }
+
+    &:hover {
+      .tabItem {
+        background-color: $color-neutral-7;
+      }
+    }
+  }
+}
