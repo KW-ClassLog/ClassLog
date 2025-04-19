@@ -19,7 +19,7 @@ import java.util.concurrent.ThreadLocalRandom;
 @RequiredArgsConstructor
 public class MailServiceImpl implements MailService{
 
-    @Value("${spring.mail.username")
+    @Value("${spring.mail.username}")
     private String senderEmail;
 
     private final JavaMailSender mailSender;
@@ -33,7 +33,7 @@ public class MailServiceImpl implements MailService{
 
         try{
             MimeMessage emailForm = createEmailForm(email,authCode,
-                    "[ClassLog] 이메일 인증을 위한 인증번호 안내 드립니다.","index");
+                    "[ClassLog] 이메일 인증을 위한 인증번호 안내 드립니다.","emailVerification");
             mailSender.send(emailForm);
         } catch (MessagingException | MailSendException e){
             throw new UserException(UserErrorCode._EMAIL_SEND_FAILURE);
