@@ -1,13 +1,21 @@
 .sidebar {
-  width: 12vw;
+  width: 260px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   background-color: $color-white;
   border-right: 1px solid $color-neutral-7;
   position: fixed;
   left: 0;
   height: 100%;
+  transition: $transition-default;
+
+  @include respond-to(lg) {
+    width: 110px;
+    .text {
+      display: none;
+    }
+  }
 
   .tab {
     width: 100%;
@@ -19,6 +27,7 @@
     font-size: $font-size-md;
     padding: 0 $spacing-lg;
     transition: $transition-default;
+    margin: $spacing-xs 0;
 
     .tabItem {
       border-radius: $radius-md;
@@ -28,6 +37,10 @@
       align-items: center;
       gap: $spacing-xs;
       transition: $transition-default;
+      @include respond-to(lg) {
+        padding: $spacing-sm;
+        justify-content: center;
+      }
     }
 
     .icon {

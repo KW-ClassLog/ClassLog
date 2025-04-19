@@ -32,7 +32,7 @@ const SideBar = () => {
       >
         <div className={styles.tabItem}>
           <House className={styles.icon} />
-          <span>홈</span>
+          <span className={styles.text}>홈</span>
         </div>
       </div>
       <div
@@ -43,7 +43,7 @@ const SideBar = () => {
       >
         <div className={styles.tabItem}>
           <School className={styles.icon} />
-          <span>클래스 관리</span>
+          <span className={styles.text}>클래스 관리</span>
         </div>
       </div>
       <div
@@ -54,7 +54,7 @@ const SideBar = () => {
       >
         <div className={styles.tabItem}>
           <BookOpenText className={styles.icon} />
-          <span>강의 관리</span>
+          <span className={styles.text}>강의 관리</span>
         </div>
       </div>
       <div
@@ -65,7 +65,7 @@ const SideBar = () => {
       >
         <div className={styles.tabItem}>
           <FileText className={styles.icon} />
-          <span>강의자료 관리</span>
+          <span className={styles.text}>강의자료 관리</span>
         </div>
       </div>
       <div
@@ -76,7 +76,7 @@ const SideBar = () => {
       >
         <div className={styles.tabItem}>
           <Users className={styles.icon} />
-          <span>학생 관리</span>
+          <span className={styles.text}>학생 관리</span>
         </div>
       </div>
     </section>
