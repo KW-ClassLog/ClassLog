@@ -24,12 +24,6 @@ public class UserRedisServiceImpl implements UserRedisService{
         redisTemplate.opsForValue().set(key, tempPassword, Duration.ofSeconds(duration));
     }
 
-    // 임시 비밀번호 조회
-    @Override
-    public String getTemporaryPassword(String email) {
-        return redisTemplate.opsForValue().get(buildTempPwdKey(email));
-    }
-
     // 임시 비밀빈호 삭제
     @Override
     public void deleteTemporaryPassword(String email) {
@@ -40,5 +34,11 @@ public class UserRedisServiceImpl implements UserRedisService{
     @Override
     public String buildTempPwdKey(String email) {
         return "tempPwd:" + email;
+    }
+
+    // 키 존재 여부 확인
+    @Override
+    public boolean existTemporaryPassword(String email) {
+        return Boolean.TRUE.equals(redisTemplate.hasKey(buildTempPwdKey(email)));
     }
 }

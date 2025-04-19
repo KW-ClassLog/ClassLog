@@ -74,4 +74,18 @@ public class UserServiceImpl implements UserService {
         return existingAccount.isPresent();
     }
 
+    // 임시비번 업데이트
+    @Override
+    public void updateTempPassword(String email, String tempPassword) {
+        //  기존 사용자 조회
+        AccountLocal accountLocal = accountLocalRepository.findByEmail(email)
+                .orElseThrow(() -> new UserException(UserErrorCode._EMAIL_NOT_FOUND));
+        System.out.println("[userService]: "+tempPassword);
+        // 비밀번호 암호화 후 저장
+        String encoded = passwordEncoder.encode(tempPassword);
+        accountLocal.setPassword(encoded);
+
+        // 저장
+        accountLocalRepository.save(accountLocal);
+    }
 }

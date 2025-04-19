@@ -8,6 +8,7 @@ import org.example.backend.domain.accountLocal.dto.response.EmailResponseDTO;
 import org.example.backend.domain.user.exception.UserErrorCode;
 import org.example.backend.domain.user.exception.UserException;
 import org.example.backend.domain.user.service.MailService;
+import org.example.backend.domain.user.service.UserRedisService;
 import org.example.backend.domain.user.service.UserService;
 import org.example.backend.global.ApiResponse;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +21,7 @@ public class UserController {
 
     private final UserService userService;
     private final MailService mailService;
+    private final UserRedisService userRedisService;
 
     // 회원가입
     @PostMapping
@@ -49,7 +51,7 @@ public class UserController {
 
     // 임시 비번 전송
     @PostMapping("/password/temp")
-    public ApiResponse<EmailResponseDTO> sendTempPwd(@Valid @RequestBody EmailRequestDTO emailRequestDTO){
+    public ApiResponse<String> sendTempPwd(@Valid @RequestBody EmailRequestDTO emailRequestDTO){
         String email = emailRequestDTO.getEmail();
         // 등록된 회원인지 치크
         if(!userService.existEmail(email)){
@@ -59,8 +61,13 @@ public class UserController {
         // 이메일 임시비번 전송
         int tempPassword = mailService.sendTemporaryPassword(emailRequestDTO.getEmail());
 
-        EmailResponseDTO responseDTO = new EmailResponseDTO(tempPassword);
-        return ApiResponse.onSuccess(responseDTO);
+        // 레디스 저장
+        userRedisService.setTemporaryPassword(email, String.valueOf(tempPassword),600);
+
+        // DB 업데이트
+        userService.updateTempPassword(email,String.valueOf(tempPassword));
+
+        return ApiResponse.onSuccess("임시 비밀번호 발급 성공");
     }
 
 }

@@ -13,4 +13,6 @@ public interface UserService {
     // 이메일이 존재 여부 확인
     boolean existEmail(String email);
 
+    // 임시비번 업데이트
+    void updateTempPassword(String email, String tempPassword);
 }
