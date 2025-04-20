@@ -50,9 +50,9 @@ public class SecurityConfig {
                 .formLogin((auth)->auth.disable()) //Form 로그인 방식 disable
                 .httpBasic((auth)-> auth.disable()) // http basic 인증방식 disable
                 .authorizeHttpRequests((auth)->auth // 경로별 인가 작업
-//                        .anyRequest().permitAll())
-                        .requestMatchers("/api/users","/","/api/users/login","/api/users/password/temp").permitAll()
-                        .anyRequest().authenticated())
+                        .anyRequest().permitAll())
+//                        .requestMatchers("/api/users","/api/users/verify-email","/api/users/login","/api/users/password/temp").permitAll()
+//                        .anyRequest().authenticated())
                 .addFilterBefore(new JWTFilter(jwtUtil),LoginFilter.class) // 미들웨어
                 .addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class) // custom한 login필터 추가
                 .sessionManagement((session)->session // 세션설정
