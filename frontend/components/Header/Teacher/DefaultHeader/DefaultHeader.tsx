@@ -11,10 +11,7 @@ const DefaultHeader: React.FC = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
   const router = useRouter();
 
-  // 드롭다운 토글 함수
-  const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
-  };
+  // TODO: 유저 아이디 스토어나 로컬스토리지에서 받아와서 하기
 
   // '설정' 클릭 시 페이지 이동 함수
   const handleSettingsClick = () => {
@@ -29,7 +26,10 @@ const DefaultHeader: React.FC = () => {
     <section className={styles.teacherHeader}>
       <Bell className={styles.icon} />
 
-      <div className={styles.profile} onClick={toggleDropdown}>
+      <div
+        className={styles.profile}
+        onClick={() => setIsDropdownOpen((prev) => !prev)}
+      >
         <Image
           src="/images/logo2.png"
           alt="Profile"
