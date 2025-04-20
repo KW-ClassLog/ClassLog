@@ -7,6 +7,10 @@
   padding-left: calc(260px + $spacing-lg);
   padding-right: $spacing-lg;
 
+  &.teacherHeaderClassSelection {
+    justify-content: flex-end !important;
+  }
+
   @include respond-to(lg) {
     padding-left: calc(110px + $spacing-lg);
   }

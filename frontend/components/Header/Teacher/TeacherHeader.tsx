@@ -1,13 +1,17 @@
 "use client";
 
-import styles from "./ClassSelectionHeader.module.scss";
+import styles from "./TeacherHeader.module.scss";
 import { Bell, ChevronDown, Settings, LogOut } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { ROUTES } from "@/constants/routes";
 import { useRouter } from "next/navigation"; // Next.js의 useRouter 사용
 
-const ClassSelectionHeader: React.FC = () => {
+type TeacherHeaderProps = {
+  mode: "classSelection" | "default"; // mode에 따라 동작을 달리함
+};
+
+const TeacherHeader: React.FC<TeacherHeaderProps> = ({ mode }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
   const [toggleClassSelectionOpen, setToggleClassSelectionOpen] =
     useState<boolean>(false);
@@ -17,11 +21,6 @@ const ClassSelectionHeader: React.FC = () => {
     "클래스 2",
     "클래스 3",
   ]);
-
-  // TODO: 스토어에서 클래스 목록 받아와서 setClassList로 저장하기
-
-  // TODO: 유저 아이디 스토어나 로컬스토리지에서 받아와서 하기
-
   const [selectedClass, setSelectedClass] = useState<string | null>(null); // 선택된 클래스 상태
 
   const router = useRouter();
@@ -43,20 +42,44 @@ const ClassSelectionHeader: React.FC = () => {
   };
 
   return (
-    <section className={styles.teacherHeader}>
-      <div
-        className={`${styles.classSelection} ${
-          isClassSelected ? styles.selected : ""
-        }`}
-        onClick={() => setToggleClassSelectionOpen((prev) => !prev)}
-      >
-        <span className={styles.classText}>
-          {selectedClass || "클래스 선택"}
-        </span>
-        <ChevronDown className={styles.icon} />
-      </div>
+    <section
+      className={
+        mode === "classSelection"
+          ? `${styles.teacherHeader}`
+          : `${styles.teacherHeader} ${styles.teacherHeaderClassSelection}`
+      }
+    >
+      {mode === "classSelection" && (
+        <div
+          className={`${styles.classSelection} ${
+            isClassSelected ? styles.selected : ""
+          }`}
+          onClick={() => setToggleClassSelectionOpen((prev) => !prev)}
+        >
+          <span className={styles.classText}>
+            {selectedClass || "클래스 선택"}
+          </span>
+          <ChevronDown className={styles.icon} />
+        </div>
+      )}
+
+      {toggleClassSelectionOpen && mode === "classSelection" && (
+        <div className={styles.classListDropdown}>
+          <ul>
+            {classList.map((classItem, index) => (
+              <li
+                key={index}
+                className={styles.classListItem}
+                onClick={() => handleClassSelect(classItem)}
+              >
+                {classItem}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
       <div className={styles.notificationAndProfile}>
-        {" "}
         <Bell className={styles.icon} />
         <div
           className={styles.profile}
@@ -75,6 +98,7 @@ const ClassSelectionHeader: React.FC = () => {
           </div>
           <ChevronDown className={styles.icon} />
         </div>
+
         {isDropdownOpen && (
           <div className={styles.dropdown}>
             <ul>
@@ -89,24 +113,9 @@ const ClassSelectionHeader: React.FC = () => {
             </ul>
           </div>
         )}
-        {toggleClassSelectionOpen && (
-          <div className={styles.classListDropdown}>
-            <ul>
-              {classList.map((classItem, index) => (
-                <li
-                  key={index}
-                  className={styles.classListItem}
-                  onClick={() => handleClassSelect(classItem)}
-                >
-                  {classItem}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
       </div>
     </section>
   );
 };
 
-export default ClassSelectionHeader;
+export default TeacherHeader;

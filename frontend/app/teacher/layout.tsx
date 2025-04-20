@@ -5,8 +5,7 @@ import { SiderbarType } from "@/config/sidebarType";
 
 import SideBar from "@/components/SideBar/SideBar";
 import { TeacherHeaderType } from "@/config/headerType";
-import ClassSelectionHeader from "@/components/Header/Teacher/ClassSelectionHeader/ClassSelectionHeader";
-import DefaultHeader from "@/components/Header/Teacher/DefaultHeader/DefaultHeader";
+import TeacherHeader from "@/components/Header/Teacher/TeacherHeader";
 
 export default function TeacherLayout({
   children,
@@ -34,9 +33,9 @@ export default function TeacherLayout({
       case TeacherHeaderType.NONE:
         return null;
       case TeacherHeaderType.DEFAULT:
-        return <DefaultHeader />;
+        return <TeacherHeader mode="default" />;
       case TeacherHeaderType.CLASS_SELECTION:
-        return <ClassSelectionHeader />;
+        return <TeacherHeader mode="classSelection" />;
       default:
         return null;
     }
