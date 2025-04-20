@@ -10,4 +10,12 @@ public interface UserService {
     // 이메일 중복 체크
     void validateEmailDuplication(String email);
 
+    // 이메일이 존재 여부 확인
+    boolean existEmail(String email);
+
+    // 임시비번 업데이트
+    void updateTempPassword(String email, String tempPassword);
+
+    // 비번 재설정
+    void updatePassword(String currentPassword,String newPassword);
 }

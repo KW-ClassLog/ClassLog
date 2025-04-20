@@ -2,10 +2,14 @@ package org.example.backend.domain.user.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.example.backend.domain.accountLocal.dto.request.VerifyEmailRequestDTO;
+import org.example.backend.domain.accountLocal.dto.request.EmailRequestDTO;
+import org.example.backend.domain.accountLocal.dto.request.ResetPwdRequestDTO;
 import org.example.backend.domain.user.dto.request.RegisterRequestDTO;
-import org.example.backend.domain.accountLocal.dto.response.VerifyEmailResponseDTO;
+import org.example.backend.domain.accountLocal.dto.response.EmailResponseDTO;
+import org.example.backend.domain.user.exception.UserErrorCode;
+import org.example.backend.domain.user.exception.UserException;
 import org.example.backend.domain.user.service.MailService;
+import org.example.backend.domain.user.service.UserRedisService;
 import org.example.backend.domain.user.service.UserService;
 import org.example.backend.global.ApiResponse;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +22,7 @@ public class UserController {
 
     private final UserService userService;
     private final MailService mailService;
+    private final UserRedisService userRedisService;
 
     // 회원가입
     @PostMapping
@@ -34,16 +39,43 @@ public class UserController {
 
     // 이메일 인증번호 전송
     @PostMapping("/verify-email")
-    public ApiResponse<VerifyEmailResponseDTO> sendEmailCode(@Valid @RequestBody VerifyEmailRequestDTO verifyEmailRequestDTO){
+    public ApiResponse<EmailResponseDTO> sendEmailCode(@Valid @RequestBody EmailRequestDTO emailRequestDTO){
         // 이메일 중복 체크
-        userService.validateEmailDuplication(verifyEmailRequestDTO.getEmail());
+        userService.validateEmailDuplication(emailRequestDTO.getEmail());
 
         // 이메일 인증번호 전송
-        int authCode = mailService.sendVerificationCode(verifyEmailRequestDTO.getEmail());
+        int authCode = mailService.sendVerificationCode(emailRequestDTO.getEmail());
 
-        // 인증번호 전송 로직
-        VerifyEmailResponseDTO responseDTO = new VerifyEmailResponseDTO(authCode);
+        EmailResponseDTO responseDTO = new EmailResponseDTO(authCode);
         return ApiResponse.onSuccess(responseDTO);
     }
 
+    // 임시 비번 전송
+    @PostMapping("/password/temp")
+    public ApiResponse<String> sendTempPwd(@Valid @RequestBody EmailRequestDTO emailRequestDTO){
+        String email = emailRequestDTO.getEmail();
+        // 등록된 회원인지 치크
+        if(!userService.existEmail(email)){
+            throw new UserException(UserErrorCode._EMAIL_NOT_FOUND);
+        }
+
+        // 이메일 임시비번 전송
+        int tempPassword = mailService.sendTemporaryPassword(emailRequestDTO.getEmail());
+
+        // 레디스 저장
+        userRedisService.setTemporaryPassword(email, String.valueOf(tempPassword),600);
+
+        // DB 업데이트
+        userService.updateTempPassword(email,String.valueOf(tempPassword));
+
+        return ApiResponse.onSuccess("임시 비밀번호 발급 성공");
+    }
+
+    // 비밀번호 재설정
+    @PatchMapping("/password/reset")
+    public ApiResponse<String> updatePwd(@RequestBody @Valid ResetPwdRequestDTO resetPwdRequestDTO){
+        userService.updatePassword(resetPwdRequestDTO.getPassword(),resetPwdRequestDTO.getNewPassword());
+
+        return ApiResponse.onSuccess("비밀번호 재설정 성공");
+    }
 }

@@ -9,7 +9,10 @@ import org.example.backend.domain.user.dto.request.RegisterRequestDTO;
 import org.example.backend.domain.user.entity.User;
 import org.example.backend.domain.user.exception.UserException;
 import org.example.backend.domain.user.repository.UserRepository;
+import org.example.backend.global.code.base.FailureCode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -67,4 +70,55 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    // 이메일이 존재 여부 확인 - 임시 비번 발급용
+    @Override
+    public boolean existEmail(String email) {
+        Optional<AccountLocal> existingAccount = accountLocalRepository.findByEmail(email);
+        return existingAccount.isPresent();
+    }
+
+    // 임시비번 업데이트
+    @Override
+    public void updateTempPassword(String email, String tempPassword) {
+        //  기존 사용자 조회
+        AccountLocal accountLocal = accountLocalRepository.findByEmail(email)
+                .orElseThrow(() -> new UserException(UserErrorCode._EMAIL_NOT_FOUND));
+
+        // 비밀번호 암호화 후 저장
+        String encoded = passwordEncoder.encode(tempPassword);
+        accountLocal.setPassword(encoded);
+
+        // 저장
+        accountLocalRepository.save(accountLocal);
+    }
+
+    // 비밀번호 재설정
+    @Override
+    public void updatePassword(String currentPassword, String newPassword) {
+
+        // 1. 인증된 사용자 정보 가져오기
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Object principal = authentication.getPrincipal();
+
+        if (!(principal instanceof CustomUserDetails)) {
+            throw new UserException(FailureCode._UNAUTHORIZED); // 예상치 못한 타입 차단
+        }
+
+        String email = ((CustomUserDetails) principal).getEmail();
+
+        // 2. 사용자 정보 조회
+        AccountLocal account = accountLocalRepository.findByEmail(email)
+                .orElseThrow(() -> new UserException(UserErrorCode._EMAIL_NOT_FOUND));
+
+        // 3. 기존 비밀번호 검증
+        if(!passwordEncoder.matches(currentPassword, account.getPassword())){
+            throw new UserException(UserErrorCode._INVALID_PASSWORD);
+        }
+        // 3. 비밀번호 암호화
+        String encoded = passwordEncoder.encode(newPassword);
+
+        // 4. 저장
+        account.setPassword(encoded);
+        accountLocalRepository.save(account);
+    }
 }

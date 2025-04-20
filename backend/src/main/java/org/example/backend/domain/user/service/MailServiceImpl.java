@@ -19,20 +19,21 @@ import java.util.concurrent.ThreadLocalRandom;
 @RequiredArgsConstructor
 public class MailServiceImpl implements MailService{
 
-    @Value("${spring.mail.username")
+    @Value("${spring.mail.username}")
     private String senderEmail;
 
     private final JavaMailSender mailSender;
     private final SpringTemplateEngine templateEngine;
 
-    // 인증 코드 생성 및 이메일 전송
+    // 인증 코드 생성 & 이메일 인증 코드
     @Override
     public int sendVerificationCode(String email) {
 
         int authCode = ThreadLocalRandom.current().nextInt(100000, 1000000);
 
         try{
-            MimeMessage emailForm = createEmailForm(email,authCode);
+            MimeMessage emailForm = createEmailForm(email,authCode,
+                    "[ClassLog] 이메일 인증을 위한 인증번호 안내 드립니다.","emailVerification");
             mailSender.send(emailForm);
         } catch (MessagingException | MailSendException e){
             throw new UserException(UserErrorCode._EMAIL_SEND_FAILURE);
@@ -41,20 +42,35 @@ public class MailServiceImpl implements MailService{
         return authCode;
     }
 
+    @Override
+    public int sendTemporaryPassword(String email) {
+        int tempPassword = ThreadLocalRandom.current().nextInt(100000, 1000000);
+
+        try{
+            MimeMessage emailForm = createEmailForm(email, tempPassword,
+                    "[ClassLog] 임시 비밀번호 안내 드립니다.","tempPassword");
+            mailSender.send(emailForm);
+        } catch (MessagingException | MailSendException e){
+            throw new UserException(UserErrorCode._EMAIL_SEND_FAILURE);
+        }
+
+        return tempPassword;
+    }
+
     // 메시지 생성
-    private MimeMessage createEmailForm(String email,int authCode) throws MessagingException{
+    private MimeMessage createEmailForm(String email,int authCode, String subject, String templateName) throws MessagingException{
 
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message,true,"UTF-8");
 
         message.setFrom(senderEmail);
         message.setRecipients(MimeMessage.RecipientType.TO,email);
-        message.setSubject("[ClassLog] 이메일 인증을 위한 인증번호 안내 드립니다.");
+        message.setSubject(subject);
 
         Context context = new Context();
         context.setVariable("authCode",authCode);
 
-        String htmlContent = templateEngine.process("index",context);
+        String htmlContent = templateEngine.process(templateName,context);
         helper.setText(htmlContent,true);
         return message;
     }
