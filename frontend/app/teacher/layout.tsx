@@ -4,6 +4,8 @@ import { TEACHER_ROUTE_CONFIG } from "@/config/teacherRouteConfig";
 import { SiderbarType } from "@/config/sidebarType";
 
 import SideBar from "@/components/SideBar/SideBar";
+import { TeacherHeaderType } from "@/config/headerType";
+import ClassSelectionHeader from "@/components/Header/Teacher/ClassSelectionHeader/ClassSelectionHeader";
 
 export default function TeacherLayout({
   children,
@@ -23,11 +25,28 @@ export default function TeacherLayout({
     return config.path === pathname;
   });
 
+  // 헤더 렌더링 함수
+  const renderHeader = () => {
+    if (!currentRoute) return null;
+
+    switch (currentRoute.headerType) {
+      case TeacherHeaderType.NONE:
+        return null;
+      case TeacherHeaderType.DEFAULT:
+        return <ClassSelectionHeader />;
+      case TeacherHeaderType.CLASS_SELECTION:
+        return <ClassSelectionHeader />;
+      default:
+        return null;
+    }
+  };
+
   const showSidebar = currentRoute?.sidebarType === SiderbarType.DEFAULT;
 
   return (
     <body className={`teacher-body ${showSidebar ? "show-sidebar" : ""}`}>
       {showSidebar && <SideBar />}
+      {renderHeader()}
       <div className="content">{children}</div>
     </body>
   );

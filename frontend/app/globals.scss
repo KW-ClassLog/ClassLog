@@ -56,7 +56,7 @@ body.student-body.show-header > .content {
 
 body.teacher-body {
   background-color: $color-neutral-7;
-  overflow-y: hidden;
+  overflow-y: auto;
 
   .content {
     height: 100vh;
