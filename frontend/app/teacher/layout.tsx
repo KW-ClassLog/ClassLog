@@ -42,9 +42,14 @@ export default function TeacherLayout({
   };
 
   const showSidebar = currentRoute?.sidebarType === SiderbarType.DEFAULT;
+  const showHeader = currentRoute?.headerType !== TeacherHeaderType.NONE;
 
   return (
-    <body className={`teacher-body ${showSidebar ? "show-sidebar" : ""}`}>
+    <body
+      className={`teacher-body ${showSidebar ? "show-sidebar" : ""} ${
+        showHeader ? "show-header" : ""
+      }`}
+    >
       {showSidebar && <SideBar />}
       {renderHeader()}
       <div className="content">{children}</div>

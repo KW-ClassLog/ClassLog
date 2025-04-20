@@ -56,7 +56,7 @@ body.student-body.show-header > .content {
 
 body.teacher-body {
   background-color: $color-neutral-7;
-  overflow-y: auto;
+  overflow-y: hidden;
 
   .content {
     height: 100vh;
@@ -76,9 +76,9 @@ body.teacher-body.show-sidebar > .content {
   }
 }
 
-// body.teacher-body.show-header > .content {
-//   padding-top: 6vh; /* 타이틀 헤더 높이 만큼 여백 추가 */
-// }
+body.teacher-body.show-header > .content {
+  height: 94vh;
+}
 
 body.non-login-body {
   background-color: $color-white;
