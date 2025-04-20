@@ -1,3 +1,3 @@
 export default function TeacherHomePage() {
-  return <div>teacher home</div>;
+  return <div>홈</div>;
 }
