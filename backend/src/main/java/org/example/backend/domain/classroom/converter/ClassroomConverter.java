@@ -1,6 +1,7 @@
 package org.example.backend.domain.classroom.converter;
 
 import org.example.backend.domain.classroom.dto.request.ClassroomRequestDTO;
+import org.example.backend.domain.classroom.dto.response.ClassroomResponseDTO;
 import org.example.backend.domain.classroom.entity.Classroom;
 import org.example.backend.domain.classroom.exception.ClassroomErrorCode;
 import org.example.backend.domain.classroom.exception.ClassroomException;
@@ -24,6 +25,17 @@ public class ClassroomConverter {
                 .startDate(classroomRequestDTO.getStartDate())
                 .endDate(classroomRequestDTO.getEndDate())
                 .professor(professor)  // professorId로 찾은 User 객체를 설정
+                .build();
+    }
+
+    // Entity → ResponseDTO
+    public ClassroomResponseDTO toResponseDTO(Classroom classroom) {
+        return ClassroomResponseDTO.builder()
+                .classId(classroom.getId())
+                .className(classroom.getClassName())
+                .startDate(classroom.getStartDate())
+                .endDate(classroom.getEndDate())
+                .professorId(classroom.getProfessor().getId())
                 .build();
     }
 }

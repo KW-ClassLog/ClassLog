@@ -1,7 +1,9 @@
 package org.example.backend.domain.classroom.controller;
 
 import jakarta.validation.Valid;
+import org.example.backend.domain.classroom.converter.ClassroomConverter;
 import org.example.backend.domain.classroom.dto.request.ClassroomRequestDTO;
+import org.example.backend.domain.classroom.dto.response.ClassroomResponseDTO;
 import org.example.backend.domain.classroom.entity.Classroom;
 import org.example.backend.domain.classroom.service.ClassroomService;
 import org.example.backend.global.ApiResponse;
@@ -12,16 +14,18 @@ import java.util.UUID;
 @RequestMapping ("/api/classes")
 public class ClassroomController {
     private final ClassroomService classroomService;
+    private final ClassroomConverter classroomConverter;
 
-    public ClassroomController(ClassroomService classroomService) {
+    public ClassroomController(ClassroomService classroomService, ClassroomConverter classroomConverter) {
         this.classroomService = classroomService;
+        this.classroomConverter = classroomConverter;
     }
     // 클래스 생성
     @PostMapping("/create")
-    public ApiResponse<Classroom> createClassroom(@Valid @RequestBody ClassroomRequestDTO classroomRequestDTO) {
+    public ApiResponse<ClassroomResponseDTO> createClassroom(@Valid @RequestBody ClassroomRequestDTO classroomRequestDTO) {
         Classroom classroom = classroomService.createClassroom(classroomRequestDTO);
-
-        return ApiResponse.onSuccess(classroom);
+        ClassroomResponseDTO response = classroomConverter.toResponseDTO(classroom);
+        return ApiResponse.onSuccess(response);
     }
     // 클래스 조회
     @GetMapping("/{classId}")
