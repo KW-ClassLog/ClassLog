@@ -1,0 +1,87 @@
+.managementTable {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-regular;
+  width: 100%;
+  overflow-x: auto;
+  color: $color-neutral-5;
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+
+    th,
+    td {
+      padding: $spacing-sm;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      border-bottom: 1px solid $color-neutral-6;
+      color: $color-neutral-3;
+      font-weight: $font-weight-bold;
+    }
+
+    tbody tr:hover {
+      background-color: $color-neutral-8;
+    }
+
+    .sortIcon {
+      cursor: pointer;
+      margin-left: 5px;
+      color: $color-neutral-5;
+    }
+
+    .trashIcon {
+      cursor: pointer;
+      color: $color-neutral-5;
+      width: 18px;
+      height: 18px;
+
+      &:hover {
+        color: $color-danger;
+      }
+    }
+
+    .pasteIcon {
+      width: 14px;
+      height: 14px;
+      margin: auto 10px;
+    }
+
+    .cancelButton,
+    .deleteButton {
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: $font-size-sm;
+      color: $color-neutral-5;
+
+      &:hover {
+        color: $color-blue;
+      }
+    }
+
+    .selectButton {
+      border: 1px solid $color-neutral-7;
+      width: 20px;
+      height: 20px;
+      border-radius: $radius-md;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      position: relative;
+      background-color: $color-neutral-7;
+
+      &.selected {
+        background-color: $color-blue !important;
+      }
+
+      &:hover {
+        background-color: $color-blue;
+      }
+    }
+  }
+}

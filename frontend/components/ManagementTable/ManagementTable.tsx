@@ -1,0 +1,213 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { Check, Copy, Trash2, X } from "lucide-react";
+import Image from "next/image";
+import styles from "./ManagementTable.module.scss";
+// lectureNote 타입 정의
+type LectureNoteData = {
+  lectureNoteId: string;
+  lectureId: string;
+  session: number[];
+  lectureNoteUrl: string;
+  fileSize: string;
+};
+
+// student 타입 정의
+type StudentData = {
+  userId: string;
+  name: string;
+  nickname: string;
+  phoneNumber: string;
+  organization?: string;
+  profile?: string;
+};
+
+type ManagementTableProps = {
+  type: "lectureNote" | "student"; // 데이터 유형
+  data: LectureNoteData[] | StudentData[];
+  onDelete: (index: string[]) => void; // 삭제 이벤트 처리 함수
+};
+
+const ManagementTable: React.FC<ManagementTableProps> = ({
+  type,
+  data,
+  onDelete,
+}) => {
+  const [isEditMode, setIsEditMode] = useState<boolean>(false); // 편집 모드 상태
+  const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set()); // 선택된 항목들 (Set 사용)
+
+  useEffect(() => {
+    console.log("selectedItems", selectedItems);
+  }, [selectedItems]);
+
+  // 전체 선택 체크박스 클릭 시 모든 항목을 선택/해제
+  const handleSelectAll = (isChecked: boolean) => {
+    if (isChecked) {
+      const allSelectedItems = new Set(
+        data.map((item) =>
+          type === "lectureNote"
+            ? (item as LectureNoteData).lectureNoteId
+            : (item as StudentData).userId
+        )
+      );
+      setSelectedItems(allSelectedItems); // 전체 선택
+    } else {
+      setSelectedItems(new Set()); // 전체 해제
+    }
+  };
+  // 체크박스를 클릭했을 때 선택 항목 업데이트
+  const toggleSelection = (id: string) => {
+    const updatedSelectedItems = new Set(selectedItems);
+    if (updatedSelectedItems.has(id)) {
+      updatedSelectedItems.delete(id); // 이미 선택된 항목은 제거
+    } else {
+      updatedSelectedItems.add(id); // 새 항목은 추가
+    }
+    setSelectedItems(updatedSelectedItems);
+  };
+
+  // 삭제 버튼 클릭 시 선택된 항목들 삭제
+  const handleDelete = () => {
+    onDelete([...selectedItems]); // selectedItems 배열로 변환하여 onDelete 함수에 전달
+    setSelectedItems(new Set()); // 삭제 후 선택 항목 초기화
+    setIsEditMode(false); // 편집 모드 종료
+  };
+
+  // 취소 버튼 클릭 시 편집 모드 종료
+  const handleCancel = () => {
+    setSelectedItems(new Set()); // 선택 항목 초기화
+    setIsEditMode(false); // 편집 모드 종료
+  };
+
+  return (
+    <div className={styles.managementTable}>
+      <table>
+        <thead>
+          <tr>
+            {isEditMode && (
+              <th>
+                <button
+                  className={`${styles.selectButton} ${
+                    selectedItems.size === data.length ? styles.selected : ""
+                  }`}
+                  onClick={() =>
+                    handleSelectAll(selectedItems.size !== data.length)
+                  }
+                >
+                  <Check size={20} color="white" />
+                </button>
+              </th>
+            )}
+            {type === "lectureNote" ? (
+              <>
+                <th>차시</th>
+                <th>파일명</th>
+                <th>용량</th>
+              </>
+            ) : (
+              <>
+                <th>이름</th>
+                <th>소속</th>
+                <th>휴대전화</th>
+              </>
+            )}
+            <th>
+              {isEditMode ? (
+                <>
+                  <button
+                    className={styles.cancelButton}
+                    onClick={handleCancel}
+                  >
+                    <X />
+                    취소
+                  </button>
+                  <button
+                    className={styles.deleteButton}
+                    onClick={handleDelete}
+                  >
+                    <Trash2 />
+                    삭제
+                  </button>
+                </>
+              ) : (
+                <Trash2
+                  className={styles.trashIcon}
+                  onClick={() => setIsEditMode(true)}
+                />
+              )}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((item) => (
+            <tr
+              key={
+                type === "lectureNote"
+                  ? (item as LectureNoteData).lectureNoteId
+                  : (item as StudentData).userId
+              }
+            >
+              {isEditMode && (
+                <td>
+                  <button
+                    className={`${styles.selectButton} ${
+                      selectedItems.has(
+                        type === "lectureNote"
+                          ? (item as LectureNoteData).lectureNoteId
+                          : (item as StudentData).userId
+                      )
+                        ? styles.selected
+                        : ""
+                    }`}
+                    onClick={() =>
+                      toggleSelection(
+                        type === "lectureNote"
+                          ? (item as LectureNoteData).lectureNoteId
+                          : (item as StudentData).userId
+                      )
+                    } // 버튼 클릭 시 선택/해제
+                  >
+                    <Check size={20} color="white" />
+                  </button>
+                </td>
+              )}
+              {type === "lectureNote" ? (
+                <>
+                  <td>{(item as LectureNoteData).session.join(", ")}</td>
+                  <td>{(item as LectureNoteData).lectureNoteUrl}</td>
+                  <td>{(item as LectureNoteData).fileSize}</td>
+                  <td></td>
+                </>
+              ) : (
+                <>
+                  <td>
+                    <Image
+                      src={
+                        (item as StudentData).profile ||
+                        "/images/default_profile.jpg"
+                      }
+                      alt={(item as StudentData).name}
+                      width={40}
+                      height={40}
+                      className={styles.profileImage}
+                    />
+                    {(item as StudentData).name}
+                  </td>
+                  <td>{(item as StudentData).organization}</td>
+                  <td>
+                    {(item as StudentData).phoneNumber}{" "}
+                    <Copy className={styles.pasteIcon} />
+                  </td>
+                  <td></td>
+                </>
+              )}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+};
+
+export default ManagementTable;
