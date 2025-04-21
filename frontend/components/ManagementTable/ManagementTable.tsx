@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Check, Copy, Trash2, X } from "lucide-react";
 import Image from "next/image";
 import styles from "./ManagementTable.module.scss";
+
 // lectureNote 타입 정의
 type LectureNoteData = {
   lectureNoteId: string;
@@ -25,7 +26,7 @@ type StudentData = {
 
 type ManagementTableProps = {
   type: "lectureNote" | "student"; // 데이터 유형
-  data: LectureNoteData[] | StudentData[];
+  data: (LectureNoteData | StudentData)[]; // lectureNote와 student에 맞는 데이터
   onDelete: (index: string[]) => void; // 삭제 이벤트 처리 함수
 };
 
@@ -56,6 +57,7 @@ const ManagementTable: React.FC<ManagementTableProps> = ({
       setSelectedItems(new Set()); // 전체 해제
     }
   };
+
   // 체크박스를 클릭했을 때 선택 항목 업데이트
   const toggleSelection = (id: string) => {
     const updatedSelectedItems = new Set(selectedItems);
@@ -78,6 +80,13 @@ const ManagementTable: React.FC<ManagementTableProps> = ({
   const handleCancel = () => {
     setSelectedItems(new Set()); // 선택 항목 초기화
     setIsEditMode(false); // 편집 모드 종료
+  };
+
+  // 전화번호 복사 함수
+  const handleCopyPhoneNumber = (phoneNumber: string) => {
+    navigator.clipboard.writeText(phoneNumber).then(() => {
+      alert("전화번호가 복사되었습니다!"); // 사용자에게 알림
+    });
   };
 
   return (
@@ -112,21 +121,21 @@ const ManagementTable: React.FC<ManagementTableProps> = ({
                 <th>휴대전화</th>
               </>
             )}
-            <th>
+            <th className={styles.buttonContainer}>
               {isEditMode ? (
                 <>
                   <button
                     className={styles.cancelButton}
                     onClick={handleCancel}
                   >
-                    <X />
-                    취소
+                    <X size={14} color={"#606060"} />
+                    닫기
                   </button>
                   <button
                     className={styles.deleteButton}
                     onClick={handleDelete}
                   >
-                    <Trash2 />
+                    <Trash2 size={14} color={"#ea4335"} />
                     삭제
                   </button>
                 </>
@@ -146,6 +155,15 @@ const ManagementTable: React.FC<ManagementTableProps> = ({
                 type === "lectureNote"
                   ? (item as LectureNoteData).lectureNoteId
                   : (item as StudentData).userId
+              }
+              className={
+                selectedItems.has(
+                  type === "lectureNote"
+                    ? (item as LectureNoteData).lectureNoteId
+                    : (item as StudentData).userId
+                )
+                  ? styles.selectedRow
+                  : ""
               }
             >
               {isEditMode && (
@@ -181,7 +199,7 @@ const ManagementTable: React.FC<ManagementTableProps> = ({
                 </>
               ) : (
                 <>
-                  <td>
+                  <td className={styles.profileContainer}>
                     <Image
                       src={
                         (item as StudentData).profile ||
@@ -192,12 +210,25 @@ const ManagementTable: React.FC<ManagementTableProps> = ({
                       height={40}
                       className={styles.profileImage}
                     />
-                    {(item as StudentData).name}
+                    {(item as StudentData).nickname}
                   </td>
                   <td>{(item as StudentData).organization}</td>
                   <td>
                     {(item as StudentData).phoneNumber}{" "}
-                    <Copy className={styles.pasteIcon} />
+                    {!isEditMode ? (
+                      <button
+                        className={styles.copyButton}
+                        onClick={() =>
+                          handleCopyPhoneNumber(
+                            (item as StudentData).phoneNumber
+                          )
+                        }
+                      >
+                        <Copy className={styles.pasteIcon} />
+                      </button>
+                    ) : (
+                      <></>
+                    )}
                   </td>
                   <td></td>
                 </>
