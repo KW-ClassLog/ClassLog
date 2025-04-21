@@ -5,6 +5,7 @@ import { Check, Copy, Trash2, X } from "lucide-react";
 import Image from "next/image";
 import styles from "./ManagementTable.module.scss";
 import AlertModal from "../Modal/AlertModal/AlertModal";
+import ConfirmModal from "../Modal/ConfirmModal/ConfirmModal";
 
 // lectureNote 타입 정의
 type LectureNoteData = {
@@ -38,8 +39,11 @@ const ManagementTable: React.FC<ManagementTableProps> = ({
 }) => {
   const [isEditMode, setIsEditMode] = useState<boolean>(false); // 편집 모드 상태
   const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set()); // 선택된 항목들 (Set 사용)
-  const [phoneNumberCopyAlertOpen, setPhoneNumberCopyAlertOpen] =
+  const [phoneNumberCopyAlertModalOpen, setPhoneNumberCopyAlertModalOpen] =
     useState<boolean>(false);
+  const [deleteConfirmModalOpen, setDeleteConfirmModalOpen] =
+    useState<boolean>(false);
+
   useEffect(() => {
     console.log("selectedItems", selectedItems);
   }, [selectedItems]);
@@ -71,11 +75,12 @@ const ManagementTable: React.FC<ManagementTableProps> = ({
     setSelectedItems(updatedSelectedItems);
   };
 
-  // 삭제 버튼 클릭 시 선택된 항목들 삭제
+  // 삭제 모달에서 확인 버튼 클릭 시 선택된 항목들 삭제
   const handleDelete = () => {
     onDelete([...selectedItems]); // selectedItems 배열로 변환하여 onDelete 함수에 전달
     setSelectedItems(new Set()); // 삭제 후 선택 항목 초기화
     setIsEditMode(false); // 편집 모드 종료
+    setDeleteConfirmModalOpen(false);
   };
 
   // 취소 버튼 클릭 시 편집 모드 종료
@@ -87,7 +92,7 @@ const ManagementTable: React.FC<ManagementTableProps> = ({
   // 전화번호 복사 함수
   const handleCopyPhoneNumber = (phoneNumber: string) => {
     navigator.clipboard.writeText(phoneNumber).then(() => {
-      setPhoneNumberCopyAlertOpen(true);
+      setPhoneNumberCopyAlertModalOpen(true);
     });
   };
 
@@ -135,7 +140,7 @@ const ManagementTable: React.FC<ManagementTableProps> = ({
                   </button>
                   <button
                     className={styles.deleteButton}
-                    onClick={handleDelete}
+                    onClick={() => setDeleteConfirmModalOpen(true)}
                   >
                     <Trash2 size={14} color={"#ea4335"} />
                     삭제
@@ -239,10 +244,21 @@ const ManagementTable: React.FC<ManagementTableProps> = ({
           ))}
         </tbody>
       </table>
-      {phoneNumberCopyAlertOpen && (
-        <AlertModal onClose={() => setPhoneNumberCopyAlertOpen(false)}>
-          전화번호가 복사되었습니다!
+      {phoneNumberCopyAlertModalOpen && (
+        <AlertModal onClose={() => setPhoneNumberCopyAlertModalOpen(false)}>
+          전화번호가 복사되었습니다.
         </AlertModal>
+      )}
+
+      {deleteConfirmModalOpen && (
+        <ConfirmModal
+          onClose={() => setDeleteConfirmModalOpen(false)}
+          onConfirm={handleDelete}
+        >
+          {type === "lectureNote"
+            ? "선택한 강의자료를 삭제하시겠습니까?"
+            : "선택한 학생들을 퇴장시키겠습니까?"}
+        </ConfirmModal>
       )}
     </div>
   );

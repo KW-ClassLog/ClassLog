@@ -3,9 +3,10 @@
   font-weight: $font-weight-regular;
   width: 100%;
   overflow-x: auto;
-  color: $color-neutral-5;
+  color: $color-neutral-3;
 
   table {
+    color: $color-neutral-5;
     width: 100%;
     border-collapse: collapse;
     margin: 20px 0;
@@ -53,6 +54,7 @@
     .pasteIcon {
       cursor: pointer;
       transition: $transition-fast;
+      color: $color-neutral-5;
       &:hover {
         transform: scale(1.05);
       }
