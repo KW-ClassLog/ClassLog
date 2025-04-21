@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Check, Copy, Trash2, X } from "lucide-react";
 import Image from "next/image";
 import styles from "./ManagementTable.module.scss";
+import AlertModal from "../Modal/AlertModal/AlertModal";
 
 // lectureNote 타입 정의
 type LectureNoteData = {
@@ -37,7 +38,8 @@ const ManagementTable: React.FC<ManagementTableProps> = ({
 }) => {
   const [isEditMode, setIsEditMode] = useState<boolean>(false); // 편집 모드 상태
   const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set()); // 선택된 항목들 (Set 사용)
-
+  const [phoneNumberCopyAlertOpen, setPhoneNumberCopyAlertOpen] =
+    useState<boolean>(false);
   useEffect(() => {
     console.log("selectedItems", selectedItems);
   }, [selectedItems]);
@@ -85,7 +87,7 @@ const ManagementTable: React.FC<ManagementTableProps> = ({
   // 전화번호 복사 함수
   const handleCopyPhoneNumber = (phoneNumber: string) => {
     navigator.clipboard.writeText(phoneNumber).then(() => {
-      alert("전화번호가 복사되었습니다!"); // 사용자에게 알림
+      setPhoneNumberCopyAlertOpen(true);
     });
   };
 
@@ -237,6 +239,11 @@ const ManagementTable: React.FC<ManagementTableProps> = ({
           ))}
         </tbody>
       </table>
+      {phoneNumberCopyAlertOpen && (
+        <AlertModal onClose={() => setPhoneNumberCopyAlertOpen(false)}>
+          전화번호가 복사되었습니다!
+        </AlertModal>
+      )}
     </div>
   );
 };
