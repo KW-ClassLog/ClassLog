@@ -18,49 +18,125 @@
     }
 
     th {
+      height: 50px;
+      padding-left: $spacing-sm;
+      padding-right: $spacing-sm;
       border-bottom: 1px solid $color-neutral-6;
       color: $color-neutral-3;
-      font-weight: $font-weight-bold;
     }
 
     tbody tr:hover {
       background-color: $color-neutral-8;
     }
 
-    .sortIcon {
+    .selectedRow {
+      background-color: $color-skyblue;
+      &:hover {
+        background-color: $color-skyblue;
+      }
+    }
+
+    .profileContainer {
+      display: flex;
+      align-items: center;
+      gap: $spacing-sm;
+
+      .profileImage {
+        width: 40px;
+        height: 40px;
+        border-radius: $radius-full;
+        border: 1px solid $color-neutral-7;
+      }
+    }
+
+    .sortIcon,
+    .pasteIcon {
       cursor: pointer;
+      transition: $transition-fast;
+      &:hover {
+        transform: scale(1.05);
+      }
+      &:active {
+        transform: scale(0.92);
+      }
+    }
+
+    .sortIcon {
       margin-left: 5px;
       color: $color-neutral-5;
     }
 
+    .copyButton {
+      border: none;
+      background-color: transparent;
+      .pasteIcon {
+        width: 14px;
+        height: 14px;
+        margin: auto 10px;
+      }
+    }
+
     .trashIcon {
+      margin: auto 0 auto auto;
       cursor: pointer;
       color: $color-neutral-5;
       width: 18px;
       height: 18px;
+      transition: $transition-fast;
 
       &:hover {
-        color: $color-danger;
+        transform: scale(1.08);
+      }
+
+      &:active {
+        transform: scale(0.92);
       }
     }
 
-    .pasteIcon {
-      width: 14px;
-      height: 14px;
-      margin: auto 10px;
+    .buttonContainer {
+      display: flex;
+      justify-content: flex-end;
+      width: 100%;
+      gap: $spacing-sm;
+      padding: 6px;
     }
 
     .cancelButton,
     .deleteButton {
-      background-color: transparent;
-      border: none;
+      display: flex;
+      align-items: center; /* 아이콘과 텍스트를 세로로 중앙 정렬 */
+      gap: 8px; /* 아이콘과 텍스트 사이의 간격 */
+      padding: 6px 8px;
+      border-radius: $radius-lg;
       cursor: pointer;
       font-size: $font-size-sm;
-      color: $color-neutral-5;
+      transition: $transition-fast;
 
       &:hover {
-        color: $color-blue;
+        font-weight: $font-weight-bold;
+        transform: scale(1.02);
       }
+
+      &:active {
+        transform: scale(0.98);
+      }
+    }
+
+    .cancelButton {
+      color: $color-neutral-4;
+      border: 1px solid $color-neutral-4;
+      background-color: $color-neutral-8;
+    }
+
+    .deleteButton {
+      color: $color-danger;
+      border: 1px solid $color-danger;
+      background-color: rgba(
+        red($color-danger),
+        green($color-danger),
+        blue($color-danger),
+        0.1
+      );
     }
 
     .selectButton {
@@ -74,6 +150,7 @@
       cursor: pointer;
       position: relative;
       background-color: $color-neutral-7;
+      transition: $transition-fast;
 
       &.selected {
         background-color: $color-blue !important;
