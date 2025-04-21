@@ -1,0 +1,166 @@
+.managementTable {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-regular;
+  width: 100%;
+  overflow-x: auto;
+  color: $color-neutral-3;
+
+  table {
+    color: $color-neutral-5;
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+
+    th,
+    td {
+      padding: $spacing-sm;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      height: 50px;
+      padding-left: $spacing-sm;
+      padding-right: $spacing-sm;
+      border-bottom: 1px solid $color-neutral-6;
+      color: $color-neutral-3;
+    }
+
+    tbody tr:hover {
+      background-color: $color-neutral-8;
+    }
+
+    .selectedRow {
+      background-color: $color-skyblue;
+      &:hover {
+        background-color: $color-skyblue;
+      }
+    }
+
+    .profileContainer {
+      display: flex;
+      align-items: center;
+      gap: $spacing-sm;
+
+      .profileImage {
+        width: 40px;
+        height: 40px;
+        border-radius: $radius-full;
+        border: 1px solid $color-neutral-7;
+      }
+    }
+
+    .sortIcon,
+    .pasteIcon {
+      cursor: pointer;
+      transition: $transition-fast;
+      color: $color-neutral-5;
+      &:hover {
+        transform: scale(1.05);
+      }
+      &:active {
+        transform: scale(0.92);
+      }
+    }
+
+    .sortIcon {
+      margin-left: 5px;
+      color: $color-neutral-5;
+    }
+
+    .copyButton {
+      border: none;
+      background-color: transparent;
+      .pasteIcon {
+        width: 14px;
+        height: 14px;
+        margin: auto 10px;
+      }
+    }
+
+    .trashIcon {
+      margin: auto 0 auto auto;
+      cursor: pointer;
+      color: $color-neutral-5;
+      width: 18px;
+      height: 18px;
+      transition: $transition-fast;
+
+      &:hover {
+        transform: scale(1.08);
+      }
+
+      &:active {
+        transform: scale(0.92);
+      }
+    }
+
+    .buttonContainer {
+      display: flex;
+      justify-content: flex-end;
+      width: 100%;
+      gap: $spacing-sm;
+      padding: 6px;
+    }
+
+    .cancelButton,
+    .deleteButton {
+      display: flex;
+      align-items: center; /* 아이콘과 텍스트를 세로로 중앙 정렬 */
+      gap: 8px; /* 아이콘과 텍스트 사이의 간격 */
+      padding: 6px 8px;
+      border-radius: $radius-lg;
+      cursor: pointer;
+      font-size: $font-size-sm;
+      transition: $transition-fast;
+
+      &:hover {
+        font-weight: $font-weight-bold;
+        transform: scale(1.02);
+      }
+
+      &:active {
+        transform: scale(0.98);
+      }
+    }
+
+    .cancelButton {
+      color: $color-neutral-4;
+      border: 1px solid $color-neutral-4;
+      background-color: $color-neutral-8;
+    }
+
+    .deleteButton {
+      color: $color-danger;
+      border: 1px solid $color-danger;
+      background-color: rgba(
+        red($color-danger),
+        green($color-danger),
+        blue($color-danger),
+        0.1
+      );
+    }
+
+    .selectButton {
+      border: 1px solid $color-neutral-7;
+      width: 20px;
+      height: 20px;
+      border-radius: $radius-md;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      position: relative;
+      background-color: $color-neutral-7;
+      transition: $transition-fast;
+
+      &.selected {
+        background-color: $color-blue !important;
+      }
+
+      &:hover {
+        background-color: $color-blue;
+      }
+    }
+  }
+}
