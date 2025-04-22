@@ -25,10 +25,11 @@ public class LectureController {
         return ApiResponse.onSuccess(null);
     }
 
-    @GetMapping("/{lectureId}")
-    public ApiResponse<LectureResponseDTO> getLecture(@PathVariable UUID lectureId) {
-        LectureResponseDTO dto = lectureService.getLectureDetail(lectureId);
-        return ApiResponse.onSuccess(dto); // 🎯 DTO만 응답
+    // Lecture 조회
+    @GetMapping("/{classId}/{lectureId}")
+    public ApiResponse<LectureResponseDTO> getLecture(@PathVariable UUID lectureId , @PathVariable UUID classId) {
+        LectureResponseDTO dto = lectureService.getLectureDetail(classId,lectureId);
+        return ApiResponse.onSuccess(dto);
     }
 
     // Lecture 수정
