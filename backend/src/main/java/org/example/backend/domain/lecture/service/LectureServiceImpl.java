@@ -14,6 +14,7 @@ import org.example.backend.domain.lecture.repository.LectureRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -36,10 +37,25 @@ public class LectureServiceImpl implements LectureService {
 
     // lecture 조회
     @Override
-    public LectureResponseDTO getLectureDetail(UUID lectureId) {
+    public LectureResponseDTO getLectureDetail(UUID classId, UUID lectureId) {
         Lecture lecture = lectureRepository.findById(lectureId)
                 .orElseThrow(() -> new LectureException(LectureErrorCode.LECTURE_NOT_FOUND));
-        return lectureConverter.toResponseDTO(lecture);
+
+        if (!lecture.getClassroom().getId().equals(classId)) {
+            throw new LectureException(LectureErrorCode.LECTURE_NOT_IN_CLASS);
+        }
+
+        List<Lecture> lecturesInClass = lectureRepository
+                .findByClassroom_IdOrderByLectureDateAscCreatedAtAsc(classId);
+
+        int session = 1;
+        for (int i = 0; i < lecturesInClass.size(); i++) {
+            if (lecturesInClass.get(i).getId().equals(lectureId)) {
+                session = i + 1;
+                break;
+            }
+        }
+        return lectureConverter.toResponseDTO(lecture, session);
     }
 
     // lecture 수정

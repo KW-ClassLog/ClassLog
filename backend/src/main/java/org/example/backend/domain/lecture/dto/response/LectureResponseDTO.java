@@ -18,4 +18,5 @@ public class LectureResponseDTO {
     private String classId;
     private String lectureName;
     private LocalDate lectureDate;
+    private Integer session;
 }
