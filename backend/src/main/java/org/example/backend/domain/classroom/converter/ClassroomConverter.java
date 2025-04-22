@@ -36,6 +36,7 @@ public class ClassroomConverter {
                 .startDate(classroom.getStartDate())
                 .endDate(classroom.getEndDate())
                 .professorId(classroom.getProfessor().getId())
+                .professorName(classroom.getProfessor().getName())
                 .build();
     }
 }

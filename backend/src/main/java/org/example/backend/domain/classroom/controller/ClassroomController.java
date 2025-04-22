@@ -29,10 +29,11 @@ public class ClassroomController {
     }
     // 클래스 조회
     @GetMapping("/{classId}")
-    public ApiResponse<Classroom> getClassroom(@PathVariable UUID classId) {
+    public ApiResponse<ClassroomResponseDTO> getClassroom(@PathVariable UUID classId) {
         Classroom classroom = classroomService.getClassroom(classId);
+        ClassroomResponseDTO response = classroomConverter.toResponseDTO(classroom);
 
-        return ApiResponse.onSuccess(classroom);
+        return ApiResponse.onSuccess(response);
     }
     // 클래스 삭제
     @DeleteMapping("/{classId}")
@@ -42,9 +43,10 @@ public class ClassroomController {
     }
     //클래스 수정
     @PatchMapping("/{classId}")
-    public ApiResponse<Classroom> updateClassroom(@PathVariable UUID classId, @RequestBody ClassroomRequestDTO classroomRequestDTO) {
+    public ApiResponse<ClassroomResponseDTO> updateClassroom(@PathVariable UUID classId, @RequestBody ClassroomRequestDTO classroomRequestDTO) {
         Classroom classroom = classroomService.updateClassroom(classId, classroomRequestDTO);
+        ClassroomResponseDTO response = classroomConverter.toResponseDTO(classroom);
 
-        return ApiResponse.onSuccess(classroom);
+        return ApiResponse.onSuccess(response);
     }
 }
