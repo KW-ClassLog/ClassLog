@@ -4,19 +4,41 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import styles from "./SideBar.module.scss";
 import { ROUTES } from "@/constants/routes"; // 페이지 경로 상수 가져오기
-import { House, School, BookOpenText, FileText, Users } from "lucide-react";
+
+import {
+  House,
+  MessageCircleQuestion,
+  BookOpenText,
+  FileText,
+  Users,
+} from "lucide-react";
 import Link from "next/link";
 
 const SideBar = () => {
   const [activeTab, setActiveTab] = useState<string>("home");
   const [logoSrc, setLogoSrc] = useState<string>("/images/logo1.png");
 
-  const router = useRouter();
+  // TODO : 스토어에 활성화된 탭 저장하기
 
-  // 화면 크기 변화에 따라 로고 이미지 URL 변경
+  const router = useRouter();
   useEffect(() => {
+    // 현재 경로에 맞는 activeTab 설정
+    const currentPath = window.location.pathname;
+
+    if (currentPath.includes(ROUTES.teacherQuizManagement)) {
+      setActiveTab("quiz-management");
+    } else if (currentPath.includes(ROUTES.teacherLectureManagement)) {
+      setActiveTab("lecture-management");
+    } else if (currentPath.includes(ROUTES.teacherLectureNoteManagement)) {
+      setActiveTab("lecturenote-management");
+    } else if (currentPath.includes(ROUTES.teacherStudentManagement)) {
+      setActiveTab("student-management");
+    } else if (currentPath.includes(ROUTES.teacherHome)) {
+      setActiveTab("home");
+    }
+
+    // 화면 크기 변화에 따라 로고 이미지 URL 변경
     const handleResize = () => {
-      // 특정 크기 이하로 줄어들면 로고 이미지를 변경
       if (window.innerWidth < 1280) {
         setLogoSrc("/images/logo2.png"); // 작은 화면에서는 다른 이미지
       } else {
@@ -24,7 +46,6 @@ const SideBar = () => {
       }
     };
 
-    // 화면 크기 변화 감지
     window.addEventListener("resize", handleResize);
     handleResize(); // 초기 상태 설정
 
@@ -35,8 +56,8 @@ const SideBar = () => {
     setActiveTab(tab);
     if (tab === "home") {
       router.push(ROUTES.teacherHome);
-    } else if (tab === "class-management") {
-      router.push(ROUTES.teacherClassManagement);
+    } else if (tab === "quiz-management") {
+      router.push(ROUTES.teacherQuizManagement);
     } else if (tab === "lecture-management") {
       router.push(ROUTES.teacherLectureManagement);
     } else if (tab === "lecturenote-management") {
@@ -63,17 +84,6 @@ const SideBar = () => {
       </div>
       <div
         className={`${styles.tab} ${
-          activeTab === "class-management" ? styles.active : ""
-        }`}
-        onClick={() => handleTabClick("class-management")}
-      >
-        <div className={styles.tabItem}>
-          <School className={styles.icon} />
-          <span className={styles.text}>클래스 관리</span>
-        </div>
-      </div>
-      <div
-        className={`${styles.tab} ${
           activeTab === "lecture-management" ? styles.active : ""
         }`}
         onClick={() => handleTabClick("lecture-management")}
@@ -81,6 +91,17 @@ const SideBar = () => {
         <div className={styles.tabItem}>
           <BookOpenText className={styles.icon} />
           <span className={styles.text}>강의 관리</span>
+        </div>
+      </div>
+      <div
+        className={`${styles.tab} ${
+          activeTab === "quiz-management" ? styles.active : ""
+        }`}
+        onClick={() => handleTabClick("quiz-management")}
+      >
+        <div className={styles.tabItem}>
+          <MessageCircleQuestion className={styles.icon} />
+          <span className={styles.text}>퀴즈 관리</span>
         </div>
       </div>
       <div
