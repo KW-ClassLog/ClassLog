@@ -15,7 +15,7 @@ export const TEACHER_ROUTE_CONFIG: Record<
   keyof Pick<
     typeof ROUTES,
     | "teacherHome"
-    | "teacherClassManagement"
+    | "teacherQuizManagement"
     | "teacherLectureManagement"
     | "teacherLectureNoteManagement"
     | "teacherQuizDashboard"
@@ -30,9 +30,9 @@ export const TEACHER_ROUTE_CONFIG: Record<
     headerType: TeacherHeaderType.DEFAULT,
     sidebarType: SiderbarType.DEFAULT,
   },
-  teacherClassManagement: {
-    path: ROUTES.teacherClassManagement,
-    headerType: TeacherHeaderType.DEFAULT,
+  teacherQuizManagement: {
+    path: ROUTES.teacherQuizManagement,
+    headerType: TeacherHeaderType.CLASS_SELECTION,
     sidebarType: SiderbarType.DEFAULT,
   },
   teacherLectureManagement: {
@@ -47,7 +47,7 @@ export const TEACHER_ROUTE_CONFIG: Record<
   },
   teacherQuizDashboard: {
     path: ROUTES.teacherQuizDashboard,
-    headerType: TeacherHeaderType.NONE,
+    headerType: TeacherHeaderType.CLASS_SELECTION,
     sidebarType: SiderbarType.NONE,
   },
   teacherLectureDetail: {
