@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./Navigation.module.scss";
 import { ROUTES } from "@/constants/routes"; // 페이지 경로 상수 가져오기
@@ -8,6 +8,23 @@ import { House, BookOpenText, Bell, User } from "lucide-react";
 const Navigation = () => {
   const [activeTab, setActiveTab] = useState<string>("home");
   const router = useRouter();
+
+  // TODO : 스토어에 활성화된 탭 저장하기
+
+  useEffect(() => {
+    // 현재 경로에 맞는 activeTab 설정
+    const currentPath = window.location.pathname;
+
+    if (currentPath.includes(ROUTES.studentClass)) {
+      setActiveTab("class");
+    } else if (currentPath.includes(ROUTES.studentNotification)) {
+      setActiveTab("notification");
+    } else if (currentPath.includes(ROUTES.studentProfile)) {
+      setActiveTab("profile");
+    } else if (currentPath.includes(ROUTES.studentHome)) {
+      setActiveTab("home");
+    }
+  }, []);
 
   const handleTabClick = (tab: string) => {
     setActiveTab(tab);

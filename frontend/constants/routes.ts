@@ -17,7 +17,7 @@ export const ROUTES = {
 
   // 강사 관련 경로
   teacherHome: "/teacher", // 강사 홈
-  teacherClassManagement: "/teacher/class-management", // 강사 클래스 관리
+  teacherQuizManagement: "/teacher/quiz-management", // 강사 퀴즈 관리
   teacherLectureManagement: "/teacher/lecture-management", // 강사 강의 관리
   teacherLectureNoteManagement: "/teacher/lecturenote-management", // 강사 강의 자료 관리
   teacherQuizDashboard: (lectureId: string) =>
