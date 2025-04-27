@@ -5,6 +5,7 @@ import BasicInput from "@/components/Input/BasicInput/BasicInput";
 import FullWidthButton from "@/components/Button/FullWidthButton/FullWidthButton";
 import styles from "../page.module.scss";
 import { useEffect, useState } from "react";
+import { verifyEmail } from "@/api/users/verifyEmail"; // 경로는 네 프로젝트 구조에 맞게 조정
 
 export default function EmailVerification() {
   const { email, verificationCode, setField } = useSignupStore();
@@ -25,8 +26,13 @@ export default function EmailVerification() {
           onChange={(e) => setField("email", e.target.value)}
         />
         <FullWidthButton
-          onClick={() => {
-            console.log("이메일 인증 요청");
+          onClick={async () => {
+            const response = await verifyEmail({ email });
+            if (response.isSuccess) {
+              console.log("인증번호:", response.result?.authCode);
+            } else {
+              console.error("이메일 인증 실패:", response.message);
+            }
           }}
           disabled={!isEmailValid}
         >
