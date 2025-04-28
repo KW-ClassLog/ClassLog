@@ -1,7 +1,7 @@
 import { create } from "zustand";
 
 interface SignupState {
-  role: "teacher" | "student" | null;
+  role: "TEACHER" | "STUDENT" | null;
   name: string;
   phoneNumber: string;
   organization: string;
@@ -9,7 +9,7 @@ interface SignupState {
   password: string;
   setField: (
     field: keyof SignupState,
-    value: string | "teacher" | "student" | null
+    value: string | "TEACHER" | "STUDENT" | null
   ) => void;
 }
 

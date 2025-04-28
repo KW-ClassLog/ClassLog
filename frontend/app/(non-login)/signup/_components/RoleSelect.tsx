@@ -12,7 +12,7 @@ export default function RoleSelect() {
       <button
         type="button"
         className={`${styles.teacherButton} ${
-          role === "teacher" ? styles.selected : ""
+          role === "TEACHER" ? styles.selected : ""
         }`}
         onClick={() => setField("role", "TEACHER")}
       >
@@ -22,7 +22,7 @@ export default function RoleSelect() {
       <button
         type="button"
         className={`${styles.studentButton} ${
-          role === "student" ? styles.selected : ""
+          role === "STUDENT" ? styles.selected : ""
         }`}
         onClick={() => setField("role", "STUDENT")}
       >
