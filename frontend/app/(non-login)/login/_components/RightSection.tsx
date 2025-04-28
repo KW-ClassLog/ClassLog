@@ -8,17 +8,41 @@ import { ROUTES } from "@/constants/routes";
 import Link from "next/link";
 import BasicInput from "@/components/Input/BasicInput/BasicInput";
 import FullWidthButton from "@/components/Button/FullWidthButton/FullWidthButton";
+import { login } from "@/api/users/login";
+import { useRouter } from "next/navigation";
+import AlertModal from "@/components/Modal/AlertModal/AlertModal"; // Import AlertModal
 
 type RightSectionProps = {
   isMobile: boolean;
 };
 
 export default function RightSection({ isMobile }: RightSectionProps) {
-  const [emailId, setEmailId] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState(""); // Error 메시지 state
+  const [showErrorModal, setShowErrorModal] = useState(false); // Modal visibility state
+  const router = useRouter(); // useRouter 사용
 
-  const handleLogin = () => {
-    console.log("로그인 시도:", { emailId, password });
+  const handleLogin = async () => {
+    try {
+      const response = await login({ email, password });
+      if (response.isSuccess) {
+        // 로그인 성공 시 accessToken을 저장 (여기서는 예시로 localStorage에 저장)
+        // localStorage.setItem("accessToken", response.accessToken); // 실제로는 상태나 Context로 저장할 수도 있음
+        router.push(ROUTES.teacherHome); // 로그인 성공 후 ___으로 리디렉션
+      } else {
+        setErrorMessage(response.message || "로그인 실패"); // 실패 시 에러 메시지 설정
+        setShowErrorModal(true); // Show the error modal
+      }
+    } catch (error) {
+      setErrorMessage("로그인 중 오류가 발생했습니다. 다시 시도해 주세요.");
+      setShowErrorModal(true); // Show the error modal
+      console.error(error);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setShowErrorModal(false); // Close the error modal
   };
 
   return (
@@ -32,8 +56,8 @@ export default function RightSection({ isMobile }: RightSectionProps) {
           height={50}
         />
         <BasicInput
-          value={emailId}
-          onChange={(e) => setEmailId(e.target.value)}
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           type="email"
           placeholder="이메일을 입력해주세요"
         />
@@ -61,6 +85,11 @@ export default function RightSection({ isMobile }: RightSectionProps) {
           <p>카카오 로그인</p>
         </button>
       </div>
+
+      {/* Show AlertModal on error */}
+      {showErrorModal && (
+        <AlertModal onClose={handleCloseModal}>{errorMessage}</AlertModal>
+      )}
     </div>
   );
 }
