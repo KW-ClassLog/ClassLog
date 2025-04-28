@@ -9,7 +9,7 @@ import AlertModal from "@/components/Modal/AlertModal/AlertModal";
 import { ROUTES } from "@/constants/routes";
 
 export default function SignupButton() {
-  const { role, name, phoneNumber, organization, email, password } =
+  const { role, name, phoneNumber, organization, email, password, setField } =
     useSignupStore();
   const [modalMessage, setModalMessage] = useState<string | null>(null);
   const [onConfirm, setOnConfirm] = useState<(() => void) | null>(null);
@@ -37,6 +37,15 @@ export default function SignupButton() {
         setModalMessage("회원가입이 성공적으로 완료되었습니다.");
         setOnConfirm(() => () => {
           setModalMessage(null);
+
+          // 스토어 초기화
+          setField("role", null);
+          setField("name", "");
+          setField("phoneNumber", "");
+          setField("organization", "");
+          setField("email", "");
+          setField("password", "");
+
           router.push(ROUTES.login);
         });
       } else {
