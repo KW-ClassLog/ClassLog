@@ -1,0 +1,178 @@
+.loginPage {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f5f7fa;
+}
+
+.leftSection {
+  flex: 1;
+  gap: 20;
+  display: inline-flex;
+  background-color: $color-blue;
+  flex-direction: column;
+  padding: $spacing-3xl;
+  overflow: hidden;
+
+  .textWrapper {
+    gap: 20;
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    color: white;
+    padding: $spacing-3xl 0px;
+    margin: $spacing-3xl 0px;
+  }
+
+  h1 {
+    font-size: clamp(80px, 7.5vw, 100px);
+    font-weight: bold;
+    font-family: $font-logo;
+  }
+
+  h2 {
+    font-size: $font-size-4xl;
+    margin-bottom: 1rem;
+    transition: $transition-default;
+
+    @include respond-to(lg) {
+      font-size: $font-size-2xl;
+    }
+  }
+
+  p {
+    font-size: $font-size-lg;
+    line-height: 1.5;
+  }
+
+  .introImageWrapper {
+    width: 100%;
+    margin-top: 2rem;
+    height: 100%;
+    position: relative;
+
+    img {
+      transition: $transition-default;
+
+      width: 700px;
+      @include respond-to(lg) {
+        width: 600px;
+      }
+      @include respond-to(lg) {
+        width: 500px;
+      }
+      height: auto;
+      object-fit: contain;
+      right: -20%;
+      bottom: -30%;
+
+      position: absolute;
+    }
+  }
+}
+
+.rightSection {
+  flex: 1;
+  height: 100vh;
+  background: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loginForm {
+  width: 100%;
+  max-width: 550px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px;
+
+  img {
+    margin: 0 auto $spacing-3xl auto;
+    width: 60%;
+    height: auto;
+  }
+
+  .loginButton {
+    width: 100%;
+    padding: 12px;
+    background-color: $color-blue;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+
+  .signupLink {
+    text-align: center;
+    font-weight: $font-weight-regular;
+
+    a {
+      color: $color-blue;
+      font-weight: $font-weight-medium;
+
+      text-decoration: none;
+    }
+  }
+
+  .or {
+    text-align: center;
+    color: $color-neutral-6;
+    margin: $spacing-xl 0px;
+  }
+
+  .kakaoButton {
+    @include common-input-button-style;
+    background-color: #fee500;
+    color: $color-black;
+    cursor: pointer;
+    border: none;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: $spacing-md;
+    width: 100%;
+
+    img {
+      width: 20px;
+      height: 20px;
+      margin: 0;
+    }
+
+    p {
+      margin: 0;
+      font-size: 1rem;
+    }
+
+    &:hover {
+      background-color: #fff173;
+      transform: scale(1.02);
+      cursor: pointer;
+    }
+
+    &:active {
+      background-color: #fee500;
+      transform: scale(0.98);
+    }
+  }
+}
+
+// 반응형
+@media (max-width: 768px) {
+  .loginPage {
+    flex-direction: column;
+  }
+
+  .leftSection {
+    display: none;
+  }
+
+  .rightSection {
+    width: 100%;
+    flex: none;
+    padding: 40px 20px;
+  }
+}
