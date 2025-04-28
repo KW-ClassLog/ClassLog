@@ -35,9 +35,10 @@ export default function SignupPage() {
             alt="ClassLog Logo"
             width={200}
             height={60}
+            className={styles.logo}
           />
-          <RoleSelect />
           <form className={styles.formContainer}>
+            <RoleSelect />
             <NameInput />
             <PhoneInput />
             <OrganizationInput />

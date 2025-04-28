@@ -13,10 +13,15 @@
   }
 }
 
+.logo {
+  width: 80%;
+  height: auto;
+  max-width: 250px;
+}
+
 .tabContainer {
   display: flex;
   gap: $spacing-md;
-  margin: 20px 0px;
   width: 100%;
 }
 
@@ -44,7 +49,8 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  gap: 15px;
+  gap: $spacing-md;
+  margin-top: $spacing-2xl;
 }
 
 .emailWrapper {
