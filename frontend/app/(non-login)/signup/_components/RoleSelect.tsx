@@ -5,16 +5,16 @@ import styles from "../page.module.scss";
 import { Briefcase, GraduationCap } from "lucide-react";
 
 export default function RoleSelect() {
-  const { selectedRole, setField } = useSignupStore();
+  const { role, setField } = useSignupStore();
 
   return (
     <div className={styles.tabContainer}>
       <button
         type="button"
         className={`${styles.teacherButton} ${
-          selectedRole === "teacher" ? styles.selected : ""
+          role === "teacher" ? styles.selected : ""
         }`}
-        onClick={() => setField("selectedRole", "teacher")}
+        onClick={() => setField("role", "teacher")}
       >
         <Briefcase size={40} strokeWidth={1.2} />
         <div>교사용 계정</div>
@@ -22,9 +22,9 @@ export default function RoleSelect() {
       <button
         type="button"
         className={`${styles.studentButton} ${
-          selectedRole === "student" ? styles.selected : ""
+          role === "student" ? styles.selected : ""
         }`}
-        onClick={() => setField("selectedRole", "student")}
+        onClick={() => setField("role", "student")}
       >
         <GraduationCap size={40} strokeWidth={1.2} />
         <div>학생용 계정</div>
