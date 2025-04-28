@@ -36,7 +36,7 @@ export default function EmailVerification() {
       if (response.isSuccess) {
         if (response.result?.authCode) {
           setAuthCode(response.result.authCode.toString());
-          setCountdown(10); // 3분 카운트다운
+          setCountdown(180); // 3분 카운트다운
           setErrorMessage("");
         }
       } else {
@@ -70,6 +70,7 @@ export default function EmailVerification() {
       setIsVerified(true);
       setVerificationCode("");
       setAuthCode("");
+      setCountdown(0);
     }
   }, [verificationCode, authCode, emailInput, setField]);
 
