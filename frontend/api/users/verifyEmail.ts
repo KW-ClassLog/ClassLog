@@ -1,14 +1,15 @@
-import axios from "axios";
+import { axiosInstance } from "@/api/axiosInstance";
+import axios from "axios"; // 추가
 import { ENDPOINTS } from "@/constants/endpoints";
-import { ApiResponse } from "@/types/apiResponseTypes"; // 기존 ApiResponse
+import { ApiResponse } from "@/types/apiResponseTypes";
 import {
   VerifyEmailRequest,
   VerifyEmailResult,
-} from "@/types/users/verifyEmailTypes"; // 새로 만든 타입
+} from "@/types/users/verifyEmailTypes";
 
 export async function verifyEmail({ email }: VerifyEmailRequest) {
   try {
-    const response = await axios.post<ApiResponse<VerifyEmailResult>>(
+    const response = await axiosInstance.post<ApiResponse<VerifyEmailResult>>(
       ENDPOINTS.USERS.VERIFY_EMAIL,
       { email }
     );
