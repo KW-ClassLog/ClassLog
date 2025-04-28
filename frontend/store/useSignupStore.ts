@@ -1,14 +1,12 @@
 import { create } from "zustand";
 
 interface SignupState {
+  role: "teacher" | "student" | null;
   name: string;
   phoneNumber: string;
   organization: string;
   email: string;
-  verificationCode: string;
   password: string;
-  confirmPassword: string;
-  selectedRole: "teacher" | "student" | null;
   setField: (
     field: keyof SignupState,
     value: string | "teacher" | "student" | null
@@ -16,13 +14,14 @@ interface SignupState {
 }
 
 export const useSignupStore = create<SignupState>((set) => ({
+  role: null,
   name: "",
   phoneNumber: "",
   organization: "",
   email: "",
-  verificationCode: "",
   password: "",
-  confirmPassword: "",
-  selectedRole: null,
-  setField: (field, value) => set({ [field]: value }),
+  setField: (field, value) => {
+    console.log(`[useSignupStore] ${field} updated to`, value);
+    set({ [field]: value });
+  },
 }));
