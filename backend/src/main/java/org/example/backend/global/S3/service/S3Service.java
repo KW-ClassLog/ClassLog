@@ -32,7 +32,7 @@ public class S3Service {
                 software.amazon.awssdk.core.sync.RequestBody.fromBytes(file.getBytes())
         );
 
-        return key; // 직접 URL 생성
+        return key;
     }
 
     /**
@@ -66,10 +66,4 @@ public class S3Service {
         }
     }
 
-    /**
-     * 업로드된 파일 URL 생성
-     */
-    private String generateFileUrl(String key) {
-        return String.format("https://%s.s3.amazonaws.com/%s", bucket, key);
-    }
 }

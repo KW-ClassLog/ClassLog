@@ -14,7 +14,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class LectureNoteResponseDTO {
 
-    private UUID lectureId;        // LectureNote ID
+    private UUID lectureNoteId;        // LectureNote ID
     private UUID classId;           // Class ID (Classroom ID)
     private String lectureNoteUrl;  // 저장된 S3 URL
 }

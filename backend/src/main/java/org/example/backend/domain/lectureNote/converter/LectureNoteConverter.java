@@ -12,7 +12,7 @@ public class LectureNoteConverter {
 
     public static LectureNoteResponseDTO toDTO(LectureNote lectureNote) {
         return LectureNoteResponseDTO.builder()
-                .lectureId(lectureNote.getId())
+                .lectureNoteId(lectureNote.getId())
                 .classId(lectureNote.getClassroom().getId())
                 .lectureNoteUrl(lectureNote.getNoteUrl())
                 .build();
