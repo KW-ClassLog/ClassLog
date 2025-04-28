@@ -1,7 +1,7 @@
 .loginPage {
   display: flex;
-  min-height: 100vh;
   background-color: #f5f7fa;
+  height: 100vh;
 }
 
 .leftSection {
@@ -64,7 +64,7 @@
       height: auto;
       object-fit: contain;
       right: -20%;
-      bottom: -30%;
+      bottom: -40%;
 
       position: absolute;
     }
@@ -73,7 +73,7 @@
 
 .rightSection {
   flex: 1;
-  height: 100vh;
+  height: 100%;
   background: white;
   display: flex;
   justify-content: center;
@@ -94,15 +94,10 @@
     height: auto;
   }
 
-  .loginButton {
+  .forgetPassword {
     width: 100%;
-    padding: 12px;
-    background-color: $color-blue;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    cursor: pointer;
+    text-align: end;
+    color: $color-neutral-6;
   }
 
   .signupLink {

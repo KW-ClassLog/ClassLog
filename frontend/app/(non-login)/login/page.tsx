@@ -51,6 +51,8 @@ export default function LoginPage() {
       )}
 
       <div className={styles.rightSection}>
+        {isMobile && <BackWithTitleHeader title="로그인" />}
+
         <div className={styles.loginForm}>
           <Image
             src="/images/logo3.png"
@@ -70,6 +72,8 @@ export default function LoginPage() {
             type="password"
             placeholder="비밀번호를 입력해주세요"
           />
+          <p className={styles.forgetPassword}>비밀번호를 잊으셨나요?</p>
+
           <FullWidthButton onClick={handleLogin}>로그인</FullWidthButton>
           <div className={styles.signupLink}>
             계정이 없으신가요? <Link href={ROUTES.signup}>회원가입하기</Link>
