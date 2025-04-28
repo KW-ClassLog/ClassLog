@@ -1,4 +1,4 @@
-const BASE_API = "http://localhost:8081/api";
+const BASE_API = "/api";
 
 export const ENDPOINTS = {
   // 인증 관련
