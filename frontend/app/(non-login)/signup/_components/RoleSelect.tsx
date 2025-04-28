@@ -14,7 +14,7 @@ export default function RoleSelect() {
         className={`${styles.teacherButton} ${
           role === "teacher" ? styles.selected : ""
         }`}
-        onClick={() => setField("role", "teacher")}
+        onClick={() => setField("role", "TEACHER")}
       >
         <Briefcase size={40} strokeWidth={1.2} />
         <div>교사용 계정</div>
@@ -24,7 +24,7 @@ export default function RoleSelect() {
         className={`${styles.studentButton} ${
           role === "student" ? styles.selected : ""
         }`}
-        onClick={() => setField("role", "student")}
+        onClick={() => setField("role", "STUDENT")}
       >
         <GraduationCap size={40} strokeWidth={1.2} />
         <div>학생용 계정</div>
