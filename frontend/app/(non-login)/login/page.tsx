@@ -10,7 +10,7 @@ export default function LoginPage() {
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768);
+      setIsMobile(window.innerWidth <= 600);
     };
     handleResize();
     window.addEventListener("resize", handleResize);
