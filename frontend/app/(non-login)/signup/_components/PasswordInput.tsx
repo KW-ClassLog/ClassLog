@@ -2,34 +2,45 @@
 
 import { useSignupStore } from "@/store/useSignupStore";
 import BasicInput from "@/components/Input/BasicInput/BasicInput";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function PasswordInput() {
-  const { password, setField } = useSignupStore();
+  const { setField } = useSignupStore();
+  const [rawPassword, setRawPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
-
-  useEffect(() => {
-    if (password && confirmPassword && password === confirmPassword) {
-      setField("password", password);
-    }
-  }, [password, confirmPassword, setField]);
 
   return (
     <>
       <BasicInput
-        value={password}
+        value={rawPassword}
         type="password"
         placeholder="비밀번호"
-        onChange={(e) => setField("password", e.target.value)}
+        onChange={(e) => {
+          const newPassword = e.target.value;
+          setRawPassword(newPassword);
+          if (newPassword === confirmPassword) {
+            setField("password", newPassword);
+          } else {
+            setField("password", "");
+          }
+        }}
       />
       <BasicInput
         value={confirmPassword}
         type="password"
         placeholder="비밀번호 확인"
-        onChange={(e) => setConfirmPassword(e.target.value)}
-        error={confirmPassword.length > 0 && confirmPassword !== password}
+        onChange={(e) => {
+          const newConfirm = e.target.value;
+          setConfirmPassword(newConfirm);
+          if (rawPassword === newConfirm) {
+            setField("password", rawPassword);
+          } else {
+            setField("password", "");
+          }
+        }}
+        error={confirmPassword.length > 0 && confirmPassword !== rawPassword}
         errorMessage={
-          confirmPassword.length > 0 && confirmPassword !== password
+          confirmPassword.length > 0 && confirmPassword !== rawPassword
             ? "비밀번호가 일치하지 않습니다."
             : undefined
         }
