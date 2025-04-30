@@ -10,7 +10,7 @@ import { verifyEmail } from "@/api/users/verifyEmail";
 export default function EmailVerification() {
   const { setField } = useSignupStore();
   const [emailInput, setEmailInput] = useState<string>(""); // 사용자가 입력한 이메일 필드
-  const [isEmailValid, setIsEmailValid] = useState(false); // 이메일 형식
+  const [isEmailValid, setIsEmailValid] = useState(false); // 이메일 형식이 유효한지
   const [authCode, setAuthCode] = useState<string>(""); // 백엔드에서 보내준 인증 코드
   const [verificationCode, setVerificationCode] = useState<string>(""); // 사용자가 입력한 인증 코드
   const [isVerified, setIsVerified] = useState(false); // 백엔드에서 보내준 인증코드와 사용자가 입력한 인증코드가 동일한지
@@ -25,7 +25,9 @@ export default function EmailVerification() {
     setAuthCode("");
     setVerificationCode("");
     setIsVerified(false);
+    setCountdown(0);
     setField("email", "");
+    setErrorMessage("");
   }, [emailInput]);
 
   // 이메일 인증 버튼 클릭시
@@ -93,7 +95,9 @@ export default function EmailVerification() {
         ) : (
           <FullWidthButton
             onClick={handleVerifyEmail}
-            disabled={!isEmailValid || isVerified || loading}
+            disabled={
+              !isEmailValid || isVerified || loading || errorMessage !== ""
+            } // 이메일 형식이 유효하지 않거나 인증이 완료(인증코드 일치)되었거나 로딩 중일 때 버튼 비활성화
           >
             {isVerified ? "인증 완료" : loading ? "전송 중..." : "이메일 인증"}
           </FullWidthButton>
