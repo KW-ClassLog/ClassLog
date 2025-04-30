@@ -11,7 +11,6 @@ import FullWidthButton from "@/components/Button/FullWidthButton/FullWidthButton
 import { login } from "@/api/users/login";
 import { useRouter } from "next/navigation";
 import AlertModal from "@/components/Modal/AlertModal/AlertModal"; // Import AlertModal
-import jwt from "jsonwebtoken"; // Import jsonwebtoken package
 import { useAuthStore } from "@/store/useAuthStore"; // Import useAuthStore
 
 type RightSectionProps = {
@@ -23,8 +22,8 @@ export default function RightSection({ isMobile }: RightSectionProps) {
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState(""); // Error 메시지 state
   const [showErrorModal, setShowErrorModal] = useState(false); // Modal visibility state
-  const { accessToken } = useAuthStore(); // Access token from the store
   const router = useRouter(); // useRouter 사용
+  const { role } = useAuthStore(); // role from the store
 
   const handleLogin = async () => {
     try {
@@ -33,14 +32,9 @@ export default function RightSection({ isMobile }: RightSectionProps) {
         // TODO: 비밀번호 찾기(변경) 직후 로그인일 경우, 홈으로 라우팅 이후에 팝업을 띄워야 함
         // if (response.result?.isTemporary){}
 
-        // role에 따른 리다이렉트 경로 설정
-        const decoded = jwt.decode(accessToken as string);
-        const role =
-          decoded && typeof decoded !== "string" ? decoded.role : undefined;
-
         if (role === "STUDENT") {
           router.push(ROUTES.studentHome);
-        } else {
+        } else if (role === "TEACHER") {
           router.push(ROUTES.teacherHome);
         }
       } else {
