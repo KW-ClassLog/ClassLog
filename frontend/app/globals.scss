@@ -81,5 +81,9 @@ body.teacher-body.show-header > .content {
 }
 
 body.non-login-body {
-  background-color: $color-white;
+  height: 100vh;
+}
+
+body.non-login-body > .content {
+  height: 100%;
 }
