@@ -2,7 +2,7 @@ export interface SignupRequest {
   role: "TEACHER" | "STUDENT";
   name: string;
   phoneNumber: string;
-  organization: string;
+  organization: string | null;
   email: string;
   password: string;
 }
