@@ -26,6 +26,7 @@
     "@types/glob": "^8.1.0",
     "@types/json-schema": "^7.0.15",
     "@types/json5": "^0.0.30",
+    "@types/jsonwebtoken": "^9.0.9",
     "@types/minimatch": "^5.1.2",
     "@types/node": "^20.17.30",
     "@types/postcss-modules-local-by-default": "^4.0.2",
