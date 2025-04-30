@@ -4,6 +4,11 @@ import { ENDPOINTS } from "@/constants/endpoints";
 import { ApiResponse } from "@/types/apiResponseTypes";
 import { LoginRequest, LoginResult } from "@/types/users/loginTypes";
 
+// 로그인 후 응답 타입에 accessToken 추가
+export interface LoginApiResponse extends ApiResponse<LoginResult> {
+  accessToken?: string; // accessToken을 별도로 반환
+}
+
 export async function login({ email, password }: LoginRequest) {
   try {
     const response = await axiosInstance.post<ApiResponse<LoginResult>>(
@@ -18,12 +23,12 @@ export async function login({ email, password }: LoginRequest) {
     );
 
     return {
-      ...response.data,
-      accessToken, // 추가: accessToken을 함께 반환
+      ...response.data, // 기존 응답 데이터
+      accessToken, // 추가된 accessToken
     };
   } catch (error: unknown) {
     if (axios.isAxiosError(error) && error.response) {
-      return error.response.data as ApiResponse<LoginResult>;
+      return error.response.data as LoginApiResponse;
     }
     throw error;
   }

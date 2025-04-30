@@ -27,22 +27,34 @@ export default function RightSection({ isMobile }: RightSectionProps) {
     try {
       const response = await login({ email, password });
       if (response.isSuccess) {
-        // 로그인 성공 시 accessToken을 저장 (여기서는 예시로 localStorage에 저장)
-        // localStorage.setItem("accessToken", response.accessToken); // 실제로는 상태나 Context로 저장할 수도 있음
-        router.push(ROUTES.teacherHome); // 로그인 성공 후 ___으로 리디렉션
+        // 로그인 성공 시 accessToken을 localStorage에 저장
+        const accessToken = response.accessToken;
+        localStorage.setItem("accessToken", accessToken);
+
+        // TODO: 비밀번호 찾기(변경) 직후 로그인일 경우, 홈으로 라우팅 이후에 팝업을 띄워야 함
+        // if (response.result?.isTemporary){}
+
+        // role에 따른 리다이렉트 경로 설정
+        const payload = JSON.parse(atob(accessToken.split(".")[1]));
+        const role = payload.role;
+        if (role == "STUDENT") {
+          router.push(ROUTES.studentHome);
+        } else {
+          router.push(ROUTES.teacherHome);
+        }
       } else {
-        setErrorMessage(response.message || "로그인 실패"); // 실패 시 에러 메시지 설정
-        setShowErrorModal(true); // Show the error modal
+        setErrorMessage(response.message || "로그인 실패");
+        setShowErrorModal(true);
       }
     } catch (error) {
       setErrorMessage("로그인 중 오류가 발생했습니다. 다시 시도해 주세요.");
-      setShowErrorModal(true); // Show the error modal
+      setShowErrorModal(true);
       console.error(error);
     }
   };
 
   const handleCloseModal = () => {
-    setShowErrorModal(false); // Close the error modal
+    setShowErrorModal(false);
   };
 
   return (
