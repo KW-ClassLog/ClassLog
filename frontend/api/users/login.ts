@@ -3,11 +3,7 @@ import { axiosInstance } from "@/api/axiosInstance";
 import { ENDPOINTS } from "@/constants/endpoints";
 import { ApiResponse } from "@/types/apiResponseTypes";
 import { LoginRequest, LoginResult } from "@/types/users/loginTypes";
-
-// 로그인 후 응답 타입에 accessToken 추가
-export interface LoginApiResponse extends ApiResponse<LoginResult> {
-  accessToken?: string; // accessToken을 별도로 반환
-}
+import { useAuthStore } from "@/store/useAuthStore";
 
 export async function login({ email, password }: LoginRequest) {
   try {
@@ -21,14 +17,18 @@ export async function login({ email, password }: LoginRequest) {
       "Bearer ",
       ""
     );
+    const setAccessToken = useAuthStore.getState().setAccessToken;
+    if (accessToken) {
+      setAccessToken(accessToken);
+    }
 
-    return {
-      ...response.data, // 기존 응답 데이터
-      accessToken, // 추가된 accessToken
-    };
+    // axios의 기본 헤더에 access token 설정
+    axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+
+    return response.data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error) && error.response) {
-      return error.response.data as LoginApiResponse;
+      return error.response.data as ApiResponse<LoginResult>;
     }
     throw error;
   }
