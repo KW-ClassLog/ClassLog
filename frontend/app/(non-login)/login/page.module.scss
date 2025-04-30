@@ -25,7 +25,7 @@
   }
 
   h1 {
-    font-size: clamp(80px, 7.5vw, 100px);
+    font-size: clamp(60px, 7.5vw, 100px);
     font-weight: bold;
     font-family: $font-logo;
   }
@@ -57,9 +57,18 @@
       width: 700px;
       @include respond-to(lg) {
         width: 600px;
+        right: -25%;
+        bottom: -30%;
       }
-      @include respond-to(lg) {
+      @include respond-to(md) {
         width: 500px;
+        right: -20%;
+        bottom: -20%;
+      }
+      @include respond-to(sm) {
+        width: 400px;
+        right: -50%;
+        bottom: -20%;
       }
       height: auto;
       object-fit: contain;
