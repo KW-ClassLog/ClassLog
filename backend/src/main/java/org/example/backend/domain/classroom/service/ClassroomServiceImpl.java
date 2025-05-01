@@ -6,6 +6,8 @@ import org.example.backend.domain.classroom.entity.Classroom;
 import org.example.backend.domain.classroom.exception.ClassroomErrorCode;
 import org.example.backend.domain.classroom.exception.ClassroomException;
 import org.example.backend.domain.classroom.repository.ClassroomRepository;
+import org.example.backend.domain.lecture.entity.Lecture;
+import org.example.backend.domain.lecture.repository.LectureRepository;
 import org.example.backend.domain.lectureNote.entity.LectureNote;
 import org.example.backend.domain.lectureNote.repository.LectureNoteRepository;
 import org.example.backend.global.S3.service.S3Service;
@@ -22,14 +24,16 @@ public class ClassroomServiceImpl implements ClassroomService {
     private ClassroomConverter classroomConverter;
     private LectureNoteRepository lectureNoteRepository;
     private S3Service s3Service;
+    private LectureRepository lectureRepository;
 
     //의존성 주입
     @Autowired
-    public ClassroomServiceImpl(ClassroomConverter classroomConverter, ClassroomRepository classroomRepository, LectureNoteRepository lectureNoteRepository, S3Service s3Service) {
+    public ClassroomServiceImpl(ClassroomConverter classroomConverter, ClassroomRepository classroomRepository, LectureNoteRepository lectureNoteRepository, S3Service s3Service, LectureRepository lectureRepository) {
         this.classroomConverter = classroomConverter;
         this.classroomRepository = classroomRepository;
         this.lectureNoteRepository = lectureNoteRepository;
         this.s3Service = s3Service;
+        this.lectureRepository = lectureRepository;
     }
 
     // Classroom 생성
@@ -59,6 +63,10 @@ public class ClassroomServiceImpl implements ClassroomService {
             String s3Key = note.getNoteUrl();  // noteUrl 필드에 S3 key가 저장되어 있다고 가정
             s3Service.deleteFile(s3Key);  // S3 파일 삭제
         }
+
+        // 5. 관련된 Lecture 삭제
+        List<Lecture> lectures = lectureRepository.findByClassroom_Id(classId);
+        lectureRepository.deleteAll(lectures);
 
         // 4. DB에서 LectureNote 삭제
         lectureNoteRepository.deleteAll(notes);

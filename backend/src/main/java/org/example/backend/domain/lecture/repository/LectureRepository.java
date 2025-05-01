@@ -8,4 +8,5 @@ import java.util.UUID;
 
 public interface LectureRepository extends JpaRepository<Lecture, UUID> {
     List<Lecture> findByClassroom_IdOrderByLectureDateAscCreatedAtAsc(UUID classId);
+    List<Lecture> findByClassroom_Id(UUID classId);
 }
