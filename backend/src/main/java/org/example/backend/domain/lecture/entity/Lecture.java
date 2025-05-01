@@ -25,7 +25,6 @@ public class Lecture extends BaseEntity {
     private UUID id;
 
     @ManyToOne
-    @OnDelete(action= OnDeleteAction.CASCADE)
     @JoinColumn(name = "class_id", nullable = false)
     private Classroom classroom;
 
