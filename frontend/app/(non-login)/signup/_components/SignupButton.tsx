@@ -19,7 +19,6 @@ export default function SignupButton() {
     role !== null &&
     name.trim() !== "" &&
     phoneNumber.trim() !== "" &&
-    organization.trim() !== "" &&
     email.trim() !== "" &&
     password.trim() !== "";
 
@@ -29,7 +28,7 @@ export default function SignupButton() {
         role: role as "TEACHER" | "STUDENT",
         name,
         phoneNumber,
-        organization,
+        organization: organization === "" ? null : organization,
         email,
         password,
       });
