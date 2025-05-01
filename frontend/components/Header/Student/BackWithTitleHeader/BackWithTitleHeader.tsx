@@ -2,15 +2,30 @@
 
 import styles from "./BackWithTitleHeader.module.scss";
 import { ChevronLeft } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 type BackWithTitleHeaderProps = {
-  title: string; // title을 props로 받기 위한 타입 정의
+  title: string;
+  backTo?: string;
 };
 
-const BackWithTitleHeader: React.FC<BackWithTitleHeaderProps> = ({ title }) => {
+const BackWithTitleHeader: React.FC<BackWithTitleHeaderProps> = ({
+  title,
+  backTo,
+}) => {
+  const router = useRouter();
+
+  const handleBack = () => {
+    if (backTo) {
+      router.push(backTo);
+    } else {
+      router.back();
+    }
+  };
+
   return (
     <section className={styles.studentHeader}>
-      <ChevronLeft className={styles.chevronIcon} />
+      <ChevronLeft className={styles.chevronIcon} onClick={handleBack} />
       <h1>{title}</h1>
     </section>
   );

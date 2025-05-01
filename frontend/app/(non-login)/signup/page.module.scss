@@ -8,8 +8,8 @@
   background-color: #fff;
   transition: $transition-default;
 
-  @include respond-up(sm) {
-    max-width: 700px;
+  @media (min-width: 600px) {
+    max-width: 600px;
   }
 }
 

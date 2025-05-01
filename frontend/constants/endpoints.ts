@@ -1,17 +1,13 @@
 const BASE_API = "/api";
 
 export const ENDPOINTS = {
-  // 인증 관련
-  AUTH: {
-    KAKAO_LOGIN: `${BASE_API}/auth/kakao`,
-    KAKAO_ONBOARDING: `${BASE_API}/auth/kakao/onboarding`,
-    LOGOUT: `${BASE_API}/auth/logout`,
-    REFRESH_TOKEN: `${BASE_API}/auth/refresh`,
-    RESET_PASSWORD: `${BASE_API}/auth/password/reset`,
-  },
-
   // 사용자 관련
   USERS: {
+    KAKAO_LOGIN: `${BASE_API}/users/kakao`,
+    KAKAO_ONBOARDING: `${BASE_API}/users/kakao/onboarding`,
+    LOGOUT: `${BASE_API}/users/logout`,
+    REFRESH_TOKEN: `${BASE_API}/users/refresh`,
+    RESET_PASSWORD: `${BASE_API}/users/password/reset`,
     SIGNUP: `${BASE_API}/users`,
     LOGIN: `${BASE_API}/users/login`,
     VERIFY_EMAIL: `${BASE_API}/users/verify-email`,

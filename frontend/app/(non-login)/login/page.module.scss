@@ -1,0 +1,183 @@
+.loginPage {
+  display: flex;
+  background-color: #f5f7fa;
+  height: 100vh;
+}
+
+.leftSection {
+  flex: 1;
+  gap: 20;
+  display: inline-flex;
+  background-color: $color-blue;
+  flex-direction: column;
+  padding: $spacing-3xl;
+  overflow: hidden;
+
+  .textWrapper {
+    gap: 20;
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    color: white;
+    padding: $spacing-3xl 0px;
+    margin: $spacing-3xl 0px;
+  }
+
+  h1 {
+    font-size: clamp(60px, 7.5vw, 100px);
+    font-weight: bold;
+    font-family: $font-logo;
+  }
+
+  h2 {
+    font-size: $font-size-4xl;
+    margin-bottom: 1rem;
+    transition: $transition-default;
+
+    @include respond-to(lg) {
+      font-size: $font-size-2xl;
+    }
+  }
+
+  p {
+    font-size: $font-size-lg;
+    line-height: 1.5;
+  }
+
+  .introImageWrapper {
+    width: 100%;
+    margin-top: 2rem;
+    height: 100%;
+    position: relative;
+
+    img {
+      transition: $transition-default;
+
+      width: 700px;
+      @include respond-to(lg) {
+        width: 600px;
+        right: -25%;
+        bottom: -30%;
+      }
+      @include respond-to(md) {
+        width: 500px;
+        right: -20%;
+        bottom: -20%;
+      }
+      @include respond-to(sm) {
+        width: 400px;
+        right: -50%;
+        bottom: -20%;
+      }
+      height: auto;
+      object-fit: contain;
+      right: -20%;
+      bottom: -40%;
+
+      position: absolute;
+    }
+  }
+}
+
+.rightSection {
+  flex: 1;
+  height: 100%;
+  background: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loginForm {
+  width: 100%;
+  max-width: 550px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px;
+
+  img {
+    margin: 0 auto $spacing-3xl auto;
+    width: 60%;
+    height: auto;
+  }
+
+  .forgetPassword {
+    width: 100%;
+    text-align: end;
+    color: $color-neutral-6;
+    cursor: pointer;
+  }
+
+  .signupLink {
+    text-align: center;
+    font-weight: $font-weight-regular;
+
+    a {
+      color: $color-blue;
+      font-weight: $font-weight-medium;
+
+      text-decoration: none;
+    }
+  }
+
+  .or {
+    text-align: center;
+    color: $color-neutral-6;
+    margin: $spacing-xl 0px;
+  }
+
+  .kakaoButton {
+    @include common-input-button-style;
+    background-color: #fee500;
+    color: $color-black;
+    cursor: pointer;
+    border: none;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: $spacing-md;
+    width: 100%;
+
+    img {
+      width: 20px;
+      height: 20px;
+      margin: 0;
+    }
+
+    p {
+      margin: 0;
+      font-size: 1rem;
+    }
+
+    &:hover {
+      background-color: #fff173;
+      transform: scale(1.02);
+      cursor: pointer;
+    }
+
+    &:active {
+      background-color: #fee500;
+      transform: scale(0.98);
+    }
+  }
+}
+
+// 반응형
+@media (max-width: 600px) {
+  .loginPage {
+    flex-direction: column;
+  }
+
+  .leftSection {
+    display: none;
+  }
+
+  .rightSection {
+    width: 100%;
+    flex: none;
+    padding: 40px 20px;
+  }
+}
