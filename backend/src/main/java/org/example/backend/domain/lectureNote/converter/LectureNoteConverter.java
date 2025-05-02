@@ -6,7 +6,8 @@ import org.example.backend.domain.lectureNote.dto.response.LectureNoteKeyRespons
 import org.example.backend.domain.lectureNote.dto.response.LectureNoteResponseDTO;
 import org.example.backend.domain.lectureNote.entity.LectureNote;
 
-import java.util.UUID;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class LectureNoteConverter {
@@ -15,7 +16,12 @@ public class LectureNoteConverter {
         return LectureNoteKeyResponseDTO.builder()
                 .lectureNoteId(lectureNote.getId())
                 .classId(lectureNote.getClassroom().getId())
-                .lectureNoteKey(lectureNote.getNoteUrl())
+                .lectureNoteKey(lectureNote.getNoteUrl()) // S3 Key 또는 URL
                 .build();
+    }
+    public static List<LectureNoteKeyResponseDTO> toDTOList(List<LectureNote> lectureNotes) {
+        return lectureNotes.stream()
+                .map(LectureNoteConverter::toDTO)
+                .collect(Collectors.toList());
     }
 }

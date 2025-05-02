@@ -1,6 +1,5 @@
 package org.example.backend.domain.lectureNote.service;
 
-import org.example.backend.domain.classroom.entity.Classroom;
 import org.example.backend.domain.lectureNote.dto.response.LectureNoteKeyResponseDTO;
 import org.example.backend.domain.lectureNote.dto.response.LectureNoteResponseDTO;
 import org.example.backend.domain.lectureNote.entity.LectureNote;
@@ -11,9 +10,8 @@ import java.util.List;
 import java.util.UUID;
 
 public interface LectureNoteService {
-    LectureNote uploadLectureNote(UUID classId, MultipartFile file) throws IOException;
     void deleteLectureNote(UUID lectureNoteId);
     LectureNoteResponseDTO getLectureNoteDetail(UUID lectureNoteId);
-
+    List<LectureNote> uploadLectureNotes(UUID classId, List<MultipartFile> files) throws IOException;
     List<LectureNoteKeyResponseDTO> getLectureNoteList(UUID lectureId);
 }

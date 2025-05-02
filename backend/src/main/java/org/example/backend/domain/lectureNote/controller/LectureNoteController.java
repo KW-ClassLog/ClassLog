@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/lectures")
@@ -23,16 +24,17 @@ public class LectureNoteController {
     private final LectureNoteService lectureNoteService;
 
 
-    //강의록 업로드
     @PostMapping("/{class_id}/note/upload")
-    public ApiResponse<LectureNoteKeyResponseDTO> uploadLectureNote(
+    public ApiResponse<List<LectureNoteKeyResponseDTO>> uploadLectureNote(
             @PathVariable("class_id") UUID classId,
-            @RequestParam("file") MultipartFile file) throws IOException {
+            @RequestParam("file") List<MultipartFile> files) throws IOException {
+        List<LectureNote> lectureNotes = lectureNoteService.uploadLectureNotes(classId, files);
 
-        LectureNote lectureNote = lectureNoteService.uploadLectureNote(classId, file);
-        LectureNoteKeyResponseDTO responseDTO = LectureNoteConverter.toDTO(lectureNote);
+        // LectureNote를 LectureNoteKeyResponseDTO로 변환
+        List<LectureNoteKeyResponseDTO> responseDTOs = LectureNoteConverter.toDTOList(lectureNotes);
 
-        return ApiResponse.onSuccess(responseDTO);
+        // 성공적인 응답 반환
+        return ApiResponse.onSuccess(responseDTOs);
     }
 
     //강의록 삭제

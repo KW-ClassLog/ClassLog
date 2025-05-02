@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,24 +28,31 @@ public class LectureNoteServiceImpl implements LectureNoteService{
     private final LectureNoteRepository lectureNoteRepository;
     private final ClassroomRepository classroomRepository; // ✅ 추가
 
-    //파일 업로드
-    public LectureNote uploadLectureNote(UUID classId, MultipartFile file) throws IOException {
-        // 1. S3에 업로드
-        String key = "lecture_note/" + classId + "/" + UUID.randomUUID() + "/" + file.getOriginalFilename();
-        String fileUrl = s3Service.uploadFile(file, key);
+    public List<LectureNote> uploadLectureNotes(UUID classId, List<MultipartFile> files) throws IOException {
+        // 1. 여러 파일에 대해 처리
+        List<LectureNote> lectureNotes = new ArrayList<>();
 
-        // 2. classId로 Classroom 엔티티 조회
-        Classroom classroom = classroomRepository.findById(classId)
-                .orElseThrow(() -> new ClassroomException(ClassroomErrorCode.CLASS_NOT_FOUND));
+        // 2. 각 파일 업로드 처리
+        for (MultipartFile file : files) {
+            // 1) S3에 업로드
+            String key = "lecture_note/" + classId + "/" + UUID.randomUUID() + "/" + file.getOriginalFilename();
+            String fileUrl = s3Service.uploadFile(file, key);
 
-        // 3. LectureNote 저장
-        LectureNote lectureNote = LectureNote.builder()
-                .noteUrl(key)
-                .classroom(classroom) // ✅ 객체 넣기
-                .build();
+            // 2) classId로 Classroom 엔티티 조회
+            Classroom classroom = classroomRepository.findById(classId)
+                    .orElseThrow(() -> new ClassroomException(ClassroomErrorCode.CLASS_NOT_FOUND));
 
-        return lectureNoteRepository.save(lectureNote);
+            // 3) LectureNote 객체 생성
+            LectureNote lectureNote = LectureNote.builder()
+                    .noteUrl(key)
+                    .classroom(classroom) // Classroom 객체 넣기
+                    .build();
 
+            // 4) LectureNote 저장
+            lectureNotes.add(lectureNoteRepository.save(lectureNote));
+        }
+
+        return lectureNotes;
     }
 
     //파일 삭제
