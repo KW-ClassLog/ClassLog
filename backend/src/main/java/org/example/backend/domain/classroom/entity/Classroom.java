@@ -3,8 +3,11 @@ package org.example.backend.domain.classroom.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
+import org.example.backend.domain.lecture.entity.Lecture;
 import org.example.backend.domain.user.entity.User;
 import org.example.backend.global.entitiy.BaseEntity;
 
@@ -36,4 +39,7 @@ public class Classroom extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "professor_id", nullable = false)
     private User professor;
+
+    @OneToMany(mappedBy = "classroom", cascade = CascadeType.ALL)
+    private List<Lecture> lectureList = new ArrayList<>();
 }

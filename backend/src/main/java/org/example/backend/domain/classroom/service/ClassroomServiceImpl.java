@@ -6,8 +6,15 @@ import org.example.backend.domain.classroom.entity.Classroom;
 import org.example.backend.domain.classroom.exception.ClassroomErrorCode;
 import org.example.backend.domain.classroom.exception.ClassroomException;
 import org.example.backend.domain.classroom.repository.ClassroomRepository;
+import org.example.backend.domain.lecture.entity.Lecture;
+import org.example.backend.domain.lecture.repository.LectureRepository;
+import org.example.backend.domain.lectureNote.entity.LectureNote;
+import org.example.backend.domain.lectureNote.repository.LectureNoteRepository;
+import org.example.backend.global.S3.service.S3Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -15,12 +22,18 @@ public class ClassroomServiceImpl implements ClassroomService {
 
     private ClassroomRepository classroomRepository;
     private ClassroomConverter classroomConverter;
+    private LectureNoteRepository lectureNoteRepository;
+    private S3Service s3Service;
+    private LectureRepository lectureRepository;
 
     //의존성 주입
     @Autowired
-    public ClassroomServiceImpl(ClassroomConverter classroomConverter, ClassroomRepository classroomRepository) {
+    public ClassroomServiceImpl(ClassroomConverter classroomConverter, ClassroomRepository classroomRepository, LectureNoteRepository lectureNoteRepository, S3Service s3Service, LectureRepository lectureRepository) {
         this.classroomConverter = classroomConverter;
         this.classroomRepository = classroomRepository;
+        this.lectureNoteRepository = lectureNoteRepository;
+        this.s3Service = s3Service;
+        this.lectureRepository = lectureRepository;
     }
 
     // Classroom 생성
@@ -34,10 +47,29 @@ public class ClassroomServiceImpl implements ClassroomService {
         return classroomRepository.findById(classId)
                 .orElseThrow(() -> new ClassroomException(ClassroomErrorCode.CLASS_NOT_FOUND)); // 예외 처리
     }
+
+    @Transactional
     // Classroom 삭제
     public void deleteClassroom(UUID classId) {
         Classroom classroom = classroomRepository.findById(classId)
                 .orElseThrow(() -> new ClassroomException(ClassroomErrorCode.CLASS_NOT_FOUND));
+
+        // 2. 관련 LectureNote 삭제
+        List<LectureNote> notes = lectureNoteRepository.findByClassroom_Id(classId);
+
+        // 3. S3에서 파일 삭제
+        for (LectureNote note : notes) {
+            // noteUrl 필드에서 S3 Key 추출 후 삭제
+            String s3Key = note.getNoteUrl();  // noteUrl 필드에 S3 key가 저장되어 있다고 가정
+            s3Service.deleteFile(s3Key);  // S3 파일 삭제
+        }
+
+        // 5. 관련된 Lecture 삭제
+        List<Lecture> lectures = lectureRepository.findByClassroom_Id(classId);
+        lectureRepository.deleteAll(lectures);
+
+        // 4. DB에서 LectureNote 삭제
+        lectureNoteRepository.deleteAll(notes);
 
         classroomRepository.delete(classroom);
     }
