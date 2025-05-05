@@ -6,6 +6,8 @@ import java.util.UUID;
 
 import org.example.backend.domain.classroom.entity.Classroom;
 import org.example.backend.global.entitiy.BaseEntity;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 
 @Entity
@@ -25,6 +27,7 @@ public class LectureNote extends BaseEntity {
     private String noteUrl;
 
     @ManyToOne
+    @OnDelete(action= OnDeleteAction.CASCADE)
     @JoinColumn(name = "class_id", nullable = false)
     private Classroom classroom;
 }

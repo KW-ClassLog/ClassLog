@@ -16,6 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -65,6 +66,7 @@ public class SecurityConfig {
                         .anyRequest().permitAll())
 //                        .requestMatchers("/api/users","/api/users/verify-email","/api/users/login","/api/users/password/temp").permitAll()
 //                        .anyRequest().authenticated())
+                .addFilterBefore(new FilterExceptionHandler(), LogoutFilter.class) // 예외처리 필터
                 .addFilterBefore(jwtFilter(),LoginFilter.class) // 미들웨어
                 .addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class) // custom한 login필터 추가
                 .sessionManagement((session)->session // 세션설정
