@@ -45,10 +45,11 @@
 /* MenuSection 스타일 */
 .menuSection ul {
   list-style: none;
+  margin-top: $spacing-lg;
 }
 
 .menuSection li {
-  padding: $spacing-md 0px;
+  padding: $spacing-lg 0px;
   border-bottom: $color-neutral-7 solid 1px;
   color: $color-neutral-3;
   transition: $transition-fast;
