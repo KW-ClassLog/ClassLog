@@ -7,8 +7,17 @@
   justify-content: space-between;
   gap: $spacing-md;
   cursor: pointer;
-
   color: white;
+  transition: $transition-fast;
+
+  &:hover {
+    background-color: $color-lightblue;
+    transform: scale(1.02);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
 
   .profileImage {
     width: 60px;
@@ -42,9 +51,15 @@
   padding: $spacing-md 0px;
   border-bottom: $color-neutral-7 solid 1px;
   color: $color-neutral-3;
+  transition: $transition-fast;
+
   &:hover {
     color: $color-blue;
     cursor: pointer;
-    transition: $transition-fast;
+    transition: background-color $transition-fast, color $transition-fast;
+  }
+
+  &:active {
+    color: $color-lightblue;
   }
 }

@@ -1,3 +1,4 @@
+"use client";
 import VerticalTopContainer from "@/components/Container/VerticalTopContainer/VerticalTopContainer";
 import ProfileSection from "./_components/ProfileSection";
 import MenuSection from "./_components/MenuSection";

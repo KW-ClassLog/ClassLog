@@ -1,10 +1,14 @@
+"use client";
+
+import { ROUTES } from "@/constants/routes";
 import styles from "../page.module.scss"; // 스타일 시트 임포트
 import { ChevronRight } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function ProfileSection() {
   return (
-    <div className={styles.profileSection}>
+    <Link href={ROUTES.studentProfileEdit} className={styles.profileSection}>
       <Image
         src="/images/default_profile.jpg"
         alt="Profile Image"
@@ -19,6 +23,6 @@ export default function ProfileSection() {
       <div className={styles.editButton}>
         <ChevronRight />
       </div>
-    </div>
+    </Link>
   );
 }
