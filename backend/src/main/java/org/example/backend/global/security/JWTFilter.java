@@ -10,6 +10,7 @@ import org.example.backend.domain.user.entity.Role;
 import org.example.backend.domain.user.entity.User;
 import org.example.backend.domain.user.exception.UserErrorCode;
 import org.example.backend.domain.user.service.CustomUserDetails;
+import org.example.backend.domain.user.service.UserRedisService;
 import org.example.backend.global.ApiResponse;
 import org.example.backend.global.code.base.FailureCode;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,9 +22,11 @@ import java.io.IOException;
 
 public class JWTFilter extends OncePerRequestFilter {
     private final JWTUtil jwtUtil;
+    private final UserRedisService userRedisService;
 
-    public JWTFilter(JWTUtil jwtUtil){
+    public JWTFilter(JWTUtil jwtUtil, UserRedisService userRedisService){
         this.jwtUtil = jwtUtil;
+        this.userRedisService = userRedisService;
     }
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -31,7 +34,12 @@ public class JWTFilter extends OncePerRequestFilter {
         String uri = request.getRequestURI();
 
         // 로그인, 회원가입에 대해 필터링 제외
-        if (uri.equals("/api/users/login") || uri.equals("/api/users")|| uri.equals("/api/users/password/temp")||uri.equals("/api/users/verify-email")) {
+        if (uri.equals("/api/users/login") ||
+                uri.equals("/api/users")||
+                uri.equals("/api/users/password/temp")||
+                uri.equals("/api/users/verify-email")||
+                uri.equals("/api/users/refresh")||
+                uri.equals("/api/users/logout")) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -56,6 +64,15 @@ public class JWTFilter extends OncePerRequestFilter {
 
         // Bearer 제외하고 토큰만 획득
         String token = authorization.substring(7);
+
+        // 블랙리스트 토큰 검증
+        if (userRedisService.isBlackList(token)) {
+            System.out.println("블랙리스트에 등록된 토큰입니다.");
+            setErrorResponse(response, UserErrorCode._TOKEN_BLACKLISTED);
+
+            return;
+        }
+
 
         // 토큰 소멸 시간 검증
         try {

@@ -1,5 +1,7 @@
 package org.example.backend.domain.user.service;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.example.backend.domain.accountLocal.entity.AccountLocal;
 import org.example.backend.domain.accountLocal.repository.AccountLocalRepository;
@@ -120,5 +122,19 @@ public class UserServiceImpl implements UserService {
         // 4. 저장
         account.setPassword(encoded);
         accountLocalRepository.save(account);
+    }
+
+    // 쿠키에서 리프레시 토큰 추출
+    @Override
+    public String extractRefreshToken(HttpServletRequest request) {
+        if(request.getCookies() == null){
+            return null;
+        }
+        for (Cookie cookie : request.getCookies()) {
+            if ("refresh_token".equals(cookie.getName())) {
+                return cookie.getValue();
+            }
+        }
+        return null;
     }
 }
