@@ -54,6 +54,16 @@
   color: $color-neutral-3;
   transition: $transition-fast;
 
+  button {
+    all: unset;
+    background: none;
+    border: none;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+    width: 100%;
+  }
+
   &:hover {
     color: $color-blue;
     cursor: pointer;
@@ -63,13 +73,4 @@
   &:active {
     color: $color-lightblue;
   }
-}
-
-.menuSection li button {
-  all: unset;
-  background: none;
-  border: none;
-  color: inherit;
-  font: inherit;
-  cursor: pointer;
 }
