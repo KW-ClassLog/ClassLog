@@ -64,3 +64,12 @@
     color: $color-lightblue;
   }
 }
+
+.menuSection li button {
+  all: unset;
+  background: none;
+  border: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
