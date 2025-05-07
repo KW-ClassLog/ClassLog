@@ -7,6 +7,14 @@
 }
 
 @font-face {
+  font-family: "EF_jejudoldam";
+  src: url("/fonts/EF_jejudoldam.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
   font-family: "Paperlogy";
   src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-1Thin.woff2")
     format("woff2");
