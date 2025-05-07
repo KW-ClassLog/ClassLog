@@ -86,10 +86,21 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         String name = customUserDetails.getUsername();
         String role = auth.getAuthority();
 
-        String token = jwtUtil.createJwt(email, name, role,30*1000L);
+        // access Token
+        String accessToken = jwtUtil.createAccessToken(email, name, role);
 
-        // 응답 Header
-        response.addHeader("Authorization","Bearer "+token);
+        // refresh Token
+        String refreshToken = jwtUtil.createRefreshToken(email);
+
+        // Redis에 refreshToken 저장
+        userRedisService.setRefreshToken(email,refreshToken);
+
+        // access token 응답 Header
+        response.addHeader("Authorization","Bearer "+accessToken);
+
+        // refresh token 응답 Header
+        response.addHeader("Set-Cookie","refresh_token="+refreshToken+
+                "; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=" + (14 * 24 * 60 * 60));
 
         // 응답 body
         response.setStatus(HttpServletResponse.SC_OK);
