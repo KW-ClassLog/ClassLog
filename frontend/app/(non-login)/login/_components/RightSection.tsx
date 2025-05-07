@@ -23,7 +23,6 @@ export default function RightSection({ isMobile }: RightSectionProps) {
   const [errorMessage, setErrorMessage] = useState(""); // Error 메시지 state
   const [showErrorModal, setShowErrorModal] = useState(false); // Modal visibility state
   const router = useRouter(); // useRouter 사용
-  const { role } = useAuthStore(); // role from the store
 
   const handleLogin = async () => {
     try {
@@ -31,6 +30,7 @@ export default function RightSection({ isMobile }: RightSectionProps) {
       if (response.isSuccess) {
         // TODO: 비밀번호 찾기(변경) 직후 로그인일 경우, 홈으로 라우팅 이후에 팝업을 띄워야 함
         // if (response.result?.isTemporary){}
+        const { role } = useAuthStore.getState(); // 로그인 직후, role을 갱신
 
         if (role === "STUDENT") {
           router.push(ROUTES.studentHome);
