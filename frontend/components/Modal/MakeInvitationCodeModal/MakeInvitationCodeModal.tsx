@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import { createPortal } from "react-dom";
 import styles from "./MakeInvitationCodeModal.module.scss";
 import ClosableModal from "../ClosableModal/ClosableModal";
 import Image from "next/image";
@@ -37,7 +38,7 @@ const MakeInvitationCodeModal: React.FC<MakeInvitationCodeModalProps> = ({
   };
 
   // 모달 상태에 따른 렌더링
-  return (
+  return createPortal(
     <ClosableModal onClose={onClose}>
       {modalState === 1 && (
         <div className={styles.modalContainer}>
@@ -97,7 +98,8 @@ const MakeInvitationCodeModal: React.FC<MakeInvitationCodeModalProps> = ({
           <p>QR코드를 스캔해 클래스에 입장하세요</p>
         </div>
       )}
-    </ClosableModal>
+    </ClosableModal>,
+    document.body
   );
 };
 

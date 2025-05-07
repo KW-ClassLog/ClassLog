@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import { createPortal } from "react-dom";
 import styles from "./ConfirmModal.module.scss";
 import FullWidthButton from "@/components/Button/FullWidthButton/FullWidthButton";
 
@@ -21,7 +22,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
     }
   };
 
-  return (
+  return createPortal(
     <div className={styles.overlay} onClick={handleOverlayClick}>
       <div className={styles.modal}>
         <div className={styles.message}>{children}</div>
@@ -30,7 +31,8 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
           <FullWidthButton onClick={onConfirm}>확인</FullWidthButton>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 
