@@ -25,10 +25,10 @@ public class LangChainClientImpl implements LangChainClient {
     public QuizResponseDTO requestQuiz(String lectureId, String documentUrl, boolean useAudio, String audioUrl) {
         try {
             Map<String, Object> body = new HashMap<>();
-            body.put("document_url", documentUrl);
+            body.put("document_path", documentUrl);
             body.put("use_audio", useAudio);
             if (useAudio) {
-                body.put("audio_url", audioUrl);
+                body.put("audio_path", audioUrl);
             }
 
             HttpHeaders headers = new HttpHeaders();
