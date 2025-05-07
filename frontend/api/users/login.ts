@@ -21,7 +21,6 @@ export async function login({ email, password }: LoginRequest) {
     if (accessToken) {
       setAccessToken(accessToken);
     }
-    console.log("accessToken:", accessToken);
 
     // axios의 기본 헤더에 access token 설정
     if (accessToken) {
