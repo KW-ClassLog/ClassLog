@@ -3,6 +3,7 @@ import { toSnakeCase, toCamelCase } from "@/utils/caseConverter";
 
 export const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
+  withCredentials: true,
 });
 
 // 요청 보내기 전에 -> camelCase → snake_case
