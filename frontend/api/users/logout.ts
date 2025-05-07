@@ -9,7 +9,8 @@ export async function logout() {
     const response = await axiosInstance.post<ApiResponse<string>>(
       ENDPOINTS.USERS.LOGOUT
     );
-    delete axios.defaults.headers.common["Authorization"];
+
+    delete axiosInstance.defaults.headers.common["Authorization"];
     useAuthStore.getState().logout();
     return response.data;
   } catch (error: unknown) {
