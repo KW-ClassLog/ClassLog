@@ -13,6 +13,7 @@ import org.example.backend.domain.quiz.exception.QuizErrorCode;
 import org.example.backend.domain.quiz.exception.QuizException;
 import org.example.backend.infra.langchain.LangChainClient;
 import org.springframework.stereotype.Service;
+import org.example.backend.global.S3.service.S3Service;
 
 import java.util.List;
 import java.util.UUID;
@@ -26,6 +27,7 @@ public class QuizServiceImpl implements QuizService {
     private final LectureNoteMappingRepository lectureNoteMappingRepository;
     private final LectureNoteRepository lectureNoteRepository;
     private final LangChainClient langChainClient;
+    private final S3Service s3Service;
 
     @Override
     public QuizResponseDTO generateQuiz(UUID lectureId, QuizRequestDTO request) {
@@ -50,17 +52,15 @@ public class QuizServiceImpl implements QuizService {
                 .collect(Collectors.toList());
 
         // S3 URL
-        String s3BucketUrl = "https://kwclasslog.s3.amazonaws.com/";
-
         String noteUrls = notes.stream()
-                .map(note -> s3BucketUrl + note.getNoteUrl()) // 저장된 경로를 S3 URL에 결합
+                .map(note -> s3Service.getPresignedUrl(note.getNoteUrl()))
                 .collect(Collectors.joining(","));
 
         try {
             // 4. LangChain 서버 호출 (필요한 정보를 가지고 호출)
             return langChainClient.requestQuiz(
                     lectureId.toString(),
-                    noteUrls, // 여러 강의록 URL을 넘겨줍니다
+                    noteUrls,
                     request.isUseAudio(),
                     lecture.getAudioUrl()
             );
