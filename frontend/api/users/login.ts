@@ -21,10 +21,14 @@ export async function login({ email, password }: LoginRequest) {
     if (accessToken) {
       setAccessToken(accessToken);
     }
+    console.log("accessToken:", accessToken);
 
     // axios의 기본 헤더에 access token 설정
-    axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-
+    if (accessToken) {
+      axiosInstance.defaults.headers.common[
+        "Authorization"
+      ] = `Bearer ${accessToken}`;
+    }
     return response.data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error) && error.response) {
