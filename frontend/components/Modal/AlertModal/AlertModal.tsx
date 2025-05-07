@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import { createPortal } from "react-dom";
 import styles from "./AlertModal.module.scss";
 import FullWidthButton from "@/components/Button/FullWidthButton/FullWidthButton";
 
@@ -16,13 +17,14 @@ const AlertModal: React.FC<AlertModalProps> = ({ children, onClose }) => {
     }
   };
 
-  return (
+  return createPortal(
     <div className={styles.overlay} onClick={handleOverlayClick}>
       <div className={styles.modal}>
         <div className={styles.message}>{children}</div>
         <FullWidthButton onClick={onClose}>확인</FullWidthButton>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 

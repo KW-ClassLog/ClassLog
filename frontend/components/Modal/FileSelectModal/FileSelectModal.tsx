@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import { createPortal } from "react-dom";
 import styles from "./FileSelectModal.module.scss";
 import ClosableModal from "../ClosableModal/ClosableModal";
 import FullWidthButton from "@/components/Button/FullWidthButton/FullWidthButton";
@@ -66,7 +67,7 @@ const FileSelectModal: React.FC<FileSelectModalProps> = ({
     }
   };
 
-  return (
+  return createPortal(
     <ClosableModal onClose={onClose}>
       <div className={`${styles.modalContent} mixed-layout-3`}>
         <h1>{sessionNumber}차시 강의자료 선택</h1>
@@ -129,7 +130,8 @@ const FileSelectModal: React.FC<FileSelectModalProps> = ({
           <FullWidthButton onClick={handleComplete}>선택 완료</FullWidthButton>
         </div>
       </div>
-    </ClosableModal>
+    </ClosableModal>,
+    document.body
   );
 };
 
