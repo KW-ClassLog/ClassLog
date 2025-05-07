@@ -93,4 +93,15 @@ public class ClassroomServiceImpl implements ClassroomService {
 
         return classroomRepository.save(classroom);
     }
+
+    //강의 목록 조회
+    @Override
+    public List<Lecture> getLecturesByClassId(UUID classId) {
+        Classroom classroom = classroomRepository.findById(classId)
+                .orElseThrow(() -> new ClassroomException(ClassroomErrorCode.CLASS_NOT_FOUND));
+
+        List<Lecture> lecturesInClass = lectureRepository.findByClassroom_IdOrderByLectureDateAscCreatedAtAsc(classroom.getId());
+
+        return lecturesInClass;
+    }
 }

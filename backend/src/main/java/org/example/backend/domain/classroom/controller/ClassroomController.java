@@ -3,11 +3,15 @@ package org.example.backend.domain.classroom.controller;
 import jakarta.validation.Valid;
 import org.example.backend.domain.classroom.converter.ClassroomConverter;
 import org.example.backend.domain.classroom.dto.request.ClassroomRequestDTO;
+import org.example.backend.domain.classroom.dto.response.ClassLectureResponseDTO;
 import org.example.backend.domain.classroom.dto.response.ClassroomResponseDTO;
 import org.example.backend.domain.classroom.entity.Classroom;
 import org.example.backend.domain.classroom.service.ClassroomService;
+import org.example.backend.domain.lecture.entity.Lecture;
 import org.example.backend.global.ApiResponse;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -48,5 +52,16 @@ public class ClassroomController {
         ClassroomResponseDTO response = classroomConverter.toResponseDTO(classroom);
 
         return ApiResponse.onSuccess(response);
+    }
+
+    //클래스에 속해있는 강의목록 조회
+    @GetMapping("/{classId}/lectures")
+    public ApiResponse<List<ClassLectureResponseDTO>> getLectureList(@PathVariable UUID classId){
+        List<Lecture> lectures = classroomService.getLecturesByClassId(classId);
+
+        List<ClassLectureResponseDTO> responseDTOs = classroomConverter.toDTOList(lectures);
+
+        return ApiResponse.onSuccess(responseDTOs);
+
     }
 }
