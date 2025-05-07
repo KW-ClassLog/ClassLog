@@ -44,6 +44,7 @@ dependencies {
 	implementation 'com.sun.mail:jakarta.mail:2.0.1'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'com.amazonaws:aws-java-sdk-s3:1.12.600'
+	implementation 'com.amazonaws:aws-java-sdk-core:1.12.681'
 }
 
 tasks.named('test') {

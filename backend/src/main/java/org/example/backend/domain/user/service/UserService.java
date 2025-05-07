@@ -1,5 +1,6 @@
 package org.example.backend.domain.user.service;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.example.backend.domain.user.dto.request.RegisterRequestDTO;
 
 public interface UserService {
@@ -18,4 +19,7 @@ public interface UserService {
 
     // 비번 재설정
     void updatePassword(String currentPassword,String newPassword);
+
+    // 쿠키에서 리프레시 토큰 추출
+    String extractRefreshToken(HttpServletRequest request);
 }
