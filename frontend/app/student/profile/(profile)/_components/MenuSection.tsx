@@ -5,8 +5,12 @@ import Link from "next/link";
 import styles from "../page.module.scss";
 import { logout } from "@/api/users/logout";
 import ConfirmModal from "@/components/Modal/ConfirmModal/ConfirmModal";
+import { useRouter } from "next/navigation";
+import { ROUTES } from "@/constants/routes";
 
 export default function MenuSection() {
+  const router = useRouter();
+
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleLogoutClick = () => {
@@ -21,6 +25,7 @@ export default function MenuSection() {
     try {
       await logout();
       setIsModalOpen(false);
+      router.push(ROUTES.landing);
     } catch (error) {
       console.error("Logout failed:", error);
     }
