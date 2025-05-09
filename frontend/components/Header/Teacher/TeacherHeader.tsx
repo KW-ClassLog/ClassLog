@@ -6,12 +6,15 @@ import Image from "next/image";
 import { useState } from "react";
 import { ROUTES } from "@/constants/routes";
 import { useRouter } from "next/navigation"; // Next.js의 useRouter 사용
+import { logout } from "@/api/users/logout";
+import ConfirmModal from "@/components/Modal/ConfirmModal/ConfirmModal";
 
 type TeacherHeaderProps = {
   mode: "classSelection" | "default"; // mode에 따라 동작을 달리함
 };
 
 const TeacherHeader: React.FC<TeacherHeaderProps> = ({ mode }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
   const [toggleClassSelectionOpen, setToggleClassSelectionOpen] =
     useState<boolean>(false);
@@ -31,8 +34,24 @@ const TeacherHeader: React.FC<TeacherHeaderProps> = ({ mode }) => {
     setIsDropdownOpen(false); // 드롭다운 닫기
   };
 
+  const handleLogoutClick = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+  };
+
   // '로그아웃' 클릭 시 로그아웃 처리
-  const handleLogoutClick = () => {};
+  const handleConfirmLogout = async () => {
+    try {
+      await logout();
+      setIsModalOpen(false);
+      router.push(ROUTES.landing);
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
 
   // 클래스 선택 처리
   const handleClassSelect = (className: string) => {
@@ -114,6 +133,14 @@ const TeacherHeader: React.FC<TeacherHeaderProps> = ({ mode }) => {
           </div>
         )}
       </div>
+      {isModalOpen && (
+        <ConfirmModal
+          onConfirm={handleConfirmLogout}
+          onClose={handleModalClose}
+        >
+          정말 로그아웃 하시겠습니까?
+        </ConfirmModal>
+      )}
     </section>
   );
 };

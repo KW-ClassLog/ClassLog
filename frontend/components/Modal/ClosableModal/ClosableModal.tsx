@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import { createPortal } from "react-dom";
 import styles from "./ClosableModal.module.scss";
 import { X } from "lucide-react";
 
@@ -16,7 +17,7 @@ const ClosableModal: React.FC<ClosableModalProps> = ({ children, onClose }) => {
     }
   };
 
-  return (
+  return createPortal(
     <div className={styles.overlay} onClick={handleOverlayClick}>
       <div className={styles.modal}>
         <div className={styles.closeButton}>
@@ -24,7 +25,8 @@ const ClosableModal: React.FC<ClosableModalProps> = ({ children, onClose }) => {
         </div>
         <div className={styles.content}>{children}</div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 

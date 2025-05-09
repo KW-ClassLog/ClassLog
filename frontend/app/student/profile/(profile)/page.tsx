@@ -1,3 +1,13 @@
+"use client";
+import VerticalTopContainer from "@/components/Container/VerticalTopContainer/VerticalTopContainer";
+import ProfileSection from "./_components/ProfileSection";
+import MenuSection from "./_components/MenuSection";
+
 export default function StudentProfilePage() {
-  return <div>프로필</div>;
+  return (
+    <VerticalTopContainer>
+      <ProfileSection />
+      <MenuSection />
+    </VerticalTopContainer>
+  );
 }

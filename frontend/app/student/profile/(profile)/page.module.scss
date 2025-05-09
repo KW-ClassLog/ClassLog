@@ -1,0 +1,76 @@
+.profileSection {
+  padding: $spacing-lg $spacing-md;
+  background-color: $color-blue;
+  border-radius: $radius-lg;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $spacing-md;
+  cursor: pointer;
+  color: white;
+  transition: $transition-fast;
+
+  &:hover {
+    background-color: $color-lightblue;
+    transform: scale(1.02);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  .profileImage {
+    width: 60px;
+    height: 60px;
+    border-radius: $radius-full;
+    object-fit: cover;
+    border: 1px solid #ccc;
+  }
+  .profileInfo {
+    width: 100%;
+    h2 {
+      margin: 0;
+      font-size: $font-size-lg;
+      font-weight: $font-weight-bold;
+    }
+    p {
+      margin: 5px 0;
+    }
+  }
+  .editButton {
+    padding: $spacing-md;
+  }
+}
+
+/* MenuSection 스타일 */
+.menuSection ul {
+  list-style: none;
+  margin-top: $spacing-lg;
+}
+
+.menuSection li {
+  padding: $spacing-lg 0px;
+  border-bottom: $color-neutral-7 solid 1px;
+  color: $color-neutral-3;
+  transition: $transition-fast;
+
+  button {
+    all: unset;
+    background: none;
+    border: none;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+    width: 100%;
+  }
+
+  &:hover {
+    color: $color-blue;
+    cursor: pointer;
+    transition: background-color $transition-fast, color $transition-fast;
+  }
+
+  &:active {
+    color: $color-lightblue;
+  }
+}
