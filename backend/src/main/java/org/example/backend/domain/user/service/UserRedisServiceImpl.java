@@ -1,6 +1,6 @@
 package org.example.backend.domain.user.service;
 
-import org.example.backend.global.security.JWTProperties;
+import org.example.backend.global.security.token.JWTProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;

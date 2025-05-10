@@ -16,7 +16,7 @@ import org.example.backend.domain.user.service.MailService;
 import org.example.backend.domain.user.service.UserRedisService;
 import org.example.backend.domain.user.service.UserService;
 import org.example.backend.global.ApiResponse;
-import org.example.backend.global.security.JWTUtil;
+import org.example.backend.global.security.token.JWTUtil;
 import org.springframework.web.bind.annotation.*;
 
 

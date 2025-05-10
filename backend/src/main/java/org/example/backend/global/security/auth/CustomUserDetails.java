@@ -1,7 +1,6 @@
-package org.example.backend.global.security;
+package org.example.backend.global.security.auth;
 
 import org.antlr.v4.runtime.misc.Array2DHashSet;
-import org.example.backend.domain.accountLocal.entity.AccountLocal;
 import org.example.backend.domain.user.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

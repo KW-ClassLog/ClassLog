@@ -1,4 +1,4 @@
-package org.example.backend.global.security;
+package org.example.backend.global.security.auth;
 
 
 import org.example.backend.domain.user.entity.User;
