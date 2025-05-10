@@ -1,6 +1,5 @@
 package org.example.backend.domain.user.service;
 
-import lombok.RequiredArgsConstructor;
 import org.example.backend.global.security.JWTProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -47,28 +46,28 @@ public class UserRedisServiceImpl implements UserRedisService{
 
     // 리프레시 토큰 저장
     @Override
-    public void setRefreshToken(String email, String refreshToken) {
+    public void setRefreshToken(String userId, String refreshToken) {
         long duration = jwtProperties.getRefreshTokenRedisExpiration();
-        String key = buildRefreshTokenKey(email);
+        String key = buildRefreshTokenKey(userId);
         redisTemplate.opsForValue().set(key, refreshToken, Duration.ofSeconds(duration));
     }
 
     // 리프레시 토큰 조회
     @Override
-    public String getRefreshToken(String email) {
-        return redisTemplate.opsForValue().get(buildRefreshTokenKey(email));
+    public String getRefreshToken(String userId) {
+        return redisTemplate.opsForValue().get(buildRefreshTokenKey(userId));
     }
 
     // 리프레시 토큰 삭제
     @Override
-    public void deleteRefreshToken(String email) {
-        redisTemplate.delete(buildRefreshTokenKey(email));
+    public void deleteRefreshToken(String userId) {
+        redisTemplate.delete(buildRefreshTokenKey(userId));
     }
 
     // 키 네이밍 규칙
     @Override
-    public String buildRefreshTokenKey(String email) {
-        return "refreshToken:"+email;
+    public String buildRefreshTokenKey(String userId) {
+        return "refreshToken:"+ userId;
     }
 
     // access token 블랙리스트 저장

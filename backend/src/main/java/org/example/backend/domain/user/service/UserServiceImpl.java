@@ -18,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.UUID;
 
 
 @Service
@@ -27,6 +28,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserConverter userConverter;
     private final PasswordEncoder passwordEncoder;
+
 
     //회원가입
     @Override
@@ -89,10 +91,10 @@ public class UserServiceImpl implements UserService {
             throw new UserException(FailureCode._UNAUTHORIZED); // 예상치 못한 타입 차단
         }
 
-        String email = ((CustomUserDetails) principal).getEmail();
+        UUID userId = ((CustomUserDetails) principal).getUser().getId();
 
         // 2. 사용자 정보 조회
-        User user = userRepository.findByEmail(email)
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserException(UserErrorCode._EMAIL_NOT_FOUND));
 
         // 3. 기존 비밀번호 검증

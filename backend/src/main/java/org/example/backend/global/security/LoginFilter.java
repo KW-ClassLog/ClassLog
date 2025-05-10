@@ -19,10 +19,7 @@ import org.springframework.util.StreamUtils;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
@@ -77,22 +74,21 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException{
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
 
-        String email = customUserDetails.getEmail();
+        UUID userId = customUserDetails.getUser().getId();
 
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         Iterator<? extends  GrantedAuthority> iterator = authorities.iterator();
         GrantedAuthority auth = iterator.next();
-        String name = customUserDetails.getUsername();
         String role = auth.getAuthority();
 
         // access Token
-        String accessToken = jwtUtil.createAccessToken(email, name, role);
+        String accessToken = jwtUtil.createAccessToken(userId, role);
 
         // refresh Token
-        String refreshToken = jwtUtil.createRefreshToken(email);
+        String refreshToken = jwtUtil.createRefreshToken(userId, role);
 
         // Redis에 refreshToken 저장
-        userRedisService.setRefreshToken(email,refreshToken);
+        userRedisService.setRefreshToken(userId.toString(),refreshToken);
 
         // access token 응답 Header
         response.addHeader("Authorization","Bearer "+accessToken);
