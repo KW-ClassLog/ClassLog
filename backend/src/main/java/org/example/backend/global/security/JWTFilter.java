@@ -5,7 +5,6 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.example.backend.domain.accountLocal.entity.AccountLocal;
 import org.example.backend.domain.user.entity.Role;
 import org.example.backend.domain.user.entity.User;
 import org.example.backend.domain.user.exception.UserErrorCode;
@@ -84,15 +83,14 @@ public class JWTFilter extends OncePerRequestFilter {
 
             // entity를 생성해서 값 세팅
             User user = new User();
-            AccountLocal accountLocal = new AccountLocal();
 
-            accountLocal.setEmail(email);
+            user.setEmail(email);
             user.setName(name);
             Role role = Role.valueOf(roleString); // Role enum으로 변환
             user.setRole(role);
 
             // UserDetail에 회원정보 객체 담기
-            CustomUserDetails customUserDetails = new CustomUserDetails(user, accountLocal);
+            CustomUserDetails customUserDetails = new CustomUserDetails(user);
 
             // 스프링 시큐리티 인증 토큰 생성
             Authentication authToken = new UsernamePasswordAuthenticationToken(customUserDetails, null, customUserDetails.getAuthorities());

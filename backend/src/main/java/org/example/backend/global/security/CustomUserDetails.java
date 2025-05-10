@@ -11,11 +11,9 @@ import java.util.Collection;
 public class CustomUserDetails implements UserDetails {
 
     private final User user;
-    private final AccountLocal accountLocal;
 
-    public CustomUserDetails(User user,AccountLocal accountLocal){
+    public CustomUserDetails(User user){
         this.user = user;
-        this.accountLocal = accountLocal;
     }
 
     @Override
@@ -39,12 +37,12 @@ public class CustomUserDetails implements UserDetails {
     }
 
     public String getEmail(){
-        return accountLocal.getEmail();
+        return user.getEmail();
     }
 
     @Override
     public String getPassword() {
-        return accountLocal.getPassword();
+        return user.getPassword();
     }
 
     @Override
