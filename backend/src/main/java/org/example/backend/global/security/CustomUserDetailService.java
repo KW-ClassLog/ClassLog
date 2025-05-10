@@ -1,4 +1,4 @@
-package org.example.backend.domain.user.service;
+package org.example.backend.global.security;
 
 import org.example.backend.domain.accountLocal.entity.AccountLocal;
 import org.example.backend.domain.accountLocal.repository.AccountLocalRepository;

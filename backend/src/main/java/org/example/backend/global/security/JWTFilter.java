@@ -9,7 +9,6 @@ import org.example.backend.domain.accountLocal.entity.AccountLocal;
 import org.example.backend.domain.user.entity.Role;
 import org.example.backend.domain.user.entity.User;
 import org.example.backend.domain.user.exception.UserErrorCode;
-import org.example.backend.domain.user.service.CustomUserDetails;
 import org.example.backend.domain.user.service.UserRedisService;
 import org.example.backend.global.ApiResponse;
 import org.example.backend.global.code.base.FailureCode;
