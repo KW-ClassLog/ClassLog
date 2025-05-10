@@ -6,7 +6,6 @@ import jakarta.servlet.ServletInputStream;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.example.backend.domain.accountLocal.dto.request.LoginDTO;
-import org.example.backend.domain.user.service.CustomUserDetails;
 import org.example.backend.domain.user.service.UserRedisService;
 import org.example.backend.global.ApiResponse;
 import org.springframework.security.authentication.AuthenticationServiceException;

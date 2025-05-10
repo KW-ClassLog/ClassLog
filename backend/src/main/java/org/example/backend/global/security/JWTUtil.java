@@ -6,8 +6,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.example.backend.domain.user.dto.response.RefreshTokenResponseDTO;
 import org.example.backend.domain.user.exception.UserErrorCode;
 import org.example.backend.domain.user.exception.UserException;
-import org.example.backend.domain.user.service.CustomUserDetailService;
-import org.example.backend.domain.user.service.CustomUserDetails;
 import org.example.backend.domain.user.service.UserRedisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
