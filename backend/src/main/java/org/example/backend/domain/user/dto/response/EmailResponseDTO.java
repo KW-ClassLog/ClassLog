@@ -1,4 +1,4 @@
-package org.example.backend.domain.accountLocal.dto.response;
+package org.example.backend.domain.user.dto.response;
 
 import lombok.Getter;
 

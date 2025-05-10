@@ -1,6 +1,5 @@
-package org.example.backend.domain.accountLocal.dto.request;
+package org.example.backend.domain.user.dto.request;
 
-import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 
 @Data
