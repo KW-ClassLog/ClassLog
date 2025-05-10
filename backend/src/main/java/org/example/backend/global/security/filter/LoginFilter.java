@@ -1,4 +1,4 @@
-package org.example.backend.global.security;
+package org.example.backend.global.security.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
@@ -8,6 +8,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.example.backend.domain.accountLocal.dto.request.LoginDTO;
 import org.example.backend.domain.user.service.UserRedisService;
 import org.example.backend.global.ApiResponse;
+import org.example.backend.global.security.auth.CustomUserDetails;
+import org.example.backend.global.security.token.JWTUtil;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.authentication.AuthenticationManager;
