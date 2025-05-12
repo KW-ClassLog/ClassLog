@@ -24,6 +24,4 @@ public class ClassroomRequestDTO {
     @NotNull(message = "end date is required")
     private LocalDateTime endDate;  // end_date
 
-    private UUID professorId;  // professor_id
-
 }

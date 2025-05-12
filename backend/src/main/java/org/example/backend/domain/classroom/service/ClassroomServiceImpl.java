@@ -10,8 +10,12 @@ import org.example.backend.domain.lecture.entity.Lecture;
 import org.example.backend.domain.lecture.repository.LectureRepository;
 import org.example.backend.domain.lectureNote.entity.LectureNote;
 import org.example.backend.domain.lectureNote.repository.LectureNoteRepository;
+import org.example.backend.domain.user.entity.Role;
 import org.example.backend.global.S3.service.S3Service;
+import org.example.backend.global.security.auth.CustomUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
@@ -38,7 +42,17 @@ public class ClassroomServiceImpl implements ClassroomService {
 
     // Classroom 생성
     public Classroom createClassroom(ClassroomRequestDTO classroomRequestDTO) {
-        Classroom classroom = classroomConverter.toEntity(classroomRequestDTO);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Object principal = authentication.getPrincipal();
+
+        UUID userId = ((CustomUserDetails) principal).getUser().getId();
+        Role role =  ((CustomUserDetails) principal).getUser().getRole();
+
+        if (role == Role.STUDENT) {
+            throw new ClassroomException(ClassroomErrorCode.STUDENT_CANNOT_CREATE_CLASSROOM);
+        }
+
+        Classroom classroom = classroomConverter.toEntity(classroomRequestDTO, userId);
 
         return classroomRepository.save(classroom);
     }

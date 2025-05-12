@@ -9,6 +9,7 @@ import org.example.backend.domain.user.entity.User;
 import org.example.backend.domain.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import java.util.UUID;
 
 @Component
 public class ClassroomConverter {
@@ -16,15 +17,15 @@ public class ClassroomConverter {
     @Autowired
     private UserRepository userRepository;
 
-    public Classroom toEntity(ClassroomRequestDTO classroomRequestDTO) {
-        User professor = userRepository.findById(classroomRequestDTO.getProfessorId())
+    public Classroom toEntity(ClassroomRequestDTO dto, UUID userId) {
+        User professor = userRepository.findById(userId)
                 .orElseThrow(() -> new ClassroomException(ClassroomErrorCode.PROFESSOR_NOT_FOUND));
         return Classroom.builder()
-                .className(classroomRequestDTO.getClassName())
-                .classDate(classroomRequestDTO.getClassDate())
-                .startDate(classroomRequestDTO.getStartDate())
-                .endDate(classroomRequestDTO.getEndDate())
-                .professor(professor)  // professorId로 찾은 User 객체를 설정
+                .className(dto.getClassName())
+                .classDate(dto.getClassDate())
+                .startDate(dto.getStartDate())
+                .endDate(dto.getEndDate())
+                .professor(professor)
                 .build();
     }
 

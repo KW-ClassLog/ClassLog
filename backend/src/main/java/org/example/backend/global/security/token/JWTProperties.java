@@ -7,8 +7,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class JWTProperties {
 
-    // access token 만료 시간: 2시간
-    private final long accessTokenExpiration = 2 * 60 * 60 * 1000L;
+    // access token 만료 시간: 24시간
+    private final long accessTokenExpiration = 24 * 60 * 60 * 1000L;
 
     // acess token 만료 시간 test: 30초
     //private final long accessTokenExpiration = 30 * 1000L;
