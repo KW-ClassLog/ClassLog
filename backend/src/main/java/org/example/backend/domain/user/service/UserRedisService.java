@@ -14,16 +14,16 @@ public interface UserRedisService {
     boolean existTemporaryPassword(String email);
 
     // 토큰 저장
-    void setRefreshToken(String email, String refreshToken);
+    void setRefreshToken(String userId, String refreshToken);
 
     // 토큰 조회
-    String getRefreshToken(String email);
+    String getRefreshToken(String userId);
 
     // 토큰 삭제
-    void deleteRefreshToken(String email);
+    void deleteRefreshToken(String userId);
 
     // 키 네이밍 규칙
-    String buildRefreshTokenKey(String email);
+    String buildRefreshTokenKey(String userId);
 
     // accessToken 블랙리스트 저장
     void setBlackList(String accessToken, long duration);

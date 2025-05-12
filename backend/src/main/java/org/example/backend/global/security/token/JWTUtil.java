@@ -1,4 +1,4 @@
-package org.example.backend.global.security;
+package org.example.backend.global.security.token;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -6,20 +6,18 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.example.backend.domain.user.dto.response.RefreshTokenResponseDTO;
 import org.example.backend.domain.user.exception.UserErrorCode;
 import org.example.backend.domain.user.exception.UserException;
-import org.example.backend.domain.user.service.CustomUserDetailService;
-import org.example.backend.domain.user.service.CustomUserDetails;
 import org.example.backend.domain.user.service.UserRedisService;
+import org.example.backend.global.security.auth.CustomUserDetailService;
+import org.example.backend.global.security.auth.CustomUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
-import java.util.Collection;
 import java.util.Date;
-import java.util.Iterator;
+import java.util.UUID;
 
 @Component
 public class JWTUtil {
@@ -62,13 +60,16 @@ public class JWTUtil {
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().getExpiration().getTime()-System.currentTimeMillis();
     }
 
+    public UUID getUserId(String token){
+        return UUID.fromString(Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("userId", String.class));
+    }
+
     // access token 발급
-    public String createAccessToken(String email, String name, String role) {
+    public String createAccessToken(UUID userId, String role) {
         long expiredMs = jwtProperties.getAccessTokenExpiration();
 
         return Jwts.builder()
-                .claim("email", email)
-                .claim("name",name)
+                .claim("userId",userId.toString())
                 .claim("role", role)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + expiredMs))
@@ -77,10 +78,11 @@ public class JWTUtil {
     }
 
     // refreshToken 발급
-    public String createRefreshToken(String email){
+    public String createRefreshToken(UUID userId, String role){
         long expiredMs = jwtProperties.getRefreshTokenExpiration();
         return Jwts.builder()
-                .claim("email",email)
+                .claim("userId",userId.toString())
+                .claim("role", role)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + expiredMs))
                 .signWith(secretKey)
@@ -92,8 +94,8 @@ public class JWTUtil {
 
         try{
             // redis에 저장된 토큰과 일치하는지 확인
-            String email = getEmail(refreshToken);
-            String redisToken = userRedisService.getRefreshToken(email);
+            UUID userId = getUserId(refreshToken);
+            String redisToken = userRedisService.getRefreshToken(userId.toString());
 
             if(redisToken == null || !redisToken.equals(refreshToken)){
                 System.out.println("refresh token != redis token");
@@ -111,22 +113,17 @@ public class JWTUtil {
         validateRefreshToken(refreshToken);
 
         // 새로운 토큰 발급
-        String email = getEmail(refreshToken);
+        UUID userId = getUserId(refreshToken);
 
-        CustomUserDetails customUserDetails = (CustomUserDetails) customUserDetailService.loadUserByUsername(email);
+        CustomUserDetails customUserDetails = (CustomUserDetails) customUserDetailService.loadUserByUserId(userId);
 
+        String role = customUserDetails.getAuthorities().iterator().next().getAuthority();
 
-        Collection<? extends GrantedAuthority> authorities = customUserDetails.getAuthorities();
-        Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
-        GrantedAuthority auth = iterator.next();
-        String name = customUserDetails.getUsername();
-        String role = auth.getAuthority();
-
-        String newAccessToken = createAccessToken(email, name, role);
-        String newRefreshToken = createRefreshToken(email);
+        String newAccessToken = createAccessToken(userId, role);
+        String newRefreshToken = createRefreshToken(userId, role);
 
         // redis 갱신
-        userRedisService.setRefreshToken(email,newRefreshToken);
+        userRedisService.setRefreshToken(userId.toString(),newRefreshToken);
 
 
         // 응답 반환

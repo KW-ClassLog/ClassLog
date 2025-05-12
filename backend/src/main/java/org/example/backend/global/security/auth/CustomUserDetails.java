@@ -1,7 +1,6 @@
-package org.example.backend.domain.user.service;
+package org.example.backend.global.security.auth;
 
 import org.antlr.v4.runtime.misc.Array2DHashSet;
-import org.example.backend.domain.accountLocal.entity.AccountLocal;
 import org.example.backend.domain.user.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,11 +10,9 @@ import java.util.Collection;
 public class CustomUserDetails implements UserDetails {
 
     private final User user;
-    private final AccountLocal accountLocal;
 
-    public CustomUserDetails(User user,AccountLocal accountLocal){
+    public CustomUserDetails(User user){
         this.user = user;
-        this.accountLocal = accountLocal;
     }
 
     @Override
@@ -35,16 +32,16 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return user.getName();
-    }
-
-    public String getEmail(){
-        return accountLocal.getEmail();
+        return user.getEmail();
     }
 
     @Override
     public String getPassword() {
-        return accountLocal.getPassword();
+        return user.getPassword();
+    }
+
+    public User getUser() {
+        return this.user;
     }
 
     @Override

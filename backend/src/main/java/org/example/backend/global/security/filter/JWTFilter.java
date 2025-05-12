@@ -1,24 +1,25 @@
-package org.example.backend.global.security;
+package org.example.backend.global.security.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.example.backend.domain.accountLocal.entity.AccountLocal;
 import org.example.backend.domain.user.entity.Role;
 import org.example.backend.domain.user.entity.User;
 import org.example.backend.domain.user.exception.UserErrorCode;
-import org.example.backend.domain.user.service.CustomUserDetails;
 import org.example.backend.domain.user.service.UserRedisService;
 import org.example.backend.global.ApiResponse;
 import org.example.backend.global.code.base.FailureCode;
+import org.example.backend.global.security.auth.CustomUserDetails;
+import org.example.backend.global.security.token.JWTUtil;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.UUID;
 
 public class JWTFilter extends OncePerRequestFilter {
     private final JWTUtil jwtUtil;
@@ -77,23 +78,19 @@ public class JWTFilter extends OncePerRequestFilter {
         // 토큰 소멸 시간 검증
         try {
 
-            // 토큰에서 email, username, role 획득
-            String email, roleString, name;
-            email = jwtUtil.getEmail(token);
-            roleString = jwtUtil.getRole(token);
-            name = jwtUtil.getName(token);
+            // 토큰에서 userId, role 획득
+            UUID userId = jwtUtil.getUserId(token);
+            String roleString = jwtUtil.getRole(token);
 
             // entity를 생성해서 값 세팅
             User user = new User();
-            AccountLocal accountLocal = new AccountLocal();
 
-            accountLocal.setEmail(email);
-            user.setName(name);
+            user.setId(userId);
             Role role = Role.valueOf(roleString); // Role enum으로 변환
             user.setRole(role);
 
             // UserDetail에 회원정보 객체 담기
-            CustomUserDetails customUserDetails = new CustomUserDetails(user, accountLocal);
+            CustomUserDetails customUserDetails = new CustomUserDetails(user);
 
             // 스프링 시큐리티 인증 토큰 생성
             Authentication authToken = new UsernamePasswordAuthenticationToken(customUserDetails, null, customUserDetails.getAuthorities());
