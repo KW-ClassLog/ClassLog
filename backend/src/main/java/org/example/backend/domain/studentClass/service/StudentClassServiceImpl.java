@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.example.backend.domain.studentClass.converter.StudentClassConverter;
 import org.example.backend.domain.studentClass.dto.request.ClassEnterRequestDTO;
 import org.example.backend.domain.studentClass.entity.StudentClass;
+import org.example.backend.domain.studentClass.exception.StudentClassErrorCode;
+import org.example.backend.domain.studentClass.exception.StudentClassException;
 import org.example.backend.domain.studentClass.repository.StudentClassRepository;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,11 @@ public class StudentClassServiceImpl implements StudentClassService{
     public void studentClassEnter(ClassEnterRequestDTO classEnterRequestDTO) {
 
         StudentClass studentClass = studentClassConverter.toClassEnterRequestDTO(classEnterRequestDTO);
+
+        // 이미 입장했는지 확인
+        if (studentClassRepository.existsByUserIdAndClassId(studentClass.getUserId(), studentClass.getClassId())) {
+            throw new StudentClassException(StudentClassErrorCode._STUDENT_ALREADY_ENTER);
+        }
 
         studentClassRepository.save(studentClass);
 
