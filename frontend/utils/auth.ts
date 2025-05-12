@@ -2,8 +2,7 @@ import { refreshToken } from "@/api/users/refreshToken";
 import { jwtDecode } from "jwt-decode";
 
 interface DecodedToken {
-  email: string;
-  name: string;
+  userId: string;
   role: string;
   iat: number;
   exp: number;
