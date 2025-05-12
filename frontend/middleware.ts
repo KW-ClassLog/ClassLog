@@ -55,9 +55,6 @@ export function middleware(request: NextRequest) {
     }
     const decodedToken = jwtDecode<DecodedToken>(token);
     const role = decodedToken.role;
-    console.log("token", token);
-    console.log("decodedToken", decodedToken);
-    console.log("role", role);
 
     // 1. 공통 경로에 대한 처리
     if (PUBLIC_PATHS.some((path) => pathname === path)) {
