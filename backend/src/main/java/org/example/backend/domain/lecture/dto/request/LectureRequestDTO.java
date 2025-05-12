@@ -17,7 +17,7 @@ public class LectureRequestDTO {
     @NotNull(message = "LectureDate is required")
     private LocalDate lectureDate;
 
-    @NotNull(message = "class_id is required")
+    @NotNull(message = "classId is required")
     private UUID class_id;
 
 

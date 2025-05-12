@@ -9,7 +9,6 @@ import java.util.UUID;
 @Setter
 public class ClassEnterRequestDTO {
 
-    UUID class_id;
-    UUID student_id;
-    String class_nickname;
+    UUID classId;
+    String classNickname;
 }

@@ -1,9 +1,9 @@
 package org.example.backend.domain.studentClass.service;
 
-import java.util.UUID;
+import org.example.backend.domain.studentClass.dto.request.ClassEnterRequestDTO;
 
 public interface StudentClassService {
 
     // 클래스 입장  & 닉네임 설정
-    void studentClassEnter(UUID classId, UUID studentId);
+    void studentClassEnter(ClassEnterRequestDTO classEnterRequestDTO);
 }
