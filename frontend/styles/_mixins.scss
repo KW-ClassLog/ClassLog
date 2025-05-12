@@ -93,26 +93,26 @@
 
 // 1. 100% 너비로 자식들이 일정한 간격으로 가로 배치
 .mixed-layout-1 {
-  @include layout-flex(row, center, space-between);
   width: 100%;
+  @include layout-flex(row, center, space-between);
 }
 
 // 2. fit-content 너비로 자식들이 특정 간격을 가지며 가로 배치
 .mixed-layout-2 {
-  @include layout-flex(row, center, flex-start, 20px);
   width: fit-content;
+  @include layout-flex(row, center, flex-start, 20px);
 }
 
 // 3. 100% 높이로 자식들이 일정한 간격으로 세로 배치
 .mixed-layout-3 {
-  @include layout-flex(column, center, space-between);
   height: 100%;
+  @include layout-flex(column, center, space-between);
 }
 
 // 4. fit-content 높이로 자식들이 특정 간격을 가지며 세로 배치
 .mixed-layout-4 {
-  @include layout-flex(column, center, flex-start, 20px);
   height: fit-content;
+  @include layout-flex(column, center, flex-start, 20px);
 }
 
 // 공통적인 모달 배경과 중앙 정렬
