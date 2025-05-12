@@ -6,8 +6,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-import org.example.backend.domain.accountKakao.entity.AccountKakao;
-import org.example.backend.domain.accountLocal.entity.AccountLocal;
 import org.example.backend.domain.notification.entity.Notification;
 import org.example.backend.domain.quizAnswer.entity.QuizAnswer;
 
@@ -26,6 +24,11 @@ public class User {
     private UUID id;
 
     @Column(nullable = false)
+    private String email;
+
+    private String password;
+
+    @Column(nullable = false)
     private String name;
 
     private String organization;
@@ -37,15 +40,20 @@ public class User {
     @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
 
+    private String profileUrl;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private SocialType socialType;
+
+    private String socialId;
+
+    @Builder.Default
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Status status = Status.ACTIVE;
+
     private LocalDateTime deletedAt;
-
-    private String profile;
-
-    @OneToOne(mappedBy = "user")
-    private AccountKakao accountKakao;
-
-    @OneToOne(mappedBy = "user")
-    private AccountLocal accountLocal;
 
     @OneToMany(mappedBy = "user")
     private List<QuizAnswer> quizAnswers;

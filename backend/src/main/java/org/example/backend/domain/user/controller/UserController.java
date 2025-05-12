@@ -5,10 +5,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.example.backend.domain.accountLocal.dto.request.EmailRequestDTO;
-import org.example.backend.domain.accountLocal.dto.request.ResetPwdRequestDTO;
+import org.example.backend.domain.user.dto.request.EmailRequestDTO;
+import org.example.backend.domain.user.dto.request.ResetPwdRequestDTO;
 import org.example.backend.domain.user.dto.request.RegisterRequestDTO;
-import org.example.backend.domain.accountLocal.dto.response.EmailResponseDTO;
+import org.example.backend.domain.user.dto.response.EmailResponseDTO;
 import org.example.backend.domain.user.dto.response.RefreshTokenResponseDTO;
 import org.example.backend.domain.user.exception.UserErrorCode;
 import org.example.backend.domain.user.exception.UserException;
@@ -16,7 +16,7 @@ import org.example.backend.domain.user.service.MailService;
 import org.example.backend.domain.user.service.UserRedisService;
 import org.example.backend.domain.user.service.UserService;
 import org.example.backend.global.ApiResponse;
-import org.example.backend.global.security.JWTUtil;
+import org.example.backend.global.security.token.JWTUtil;
 import org.springframework.web.bind.annotation.*;
 
 

@@ -1,4 +1,4 @@
-package org.example.backend.global.security;
+package org.example.backend.global.security.token;
 
 import lombok.Getter;
 import org.springframework.stereotype.Component;
