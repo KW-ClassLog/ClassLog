@@ -1,0 +1,68 @@
+.heading {
+  font-size: 140px;
+  color: $color-blue;
+  font-family: "EF_jejudoldam";
+  margin-bottom: $spacing-md;
+  transition: $transition-fast;
+  @include respond-to(lg) {
+    font-size: 120px;
+  }
+  @include respond-to(md) {
+    font-size: 100px;
+  }
+  @include respond-to(sm) {
+    font-size: 80px;
+  }
+  @include respond-to(xs) {
+    font-size: 60px;
+  }
+}
+
+.subheading {
+  font-weight: $font-weight-regular;
+  color: $color-neutral-4;
+  transition: $transition-fast;
+
+  font-size: $font-size-lg;
+  @include respond-to(sm) {
+    font-size: $font-size-md;
+  }
+}
+
+.link {
+  display: block;
+  color: $color-blue;
+  text-decoration: none;
+  font-weight: $font-weight-medium;
+  border: $color-blue 2px solid;
+  padding: $spacing-sm $spacing-md;
+  border-radius: $radius-md;
+  transition: $transition-fast;
+
+  font-size: $font-size-lg;
+  @include respond-to(sm) {
+    font-size: $font-size-md;
+  }
+  &:hover {
+    background-color: $color-skyblue;
+    transform: scale(1.02);
+    cursor: pointer;
+  }
+
+  &:active {
+    background-color: $color-skyblue;
+    transform: scale(0.98);
+  }
+
+  &:disabled {
+    background-color: $color-neutral-6;
+    cursor: not-allowed;
+    opacity: 0.5;
+    transform: none;
+
+    &:hover {
+      background-color: $color-neutral-6;
+      transform: none;
+    }
+  }
+}

@@ -3,7 +3,7 @@ import { jwtDecode } from "jwt-decode";
 
 interface AuthState {
   accessToken: string | null;
-  email: string | null;
+  userId: string | null;
   role: string | null;
 
   iat: number | null;
@@ -14,14 +14,14 @@ interface AuthState {
 
 export const useAuthStore = create<AuthState>((set) => ({
   accessToken: null,
-  email: null,
+  userId: null,
   role: null,
   iat: null,
   exp: null,
   setAccessToken: (token) => {
     // 토큰을 디코딩하여 값 추출
     interface DecodedToken {
-      email: string;
+      userId: string;
       name: string;
       role: string;
       iat: number;
@@ -30,12 +30,12 @@ export const useAuthStore = create<AuthState>((set) => ({
     const decodedToken = jwtDecode<DecodedToken>(token);
     set({
       accessToken: token,
-      email: decodedToken.email,
+      userId: decodedToken.userId,
       role: decodedToken.role,
       iat: decodedToken.iat, // 발급 시간
       exp: decodedToken.exp, // 만료 시간
     });
   },
   logout: () =>
-    set({ accessToken: null, email: null, role: null, iat: null, exp: null }),
+    set({ accessToken: null, userId: null, role: null, iat: null, exp: null }),
 }));

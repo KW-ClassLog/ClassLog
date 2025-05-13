@@ -87,3 +87,14 @@ body.non-login-body {
 body.non-login-body > .content {
   height: 100%;
 }
+
+body.not-found-body {
+  text-align: center;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: $spacing-3xl;
+  font-size: $font-size-lg;
+}
