@@ -5,6 +5,7 @@ import org.example.backend.domain.classroom.converter.ClassroomConverter;
 import org.example.backend.domain.classroom.dto.request.ClassroomRequestDTO;
 import org.example.backend.domain.classroom.dto.response.ClassLectureResponseDTO;
 import org.example.backend.domain.classroom.dto.response.ClassroomResponseDTO;
+import org.example.backend.domain.classroom.dto.response.ClassroomResponseStudentDTO;
 import org.example.backend.domain.classroom.entity.Classroom;
 import org.example.backend.domain.classroom.service.ClassroomService;
 import org.example.backend.domain.lecture.entity.Lecture;
@@ -33,9 +34,9 @@ public class ClassroomController {
     }
     // 클래스 조회
     @GetMapping("/{classId}")
-    public ApiResponse<ClassroomResponseDTO> getClassroom(@PathVariable UUID classId) {
+    public ApiResponse<ClassroomResponseStudentDTO> getClassroom(@PathVariable UUID classId) {
         Classroom classroom = classroomService.getClassroom(classId);
-        ClassroomResponseDTO response = classroomConverter.toResponseDTO(classroom);
+        ClassroomResponseStudentDTO response = classroomConverter.toResponseStudentDTO(classroom);
 
         return ApiResponse.onSuccess(response);
     }
