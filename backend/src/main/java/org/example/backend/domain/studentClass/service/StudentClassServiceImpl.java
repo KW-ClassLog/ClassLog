@@ -1,12 +1,12 @@
 package org.example.backend.domain.studentClass.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.backend.domain.classroom.converter.ClassroomConverter;
+import org.example.backend.domain.classroom.dto.response.ClassroomResponseDTO;
 import org.example.backend.domain.classroom.entity.Classroom;
 import org.example.backend.domain.classroom.exception.ClassroomErrorCode;
 import org.example.backend.domain.classroom.exception.ClassroomException;
 import org.example.backend.domain.classroom.repository.ClassroomRepository;
-import org.example.backend.domain.lecture.exception.LectureErrorCode;
-import org.example.backend.domain.lecture.exception.LectureException;
 import org.example.backend.domain.studentClass.converter.StudentClassConverter;
 import org.example.backend.domain.studentClass.dto.request.StudentClassRequestDTO;
 import org.example.backend.domain.studentClass.dto.response.StudentClassResponseDTO;
@@ -21,7 +21,6 @@ import org.example.backend.global.security.auth.CustomSecurityUtil;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -34,6 +33,7 @@ public class StudentClassServiceImpl implements StudentClassService{
     private final UserRepository userRepository;
     private final StudentClassConverter studentClassConverter;
     private final CustomSecurityUtil customSecurityUtil;
+    private final ClassroomConverter classroomConverter;
 
     // 클래스 입장  & 닉네임 설정
     @Override
@@ -95,5 +95,27 @@ public class StudentClassServiceImpl implements StudentClassService{
                 .orElseThrow(() -> new StudentClassException(StudentClassErrorCode._STUDENT_NOT_IN_CLASS));
 
         return studentClassConverter.toResponseDTO(studentClass);
+    }
+
+    // 참여중인 클래스 조회
+    @Override
+    public List<ClassroomResponseDTO> getClassroomByStudentId() {
+        UUID studentId = customSecurityUtil.getUserId();
+
+        List<StudentClass> studentClasses = studentClassRepository.findByUserId(studentId);
+
+        if (studentClasses.isEmpty()) {
+            throw new StudentClassException(StudentClassErrorCode._STUDENT_NOT_IN_CLASS);
+        }
+
+        List<UUID> classIds = studentClasses.stream()
+                .map(StudentClass::getClassId)
+                .collect(Collectors.toList());
+
+        List<Classroom> classrooms = classroomRepository.findAllById(classIds);
+
+        return classrooms.stream()
+                .map(classroomConverter::toResponseDTO)
+                .collect(Collectors.toList());
     }
 }
