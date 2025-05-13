@@ -15,6 +15,5 @@ public class ClassroomResponseDTO {
     private String className;
     private LocalDate startDate;
     private LocalDate endDate;
-    private UUID professorId;
-    private String professorName;
+    private String classDate;
 }
