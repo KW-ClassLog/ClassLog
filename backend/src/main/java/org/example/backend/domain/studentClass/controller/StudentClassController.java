@@ -2,12 +2,14 @@ package org.example.backend.domain.studentClass.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.backend.domain.studentClass.converter.StudentClassConverter;
+import org.example.backend.domain.classroom.dto.response.ClassroomResponseDTO;
 import org.example.backend.domain.studentClass.dto.request.StudentClassRequestDTO;
 import org.example.backend.domain.studentClass.dto.response.StudentClassResponseDTO;
 import org.example.backend.domain.studentClass.service.StudentClassService;
 import org.example.backend.global.ApiResponse;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -16,7 +18,6 @@ import java.util.UUID;
 public class StudentClassController {
 
     private final StudentClassService studentClassService;
-    private final StudentClassConverter studentClassConverter;
 
     // 클래스 입장  & 닉네임 설정
     @PostMapping("/create")
@@ -39,6 +40,14 @@ public class StudentClassController {
     public ApiResponse<StudentClassResponseDTO> getNickname(@PathVariable("classId") UUID classId){
 
         StudentClassResponseDTO response = studentClassService.getNicknameByClassId(classId);
+        return ApiResponse.onSuccess(response);
+    }
+
+    // 내가 참여중인 클래스 조회
+    @GetMapping("/")
+    public ApiResponse<List<ClassroomResponseDTO>> getClassroomInfo(){
+
+        List<ClassroomResponseDTO> response = studentClassService.getClassroomByStudentId();
         return ApiResponse.onSuccess(response);
     }
 
