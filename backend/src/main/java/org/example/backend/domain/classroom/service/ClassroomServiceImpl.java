@@ -2,6 +2,7 @@ package org.example.backend.domain.classroom.service;
 
 import org.example.backend.domain.classroom.converter.ClassroomConverter;
 import org.example.backend.domain.classroom.dto.request.ClassroomRequestDTO;
+import org.example.backend.domain.classroom.dto.response.ClassroomResponseDTO;
 import org.example.backend.domain.classroom.entity.Classroom;
 import org.example.backend.domain.classroom.exception.ClassroomErrorCode;
 import org.example.backend.domain.classroom.exception.ClassroomException;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class ClassroomServiceImpl implements ClassroomService {
@@ -118,4 +120,21 @@ public class ClassroomServiceImpl implements ClassroomService {
 
         return lecturesInClass;
     }
+    //교수 나의 클래스 조회
+    @Override
+    public List<ClassroomResponseDTO> getClassListByProfessor() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Object principal = authentication.getPrincipal();
+
+        UUID professorId = ((CustomUserDetails) principal).getUser().getId();
+
+        // 교수 ID로 해당 교수의 클래스 목록 조회
+        List<Classroom> classrooms = classroomRepository.findByProfessorId(professorId);
+
+        // Classroom 객체를 ClassroomResponseDTO로 변환
+        return classrooms.stream()
+                .map(classroomConverter::toResponseDTO)
+                .collect(Collectors.toList());
+    }
+
 }

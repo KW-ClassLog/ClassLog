@@ -64,4 +64,11 @@ public class ClassroomController {
         return ApiResponse.onSuccess(responseDTOs);
 
     }
+    // 교수의 클래스 조회
+    @GetMapping("/teacher/myclass")
+    public ApiResponse<List<ClassroomResponseDTO>> getMyClassList() {
+        // JWT 토큰에서 교수의 userId 추출 후, 해당 교수의 클래스 리스트 조회
+        List<ClassroomResponseDTO> responseDTOs = classroomService.getClassListByProfessor();
+        return ApiResponse.onSuccess(responseDTOs);
+    }
 }

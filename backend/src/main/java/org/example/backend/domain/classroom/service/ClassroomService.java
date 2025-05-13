@@ -1,6 +1,7 @@
 package org.example.backend.domain.classroom.service;
 
 import org.example.backend.domain.classroom.dto.request.ClassroomRequestDTO;
+import org.example.backend.domain.classroom.dto.response.ClassroomResponseDTO;
 import org.example.backend.domain.classroom.entity.Classroom;
 import org.example.backend.domain.lecture.entity.Lecture;
 import org.springframework.stereotype.Service;
@@ -15,4 +16,5 @@ public interface ClassroomService {
     void deleteClassroom(UUID classId);
     Classroom updateClassroom(UUID classId, ClassroomRequestDTO classroomRequestDTO);
     List<Lecture> getLecturesByClassId(UUID classId);
+    List<ClassroomResponseDTO> getClassListByProfessor();
 }
