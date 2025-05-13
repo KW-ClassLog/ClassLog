@@ -1,0 +1,33 @@
+.container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $spacing-lg;
+  margin: 0 auto;
+  padding: $spacing-lg;
+}
+
+.leftSection,
+.rightSection {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+  width: 100%;
+}
+
+.calendarSection,
+.lectureSection {
+  width: 100%;
+}
+
+.scheduleContainer {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+  background: $color-white;
+  border: 1px solid $color-neutral-7;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-sm;
+  padding: $spacing-lg;
+  height: 100%;
+  overflow: hidden;
+}
