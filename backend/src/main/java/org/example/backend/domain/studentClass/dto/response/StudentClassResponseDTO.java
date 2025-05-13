@@ -13,7 +13,6 @@ import java.util.UUID;
 @AllArgsConstructor
 public class StudentClassResponseDTO {
 
-    private UUID classId;
     private String className;
     private String classNickname;
 

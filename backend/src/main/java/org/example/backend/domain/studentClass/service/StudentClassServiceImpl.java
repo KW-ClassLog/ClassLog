@@ -74,7 +74,7 @@ public class StudentClassServiceImpl implements StudentClassService{
         studentClassRepository.save(studentClass);
     }
 
-    // 클래스별 닉네임 조회
+    // 클래스 전체 닉네임 조회
     @Override
     public List<StudentClassResponseDTO> getNicknameByUserId() {
         UUID studentId = customSecurityUtil.getUserId();
@@ -84,5 +84,16 @@ public class StudentClassServiceImpl implements StudentClassService{
         return studentClasses.stream()
                 .map(studentClassConverter::toResponseDTO)
                 .collect(Collectors.toList());
+    }
+
+    // 클래스별 닉네임 조회
+    @Override
+    public StudentClassResponseDTO getNicknameByClassId(UUID classId) {
+        UUID studentId = customSecurityUtil.getUserId();
+
+        StudentClass studentClass = studentClassRepository.findByUserIdAndClassId(studentId, classId)
+                .orElseThrow(() -> new StudentClassException(StudentClassErrorCode._STUDENT_NOT_IN_CLASS));
+
+        return studentClassConverter.toResponseDTO(studentClass);
     }
 }

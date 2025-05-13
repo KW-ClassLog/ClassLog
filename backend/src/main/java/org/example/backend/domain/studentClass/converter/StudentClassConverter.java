@@ -36,7 +36,6 @@ public class StudentClassConverter {
                 .orElseThrow(() -> new ClassroomException(ClassroomErrorCode.CLASS_NOT_FOUND));
 
         return StudentClassResponseDTO.builder()
-                .classId(studentClass.getClassId())
                 .className(className)
                 .classNickname(studentClass.getClassNickname())
                 .build();
