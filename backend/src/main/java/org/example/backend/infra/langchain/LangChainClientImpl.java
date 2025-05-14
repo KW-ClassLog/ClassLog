@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -45,11 +46,25 @@ public class LangChainClientImpl implements LangChainClient {
             List<Map<String, String>> quizzes = (List<Map<String, String>>) responseBody.get("quizzes");
 
             List<QuizDTO> quizDTOs = quizzes.stream()
-                    .map(q -> QuizDTO.builder()
-                            .quizBody(q.get("quiz_body"))
-                            .solution(q.get("solution"))
-                            .type(q.get("type"))
-                            .build())
+                    .map(q -> {
+                        Object choicesObj = q.get("choices");
+                        List<String> choices;
+
+                        if (choicesObj instanceof List<?>) {
+                            choices = ((List<?>) choicesObj).stream()
+                                    .map(Object::toString)
+                                    .collect(Collectors.toList());
+                        } else {
+                            choices = Collections.emptyList();
+                        }
+
+                        return QuizDTO.builder()
+                                .quizBody((String) q.get("quiz_body"))
+                                .solution((String) q.get("solution"))
+                                .type((String) q.get("type"))
+                                .choices(choices)
+                                .build();
+                    })
                     .toList();
 
             return QuizResponseDTO.builder()

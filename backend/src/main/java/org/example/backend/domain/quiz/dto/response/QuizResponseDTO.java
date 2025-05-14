@@ -20,6 +20,7 @@ public class QuizResponseDTO {
     public static class QuizDTO {
         private String quizBody;
         private String solution;
+        private List<String> choices;
         private String type;
     }
 }
