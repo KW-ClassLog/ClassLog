@@ -63,6 +63,8 @@ export default function TeacherQuizManagementPage() {
   if (!selectedClassId || !selectedClassName) {
     return (
       <div className={styles.container}>
+        <h1>퀴즈 관리</h1>
+
         <NoDataView
           icon={MessageCircleQuestion}
           title="선택된 클래스가 없습니다"
