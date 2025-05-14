@@ -19,7 +19,6 @@ const TeacherHeader: React.FC<TeacherHeaderProps> = ({ mode }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
   const [toggleClassSelectionOpen, setToggleClassSelectionOpen] =
     useState<boolean>(false);
-  const [isClassSelected, setIsClassSelected] = useState<boolean>(false);
   const [classList, setClassList] = useState<string[]>([
     "클래스 1",
     "클래스 2",
@@ -57,7 +56,6 @@ const TeacherHeader: React.FC<TeacherHeaderProps> = ({ mode }) => {
   // 클래스 선택 처리
   const handleClassSelect = (className: string) => {
     setSelectedClass(className);
-    setIsClassSelected(true); // 클래스 선택 후 드롭다운 닫기
     setToggleClassSelectionOpen(false);
   };
 
@@ -72,7 +70,7 @@ const TeacherHeader: React.FC<TeacherHeaderProps> = ({ mode }) => {
       {mode === "classSelection" && (
         <div
           className={`${styles.classSelection} ${
-            isClassSelected ? styles.selected : ""
+            selectedClass ? styles.selected : ""
           }`}
           onClick={() => setToggleClassSelectionOpen((prev) => !prev)}
         >
@@ -89,7 +87,9 @@ const TeacherHeader: React.FC<TeacherHeaderProps> = ({ mode }) => {
             {classList.map((classItem, index) => (
               <li
                 key={index}
-                className={styles.classListItem}
+                className={`${styles.classListItem} ${
+                  selectedClass === classItem ? styles.selected : ""
+                }`}
                 onClick={() => handleClassSelect(classItem)}
               >
                 {classItem}
