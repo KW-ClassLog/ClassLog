@@ -4,6 +4,8 @@ import styles from "./page.module.scss";
 import useClassStore from "@/store/useClassStore";
 import { useEffect, useState } from "react";
 import LectureItem from "./_components/LectureItem/LectureItem";
+import NoDataView from "@/components/NoDataView/NoDataView";
+import { MessageCircleQuestion } from "lucide-react";
 
 interface Lecture {
   lectureId: string;
@@ -57,6 +59,18 @@ export default function TeacherQuizManagementPage() {
       console.log("Selected Class ID:", selectedClassId);
     }
   }, [selectedClassId]);
+
+  if (!selectedClassId || !selectedClassName) {
+    return (
+      <div className={styles.container}>
+        <NoDataView
+          icon={MessageCircleQuestion}
+          title="선택된 클래스가 없습니다"
+          description="좌상단의 클래스 선택 메뉴에서 클래스를 선택해주세요"
+        />
+      </div>
+    );
+  }
 
   return (
     <div className={styles.container}>
