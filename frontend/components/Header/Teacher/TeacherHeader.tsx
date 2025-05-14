@@ -8,6 +8,7 @@ import { ROUTES } from "@/constants/routes";
 import { useRouter } from "next/navigation"; // Next.js의 useRouter 사용
 import { logout } from "@/api/users/logout";
 import ConfirmModal from "@/components/Modal/ConfirmModal/ConfirmModal";
+import useClassStore from "@/store/useClassStore";
 
 type TeacherHeaderProps = {
   mode: "classSelection" | "default"; // mode에 따라 동작을 달리함
@@ -24,8 +25,8 @@ const TeacherHeader: React.FC<TeacherHeaderProps> = ({ mode }) => {
     "클래스 2",
     "클래스 3",
   ]);
-  const [selectedClass, setSelectedClass] = useState<string | null>(null); // 선택된 클래스 상태
 
+  const { selectedClass, setSelectedClass } = useClassStore();
   const router = useRouter();
 
   // '설정' 클릭 시 페이지 이동 함수
