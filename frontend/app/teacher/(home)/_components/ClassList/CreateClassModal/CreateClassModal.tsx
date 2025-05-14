@@ -6,6 +6,7 @@ import FullWidthButton from "@/components/Button/FullWidthButton/FullWidthButton
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { ko } from "date-fns/locale";
+import { formatInTimeZone } from "date-fns-tz";
 
 interface CreateClassModalProps {
   onClose: () => void;
@@ -13,18 +14,19 @@ interface CreateClassModalProps {
 
 interface FormData {
   className: string;
-  startDate: string;
-  endDate: string;
   classTime: string;
 }
 
 export default function CreateClassModal({ onClose }: CreateClassModalProps) {
   const [formData, setFormData] = useState<FormData>({
     className: "",
-    startDate: "",
-    endDate: "",
     classTime: "",
   });
+  const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
+    null,
+    null,
+  ]);
+  const [startDate, endDate] = dateRange;
 
   const handleChange =
     (field: keyof typeof formData) => (e: ChangeEvent<HTMLInputElement>) => {
@@ -35,7 +37,17 @@ export default function CreateClassModal({ onClose }: CreateClassModalProps) {
     };
 
   const handleSubmit = () => {
-    console.log(formData);
+    const koreanTimeZone = "Asia/Seoul";
+    const submissionData = {
+      ...formData,
+      startDate: startDate
+        ? formatInTimeZone(startDate, koreanTimeZone, "yyyy-MM-dd")
+        : "",
+      endDate: endDate
+        ? formatInTimeZone(endDate, koreanTimeZone, "yyyy-MM-dd")
+        : "",
+    };
+    console.log(submissionData);
     onClose();
   };
 
@@ -55,14 +67,14 @@ export default function CreateClassModal({ onClose }: CreateClassModalProps) {
             <div className={styles.datePickerWrapper}>
               <DatePicker
                 selectsRange={true}
-                className="datepicker"
+                startDate={startDate}
+                endDate={endDate}
+                onChange={(update) => setDateRange(update)}
                 locale={ko}
-                dateFormat="yyyy년 MM월 dd일"
-                selected={this.state.startDate}
-                startDate={this.state.startDate}
-                endDate={this.state.endDate}
-                maxDate={new Date()}
-                onChange={(dates) => this.setChangeDate(dates)}
+                dateFormat="yyyy-MM-dd"
+                placeholderText="시작 날짜와 종료 날짜를 선택해주세요"
+                className={styles.datePicker}
+                isClearable
               />
             </div>
           </div>
