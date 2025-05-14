@@ -4,18 +4,30 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 interface ClassStore {
-  selectedClass: string | null;
-  setSelectedClass: (className: string | null) => void;
+  selectedClassId: string | null;
+  selectedClassName: string | null;
+  setSelectedClass: (classId: string, className: string) => void;
+  resetSelectedClass: () => void;
 }
 
 const useClassStore = create<ClassStore>()(
   persist(
     (set) => ({
-      selectedClass: null,
-      setSelectedClass: (className) => set({ selectedClass: className }),
+      selectedClassId: null,
+      selectedClassName: null,
+      setSelectedClass: (classId, className) =>
+        set({
+          selectedClassId: classId,
+          selectedClassName: className,
+        }),
+      resetSelectedClass: () =>
+        set({
+          selectedClassId: null,
+          selectedClassName: null,
+        }),
     }),
     {
-      name: "class-storage", // localStorage에 저장될 키 이름
+      name: "class-storage",
     }
   )
 );
