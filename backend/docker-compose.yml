@@ -1,23 +1,20 @@
 services:
-#  springboot:
-#    build: .
-#    container_name: classlog-backend
-#    ports:
-#      - 8080:8080
-#    env_file:
-#      - .env
-#    environment:
-#     - AI_SERVER_URL=http://ai:8000
-#    depends_on:
-#      mysql:
-#        condition: service_healthy
-#      redis:
-#        condition: service_healthy
-#    ai:
-#      condition: service_started
-#      networks:
-#        - classlog-network
-
+  springboot:
+    build: .
+    container_name: classlog-backend
+    ports:
+      - 8081:8081
+    env_file:
+      - .env
+    depends_on:
+              mysql:
+                condition: service_healthy
+              redis:
+                condition: service_healthy
+              ai:
+                condition: service_started
+    networks:
+      - classlog-network
 
 #  mysql:
 #    image: mysql
@@ -33,22 +30,25 @@ services:
 #      test: [ "CMD", "mysqladmin", "ping" ]
 #      interval: 5s
 #      retries: 10
-
-  redis:
-    image: redis
-    container_name: classlog-redis
-    ports:
-      - 6379:6379
-    healthcheck:
-      test: [ "CMD", "redis-cli", "ping" ]
-      interval: 5s
-      retries: 10
+#
+#  redis:
+#    image: redis
+#    container_name: classlog-redis
+#    ports:
+#      - 6379:6379
+#    healthcheck:
+#      test: [ "CMD", "redis-cli", "ping" ]
+#      interval: 5s
+#      retries: 10
 
   ai:
-    build:
-      context: ./classlog-ai
+    image: mumminn/classlog-ai:v1.11
     container_name: classlog-ai
     ports:
       - 8000:8000
     networks:
       - classlog-network
+
+networks:
+  classlog-network:
+    driver: bridge
