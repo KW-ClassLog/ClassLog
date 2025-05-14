@@ -1,0 +1,19 @@
+.container {
+  min-width: 500px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-between;
+
+  h2 {
+    font-size: $font-size-xl;
+    font-weight: $font-weight-bold;
+    margin-bottom: $spacing-3xl;
+  }
+
+  .form {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-sm;
+  }
+}
