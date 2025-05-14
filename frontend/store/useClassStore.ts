@@ -1,3 +1,5 @@
+// [강사용] 헤더에서 선택한 클래스 저장하는 스토어
+
 import { create } from "zustand";
 
 interface ClassStore {
