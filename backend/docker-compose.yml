@@ -7,12 +7,12 @@ services:
     env_file:
       - .env
     depends_on:
-              mysql:
-                condition: service_healthy
-              redis:
-                condition: service_healthy
-              ai:
-                condition: service_started
+#        mysql:
+#          condition: service_healthy
+#        redis:
+#          condition: service_healthy
+        ai:
+          condition: service_started
     networks:
       - classlog-network
 
@@ -42,7 +42,7 @@ services:
 #      retries: 10
 
   ai:
-    image: mumminn/classlog-ai:v1.11
+    image: mumminn/classlog-ai:v1.12
     container_name: classlog-ai
     ports:
       - 8000:8000
