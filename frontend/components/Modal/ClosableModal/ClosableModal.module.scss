@@ -7,7 +7,8 @@
   @include modal-base; // 공통 스타일
 
   min-width: 30vw;
-  height: 60vh;
+  min-height: 60vh;
+  max-height: 70vh;
   display: flex;
   flex-direction: column; /* 세로 정렬 */
   @include respond-to(sm) {
@@ -37,6 +38,7 @@
     flex-direction: column;
     gap: $spacing-sm;
     flex-grow: 1;
+    overflow-y: auto;
 
     h1 {
       font-size: $font-size-lg;

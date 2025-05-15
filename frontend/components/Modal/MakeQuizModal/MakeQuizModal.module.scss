@@ -1,0 +1,105 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  padding: $spacing-md 0;
+  width: 1000px;
+  height: 100%;
+  transition: $transition-fast;
+  @include respond-to(md) {
+    max-width: 100%;
+  }
+  gap: $spacing-md;
+
+  overflow: hidden;
+}
+
+.title {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-medium;
+}
+
+.toggleSection {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  justify-content: center;
+}
+
+.toggle,
+.toggleDisabled {
+  background-color: #f2f4f6;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.toggle {
+  background-color: #2563eb;
+  color: white;
+}
+
+.toggleDisabled {
+  color: #888;
+}
+
+.content {
+  overflow-y: scroll;
+  height: 100%;
+  padding-top: $spacing-md;
+  border-top: 1px solid $color-neutral-6;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.buttonSection {
+  display: flex;
+  margin: 0 auto;
+  gap: $spacing-md;
+  button {
+    padding: $spacing-sm;
+    font-weight: $font-weight-medium;
+    @include common-input-button-style;
+    border-radius: $radius-lg;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+    &:hover {
+      transform: scale(1.02);
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+
+    &.submit {
+      background-color: $color-blue;
+      color: white;
+    }
+
+    &.customizing {
+      background-color: $color-skyblue;
+      color: $color-blue;
+      border: 1px solid $color-blue;
+    }
+  }
+}
+
+.loading {
+  text-align: center;
+  font-size: 16px;
+  color: #555;
+  animation: blink 1.2s infinite;
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
