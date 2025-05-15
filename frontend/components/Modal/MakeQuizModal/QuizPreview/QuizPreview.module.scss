@@ -1,30 +1,93 @@
-/* _components/QuizPreview.module.scss */
-.quizCard {
-  border: 1px solid #ddd;
-  border-radius: 12px;
-  padding: 16px;
-  margin-bottom: 16px;
-  background-color: #f9f9f9;
+.content {
+  overflow-y: scroll;
+  height: 100%;
+  padding-top: $spacing-md;
+  border-top: 1px solid $color-neutral-6;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
 }
 
-.type {
-  font-size: 12px;
-  font-weight: bold;
-  color: #888;
+.buttonSection {
+  display: flex;
+  margin: 0 auto;
+  gap: $spacing-md;
+  button {
+    padding: $spacing-sm;
+    font-weight: $font-weight-medium;
+    @include common-input-button-style;
+    border-radius: $radius-lg;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+    &:hover {
+      transform: scale(1.02);
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+
+    &.submit {
+      background-color: $color-blue;
+      color: white;
+    }
+
+    &.customizing {
+      background-color: $color-skyblue;
+      color: $color-blue;
+      border: 1px solid $color-blue;
+    }
+  }
 }
 
-.question {
+.loading {
+  text-align: center;
   font-size: 16px;
-  margin: 8px 0;
-  font-weight: 500;
+  color: #555;
+  animation: blink 1.2s infinite;
 }
 
-.choices {
-  padding-left: 16px;
-  margin-bottom: 8px;
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
 }
 
-.answer {
-  font-weight: bold;
-  color: #2c7;
+.quizCard {
+  padding: $spacing-md;
+  border: 1px solid $color-neutral-6;
+  border-radius: $radius-md;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+
+  .type {
+    font-weight: $font-weight-medium;
+    color: $color-blue;
+  }
+
+  .question {
+    font-size: $font-size-md;
+  }
+
+  .choices {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-xs;
+  }
+
+  .answer {
+    margin-top: $spacing-sm;
+    font-weight: $font-weight-medium;
+    color: $color-neutral-4;
+  }
 }

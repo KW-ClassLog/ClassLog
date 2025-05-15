@@ -18,6 +18,7 @@ interface MakeQuizModalProps {
 
 const MakeQuizModal = ({ onClose, lectureId }: MakeQuizModalProps) => {
   const [quizzes, setQuizzes] = useState<Quiz[] | null>(null);
+  const [useAudio, setUseAudio] = useState(false);
 
   useEffect(() => {
     // TODO: Replace with actual data fetch using lectureId
@@ -57,6 +58,14 @@ const MakeQuizModal = ({ onClose, lectureId }: MakeQuizModalProps) => {
     }, 2000);
   }, []);
 
+  const handleCustomize = () => {
+    // TODO: Implement customization logic
+  };
+
+  const handleSubmit = () => {
+    // TODO: Implement submit logic
+  };
+
   return (
     <ClosableModal onClose={onClose}>
       <div className={styles.wrapper}>
@@ -65,28 +74,42 @@ const MakeQuizModal = ({ onClose, lectureId }: MakeQuizModalProps) => {
           확인해보세요!
         </h2>
         <div className={styles.toggleSection}>
-          <span className={styles.toggle}>강의자료</span>
-          <span className={styles.toggleDisabled}>녹음본</span>
+          <div className={styles.toggleSwitch}>
+            <span className={`${styles.switchLabel} ${styles.active}`}>
+              강의자료
+            </span>
+            <div className={`${styles.switchBackground} ${styles.active}`} />
+          </div>
+          <div
+            className={styles.toggleSwitch}
+            onClick={() => setUseAudio((prev) => !prev)}
+            style={{ cursor: "pointer" }}
+          >
+            <input
+              type="checkbox"
+              checked={useAudio}
+              onChange={() => {}}
+              style={{ display: "none" }}
+            />
+            <span
+              className={`${styles.switchLabel} ${
+                useAudio ? styles.active : ""
+              }`}
+            >
+              녹음본
+            </span>
+            <div
+              className={`${styles.switchBackground} ${
+                useAudio ? styles.active : ""
+              }`}
+            />
+          </div>
         </div>
-        <div className={styles.content}>
-          {quizzes === null ? (
-            <div className={styles.loading}>
-              AI가 퀴즈를 만들고 있어요
-              <br />
-              잠시만 기다려주세요
-            </div>
-          ) : (
-            quizzes.map((quiz, index) => (
-              <QuizPreview key={index} quiz={quiz} />
-            ))
-          )}
-        </div>
-        <div className={styles.buttonSection}>
-          <button className={styles.customizing}>
-            선택한 퀴즈를 기반으로 커스터마이징 하기
-          </button>
-          <button className={styles.submit}>이대로 퀴즈 제출하기</button>
-        </div>
+        <QuizPreview
+          quizzes={quizzes}
+          onCustomize={handleCustomize}
+          onSubmit={handleSubmit}
+        />
       </div>
     </ClosableModal>
   );
