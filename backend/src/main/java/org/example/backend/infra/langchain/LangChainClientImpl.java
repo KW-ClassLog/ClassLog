@@ -73,7 +73,7 @@ public class LangChainClientImpl implements LangChainClient {
                     .build();
 
         } catch (Exception e) {
-            throw new QuizException(QuizErrorCode.AiCallFailed);
+            throw new QuizException(QuizErrorCode.AI_CALL_FAILED);
         }
     }
 }

@@ -11,9 +11,13 @@ import org.example.backend.domain.quiz.dto.request.QuizRequestDTO;
 import org.example.backend.domain.quiz.dto.response.QuizResponseDTO;
 import org.example.backend.domain.quiz.exception.QuizErrorCode;
 import org.example.backend.domain.quiz.exception.QuizException;
+import org.example.backend.domain.user.entity.Role;
 import org.example.backend.infra.langchain.LangChainClient;
-import org.springframework.stereotype.Service;
 import org.example.backend.global.S3.service.S3Service;
+import org.example.backend.global.security.auth.CustomUserDetails;
+import org.springframework.stereotype.Service;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.List;
 import java.util.UUID;
@@ -31,41 +35,53 @@ public class QuizServiceImpl implements QuizService {
 
     @Override
     public QuizResponseDTO generateQuiz(UUID lectureId, QuizRequestDTO request) {
-        // 1. 강의 존재 여부 확인
-        Lecture lecture = lectureRepository.findById(lectureId)
-                .orElseThrow(() -> new QuizException(QuizErrorCode.LectureNotFound));
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        Object principal = authentication.getPrincipal();
+//
+//        Role role =  ((CustomUserDetails) principal).getUser().getRole();
+//
+//        if (role == Role.STUDENT) {
+//            throw new QuizException(QuizErrorCode.STUDENT_NOT_CREATE_QUIZ);
+//        }
 
-        // 2. 강의록 매핑 존재 여부 확인
+        // 강의 존재 여부 확인
+        Lecture lecture = lectureRepository.findById(lectureId)
+                .orElseThrow(() -> new QuizException(QuizErrorCode.LECTURE_NOT_FOUND));
+
+        // 강의록 매핑 존재 여부 확인
         List<LectureNoteMapping> mappings = lectureNoteMappingRepository.findAllByLectureId(lectureId);
         if (mappings.isEmpty()) {
-            throw new QuizException(QuizErrorCode.LectureNoteNotFound);
+            throw new QuizException(QuizErrorCode.LECTURE_NOTE_NOT_FOUND);
         }
 
-        // 3. 모든 강의록을 조회
+        // 모든 강의록을 조회
         List<LectureNote> notes = mappings.stream()
                 .map(mapping -> {
-                    // lectureNoteId를 통해 LectureNote를 가져온 뒤, note_url을 확인
                     LectureNote note = lectureNoteRepository.findById(mapping.getLectureNoteId())
-                            .orElseThrow(() -> new QuizException(QuizErrorCode.LectureNoteNotFound));
-                    return note;  // LectureNote 객체를 반환
+                            .orElseThrow(() -> new QuizException(QuizErrorCode.LECTURE_NOTE_NOT_FOUND));
+                    return note;
                 })
                 .collect(Collectors.toList());
 
-        // S3 URL
+        // S3 URL 변환
         String noteUrls = notes.stream()
-                .map(note -> s3Service.getPresignedUrl(note.getNoteUrl()))
+                .map(note -> {
+                    String presignedUrl = s3Service.getPresignedUrl(note.getNoteUrl());
+                    return presignedUrl;
+                })
                 .collect(Collectors.joining(","));
 
+        String audioUrl = s3Service.getPresignedUrl(lecture.getAudioUrl());
+
         try {
-            // 4. LangChain 서버 호출 (필요한 정보를 가지고 호출)
             return langChainClient.requestQuiz(
                     lectureId.toString(),
                     noteUrls,
                     request.isUseAudio(),
-                    lecture.getAudioUrl()
+                    audioUrl
             );
         } catch (Exception e) {
-            throw new QuizException(QuizErrorCode.AiCallFailed);
+            throw new QuizException(QuizErrorCode.AI_CALL_FAILED);
         }
     }
 }

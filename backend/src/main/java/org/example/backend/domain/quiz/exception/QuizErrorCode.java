@@ -8,9 +8,10 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public enum QuizErrorCode implements BaseErrorCode {
 
-    LectureNotFound(HttpStatus.NOT_FOUND, "LECTURE404_1", "해당 강의를 찾을 수 없습니다."),
-    LectureNoteNotFound(HttpStatus.NOT_FOUND, "LECTURE404_2", "해당 강의에 등록된 강의록을 찾을 수 없습니다."),
-    AiCallFailed(HttpStatus.INTERNAL_SERVER_ERROR, "AI_500", "AI 호출 중 오류가 발생했습니다.");
+    LECTURE_NOT_FOUND(HttpStatus.NOT_FOUND, "LECTURE404_1", "해당 강의를 찾을 수 없습니다."),
+    LECTURE_NOTE_NOT_FOUND(HttpStatus.NOT_FOUND, "LECTURE404_2", "해당 강의에 등록된 강의록을 찾을 수 없습니다."),
+    STUDENT_NOT_CREATE_QUIZ(HttpStatus.BAD_REQUEST, "QUIZ403_1", "강사만 퀴즈를 생성할 수 있습니다."),
+    AI_CALL_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "AI_500", "AI 호출 중 오류가 발생했습니다.");
 
     private final HttpStatus httpStatus;
     private final String code;
