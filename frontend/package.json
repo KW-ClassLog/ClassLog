@@ -9,13 +9,17 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@types/react-datepicker": "^6.2.0",
     "axios": "^1.9.0",
+    "date-fns": "^4.1.0",
+    "date-fns-tz": "^3.2.0",
     "jsonwebtoken": "^9.0.2",
     "jwt-decode": "^4.0.0",
     "lucide-react": "^0.487.0",
     "next": "15.2.4",
     "next-pwa": "^5.6.0",
     "react": "^19.0.0",
+    "react-datepicker": "^8.3.0",
     "react-dom": "^19.0.0",
     "zustand": "^5.0.3"
   },
