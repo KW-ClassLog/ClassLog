@@ -45,6 +45,11 @@
   display: flex;
   flex-direction: column;
   gap: $spacing-xs;
+  cursor: pointer;
+  transition: border 0.2s ease-in-out;
+  &:hover {
+    border: 2px solid $color-blue;
+  }
 }
 
 .lectureHeader {
