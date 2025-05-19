@@ -4,6 +4,7 @@ import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
 import { useState } from "react";
 import Masonry from "react-masonry-css";
 import SelectableButton from "@/components/Button/SelectableButton/SelectableButton";
+import AlertModal from "@/components/Modal/AlertModal/AlertModal";
 
 interface Quiz {
   quizBody: string;
@@ -20,11 +21,20 @@ interface QuizPreviewProps {
 
 const QuizPreview = ({ quizzes, onCustomize, onSubmit }: QuizPreviewProps) => {
   const [selectedQuizzes, setSelectedQuizzes] = useState<number[]>([]);
+  const [showAlert, setShowAlert] = useState(false);
 
   const toggleQuizSelection = (index: number) => {
-    setSelectedQuizzes((prev) =>
-      prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]
-    );
+    setSelectedQuizzes((prev) => {
+      if (prev.includes(index)) {
+        return prev.filter((i) => i !== index);
+      } else {
+        if (prev.length >= 4) {
+          setShowAlert(true);
+          return prev;
+        }
+        return [...prev, index];
+      }
+    });
   };
 
   const breakpointColumnsObj = {
@@ -38,6 +48,11 @@ const QuizPreview = ({ quizzes, onCustomize, onSubmit }: QuizPreviewProps) => {
 
   return (
     <div className={styles.wrapper}>
+      {showAlert && (
+        <AlertModal onClose={() => setShowAlert(false)}>
+          최대 4개의 퀴즈만 선택할 수 있습니다.
+        </AlertModal>
+      )}
       <div className={styles.content}>
         {quizzes === null ? (
           <div className={styles.loading}>
