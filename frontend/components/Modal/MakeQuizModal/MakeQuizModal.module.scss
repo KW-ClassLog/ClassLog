@@ -1,15 +1,13 @@
 .wrapper {
   display: flex;
   flex-direction: column;
-  padding: $spacing-md 0;
+  padding: 0;
   width: 1200px;
   transition: $transition-fast;
   @include respond-to(md) {
     max-width: 100%;
   }
-  gap: $spacing-lg;
-  max-height: 90vh;
-
+  gap: $spacing-md;
   overflow: hidden;
 }
 
@@ -50,7 +48,7 @@
     .switchBackground {
       width: 3rem;
       height: 1.5rem;
-      background-color: $color-neutral-6;
+      background-color: $color-neutral-7;
       border-radius: 1rem;
       position: relative;
       transition: background-color 0.2s;

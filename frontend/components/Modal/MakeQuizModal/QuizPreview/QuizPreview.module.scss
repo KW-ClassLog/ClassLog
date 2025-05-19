@@ -15,7 +15,8 @@
 
 .buttonSection {
   margin-top: auto;
-  padding: $spacing-md 0;
+  border-top: 1px solid $color-neutral-7;
+  padding: $spacing-sm 0;
   display: flex;
   justify-content: center;
   gap: $spacing-md;
@@ -114,6 +115,7 @@
   cursor: pointer;
   transition: all 0.2s ease;
   height: fit-content;
+  text-align: left;
 
   &:hover {
     border-color: $color-blue;
@@ -130,6 +132,14 @@
     display: flex;
     align-items: center;
     gap: $spacing-sm;
+    position: relative;
+  }
+
+  .selectButtonWrapper {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 2;
   }
 
   .type {
@@ -155,8 +165,7 @@
   }
 
   .answer {
-    margin-top: $spacing-sm;
-    font-weight: $font-weight-medium;
+    font-weight: $font-weight-light;
     color: $color-neutral-4;
   }
 }
@@ -172,4 +181,19 @@
   display: flex;
   flex-direction: column;
   gap: $spacing-md;
+}
+
+.quizContainer {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xl;
+}
+
+.moreQuiz {
+  text-align: center;
+  color: $color-blue;
+  cursor: pointer;
+  &:hover {
+    text-decoration: underline;
+  }
 }
