@@ -7,6 +7,8 @@ import NoDataView from "@/components/NoDataView/NoDataView";
 import { BookOpenText } from "lucide-react";
 import dayjs from "dayjs";
 import LectureColumn from "./_components/LectureColumn/LectureColumn";
+import ClosableModal from "@/components/Modal/ClosableModal/ClosableModal";
+import CreateLectureModal from "./_components/CreateLectureModal/CreateLectureModal";
 
 interface Lecture {
   lectureId: string;
@@ -19,6 +21,10 @@ interface Lecture {
 
 export default function TeacherLectureManagementPage() {
   const { selectedClassId, selectedClassName } = useClassStore();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const handleOpenModal = () => setIsModalOpen(true);
+  const handleCloseModal = () => setIsModalOpen(false);
+
   const [lectures, setLectures] = useState<Lecture[]>([
     {
       lectureId: "1",
@@ -95,10 +101,14 @@ export default function TeacherLectureManagementPage() {
       </div>
     );
   }
-
   return (
     <div className={styles.container}>
       <h1>[{selectedClassName}] 강의 관리</h1>
+      <div className={styles.addButtonContainer}>
+        <button className={styles.addButton} onClick={handleOpenModal}>
+          + 강의 생성하기
+        </button>
+      </div>
       <div className={styles.lectureListContainer}>
         {/* 강의 종료 */}
         <LectureColumn
@@ -125,6 +135,11 @@ export default function TeacherLectureManagementPage() {
           columnClassName={styles.before}
         />
       </div>
+      {isModalOpen && (
+        <ClosableModal onClose={handleCloseModal}>
+          <CreateLectureModal onClose={handleCloseModal} />
+        </ClosableModal>
+      )}
     </div>
   );
 }

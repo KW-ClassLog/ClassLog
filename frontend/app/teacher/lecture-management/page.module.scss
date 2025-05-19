@@ -7,7 +7,7 @@
   h1 {
     font-size: $font-size-xl;
     font-weight: $font-weight-bold;
-    margin-bottom: $spacing-3xl;
+    margin-bottom: $spacing-lg;
   }
 
   // NoDataView가 있을 때는 중앙 정렬
@@ -15,6 +15,30 @@
     height: 100%;
     display: flex;
     align-items: center;
+  }
+}
+
+.addButtonContainer {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: $spacing-lg;
+}
+
+.addButton {
+  font-family: $font-default;
+  padding: $spacing-sm $spacing-md;
+  background-color: $color-blue;
+  color: $color-white;
+  font-weight: $font-weight-medium;
+  border: none;
+  border-radius: $radius-md;
+  font-size: $font-size-sm;
+  cursor: pointer;
+  transition: $transition-fast;
+  font-size: $font-size-md;
+
+  &:hover {
+    background-color: $color-lightblue;
   }
 }
 
