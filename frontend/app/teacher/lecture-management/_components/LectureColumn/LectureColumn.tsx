@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "./LectureColumn.module.scss";
+import { Calendar, Clock, ChevronRight } from "lucide-react";
 
 interface Lecture {
   lectureId: string;
@@ -36,10 +37,22 @@ const LectureColumn: React.FC<LectureColumnProps> = ({
         ) : (
           lectures.map((l) => (
             <div key={l.lectureId} className={styles.lectureCard}>
-              <div className={styles.lectureTitle}>{l.title}</div>
-              <div className={styles.lectureDate}>{l.lectureDate}</div>
-              <div className={styles.lectureTime}>
-                {l.startTime} - {l.endTime}
+              <div className={styles.lectureHeader}>
+                <div className={styles.lectureTitle}>{l.title}</div>
+                <div className={styles.arrowButton}>
+                  <ChevronRight color="#4894fe" size={20} />
+                </div>
+              </div>
+
+              <div className={styles.lectureInfo}>
+                <div className={styles.lectureDate}>
+                  <Calendar size={16} />
+                  {l.lectureDate}
+                </div>
+                <div className={styles.lectureTime}>
+                  <Clock size={16} />
+                  {l.startTime} - {l.endTime}
+                </div>
               </div>
             </div>
           ))
