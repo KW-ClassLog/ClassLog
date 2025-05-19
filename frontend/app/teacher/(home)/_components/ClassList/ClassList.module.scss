@@ -1,0 +1,102 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+  background: $color-white;
+  border: 1px solid $color-neutral-7;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-sm;
+  padding: $spacing-lg;
+}
+
+.topHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mainTitle {
+  font-family: $font-default;
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  color: $color-neutral-1;
+}
+
+.addButton {
+  font-family: $font-default;
+  padding: $spacing-sm $spacing-md;
+  background-color: $color-blue;
+  color: $color-white;
+  font-weight: $font-weight-medium;
+  border: none;
+  border-radius: $radius-md;
+  font-size: $font-size-sm;
+  cursor: pointer;
+  transition: $transition-fast;
+  font-size: $font-size-md;
+
+  &:hover {
+    background-color: $color-lightblue;
+  }
+}
+
+.classList {
+  display: flex;
+  flex-direction: column;
+}
+
+.classCard {
+  padding: $spacing-md 0;
+  border-bottom: 1.5px solid $color-neutral-7;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-xs;
+}
+
+.title {
+  font-family: $font-default;
+  font-weight: $font-weight-medium;
+  font-size: $font-size-md;
+}
+
+.moreButton {
+  background: none;
+  border: none;
+  padding: $spacing-xs;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: $radius-full;
+  transition: $transition-fast;
+
+  &:hover {
+    background-color: $color-neutral-7;
+  }
+}
+
+.infoList {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+}
+
+.infoItem {
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+}
+
+.icon {
+  color: $color-mutedblue;
+}
+
+.infoText {
+  font-family: $font-default;
+  font-size: $font-size-md;
+  color: $color-neutral-4;
+}

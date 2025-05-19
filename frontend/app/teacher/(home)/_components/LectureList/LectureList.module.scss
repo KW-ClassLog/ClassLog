@@ -1,0 +1,122 @@
+.container {
+  width: 100%;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-lg;
+}
+
+.title {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  color: $color-neutral-1;
+  margin-bottom: $spacing-lg;
+}
+
+.lectureList {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.lectureItem {
+  padding: $spacing-lg;
+  background-color: $color-white;
+  border: 1px solid $color-neutral-7;
+  border-radius: $radius-lg;
+  transition: $transition-fast;
+
+  &:hover {
+    border-color: $color-neutral-5;
+    box-shadow: $shadow-sm;
+    cursor: pointer;
+  }
+}
+
+.lectureMain {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  border-bottom: 1px solid $color-neutral-7;
+  padding-bottom: $spacing-xs;
+  .lectureTitle {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    color: $color-neutral-1;
+
+    .lectureTitleText {
+      font-size: $font-size-lg;
+      font-weight: $font-weight-medium;
+    }
+
+    .className {
+      font-size: $font-size-md;
+      border-radius: $radius-sm;
+      margin-left: $spacing-sm;
+      color: $color-mutedblue;
+    }
+  }
+
+  .actionButton {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    transition: $transition-fast;
+
+    .buttonText {
+      font-weight: $font-weight-medium;
+      &.강의전 {
+        color: $color-blue;
+      }
+
+      &.강의중 {
+        color: $color-blue;
+      }
+
+      &.강의종료 {
+        color: $color-neutral-5;
+      }
+    }
+
+    .buttonIcon {
+      transition: $transition-fast;
+      color: $color-blue;
+      border-radius: $radius-full;
+      background-color: $color-skyblue;
+      padding: $spacing-xs;
+    }
+
+    .buttonText {
+      font-weight: $font-weight-medium;
+    }
+
+    .buttonIcon {
+      transition: $transition-fast;
+    }
+  }
+}
+
+.lectureInfo {
+  display: flex;
+  gap: $spacing-md;
+  padding-top: $spacing-sm;
+
+  .infoItem {
+    display: flex;
+    align-items: center;
+    gap: $spacing-xs;
+
+    .icon {
+      color: $color-neutral-4;
+    }
+
+    .infoText {
+      font-size: $font-size-sm;
+      color: $color-neutral-3;
+    }
+  }
+}
