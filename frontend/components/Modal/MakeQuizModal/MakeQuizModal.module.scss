@@ -2,13 +2,13 @@
   display: flex;
   flex-direction: column;
   padding: $spacing-md 0;
-  width: 1000px;
-  height: 100%;
+  width: 1200px;
   transition: $transition-fast;
   @include respond-to(md) {
     max-width: 100%;
   }
   gap: $spacing-lg;
+  max-height: 90vh;
 
   overflow: hidden;
 }

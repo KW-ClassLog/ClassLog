@@ -54,6 +54,30 @@ const MakeQuizModal = ({ onClose, lectureId }: MakeQuizModalProps) => {
           choices: [],
           type: "단답형",
         },
+        {
+          quizBody: "오늘 내가 먹고싶은 과일은?",
+          solution: "바나나",
+          choices: [],
+          type: "단답형",
+        },
+        {
+          quizBody: "오늘 내가 먹고싶은 과일은?",
+          solution: "바나나",
+          choices: [],
+          type: "단답형",
+        },
+        {
+          quizBody: "오늘 내가 먹고싶은 과일은?",
+          solution: "바나나",
+          choices: [],
+          type: "단답형",
+        },
+        {
+          quizBody: "오늘 내가 먹고싶은 과일은?",
+          solution: "바나나",
+          choices: [],
+          type: "단답형",
+        },
       ]);
     }, 2000);
   }, []);

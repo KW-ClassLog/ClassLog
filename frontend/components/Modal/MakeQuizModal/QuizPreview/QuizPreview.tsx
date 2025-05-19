@@ -1,5 +1,7 @@
 // _components/QuizPreview.tsx
 import styles from "./QuizPreview.module.scss";
+import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
+import { useState } from "react";
 
 interface Quiz {
   quizBody: string;
@@ -15,18 +17,35 @@ interface QuizPreviewProps {
 }
 
 const QuizPreview = ({ quizzes, onCustomize, onSubmit }: QuizPreviewProps) => {
+  const [selectedQuizzes, setSelectedQuizzes] = useState<number[]>([]);
+
+  const toggleQuizSelection = (index: number) => {
+    setSelectedQuizzes((prev) =>
+      prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]
+    );
+  };
+
   return (
-    <>
+    <div className={styles.wrapper}>
       <div className={styles.content}>
         {quizzes === null ? (
           <div className={styles.loading}>
-            AI가 퀴즈를 만들고 있어요
-            <br />
-            잠시만 기다려주세요
+            <LoadingSpinner />
+            <div className={styles.loadingText}>
+              AI가 퀴즈를 만들고 있어요
+              <br />
+              잠시만 기다려주세요!
+            </div>
           </div>
         ) : (
           quizzes.map((quiz, index) => (
-            <div key={index} className={styles.quizCard}>
+            <div
+              key={index}
+              className={`${styles.quizCard} ${
+                selectedQuizzes.includes(index) ? styles.selected : ""
+              }`}
+              onClick={() => toggleQuizSelection(index)}
+            >
               <div className={styles.type}>{quiz.type}</div>
               <div className={styles.question}>{quiz.quizBody}</div>
               {quiz.type === "객관식" && quiz.choices.length > 0 && (
@@ -43,17 +62,25 @@ const QuizPreview = ({ quizzes, onCustomize, onSubmit }: QuizPreviewProps) => {
           ))
         )}
       </div>
-      {quizzes === null || (
+      {quizzes !== null && (
         <div className={styles.buttonSection}>
-          <button className={styles.customizing} onClick={onCustomize}>
+          <button
+            className={styles.customizing}
+            onClick={onCustomize}
+            disabled={selectedQuizzes.length === 0}
+          >
             선택한 퀴즈를 기반으로 커스터마이징 하기
           </button>
-          <button className={styles.submit} onClick={onSubmit}>
+          <button
+            className={styles.submit}
+            onClick={onSubmit}
+            disabled={selectedQuizzes.length === 0}
+          >
             이대로 퀴즈 제출하기
           </button>
         </div>
       )}
-    </>
+    </div>
   );
 };
 
