@@ -2,6 +2,7 @@
 import styles from "./QuizPreview.module.scss";
 import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
 import { useState } from "react";
+import Masonry from "react-masonry-css";
 
 interface Quiz {
   quizBody: string;
@@ -25,6 +26,11 @@ const QuizPreview = ({ quizzes, onCustomize, onSubmit }: QuizPreviewProps) => {
     );
   };
 
+  const breakpointColumnsObj = {
+    default: 2,
+    800: 1,
+  };
+
   return (
     <div className={styles.wrapper}>
       <div className={styles.content}>
@@ -38,28 +44,36 @@ const QuizPreview = ({ quizzes, onCustomize, onSubmit }: QuizPreviewProps) => {
             </div>
           </div>
         ) : (
-          quizzes.map((quiz, index) => (
-            <div
-              key={index}
-              className={`${styles.quizCard} ${
-                selectedQuizzes.includes(index) ? styles.selected : ""
-              }`}
-              onClick={() => toggleQuizSelection(index)}
-            >
-              <div className={styles.type}>{quiz.type}</div>
-              <div className={styles.question}>{quiz.quizBody}</div>
-              {quiz.type === "객관식" && quiz.choices.length > 0 && (
-                <ul className={styles.choices}>
-                  {quiz.choices.map((choice, index) => (
-                    <li key={index}>
-                      {index + 1}. {choice}
-                    </li>
-                  ))}
-                </ul>
-              )}
-              <div className={styles.answer}>정답: {quiz.solution}</div>
-            </div>
-          ))
+          <Masonry
+            breakpointCols={breakpointColumnsObj}
+            className={styles.masonryGrid}
+            columnClassName={styles.masonryColumn}
+          >
+            {quizzes.map((quiz, index) => (
+              <div
+                key={index}
+                className={`${styles.quizCard} ${
+                  selectedQuizzes.includes(index) ? styles.selected : ""
+                }`}
+                onClick={() => toggleQuizSelection(index)}
+              >
+                <div className={styles.quizCardHeader}>
+                  <div className={styles.type}>{quiz.type}</div>
+                  <div className={styles.question}>{quiz.quizBody}</div>
+                </div>
+                {quiz.type === "객관식" && quiz.choices.length > 0 && (
+                  <ul className={styles.choices}>
+                    {quiz.choices.map((choice, index) => (
+                      <li key={index}>
+                        {index + 1}. {choice}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                <div className={styles.answer}>정답: {quiz.solution}</div>
+              </div>
+            ))}
+          </Masonry>
         )}
       </div>
       {quizzes !== null && (
