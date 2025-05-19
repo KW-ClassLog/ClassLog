@@ -145,3 +145,11 @@
     color: $color-neutral-6;
   }
 }
+
+.inputLabel {
+  display: block;
+  font-size: $font-size-md;
+  color: $color-neutral-7;
+  margin-bottom: $spacing-xs;
+  font-weight: $font-weight-medium;
+}

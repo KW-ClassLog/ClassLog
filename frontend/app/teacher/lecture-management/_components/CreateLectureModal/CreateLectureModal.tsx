@@ -14,7 +14,9 @@ interface CreateLectureModalProps {
 
 interface FormData {
   className: string;
-  classTime: string;
+  classDate: Date | null;
+  startTime: string;
+  endTime: string;
 }
 
 export default function CreateLectureModal({
@@ -22,13 +24,10 @@ export default function CreateLectureModal({
 }: CreateLectureModalProps) {
   const [formData, setFormData] = useState<FormData>({
     className: "",
-    classTime: "",
+    classDate: null,
+    startTime: "",
+    endTime: "",
   });
-  const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
-    null,
-    null,
-  ]);
-  const [startDate, endDate] = dateRange;
 
   const handleChange =
     (field: keyof typeof formData) => (e: ChangeEvent<HTMLInputElement>) => {
@@ -38,15 +37,16 @@ export default function CreateLectureModal({
       }));
     };
 
+  const handleDateChange = (date: Date | null) => {
+    setFormData((prev) => ({ ...prev, classDate: date }));
+  };
+
   const handleSubmit = () => {
     const koreanTimeZone = "Asia/Seoul";
     const submissionData = {
       ...formData,
-      startDate: startDate
-        ? formatInTimeZone(startDate, koreanTimeZone, "yyyy-MM-dd")
-        : "",
-      endDate: endDate
-        ? formatInTimeZone(endDate, koreanTimeZone, "yyyy-MM-dd")
+      classDate: formData.classDate
+        ? formatInTimeZone(formData.classDate, koreanTimeZone, "yyyy-MM-dd")
         : "",
     };
     console.log(submissionData);
@@ -62,19 +62,17 @@ export default function CreateLectureModal({
             <BasicInput
               value={formData.className}
               onChange={handleChange("className")}
-              placeholder="클래스 이름을 입력해주세요"
+              placeholder="강의 제목을 입력하세요 (차시는 자동으로 입력됩니다)"
             />
           </div>
           <div className={styles.formGroup}>
             <div className={styles.datePickerWrapper}>
               <DatePicker
-                selectsRange={true}
-                startDate={startDate}
-                endDate={endDate}
-                onChange={(update) => setDateRange(update)}
+                selected={formData.classDate}
+                onChange={handleDateChange}
                 locale={ko}
                 dateFormat="yyyy-MM-dd"
-                placeholderText="시작 날짜와 종료 날짜를 선택해주세요"
+                placeholderText="강의 날짜를 선택하세요"
                 className={styles.datePicker}
                 isClearable
               />
@@ -82,9 +80,18 @@ export default function CreateLectureModal({
           </div>
           <div className={styles.formGroup}>
             <BasicInput
-              value={formData.classTime}
-              onChange={handleChange("classTime")}
-              placeholder="요일과 시간을 입력해주세요 (예: 월/수 10:15~11:45)"
+              type="time"
+              value={formData.startTime}
+              onChange={handleChange("startTime")}
+              placeholder="강의 시작시간을 선택하세요"
+            />
+          </div>
+          <div className={styles.formGroup}>
+            <BasicInput
+              type="time"
+              value={formData.endTime}
+              onChange={handleChange("endTime")}
+              placeholder="강의 종료시간을 선택하세요"
             />
           </div>
         </div>
