@@ -1,0 +1,60 @@
+.lectureColumn {
+  flex: 1;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  display: flex;
+  flex-direction: column;
+  min-width: 260px;
+  height: fit-content;
+}
+
+.lectureColumnHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.columnTitle {
+  margin-bottom: 12px;
+  font-size: $font-size-lg;
+}
+.count {
+  color: $color-neutral-6;
+  font-size: $font-size-md;
+  margin-left: $spacing-sm;
+}
+.emptyText {
+  color: $color-neutral-6;
+  font-size: $font-size-md;
+  margin: $spacing-lg 0;
+  width: 100%;
+  text-align: center;
+  height: fit-content;
+}
+
+.lectureList {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.lectureCard {
+  background: #fff;
+  border-radius: $radius-lg;
+  padding: $spacing-md;
+  border: 1px solid $color-neutral-7;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+}
+.lectureTitle {
+  font-weight: $font-weight-medium;
+  font-size: $font-size-md;
+}
+.lectureDate {
+  font-size: $font-size-sm;
+  color: #8b95a1;
+}
+.lectureTime {
+  font-size: $font-size-sm;
+  color: #8b95a1;
+}

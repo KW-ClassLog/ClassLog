@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import NoDataView from "@/components/NoDataView/NoDataView";
 import { BookOpenText } from "lucide-react";
 import dayjs from "dayjs";
+import LectureColumn from "./_components/LectureColumn/LectureColumn";
 
 interface Lecture {
   lectureId: string;
@@ -100,71 +101,29 @@ export default function TeacherLectureManagementPage() {
       <h1>[{selectedClassName}] 강의 관리</h1>
       <div className={styles.lectureListContainer}>
         {/* 강의 종료 */}
-        <div className={`${styles.lectureColumn} ${styles.ended}`}>
-          <div className={styles.columnTitle}>
-            강의 종료{" "}
-            <span className={styles.count}>{endedLectures.length}건</span>
-          </div>
-          <div className={styles.lectureList}>
-            {endedLectures.length === 0 ? (
-              <div className={styles.emptyText}>종료된 강의가 없습니다.</div>
-            ) : (
-              endedLectures.map((l) => (
-                <div key={l.lectureId} className={styles.lectureCard}>
-                  <div className={styles.lectureTitle}>{l.title}</div>
-                  <div className={styles.lectureDate}>{l.lectureDate}</div>
-                  <div className={styles.lectureTime}>
-                    {l.startTime} - {l.endTime}
-                  </div>
-                </div>
-              ))
-            )}
-          </div>
-        </div>
+        <LectureColumn
+          title="강의 종료"
+          count={endedLectures.length}
+          emptyText="종료된 강의가 없습니다."
+          lectures={endedLectures}
+          columnClassName={styles.ended}
+        />
         {/* 강의 중 */}
-        <div className={`${styles.lectureColumn} ${styles.inProgress}`}>
-          <div className={styles.columnTitle}>
-            강의 중{" "}
-            <span className={styles.count}>{inProgressLectures.length}건</span>
-          </div>
-          <div className={styles.lectureList}>
-            {inProgressLectures.length === 0 ? (
-              <div className={styles.emptyText}>진행중인 강의가 없습니다.</div>
-            ) : (
-              inProgressLectures.map((l) => (
-                <div key={l.lectureId} className={styles.lectureCard}>
-                  <div className={styles.lectureTitle}>{l.title}</div>
-                  <div className={styles.lectureDate}>{l.lectureDate}</div>
-                  <div className={styles.lectureTime}>
-                    {l.startTime} - {l.endTime}
-                  </div>
-                </div>
-              ))
-            )}
-          </div>
-        </div>
+        <LectureColumn
+          title="강의 중"
+          count={inProgressLectures.length}
+          emptyText="진행중인 강의가 없습니다."
+          lectures={inProgressLectures}
+          columnClassName={styles.inProgress}
+        />
         {/* 강의 전 */}
-        <div className={`${styles.lectureColumn} ${styles.before}`}>
-          <div className={styles.columnTitle}>
-            강의 전{" "}
-            <span className={styles.count}>{beforeLectures.length}건</span>
-          </div>
-          <div className={styles.lectureList}>
-            {beforeLectures.length === 0 ? (
-              <div className={styles.emptyText}>예정된 강의가 없습니다.</div>
-            ) : (
-              beforeLectures.map((l) => (
-                <div key={l.lectureId} className={styles.lectureCard}>
-                  <div className={styles.lectureTitle}>{l.title}</div>
-                  <div className={styles.lectureDate}>{l.lectureDate}</div>
-                  <div className={styles.lectureTime}>
-                    {l.startTime} - {l.endTime}
-                  </div>
-                </div>
-              ))
-            )}
-          </div>
-        </div>
+        <LectureColumn
+          title="강의 전"
+          count={beforeLectures.length}
+          emptyText="예정된 강의가 없습니다."
+          lectures={beforeLectures}
+          columnClassName={styles.before}
+        />
       </div>
     </div>
   );
