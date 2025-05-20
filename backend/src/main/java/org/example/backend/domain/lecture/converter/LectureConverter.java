@@ -19,6 +19,8 @@ public class LectureConverter {
                 .lectureName(dto.getLectureName())
                 .lectureDate(dto.getLectureDate())
                 .classroom(classroom)
+                .startTime(dto.getStartTime())
+                .endTime(dto.getEndTime())
                 .isLectureStart(false)
                 .saveAudio(false)
                 .build();
