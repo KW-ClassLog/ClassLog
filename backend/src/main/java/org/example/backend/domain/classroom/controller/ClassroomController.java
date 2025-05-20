@@ -55,16 +55,13 @@ public class ClassroomController {
         return ApiResponse.onSuccess(response);
     }
 
-    //클래스에 속해있는 강의목록 조회
     @GetMapping("/{classId}/lectures")
     public ApiResponse<List<ClassLectureResponseDTO>> getLectureList(@PathVariable UUID classId){
         List<Lecture> lectures = classroomService.getLecturesByClassId(classId);
-
-        List<ClassLectureResponseDTO> responseDTOs = classroomConverter.toDTOList(lectures);
-
+        List<ClassLectureResponseDTO> responseDTOs = classroomService.getLectureDTOs(lectures);
         return ApiResponse.onSuccess(responseDTOs);
-
     }
+
     // 교수의 클래스 조회
     @GetMapping("/teacher/myclass")
     public ApiResponse<List<ClassroomResponseDTO>> getMyClassList() {

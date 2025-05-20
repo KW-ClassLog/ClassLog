@@ -2,6 +2,7 @@ package org.example.backend.domain.classroom.service;
 
 import org.example.backend.domain.classroom.converter.ClassroomConverter;
 import org.example.backend.domain.classroom.dto.request.ClassroomRequestDTO;
+import org.example.backend.domain.classroom.dto.response.ClassLectureResponseDTO;
 import org.example.backend.domain.classroom.dto.response.ClassroomResponseDTO;
 import org.example.backend.domain.classroom.entity.Classroom;
 import org.example.backend.domain.classroom.exception.ClassroomErrorCode;
@@ -19,6 +20,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -136,5 +140,38 @@ public class ClassroomServiceImpl implements ClassroomService {
                 .map(classroomConverter::toResponseDTO)
                 .collect(Collectors.toList());
     }
+
+    public List<ClassLectureResponseDTO> getLectureDTOs(List<Lecture> lectures) {
+        List<String> statuses = lectures.stream()
+                .map(lecture -> calculateLectureStatus(
+                        lecture.getLectureDate(),
+                        lecture.getStartTime(),
+                        lecture.getEndTime()))
+                .toList();
+
+        return classroomConverter.toDTOList(lectures, statuses);
+    }
+
+    public String calculateLectureStatus(LocalDate lectureDate, LocalTime startTime, LocalTime endTime) {
+        LocalDate today = LocalDate.now();
+        LocalTime now = LocalTime.now();
+
+        if (lectureDate.isAfter(today)) {
+            // 강의 날짜가 오늘 이후
+            return "beforeLecture";
+        } else if (lectureDate.isEqual(today)) {
+            // 오늘이라면 시간도 확인
+            if (now.isBefore(startTime)) {
+                return "beforeLecture";
+            } else {
+                return "quizCreation";
+            }
+        } else {
+            // 과거 날짜
+            return "quizCreation";
+        }
+    }
+
+
 
 }

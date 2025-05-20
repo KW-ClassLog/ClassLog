@@ -50,22 +50,26 @@ public class ClassroomConverter {
     }
 
     // Lecture 엔티티를 LectureResponseDTO로 변환
-    public static ClassLectureResponseDTO toDTO(Lecture lecture, int session) {
+    public static ClassLectureResponseDTO toDTO(Lecture lecture,String status,  int session) {
         return new ClassLectureResponseDTO(
                 lecture.getId(),
                 lecture.getLectureName(),
                 lecture.getLectureDate(),
                 lecture.getStartTime(),
                 lecture.getEndTime(),
-                lecture.getAudioUrl(),
+                status,
                 session
         );
     }
 
     // Lecture 엔티티 리스트를 LectureResponseDTO 리스트로 변환
-    public static List<ClassLectureResponseDTO> toDTOList(List<Lecture> lectures) {
+    public static List<ClassLectureResponseDTO> toDTOList(List<Lecture> lectures,List<String> statuses) {
+        if (lectures.size() != statuses.size()) {
+            throw new IllegalArgumentException("lectures와 statuses의 크기가 일치하지 않습니다.");
+        }
+
         return IntStream.range(0, lectures.size()) // 0부터 lectures.size()까지의 인덱스 범위 생성
-                .mapToObj(i -> toDTO(lectures.get(i), i + 1)) // 인덱스를 기반으로 session 값을 계산하여 전달
+                .mapToObj(i -> toDTO(lectures.get(i),statuses.get(i), i + 1)) // 인덱스를 기반으로 session 값을 계산하여 전달
                 .collect(Collectors.toList());
     }
 
