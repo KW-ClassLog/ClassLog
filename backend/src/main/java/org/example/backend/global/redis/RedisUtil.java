@@ -21,6 +21,7 @@ public class RedisUtil {
         try {
             redisTemplate.opsForValue().set(key, value, ttl);
         } catch (Exception e) {
+            log.error("🚨 RedisUtil.set 실패: {}", e.getMessage(), e);
             throw new FailureException(FailureCode._REDIS_SERVER_ERROR);
         }
     }
@@ -30,6 +31,7 @@ public class RedisUtil {
         try {
             return redisTemplate.opsForValue().get(key);
         } catch (Exception e) {
+            log.error("🚨 RedisUtil.get 실패: {}", e.getMessage(), e);
             throw new FailureException(FailureCode._REDIS_SERVER_ERROR);
         }
     }
@@ -39,6 +41,7 @@ public class RedisUtil {
         try {
             redisTemplate.delete(key);
         } catch (Exception e) {
+            log.error("🚨 RedisUtil.delete 실패: {}", e.getMessage(), e);
             throw new FailureException(FailureCode._REDIS_SERVER_ERROR);
         }
     }
@@ -48,6 +51,7 @@ public class RedisUtil {
         try {
             return Boolean.TRUE.equals(redisTemplate.hasKey(key));
         } catch (Exception e) {
+            log.error("🚨 RedisUtil.exists 실패: {}", e.getMessage(), e);
             throw new FailureException(FailureCode._REDIS_SERVER_ERROR);
         }
     }
