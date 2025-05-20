@@ -42,12 +42,14 @@ services:
 #      retries: 10
 
   ai:
-    image: mumminn/classlog-ai:v1.12
+    image: classlog/ai:v1.1
     container_name: classlog-ai
     ports:
       - 8000:8000
     networks:
       - classlog-network
+    env_file:
+      - .env
 
 networks:
   classlog-network:
