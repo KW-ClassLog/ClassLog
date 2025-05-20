@@ -1,16 +1,13 @@
 package org.example.backend.domain.studentClass.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.example.backend.domain.lectureNote.dto.response.LectureNoteKeyResponseDTO;
 import org.example.backend.domain.studentClass.converter.StudentClassConverter;
 import org.example.backend.domain.studentClass.dto.request.StudentClassRequestDTO;
 import org.example.backend.domain.studentClass.dto.response.StudentClassResponseDTO;
 import org.example.backend.domain.studentClass.service.StudentClassService;
 import org.example.backend.global.ApiResponse;
-import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -39,7 +36,7 @@ public class StudentClassController {
 
     // 클래스별 닉네임 조회
     @GetMapping("nickname/{classId}")
-    public ApiResponse<StudentClassResponseDTO> getNickname(@PathVariable UUID classId){
+    public ApiResponse<StudentClassResponseDTO> getNickname(@PathVariable("classId") UUID classId){
 
         StudentClassResponseDTO response = studentClassService.getNicknameByClassId(classId);
         return ApiResponse.onSuccess(response);
