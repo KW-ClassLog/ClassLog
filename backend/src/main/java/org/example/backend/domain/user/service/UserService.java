@@ -1,6 +1,7 @@
 package org.example.backend.domain.user.service;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.example.backend.domain.user.dto.request.RegisterRequestDTO;
 
 public interface UserService {
@@ -22,4 +23,10 @@ public interface UserService {
 
     // 쿠키에서 리프레시 토큰 추출
     String extractRefreshToken(HttpServletRequest request);
+
+    //리프레시 토큰 발급
+    void getRefreshToken(HttpServletRequest request, HttpServletResponse response);
+
+    // 로그아웃
+    void logout(HttpServletRequest request, HttpServletResponse response);
 }

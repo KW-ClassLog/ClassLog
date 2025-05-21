@@ -45,11 +45,11 @@ public class JWTFilter extends OncePerRequestFilter {
             return;
         }
 
-        // 개발 중 인증 생략
-        if (uri.startsWith("/api/lectures")|| uri.startsWith("/api/classes")|| uri.startsWith("/api/notifications")|| uri.startsWith("/api/quizzes")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
+//        // 개발 중 인증 생략
+//        if (uri.startsWith("/api/lectures")|| uri.startsWith("/api/classes")|| uri.startsWith("/api/notifications")|| uri.startsWith("/api/quizzes")) {
+//            filterChain.doFilter(request, response);
+//            return;
+//        }
 
         // request에서 Authorization 헤더를 찾음
         String authorization = request.getHeader("Authorization");

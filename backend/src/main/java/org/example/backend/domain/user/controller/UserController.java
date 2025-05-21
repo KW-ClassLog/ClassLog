@@ -1,6 +1,5 @@
 package org.example.backend.domain.user.controller;
 
-import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -9,7 +8,6 @@ import org.example.backend.domain.user.dto.request.EmailRequestDTO;
 import org.example.backend.domain.user.dto.request.ResetPwdRequestDTO;
 import org.example.backend.domain.user.dto.request.RegisterRequestDTO;
 import org.example.backend.domain.user.dto.response.EmailResponseDTO;
-import org.example.backend.domain.user.dto.response.RefreshTokenResponseDTO;
 import org.example.backend.domain.user.exception.UserErrorCode;
 import org.example.backend.domain.user.exception.UserException;
 import org.example.backend.domain.user.service.MailService;
@@ -29,6 +27,7 @@ public class UserController {
     private final MailService mailService;
     private final UserRedisService userRedisService;
     private final JWTUtil jwtUtil;
+    private final HttpServletResponse httpServletResponse;
 
     // 회원가입
     @PostMapping
@@ -88,52 +87,15 @@ public class UserController {
     // 리프레시 토큰 요청
     @PostMapping("/refresh")
     public ApiResponse<String> refreshAccessToken(HttpServletRequest request, HttpServletResponse response) {
-
-        // 토큰 존재 확인
-        String refreshToken = userService.extractRefreshToken(request);
-
-        if(refreshToken == null){
-            throw new UserException(UserErrorCode._REFRESH_TOKEN_MISSING);
-        }
-
-        // 토큰 만료 검증 & 토큰 생성
-        RefreshTokenResponseDTO dto = jwtUtil.reissueToken(refreshToken);
-
-        response.setHeader("Authorization","Bearer "+dto.getAccessToken());
-
-        response.addHeader("Set-Cookie","refresh_token=" + dto.getRefreshToken() +
-                "; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=" + (14 * 24 * 60 * 60));
+        userService.getRefreshToken(request,response);
 
         return ApiResponse.onSuccess("리프레시 토큰 발급 성공");
     }
 
     // 로그아웃
     @PostMapping("/logout")
-    public ApiResponse<String> logout(HttpServletRequest request){
-        String accessToken = jwtUtil.resolveAccessToken(request);
-        String refreshToken = userService.extractRefreshToken(request);
-
-        if(accessToken != null){
-            // access token & refresh token 만료 처리
-            try{
-                System.out.println("access token = " + accessToken);
-                long exp = jwtUtil.getExpiration(accessToken);
-                userRedisService.setBlackList(accessToken, exp);
-            } catch (ExpiredJwtException e){
-                System.out.println("access token 만료됨, 블랙리스트 생략");
-            } catch (Exception e){
-                System.out.println("access token 처리 중 예외 발생");
-            }
-        }
-
-        if(refreshToken != null){
-            try{
-                String email = jwtUtil.getEmail(refreshToken);
-                userRedisService.deleteRefreshToken(email);
-            } catch (Exception e){
-                System.out.println("refresh token 만료됨 또는 파싱 실패");
-            }
-        }
+    public ApiResponse<String> logout(HttpServletRequest request,HttpServletResponse response){
+        userService.logout(request,response);
 
         return ApiResponse.onSuccess("로그아웃 성공");
     }
