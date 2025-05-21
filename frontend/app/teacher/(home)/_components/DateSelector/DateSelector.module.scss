@@ -1,0 +1,59 @@
+.header {
+  margin-bottom: $spacing-lg;
+}
+
+.currentDate {
+  margin-bottom: $spacing-lg;
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  color: $color-neutral-1;
+}
+
+.dateList {
+  display: flex;
+  gap: $spacing-sm;
+  justify-content: space-between;
+}
+
+.dateItem {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-xxs;
+  padding: $spacing-md $spacing-sm;
+  border: 1px solid $color-neutral-7;
+  border-radius: $radius-md;
+  background: none;
+  cursor: pointer;
+  transition: $transition-fast;
+
+  &:hover {
+    background-color: $color-neutral-8;
+  }
+
+  &.selected {
+    background-color: $color-blue;
+    border-color: $color-blue;
+
+    .dayName,
+    .dayNumber {
+      color: $color-white;
+    }
+
+    &:hover {
+      background-color: $color-lightblue;
+    }
+  }
+}
+
+.dayName {
+  font-size: $font-size-md;
+  color: $color-neutral-4;
+}
+
+.dayNumber {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  color: $color-neutral-1;
+}

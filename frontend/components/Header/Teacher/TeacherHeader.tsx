@@ -5,12 +5,18 @@ import { Bell, ChevronDown, Settings, LogOut } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { ROUTES } from "@/constants/routes";
-import { useRouter } from "next/navigation"; // Next.js의 useRouter 사용
+import { useRouter } from "next/navigation";
 import { logout } from "@/api/users/logout";
 import ConfirmModal from "@/components/Modal/ConfirmModal/ConfirmModal";
+import useClassStore from "@/store/useClassStore";
+
+interface Class {
+  classId: string;
+  className: string;
+}
 
 type TeacherHeaderProps = {
-  mode: "classSelection" | "default"; // mode에 따라 동작을 달리함
+  mode: "classSelection" | "default";
 };
 
 const TeacherHeader: React.FC<TeacherHeaderProps> = ({ mode }) => {
@@ -18,20 +24,19 @@ const TeacherHeader: React.FC<TeacherHeaderProps> = ({ mode }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
   const [toggleClassSelectionOpen, setToggleClassSelectionOpen] =
     useState<boolean>(false);
-  const [isClassSelected, setIsClassSelected] = useState<boolean>(false);
-  const [classList, setClassList] = useState<string[]>([
-    "클래스 1",
-    "클래스 2",
-    "클래스 3",
+  const [classList] = useState<Class[]>([
+    { classId: "1", className: "클래스 1" },
+    { classId: "2", className: "클래스 2" },
+    { classId: "3", className: "클래스 3" },
   ]);
-  const [selectedClass, setSelectedClass] = useState<string | null>(null); // 선택된 클래스 상태
 
+  const { selectedClassId, selectedClassName, setSelectedClass } =
+    useClassStore();
   const router = useRouter();
 
-  // '설정' 클릭 시 페이지 이동 함수
   const handleSettingsClick = () => {
-    router.push(ROUTES.teacherSetting); // teacherSetting 페이지로 이동
-    setIsDropdownOpen(false); // 드롭다운 닫기
+    router.push(ROUTES.teacherSetting);
+    setIsDropdownOpen(false);
   };
 
   const handleLogoutClick = () => {
@@ -42,7 +47,6 @@ const TeacherHeader: React.FC<TeacherHeaderProps> = ({ mode }) => {
     setIsModalOpen(false);
   };
 
-  // '로그아웃' 클릭 시 로그아웃 처리
   const handleConfirmLogout = async () => {
     try {
       await logout();
@@ -53,10 +57,8 @@ const TeacherHeader: React.FC<TeacherHeaderProps> = ({ mode }) => {
     }
   };
 
-  // 클래스 선택 처리
-  const handleClassSelect = (className: string) => {
-    setSelectedClass(className);
-    setIsClassSelected(true); // 클래스 선택 후 드롭다운 닫기
+  const handleClassSelect = (classId: string, className: string) => {
+    setSelectedClass(classId, className);
     setToggleClassSelectionOpen(false);
   };
 
@@ -71,12 +73,12 @@ const TeacherHeader: React.FC<TeacherHeaderProps> = ({ mode }) => {
       {mode === "classSelection" && (
         <div
           className={`${styles.classSelection} ${
-            isClassSelected ? styles.selected : ""
+            selectedClassId ? styles.selected : ""
           }`}
           onClick={() => setToggleClassSelectionOpen((prev) => !prev)}
         >
           <span className={styles.classText}>
-            {selectedClass || "클래스 선택"}
+            {selectedClassName || "클래스 선택"}
           </span>
           <ChevronDown className={styles.icon} />
         </div>
@@ -85,13 +87,17 @@ const TeacherHeader: React.FC<TeacherHeaderProps> = ({ mode }) => {
       {toggleClassSelectionOpen && mode === "classSelection" && (
         <div className={styles.classListDropdown}>
           <ul>
-            {classList.map((classItem, index) => (
+            {classList.map((classItem) => (
               <li
-                key={index}
-                className={styles.classListItem}
-                onClick={() => handleClassSelect(classItem)}
+                key={classItem.classId}
+                className={`${styles.classListItem} ${
+                  selectedClassId === classItem.classId ? styles.selected : ""
+                }`}
+                onClick={() =>
+                  handleClassSelect(classItem.classId, classItem.className)
+                }
               >
-                {classItem}
+                {classItem.className}
               </li>
             ))}
           </ul>

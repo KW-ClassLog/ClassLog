@@ -2,7 +2,9 @@ package org.example.backend.domain.lecture.controller;
 
 
 import jakarta.validation.Valid;
+import org.example.backend.domain.lecture.converter.LectureConverter;
 import org.example.backend.domain.lecture.dto.request.LectureRequestDTO;
+import org.example.backend.domain.lecture.dto.response.LectureIdResponseDTO;
 import org.example.backend.domain.lecture.dto.response.LectureResponseDTO;
 import org.example.backend.domain.lecture.entity.Lecture;
 import org.example.backend.domain.lecture.service.LectureService;
@@ -15,14 +17,18 @@ import java.util.UUID;
 @RequestMapping("/api/lectures")
 public class LectureController {
     private final LectureService lectureService;
+    private final LectureConverter lectureConverter;
 
-    public LectureController(LectureService lectureService) {this.lectureService=lectureService;}
+    public LectureController(LectureService lectureService, LectureConverter lectureConverter) {this.lectureService=lectureService;
+        this.lectureConverter = lectureConverter;
+    }
 
     // Lecture 생성
     @PostMapping("/create")
-    public ApiResponse<Void> createLecture(@Valid @RequestBody LectureRequestDTO dto) {
-        lectureService.createLecture(dto);
-        return ApiResponse.onSuccess(null);
+    public ApiResponse<LectureIdResponseDTO> createLecture(@Valid @RequestBody LectureRequestDTO dto) {
+        Lecture lecture = lectureService.createLecture(dto);
+        LectureIdResponseDTO responseDTO = lectureConverter.toResponseIdDTO(lecture);
+        return ApiResponse.onSuccess(responseDTO);
     }
 
     // Lecture 조회

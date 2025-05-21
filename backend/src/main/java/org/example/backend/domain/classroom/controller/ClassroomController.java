@@ -37,7 +37,6 @@ public class ClassroomController {
     public ApiResponse<ClassroomResponseStudentDTO> getClassroom(@PathVariable UUID classId) {
         Classroom classroom = classroomService.getClassroom(classId);
         ClassroomResponseStudentDTO response = classroomConverter.toResponseStudentDTO(classroom);
-
         return ApiResponse.onSuccess(response);
     }
     // 클래스 삭제
