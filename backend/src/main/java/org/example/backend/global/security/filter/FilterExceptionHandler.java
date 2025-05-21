@@ -1,6 +1,7 @@
 package org.example.backend.global.security.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.lettuce.core.RedisConnectionException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
@@ -8,6 +9,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.example.backend.global.ApiResponse;
 import org.example.backend.global.code.BaseErrorCode;
 import org.example.backend.global.code.base.FailureCode;
+import org.example.backend.global.exception.FailureException;
+import org.springframework.data.redis.RedisConnectionFailureException;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.filter.GenericFilterBean;
@@ -21,11 +24,13 @@ public class FilterExceptionHandler extends GenericFilterBean {
 
         try {
             chain.doFilter(request, response);
-        } catch (AuthenticationServiceException e) {
+        } catch (AuthenticationServiceException | BadCredentialsException e) {
             sendError(httpResponse, FailureCode._UNAUTHORIZED);
-        } catch (BadCredentialsException e) {
-            sendError(httpResponse, FailureCode._UNAUTHORIZED);
-        }catch (Exception e) {
+        } catch (RedisConnectionFailureException | RedisConnectionException e) {
+            sendError(httpResponse, FailureCode._REDIS_SERVER_ERROR);
+        } catch (FailureException e) {
+            sendError(httpResponse, e.getBaseErrorCode());
+        } catch (Exception e) {
             sendError(httpResponse, FailureCode._INTERNAL_SERVER_ERROR);
         }
     }
