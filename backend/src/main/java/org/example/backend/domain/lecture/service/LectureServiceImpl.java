@@ -26,13 +26,14 @@ public class LectureServiceImpl implements LectureService {
 
     // lecture 생성
     @Override
-    public void createLecture(LectureRequestDTO dto) {
-        UUID classId = dto.getClass_id();
+    public Lecture createLecture(LectureRequestDTO dto) {
+        UUID classId = dto.getClassId();
         Classroom classroom = classroomRepository.findById(classId)
                 .orElseThrow(() -> new LectureException(LectureErrorCode.CLASS_NOT_FOUND));
 
         Lecture lecture = lectureConverter.toEntity(dto, classroom);
         lectureRepository.save(lecture);
+        return lecture;
     }
 
     // lecture 조회
@@ -73,8 +74,8 @@ public class LectureServiceImpl implements LectureService {
             lecture.setLectureDate(dto.getLectureDate());
         }
 
-        if (dto.getClass_id() != null && !dto.getClass_id().equals(lecture.getClassroom().getId())) {
-            Classroom classroom = classroomRepository.findById(dto.getClass_id())
+        if (dto.getClassId() != null && !dto.getClassId().equals(lecture.getClassroom().getId())) {
+            Classroom classroom = classroomRepository.findById(dto.getClassId())
                     .orElseThrow(() -> new LectureException(LectureErrorCode.CLASS_NOT_FOUND));
             lecture.setClassroom(classroom);
         }

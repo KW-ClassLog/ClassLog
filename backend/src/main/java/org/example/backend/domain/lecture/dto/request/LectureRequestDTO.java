@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.UUID;
 
 @Getter
@@ -17,8 +18,15 @@ public class LectureRequestDTO {
     @NotNull(message = "LectureDate is required")
     private LocalDate lectureDate;
 
-    @NotNull(message = "classId is required")
-    private UUID class_id;
+    @NotNull(message = "class_id is required")
+    private UUID classId;
+
+    @NotNull(message = "startTime is required")
+    private LocalTime startTime;
+
+    @NotNull(message = "endTime is required")
+    private LocalTime endTime;
+
 
 
 
