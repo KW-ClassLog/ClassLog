@@ -3,11 +3,16 @@ package org.example.backend.domain.classroom.controller;
 import jakarta.validation.Valid;
 import org.example.backend.domain.classroom.converter.ClassroomConverter;
 import org.example.backend.domain.classroom.dto.request.ClassroomRequestDTO;
+import org.example.backend.domain.classroom.dto.response.ClassLectureResponseDTO;
 import org.example.backend.domain.classroom.dto.response.ClassroomResponseDTO;
+import org.example.backend.domain.classroom.dto.response.ClassroomResponseStudentDTO;
 import org.example.backend.domain.classroom.entity.Classroom;
 import org.example.backend.domain.classroom.service.ClassroomService;
+import org.example.backend.domain.lecture.entity.Lecture;
 import org.example.backend.global.ApiResponse;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -29,9 +34,9 @@ public class ClassroomController {
     }
     // 클래스 조회
     @GetMapping("/{classId}")
-    public ApiResponse<ClassroomResponseDTO> getClassroom(@PathVariable UUID classId) {
+    public ApiResponse<ClassroomResponseStudentDTO> getClassroom(@PathVariable UUID classId) {
         Classroom classroom = classroomService.getClassroom(classId);
-        ClassroomResponseDTO response = classroomConverter.toResponseDTO(classroom);
+        ClassroomResponseStudentDTO response = classroomConverter.toResponseStudentDTO(classroom);
         return ApiResponse.onSuccess(response);
     }
     // 클래스 삭제
@@ -47,5 +52,20 @@ public class ClassroomController {
         ClassroomResponseDTO response = classroomConverter.toResponseDTO(classroom);
 
         return ApiResponse.onSuccess(response);
+    }
+
+    @GetMapping("/{classId}/lectures")
+    public ApiResponse<List<ClassLectureResponseDTO>> getLectureList(@PathVariable UUID classId){
+        List<Lecture> lectures = classroomService.getLecturesByClassId(classId);
+        List<ClassLectureResponseDTO> responseDTOs = classroomService.getLectureDTOs(lectures);
+        return ApiResponse.onSuccess(responseDTOs);
+    }
+
+    // 교수의 클래스 조회
+    @GetMapping("/teacher/myclass")
+    public ApiResponse<List<ClassroomResponseDTO>> getMyClassList() {
+        // JWT 토큰에서 교수의 userId 추출 후, 해당 교수의 클래스 리스트 조회
+        List<ClassroomResponseDTO> responseDTOs = classroomService.getClassListByProfessor();
+        return ApiResponse.onSuccess(responseDTOs);
     }
 }

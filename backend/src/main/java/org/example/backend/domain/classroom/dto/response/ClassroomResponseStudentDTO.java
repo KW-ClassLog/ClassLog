@@ -10,10 +10,11 @@ import java.util.UUID;
 @Data
 @Builder
 @AllArgsConstructor
-public class ClassroomResponseDTO {
+public class ClassroomResponseStudentDTO {
     private UUID classId;
     private String className;
     private LocalDate startDate;
     private LocalDate endDate;
     private String classDate;
+    private String professorName;
 }

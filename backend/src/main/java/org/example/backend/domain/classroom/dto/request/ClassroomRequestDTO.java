@@ -5,8 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
-import java.util.UUID;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -19,9 +18,11 @@ public class ClassroomRequestDTO {
     private String classDate; // class_date
 
     @NotNull(message = "Start date is required")
-    private LocalDateTime startDate;  // start_date
+    private LocalDate startDate;  // start_date
 
     @NotNull(message = "end date is required")
-    private LocalDateTime endDate;  // end_date
+
+    private LocalDate endDate;  // end_date
+
 
 }
