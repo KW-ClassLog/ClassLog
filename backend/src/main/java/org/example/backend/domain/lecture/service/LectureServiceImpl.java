@@ -26,13 +26,14 @@ public class LectureServiceImpl implements LectureService {
 
     // lecture 생성
     @Override
-    public void createLecture(LectureRequestDTO dto) {
+    public Lecture createLecture(LectureRequestDTO dto) {
         UUID classId = dto.getClassId();
         Classroom classroom = classroomRepository.findById(classId)
                 .orElseThrow(() -> new LectureException(LectureErrorCode.CLASS_NOT_FOUND));
 
         Lecture lecture = lectureConverter.toEntity(dto, classroom);
         lectureRepository.save(lecture);
+        return lecture;
     }
 
     // lecture 조회
