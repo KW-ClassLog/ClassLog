@@ -27,4 +27,8 @@ public class LectureNoteMapping extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "lecture_note_id", nullable = false)
     private LectureNote lectureNote;
+
+    public UUID getLectureNoteId() {
+        return lectureNote != null ? lectureNote.getId() : null;
+    }
 }
