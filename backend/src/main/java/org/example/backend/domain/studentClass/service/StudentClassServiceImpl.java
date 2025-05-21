@@ -3,6 +3,7 @@ package org.example.backend.domain.studentClass.service;
 import lombok.RequiredArgsConstructor;
 import org.example.backend.domain.classroom.converter.ClassroomConverter;
 import org.example.backend.domain.classroom.dto.response.ClassroomResponseDTO;
+import org.example.backend.domain.classroom.dto.response.ClassroomResponseStudentDTO;
 import org.example.backend.domain.classroom.entity.Classroom;
 import org.example.backend.domain.classroom.exception.ClassroomErrorCode;
 import org.example.backend.domain.classroom.exception.ClassroomException;
@@ -99,7 +100,7 @@ public class StudentClassServiceImpl implements StudentClassService{
 
     // 참여중인 클래스 조회
     @Override
-    public List<ClassroomResponseDTO> getClassroomByStudentId() {
+    public List<ClassroomResponseStudentDTO> getClassroomByStudentId() {
         UUID studentId = customSecurityUtil.getUserId();
 
         List<StudentClass> studentClasses = studentClassRepository.findByUserId(studentId);
@@ -115,7 +116,7 @@ public class StudentClassServiceImpl implements StudentClassService{
         List<Classroom> classrooms = classroomRepository.findAllById(classIds);
 
         return classrooms.stream()
-                .map(classroomConverter::toResponseDTO)
+                .map(classroomConverter::toResponseStudentDTO)
                 .collect(Collectors.toList());
     }
 }
