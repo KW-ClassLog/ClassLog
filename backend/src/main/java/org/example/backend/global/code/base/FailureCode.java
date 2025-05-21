@@ -12,6 +12,7 @@ public enum FailureCode implements BaseErrorCode {
     _FORBIDDEN(HttpStatus.FORBIDDEN, "COMMON403", "권한이 없습니다."),
     _NOT_FOUND(HttpStatus.NOT_FOUND, "COMMON404", "컨텐츠를 찾지 못했습니다."),
     _INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "COMMON500", "서버 관리자에게 문의하세요."),
+    _REDIS_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"REDIS500","레디스 서버 연결 실패")
     ;
 
     private final HttpStatus httpStatus;
