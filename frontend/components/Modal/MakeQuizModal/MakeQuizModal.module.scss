@@ -1,0 +1,77 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  width: 1200px;
+  transition: $transition-fast;
+  @include respond-to(md) {
+    max-width: 100%;
+  }
+  gap: $spacing-md;
+  overflow: hidden;
+}
+
+.title {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-medium;
+}
+
+.toggleSection {
+  display: flex;
+  gap: $spacing-lg;
+  width: 100%;
+  justify-content: center;
+
+  .toggleSwitch {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+
+    input[type="radio"] {
+      display: none;
+    }
+
+    .switchLabel {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: $color-neutral-5;
+      cursor: pointer;
+
+      &.active {
+        color: #000;
+      }
+    }
+
+    .switchBackground {
+      width: 3rem;
+      height: 1.5rem;
+      background-color: $color-neutral-7;
+      border-radius: 1rem;
+      position: relative;
+      transition: background-color 0.2s;
+
+      &.active {
+        background-color: $color-blue;
+      }
+
+      &::after {
+        content: "";
+        position: absolute;
+        top: 0.15rem;
+        left: 0.15rem;
+        width: 1.2rem;
+        height: 1.2rem;
+        background-color: white;
+        border-radius: 50%;
+        transition: transform 0.2s;
+      }
+
+      &.active::after {
+        transform: translateX(1.5rem);
+      }
+    }
+  }
+}

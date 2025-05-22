@@ -4,7 +4,7 @@ import styles from "./SelectableButton.module.scss"; // 스타일 파일
 
 interface SelectableButtonProps {
   selected: boolean; // 선택 상태
-  onClick: () => void; // 클릭 이벤트 핸들러
+  onClick?: (e?: React.MouseEvent) => void; // 클릭 이벤트 핸들러
   disabled?: boolean; // 비활성화 여부
 }
 

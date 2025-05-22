@@ -3,7 +3,7 @@
 import styles from "./TeacherHeader.module.scss";
 import { Bell, ChevronDown, Settings, LogOut } from "lucide-react";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { ROUTES } from "@/constants/routes";
 import { useRouter } from "next/navigation";
 import { logout } from "@/api/users/logout";
@@ -33,6 +33,38 @@ const TeacherHeader: React.FC<TeacherHeaderProps> = ({ mode }) => {
   const { selectedClassId, selectedClassName, setSelectedClass } =
     useClassStore();
   const router = useRouter();
+
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const classListDropdownRef = useRef<HTMLDivElement>(null);
+  const profileRef = useRef<HTMLDivElement>(null);
+  const classSelectionRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        profileRef.current &&
+        !dropdownRef.current.contains(event.target as Node) &&
+        !profileRef.current.contains(event.target as Node)
+      ) {
+        setIsDropdownOpen(false);
+      }
+
+      if (
+        classListDropdownRef.current &&
+        classSelectionRef.current &&
+        !classListDropdownRef.current.contains(event.target as Node) &&
+        !classSelectionRef.current.contains(event.target as Node)
+      ) {
+        setToggleClassSelectionOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const handleSettingsClick = () => {
     router.push(ROUTES.teacherSetting);
@@ -72,6 +104,7 @@ const TeacherHeader: React.FC<TeacherHeaderProps> = ({ mode }) => {
     >
       {mode === "classSelection" && (
         <div
+          ref={classSelectionRef}
           className={`${styles.classSelection} ${
             selectedClassId ? styles.selected : ""
           }`}
@@ -85,7 +118,7 @@ const TeacherHeader: React.FC<TeacherHeaderProps> = ({ mode }) => {
       )}
 
       {toggleClassSelectionOpen && mode === "classSelection" && (
-        <div className={styles.classListDropdown}>
+        <div ref={classListDropdownRef} className={styles.classListDropdown}>
           <ul>
             {classList.map((classItem) => (
               <li
@@ -107,6 +140,7 @@ const TeacherHeader: React.FC<TeacherHeaderProps> = ({ mode }) => {
       <div className={styles.notificationAndProfile}>
         <Bell className={styles.icon} />
         <div
+          ref={profileRef}
           className={styles.profile}
           onClick={() => setIsDropdownOpen((prev) => !prev)}
         >
@@ -125,7 +159,7 @@ const TeacherHeader: React.FC<TeacherHeaderProps> = ({ mode }) => {
         </div>
 
         {isDropdownOpen && (
-          <div className={styles.dropdown}>
+          <div ref={dropdownRef} className={styles.dropdown}>
             <ul>
               <li className={styles.dropdownItem} onClick={handleSettingsClick}>
                 <Settings />

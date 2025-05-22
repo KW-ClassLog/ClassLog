@@ -49,11 +49,11 @@
       transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 
       &:hover {
-        transform: scale(1.05);
+        transform: scale(1.02);
       }
 
       &:active {
-        transform: scale(0.95);
+        transform: scale(0.98);
       }
 
       &.quizCreation {

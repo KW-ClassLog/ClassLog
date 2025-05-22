@@ -1,7 +1,7 @@
 .button {
   display: inline-block;
   padding: $spacing-xs $spacing-md;
-  font-weight: $font-weight-bold;
+  font-weight: $font-weight-medium;
   color: $color-white;
   background-color: $color-blue;
   border: none;
@@ -12,6 +12,7 @@
   margin: $spacing-xs 0;
   font-size: $font-size-sm;
   width: fit-content;
+  font-family: $font-default;
 
   @include respond-up(sm) {
     font-size: $font-size-md;

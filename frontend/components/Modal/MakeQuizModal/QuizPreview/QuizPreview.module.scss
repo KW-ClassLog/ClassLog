@@ -1,0 +1,199 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+.content {
+  flex: 1;
+  overflow-y: auto;
+  padding: $spacing-md;
+  border-top: 1px solid $color-neutral-7;
+  min-height: 0;
+}
+
+.buttonSection {
+  margin-top: auto;
+  border-top: 1px solid $color-neutral-7;
+  padding: $spacing-sm 0;
+  display: flex;
+  justify-content: center;
+  gap: $spacing-md;
+  background: white;
+
+  button {
+    padding: $spacing-sm $spacing-lg;
+    font-weight: $font-weight-medium;
+    @include common-input-button-style;
+    border-radius: $radius-lg;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+    &:disabled {
+      background-color: $color-neutral-7;
+      color: $color-neutral-5;
+      border-color: $color-neutral-6;
+      cursor: not-allowed;
+      transform: none;
+
+      &:hover {
+        transform: none;
+      }
+    }
+
+    &:not(:disabled) {
+      &:hover {
+        transform: scale(1.02);
+      }
+
+      &:active {
+        transform: scale(0.98);
+      }
+    }
+
+    &.submit {
+      background-color: $color-blue;
+      color: white;
+
+      &:disabled {
+        background-color: $color-neutral-7;
+        color: $color-neutral-5;
+      }
+    }
+
+    &.customizing {
+      background-color: $color-skyblue;
+      color: $color-blue;
+      border: 1px solid $color-blue;
+
+      &:disabled {
+        background-color: $color-neutral-8;
+        color: $color-neutral-5;
+        border-color: $color-neutral-6;
+      }
+    }
+  }
+}
+
+.loading {
+  grid-column: span 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: $spacing-3xl;
+  height: 100%;
+  min-height: 300px;
+  .loadingText {
+    text-align: center;
+    font-size: $font-size-md;
+    color: $color-neutral-5;
+    line-height: 1.6;
+  }
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+.quizCard {
+  background-color: white;
+  padding: $spacing-md;
+  border: 1px solid $color-neutral-7;
+  border-radius: $radius-md;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  height: fit-content;
+  text-align: left;
+
+  &:hover {
+    border-color: $color-blue;
+    box-shadow: 0 0 0 1px $color-blue;
+  }
+
+  &.selected {
+    border-color: $color-blue;
+    box-shadow: 0 0 0 1px $color-blue;
+    background-color: rgba($color-blue, 0.05);
+  }
+
+  .quizCardHeader {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    position: relative;
+  }
+
+  .selectButtonWrapper {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 2;
+  }
+
+  .type {
+    font-weight: $font-weight-medium;
+    color: $color-blue;
+    background-color: $color-skyblue;
+    padding: $spacing-xs $spacing-sm;
+    border-radius: $radius-full;
+  }
+
+  .question {
+    font-size: $font-size-md;
+    word-break: break-word;
+  }
+
+  .choices {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-xs;
+  }
+
+  .answer {
+    font-weight: $font-weight-light;
+    color: $color-neutral-4;
+  }
+}
+
+.masonryGrid {
+  display: flex;
+  width: auto;
+  gap: $spacing-md;
+}
+
+.masonryColumn {
+  background-clip: padding-box;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.quizContainer {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xl;
+}
+
+.moreQuiz {
+  text-align: center;
+  color: $color-blue;
+  cursor: pointer;
+  &:hover {
+    text-decoration: underline;
+  }
+}
