@@ -1,8 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styles from "./BasicInput.module.scss";
 import { Eye, EyeOff } from "lucide-react";
+import flatpickr from "flatpickr";
+import type { Instance } from "flatpickr/dist/types/instance";
+import "flatpickr/dist/flatpickr.css";
+import { Korean } from "flatpickr/dist/l10n/ko.js";
 
 interface BasicInputProps {
   value: string;
@@ -32,7 +36,7 @@ const BasicInput: React.FC<BasicInputProps> = ({
   type = "text",
   disabled,
   required,
-  readOnly,
+  readOnly = false,
   error,
   errorMessage,
   iconLeft,
@@ -45,7 +49,56 @@ const BasicInput: React.FC<BasicInputProps> = ({
 }) => {
   const [showPassword, setShowPassword] = useState(false);
   const isPassword = type === "password";
+  const isTime = type === "time";
   const inputType = isPassword && showPassword ? "text" : type;
+  const inputRef = useRef<HTMLInputElement>(null);
+  const flatpickrRef = useRef<Instance | null>(null);
+
+  useEffect(() => {
+    if (isTime && inputRef.current && !flatpickrRef.current) {
+      flatpickrRef.current = flatpickr(inputRef.current, {
+        enableTime: true,
+        noCalendar: true,
+        dateFormat: "H:i",
+        locale: Korean,
+        defaultHour: 0,
+        defaultMinute: 0,
+        onChange: (selectedDates, dateStr) => {
+          const event = {
+            target: { value: dateStr, name: name },
+          } as React.ChangeEvent<HTMLInputElement>;
+          onChange(event);
+        },
+        onClose: (selectedDates, dateStr) => {
+          if (onBlur) {
+            const event = {
+              target: { value: dateStr, name: name },
+            } as React.FocusEvent<HTMLInputElement>;
+            onBlur(event);
+          }
+        },
+        onOpen: () => {
+          if (onFocus) {
+            const event = {
+              target: { value: value, name: name },
+            } as React.FocusEvent<HTMLInputElement>;
+            onFocus(event);
+          }
+        },
+      });
+
+      if (placeholder) {
+        inputRef.current.setAttribute("placeholder", placeholder);
+      }
+    }
+
+    return () => {
+      if (flatpickrRef.current) {
+        flatpickrRef.current.destroy();
+        flatpickrRef.current = null;
+      }
+    };
+  }, [isTime, value, onChange, onBlur, onFocus, name, placeholder]);
 
   return (
     <div className={styles.wrapper}>
@@ -62,16 +115,17 @@ const BasicInput: React.FC<BasicInputProps> = ({
       >
         {iconLeft && <span className={styles.iconLeft}>{iconLeft}</span>}
         <input
+          ref={inputRef}
           className={styles.input}
-          type={inputType}
+          type={isTime ? "text" : inputType}
           value={value}
-          onChange={onChange}
-          placeholder={placeholder}
+          onChange={!isTime ? onChange : undefined}
+          placeholder={!isTime ? placeholder : undefined}
           disabled={disabled}
-          readOnly={readOnly}
+          readOnly={isTime ? true : readOnly}
           required={required}
-          onBlur={onBlur}
-          onFocus={onFocus}
+          onBlur={!isTime ? onBlur : undefined}
+          onFocus={!isTime ? onFocus : undefined}
           name={name}
           maxLength={maxLength}
           autoFocus={autoFocus}

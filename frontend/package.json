@@ -9,10 +9,13 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@types/flatpickr": "^3.0.2",
     "@types/react-datepicker": "^6.2.0",
     "axios": "^1.9.0",
     "date-fns": "^4.1.0",
     "date-fns-tz": "^3.2.0",
+    "dayjs": "^1.11.13",
+    "flatpickr": "^4.6.13",
     "jsonwebtoken": "^9.0.2",
     "jwt-decode": "^4.0.0",
     "lucide-react": "^0.487.0",
