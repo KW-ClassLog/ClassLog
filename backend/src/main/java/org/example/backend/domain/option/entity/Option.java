@@ -1,12 +1,17 @@
 package org.example.backend.domain.option.entity;
 
 import jakarta.persistence.*;
+import lombok.*;
 import org.example.backend.domain.quiz.entity.Quiz;
 
 import java.util.UUID;
 
 @Entity
-@Table(name = "option")
+@Table(name = "options")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Option {
     @Id
     @GeneratedValue
@@ -20,6 +25,6 @@ public class Option {
     @Column(name = "text", nullable = false)
     private String text;
 
-    @Column(name = "order", nullable = false)
-    private int order;
+    @Column(name = "option_order")
+    private int optionOrder;
 }

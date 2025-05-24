@@ -1,12 +1,16 @@
 package org.example.backend.domain.quizAccuracy.entity;
 
 import jakarta.persistence.*;
+import lombok.*;
 import org.example.backend.domain.quiz.entity.Quiz;
 
 import java.util.UUID;
 
 @Entity
 @Table(name = "quiz_accuracy")
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class QuizAccuracy {
 
     @Id
