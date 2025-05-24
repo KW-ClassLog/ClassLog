@@ -30,8 +30,9 @@ public class Quiz extends BaseEntity {
     @Column(nullable = false)
     private QuizType type;
 
+    @Column(nullable = false)
     private String solution;
 
+    @Column(nullable = false)
     private Integer order;
-
 }
