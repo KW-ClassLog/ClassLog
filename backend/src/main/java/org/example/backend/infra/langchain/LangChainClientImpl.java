@@ -61,9 +61,9 @@ public class LangChainClientImpl implements LangChainClient {
                         String rawType = (String) q.get("type");
                         String mappedType;
                         switch (rawType) {
-                            case "객관식" -> mappedType = "MULTIPLE_CHOICE";
-                            case "단답형" -> mappedType = "SHORT_ANSWER";
-                            case "OX", "참/거짓", "참거짓", "True/False" -> mappedType = "TRUE_FALSE";
+                            case "객관식" -> mappedType = "multipleChoice";
+                            case "단답형" -> mappedType = "shortAnswer";
+                            case "OX", "참/거짓", "참거짓", "True/False" -> mappedType = "trueFalse";
                             default -> mappedType = "UNKNOWN";
                         }
 
