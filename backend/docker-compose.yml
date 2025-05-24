@@ -42,7 +42,7 @@ services:
 #      retries: 10
 
   ai:
-    image: classlog/ai:v1.2
+    image: classlog/ai:v1.3
     container_name: classlog-ai
     ports:
       - 8000:8000
