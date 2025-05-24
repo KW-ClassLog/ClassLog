@@ -32,4 +32,6 @@ public class Quiz extends BaseEntity {
 
     private String solution;
 
+    private Integer order;
+
 }
