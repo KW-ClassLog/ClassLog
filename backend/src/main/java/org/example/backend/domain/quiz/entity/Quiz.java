@@ -30,6 +30,9 @@ public class Quiz extends BaseEntity {
     @Column(nullable = false)
     private QuizType type;
 
+    @Column(nullable = false)
     private String solution;
 
+    @Column(name = "quiz_order", nullable = false)
+    private Integer quizOrder;
 }

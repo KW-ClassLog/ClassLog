@@ -31,4 +31,7 @@ public class QuizAnswer extends BaseEntity {
 
     @Column(nullable = false)
     private String answer;
+
+    @Column(name = "is_collect", nullable = false)
+    private Boolean isCollect;
 }

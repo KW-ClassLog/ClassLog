@@ -58,10 +58,19 @@ public class LangChainClientImpl implements LangChainClient {
                             choices = Collections.emptyList();
                         }
 
+                        String rawType = (String) q.get("type");
+                        String mappedType;
+                        switch (rawType) {
+                            case "객관식" -> mappedType = "multipleChoice";
+                            case "단답형" -> mappedType = "shortAnswer";
+                            case "OX", "참/거짓", "참거짓", "True/False" -> mappedType = "trueFalse";
+                            default -> mappedType = "UNKNOWN";
+                        }
+
                         return QuizDTO.builder()
                                 .quizBody((String) q.get("quiz_body"))
                                 .solution((String) q.get("solution"))
-                                .type((String) q.get("type"))
+                                .type(mappedType)
                                 .choices(choices)
                                 .build();
                     })
