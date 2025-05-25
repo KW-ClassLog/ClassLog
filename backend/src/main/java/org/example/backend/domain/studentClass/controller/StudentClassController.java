@@ -2,9 +2,8 @@ package org.example.backend.domain.studentClass.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.backend.domain.classroom.dto.response.ClassroomResponseStudentDTO;
-import org.example.backend.domain.studentClass.converter.StudentClassConverter;
-import org.example.backend.domain.classroom.dto.response.ClassroomResponseDTO;
 import org.example.backend.domain.studentClass.dto.request.StudentClassRequestDTO;
+import org.example.backend.domain.studentClass.dto.response.StudentEnrolledResponseDTO;
 import org.example.backend.domain.studentClass.dto.response.StudentClassResponseDTO;
 import org.example.backend.domain.studentClass.service.StudentClassService;
 import org.example.backend.global.ApiResponse;
@@ -49,6 +48,13 @@ public class StudentClassController {
     public ApiResponse<List<ClassroomResponseStudentDTO>> getClassroomInfo(){
 
         List<ClassroomResponseStudentDTO> response = studentClassService.getClassroomByStudentId();
+        return ApiResponse.onSuccess(response);
+    }
+
+    // 클래스 학생목록 조회
+    @GetMapping("/{classId}/students")
+    public ApiResponse<List<StudentEnrolledResponseDTO>> getStudentInfo(@PathVariable("classId") UUID classId){
+        List<StudentEnrolledResponseDTO> response = studentClassService.getStudentByClassId(classId);
         return ApiResponse.onSuccess(response);
     }
 

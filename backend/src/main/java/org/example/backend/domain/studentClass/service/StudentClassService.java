@@ -1,8 +1,8 @@
 package org.example.backend.domain.studentClass.service;
 
-import org.example.backend.domain.classroom.dto.response.ClassroomResponseDTO;
 import org.example.backend.domain.classroom.dto.response.ClassroomResponseStudentDTO;
 import org.example.backend.domain.studentClass.dto.request.StudentClassRequestDTO;
+import org.example.backend.domain.studentClass.dto.response.StudentEnrolledResponseDTO;
 import org.example.backend.domain.studentClass.dto.response.StudentClassResponseDTO;
 
 import java.util.List;
@@ -24,4 +24,7 @@ public interface StudentClassService {
 
     // 참여중인 클래스 조회
     List<ClassroomResponseStudentDTO> getClassroomByStudentId();
+
+    // 클래스 학생목록 조회
+    List<StudentEnrolledResponseDTO> getStudentByClassId(UUID classId);
 }

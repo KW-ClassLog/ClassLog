@@ -2,7 +2,6 @@ package org.example.backend.domain.studentClass.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.backend.domain.classroom.converter.ClassroomConverter;
-import org.example.backend.domain.classroom.dto.response.ClassroomResponseDTO;
 import org.example.backend.domain.classroom.dto.response.ClassroomResponseStudentDTO;
 import org.example.backend.domain.classroom.entity.Classroom;
 import org.example.backend.domain.classroom.exception.ClassroomErrorCode;
@@ -10,14 +9,19 @@ import org.example.backend.domain.classroom.exception.ClassroomException;
 import org.example.backend.domain.classroom.repository.ClassroomRepository;
 import org.example.backend.domain.studentClass.converter.StudentClassConverter;
 import org.example.backend.domain.studentClass.dto.request.StudentClassRequestDTO;
+import org.example.backend.domain.studentClass.dto.response.StudentEnrolledResponseDTO;
 import org.example.backend.domain.studentClass.dto.response.StudentClassResponseDTO;
 import org.example.backend.domain.studentClass.entity.StudentClass;
 import org.example.backend.domain.studentClass.exception.StudentClassErrorCode;
 import org.example.backend.domain.studentClass.exception.StudentClassException;
 import org.example.backend.domain.studentClass.repository.StudentClassRepository;
+import org.example.backend.domain.user.entity.Role;
+import org.example.backend.domain.user.entity.User;
 import org.example.backend.domain.user.exception.UserErrorCode;
 import org.example.backend.domain.user.exception.UserException;
 import org.example.backend.domain.user.repository.UserRepository;
+import org.example.backend.global.code.base.FailureCode;
+import org.example.backend.global.exception.FailureException;
 import org.example.backend.global.security.auth.CustomSecurityUtil;
 import org.springframework.stereotype.Service;
 
@@ -117,6 +121,26 @@ public class StudentClassServiceImpl implements StudentClassService{
 
         return classrooms.stream()
                 .map(classroomConverter::toResponseStudentDTO)
+                .collect(Collectors.toList());
+    }
+
+    // 클래스 학생목록 조회
+    @Override
+    public List<StudentEnrolledResponseDTO> getStudentByClassId(UUID classId) {
+        Role role = customSecurityUtil.getUserRole();
+
+        if (role != Role.TEACHER) {
+            throw new FailureException(FailureCode._FORBIDDEN);
+        }
+
+        List<StudentClass> studentClasses = studentClassRepository.findAllByClassId(classId);
+
+        return studentClasses.stream()
+                .map(sc -> {
+                    User user = userRepository.findById(sc.getUserId())
+                            .orElseThrow(() -> new UserException(UserErrorCode._USER_NOT_FOUND));
+                    return studentClassConverter.toStudentEnrolledResponseDTO(sc, user);
+                })
                 .collect(Collectors.toList());
     }
 }
