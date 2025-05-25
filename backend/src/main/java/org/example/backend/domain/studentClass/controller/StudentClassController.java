@@ -5,10 +5,13 @@ import org.example.backend.domain.classroom.dto.response.ClassroomResponseStuden
 import org.example.backend.domain.studentClass.dto.request.StudentClassRequestDTO;
 import org.example.backend.domain.studentClass.dto.response.StudentEnrolledResponseDTO;
 import org.example.backend.domain.studentClass.dto.response.StudentClassResponseDTO;
+import org.example.backend.domain.studentClass.dto.response.TodayLectureResponseDTO;
 import org.example.backend.domain.studentClass.service.StudentClassService;
 import org.example.backend.global.ApiResponse;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -55,6 +58,13 @@ public class StudentClassController {
     @GetMapping("/{classId}/students")
     public ApiResponse<List<StudentEnrolledResponseDTO>> getStudentInfo(@PathVariable("classId") UUID classId){
         List<StudentEnrolledResponseDTO> response = studentClassService.getStudentByClassId(classId);
+        return ApiResponse.onSuccess(response);
+    }
+
+    // 오늘의 강의목록 조회
+    @GetMapping("/today")
+    public ApiResponse<List<TodayLectureResponseDTO>> getTodayLectureInfo(@RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date){
+        List<TodayLectureResponseDTO> response = studentClassService.getLectureByStudentIdAndDate(date);
         return ApiResponse.onSuccess(response);
     }
 
