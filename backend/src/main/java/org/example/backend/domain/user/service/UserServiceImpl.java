@@ -9,6 +9,7 @@ import org.example.backend.domain.user.converter.UserConverter;
 import org.example.backend.domain.user.dto.request.ProfileUpdateRequestDTO;
 import org.example.backend.domain.user.dto.response.ProfileUpdateResponseDTO;
 import org.example.backend.domain.user.dto.response.RefreshTokenResponseDTO;
+import org.example.backend.domain.user.dto.response.UserProfileResponseDTO;
 import org.example.backend.domain.user.exception.UserErrorCode;
 import org.example.backend.domain.user.dto.request.RegisterRequestDTO;
 import org.example.backend.domain.user.entity.User;
@@ -275,5 +276,15 @@ public class UserServiceImpl implements UserService {
             throw new UserException(UserErrorCode._INVALID_IMAGE_EXTENSION);
         }
         return ext;
+    }
+
+    // 개인정보 조회
+    @Override
+    public UserProfileResponseDTO getProfile() {
+        UUID userId = customSecurityUtil.getUserId();
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserException(UserErrorCode._USER_NOT_FOUND));
+
+        return userConverter.toUserProfileResponseDTO(user);
     }
 }

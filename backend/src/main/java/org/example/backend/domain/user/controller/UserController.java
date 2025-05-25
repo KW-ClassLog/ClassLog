@@ -10,6 +10,7 @@ import org.example.backend.domain.user.dto.request.ResetPwdRequestDTO;
 import org.example.backend.domain.user.dto.request.RegisterRequestDTO;
 import org.example.backend.domain.user.dto.response.EmailResponseDTO;
 import org.example.backend.domain.user.dto.response.ProfileUpdateResponseDTO;
+import org.example.backend.domain.user.dto.response.UserProfileResponseDTO;
 import org.example.backend.domain.user.exception.UserErrorCode;
 import org.example.backend.domain.user.exception.UserException;
 import org.example.backend.domain.user.service.MailService;
@@ -40,8 +41,9 @@ public class UserController {
 
     // 개인정보조회
     @GetMapping("/me")
-    public ApiResponse<String> profile(){
-        return ApiResponse.onSuccess("개인정보 조회 성공");
+    public ApiResponse<UserProfileResponseDTO> profile(){
+        UserProfileResponseDTO response = userService.getProfile();
+        return ApiResponse.onSuccess(response);
     }
 
     // 이메일 인증번호 전송

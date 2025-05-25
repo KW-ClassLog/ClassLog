@@ -2,9 +2,9 @@ package org.example.backend.domain.user.converter;
 
 
 import lombok.RequiredArgsConstructor;
-import org.example.backend.domain.user.dto.request.ProfileUpdateRequestDTO;
 import org.example.backend.domain.user.dto.request.RegisterRequestDTO;
 import org.example.backend.domain.user.dto.response.ProfileUpdateResponseDTO;
+import org.example.backend.domain.user.dto.response.UserProfileResponseDTO;
 import org.example.backend.domain.user.entity.SocialType;
 import org.example.backend.domain.user.entity.Status;
 import org.example.backend.domain.user.entity.User;
@@ -45,13 +45,15 @@ UserConverter {
                 .build();
     }
 
-    // requestDTO -> Entity
-    public User toUser(ProfileUpdateRequestDTO dto, String profileUrl){
-        return User.builder()
-                .name(dto.getName())
-                .organization(dto.getOrganization())
-                .phoneNumber(dto.getPhoneNumber())
-                .profileUrl(profileUrl)
+    // Entity -> responseDTO
+    public UserProfileResponseDTO toUserProfileResponseDTO(User user){
+        return UserProfileResponseDTO.builder()
+                .userId(user.getId())
+                .name(user.getName())
+                .organization(user.getOrganization())
+                .phoneNumber(user.getPhoneNumber())
+                .profile(s3Service.getPublicUrl(user.getProfileUrl()))
+                .role(user.getRole().toString())
                 .build();
     }
 }
