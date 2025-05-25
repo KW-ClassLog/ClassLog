@@ -133,6 +133,9 @@ public class StudentClassServiceImpl implements StudentClassService{
             throw new FailureException(FailureCode._FORBIDDEN);
         }
 
+        classroomRepository.findById(classId)
+                .orElseThrow(() -> new ClassroomException(ClassroomErrorCode.CLASS_NOT_FOUND));
+
         List<StudentClass> studentClasses = studentClassRepository.findAllByClassId(classId);
 
         return studentClasses.stream()
