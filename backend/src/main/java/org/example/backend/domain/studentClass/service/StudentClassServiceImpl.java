@@ -7,10 +7,13 @@ import org.example.backend.domain.classroom.entity.Classroom;
 import org.example.backend.domain.classroom.exception.ClassroomErrorCode;
 import org.example.backend.domain.classroom.exception.ClassroomException;
 import org.example.backend.domain.classroom.repository.ClassroomRepository;
+import org.example.backend.domain.lecture.entity.Lecture;
+import org.example.backend.domain.lecture.repository.LectureRepository;
 import org.example.backend.domain.studentClass.converter.StudentClassConverter;
 import org.example.backend.domain.studentClass.dto.request.StudentClassRequestDTO;
 import org.example.backend.domain.studentClass.dto.response.StudentEnrolledResponseDTO;
 import org.example.backend.domain.studentClass.dto.response.StudentClassResponseDTO;
+import org.example.backend.domain.studentClass.dto.response.TodayLectureResponseDTO;
 import org.example.backend.domain.studentClass.entity.StudentClass;
 import org.example.backend.domain.studentClass.exception.StudentClassErrorCode;
 import org.example.backend.domain.studentClass.exception.StudentClassException;
@@ -25,6 +28,8 @@ import org.example.backend.global.exception.FailureException;
 import org.example.backend.global.security.auth.CustomSecurityUtil;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -35,6 +40,7 @@ public class StudentClassServiceImpl implements StudentClassService{
 
     private final StudentClassRepository studentClassRepository;
     private final ClassroomRepository classroomRepository;
+    private final LectureRepository lectureRepository;
     private final UserRepository userRepository;
     private final StudentClassConverter studentClassConverter;
     private final CustomSecurityUtil customSecurityUtil;
@@ -144,6 +150,30 @@ public class StudentClassServiceImpl implements StudentClassService{
                             .orElseThrow(() -> new UserException(UserErrorCode._USER_NOT_FOUND));
                     return studentClassConverter.toStudentEnrolledResponseDTO(sc, user);
                 })
+                .collect(Collectors.toList());
+    }
+
+    // 오늘의 강의목록 조회
+    @Override
+    public List<TodayLectureResponseDTO> getLectureByStudentIdAndDate(LocalDate date) {
+        UUID studentId = customSecurityUtil.getUserId();
+
+        // 1. 수강 중인 classId 목록
+        List<UUID> classIds = studentClassRepository.findClassIdsByUserId(studentId);
+        if (classIds.isEmpty()) {
+            throw new StudentClassException(StudentClassErrorCode._STUDENT_NOT_IN_CLASS);
+        }
+
+        // 2. 오늘 날짜에 해당하는 강의 목록 조회
+        List<Lecture> lectures = lectureRepository
+                .findByClassroom_IdInAndLectureDateOrderByStartTime(classIds, date);
+
+        if (lectures.isEmpty()) {
+            throw new StudentClassException(StudentClassErrorCode._NO_LECTURE_TODAY);
+        }
+
+        return lectures.stream()
+                .map(lecture -> studentClassConverter.toTodayLectureResponseDTO(lecture.getClassroom(), lecture))
                 .collect(Collectors.toList());
     }
 }
