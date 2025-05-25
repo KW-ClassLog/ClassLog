@@ -7,8 +7,10 @@ import org.example.backend.domain.classroom.exception.ClassroomErrorCode;
 import org.example.backend.domain.classroom.exception.ClassroomException;
 import org.example.backend.domain.classroom.repository.ClassroomRepository;
 import org.example.backend.domain.studentClass.dto.request.StudentClassRequestDTO;
+import org.example.backend.domain.studentClass.dto.response.StudentEnrolledResponseDTO;
 import org.example.backend.domain.studentClass.dto.response.StudentClassResponseDTO;
 import org.example.backend.domain.studentClass.entity.StudentClass;
+import org.example.backend.domain.user.entity.User;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
@@ -19,6 +21,7 @@ public class StudentClassConverter {
 
     private final ClassroomRepository classroomRepository;
 
+    // RequestDTO -> Entity
     public StudentClass toClassEnterRequestDTO(UUID userId, StudentClassRequestDTO dto){
 
         return StudentClass.builder()
@@ -29,6 +32,7 @@ public class StudentClassConverter {
 
     }
 
+    // Entity → ResponseDTO
     public StudentClassResponseDTO toResponseDTO(StudentClass studentClass) {
 
         String className = classroomRepository.findById(studentClass.getClassId())
@@ -39,5 +43,18 @@ public class StudentClassConverter {
                 .className(className)
                 .classNickname(studentClass.getClassNickname())
                 .build();
+    }
+
+    // Entity → ResponseDTO
+    public StudentEnrolledResponseDTO toStudentEnrolledResponseDTO(StudentClass studentClass, User user){
+        return StudentEnrolledResponseDTO.builder()
+                .userId(user.getId())
+                .name(user.getName())
+                .nickname(studentClass.getClassNickname())
+                .phoneNumber(user.getPhoneNumber())
+                .profileUrl(user.getProfileUrl())
+                .organization(user.getOrganization())
+                .build();
+
     }
 }
