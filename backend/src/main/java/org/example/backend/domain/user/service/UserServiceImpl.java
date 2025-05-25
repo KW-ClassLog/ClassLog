@@ -6,20 +6,27 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.example.backend.domain.user.converter.UserConverter;
+import org.example.backend.domain.user.dto.request.ProfileUpdateRequestDTO;
+import org.example.backend.domain.user.dto.response.ProfileUpdateResponseDTO;
 import org.example.backend.domain.user.dto.response.RefreshTokenResponseDTO;
 import org.example.backend.domain.user.exception.UserErrorCode;
 import org.example.backend.domain.user.dto.request.RegisterRequestDTO;
 import org.example.backend.domain.user.entity.User;
 import org.example.backend.domain.user.exception.UserException;
 import org.example.backend.domain.user.repository.UserRepository;
+import org.example.backend.global.S3.service.S3Service;
 import org.example.backend.global.code.base.FailureCode;
+import org.example.backend.global.security.auth.CustomSecurityUtil;
 import org.example.backend.global.security.auth.CustomUserDetails;
 import org.example.backend.global.security.token.JWTUtil;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -33,6 +40,8 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final JWTUtil jwtUtil;
     private final UserRedisService userRedisService;
+    private final CustomSecurityUtil customSecurityUtil;
+    private final S3Service s3Service;
 
 
     //회원가입
@@ -190,5 +199,81 @@ public class UserServiceImpl implements UserService {
             response.addCookie(cookie);
         }
 
+    }
+
+    // 개인정보 수정
+    @Override
+    public ProfileUpdateResponseDTO updateProfile(ProfileUpdateRequestDTO request) {
+        UUID userId = customSecurityUtil.getUserId();
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserException(UserErrorCode._USER_NOT_FOUND));
+
+        // 이미지 업데이트
+        MultipartFile newProfile = request.getProfile();
+        if (newProfile != null && !newProfile.isEmpty()) {
+            String key = uploadProfile(newProfile, userId);
+            user.setProfileUrl(key);
+        }
+
+        // 필드 업데이트
+        if (request.getName() != null) {
+            user.setName(request.getName());
+        }
+
+        if (request.getOrganization() != null) {
+            user.setOrganization(request.getOrganization());
+        }
+
+        if (request.getPhoneNumber() != null) {
+            user.setPhoneNumber(request.getPhoneNumber());
+        }
+
+        userRepository.save(user);
+
+        return userConverter.toProfileUpdateResponseDTO(user);
+    }
+
+    // s3 이미지 업로드
+    @Override
+    public String uploadProfile(MultipartFile profile, UUID userId) {
+
+        String ext = getExtension(profile.getOriginalFilename());
+        String key = "profile/" + userId + "-" + UUID.randomUUID() + "." + ext;
+
+        try {
+            // 기존 이미지 삭제
+            User user = userRepository.findById(userId)
+                    .orElseThrow(() -> new UserException(UserErrorCode._USER_NOT_FOUND));
+
+            String oldKey = user.getProfileUrl();
+            if (oldKey != null && !oldKey.isBlank()) {
+                System.out.println("[S3] 기존 프로필 이미지 삭제 시도 - key: {}"+ oldKey);
+                s3Service.deleteFile(oldKey);
+            }
+
+            // 새로운 이미지 업로드
+            s3Service.uploadFilePublic(profile, key);
+
+            return key;
+        } catch (IOException e) {
+            throw new UserException(UserErrorCode._UPLOAD_FAILED);
+        }
+    }
+
+    // 확장자 추출
+    private String getExtension(String filename) {
+
+        if (filename == null || filename.isBlank() || !filename.contains(".")) {
+            throw new UserException(UserErrorCode._INVALID_FILE);
+        }
+
+        String ext = filename.substring(filename.lastIndexOf('.') + 1).toLowerCase();
+
+        List<String> allowed = List.of("jpg", "jpeg", "png", "gif");
+
+        if (!allowed.contains(ext)) {
+            throw new UserException(UserErrorCode._INVALID_IMAGE_EXTENSION);
+        }
+        return ext;
     }
 }

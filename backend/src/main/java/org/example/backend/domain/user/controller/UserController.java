@@ -5,9 +5,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.backend.domain.user.dto.request.EmailRequestDTO;
+import org.example.backend.domain.user.dto.request.ProfileUpdateRequestDTO;
 import org.example.backend.domain.user.dto.request.ResetPwdRequestDTO;
 import org.example.backend.domain.user.dto.request.RegisterRequestDTO;
 import org.example.backend.domain.user.dto.response.EmailResponseDTO;
+import org.example.backend.domain.user.dto.response.ProfileUpdateResponseDTO;
 import org.example.backend.domain.user.exception.UserErrorCode;
 import org.example.backend.domain.user.exception.UserException;
 import org.example.backend.domain.user.service.MailService;
@@ -98,6 +100,14 @@ public class UserController {
         userService.logout(request,response);
 
         return ApiResponse.onSuccess("로그아웃 성공");
+    }
+
+    // 개인정보 수정
+    @PatchMapping("/me")
+    public ApiResponse<ProfileUpdateResponseDTO> updateProfile(@ModelAttribute ProfileUpdateRequestDTO dto){
+        ProfileUpdateResponseDTO response = userService.updateProfile(dto);
+
+        return ApiResponse.onSuccess(response);
     }
 
 
