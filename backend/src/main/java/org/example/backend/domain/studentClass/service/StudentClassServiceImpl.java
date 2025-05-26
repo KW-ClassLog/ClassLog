@@ -1,27 +1,36 @@
 package org.example.backend.domain.studentClass.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.backend.domain.classroom.converter.ClassroomConverter;
+import org.example.backend.domain.classroom.dto.response.ClassroomResponseStudentDTO;
 import org.example.backend.domain.classroom.entity.Classroom;
 import org.example.backend.domain.classroom.exception.ClassroomErrorCode;
 import org.example.backend.domain.classroom.exception.ClassroomException;
 import org.example.backend.domain.classroom.repository.ClassroomRepository;
-import org.example.backend.domain.lecture.exception.LectureErrorCode;
-import org.example.backend.domain.lecture.exception.LectureException;
+import org.example.backend.domain.lecture.entity.Lecture;
+import org.example.backend.domain.lecture.repository.LectureRepository;
 import org.example.backend.domain.studentClass.converter.StudentClassConverter;
 import org.example.backend.domain.studentClass.dto.request.StudentClassRequestDTO;
+import org.example.backend.domain.studentClass.dto.response.StudentEnrolledResponseDTO;
 import org.example.backend.domain.studentClass.dto.response.StudentClassResponseDTO;
+import org.example.backend.domain.studentClass.dto.response.TodayLectureResponseDTO;
 import org.example.backend.domain.studentClass.entity.StudentClass;
 import org.example.backend.domain.studentClass.exception.StudentClassErrorCode;
 import org.example.backend.domain.studentClass.exception.StudentClassException;
 import org.example.backend.domain.studentClass.repository.StudentClassRepository;
+import org.example.backend.domain.user.entity.Role;
+import org.example.backend.domain.user.entity.User;
 import org.example.backend.domain.user.exception.UserErrorCode;
 import org.example.backend.domain.user.exception.UserException;
 import org.example.backend.domain.user.repository.UserRepository;
+import org.example.backend.global.code.base.FailureCode;
+import org.example.backend.global.exception.FailureException;
 import org.example.backend.global.security.auth.CustomSecurityUtil;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -31,9 +40,11 @@ public class StudentClassServiceImpl implements StudentClassService{
 
     private final StudentClassRepository studentClassRepository;
     private final ClassroomRepository classroomRepository;
+    private final LectureRepository lectureRepository;
     private final UserRepository userRepository;
     private final StudentClassConverter studentClassConverter;
     private final CustomSecurityUtil customSecurityUtil;
+    private final ClassroomConverter classroomConverter;
 
     // 클래스 입장  & 닉네임 설정
     @Override
@@ -95,5 +106,74 @@ public class StudentClassServiceImpl implements StudentClassService{
                 .orElseThrow(() -> new StudentClassException(StudentClassErrorCode._STUDENT_NOT_IN_CLASS));
 
         return studentClassConverter.toResponseDTO(studentClass);
+    }
+
+    // 참여중인 클래스 조회
+    @Override
+    public List<ClassroomResponseStudentDTO> getClassroomByStudentId() {
+        UUID studentId = customSecurityUtil.getUserId();
+
+        List<StudentClass> studentClasses = studentClassRepository.findByUserId(studentId);
+
+        if (studentClasses.isEmpty()) {
+            throw new StudentClassException(StudentClassErrorCode._STUDENT_NOT_IN_CLASS);
+        }
+
+        List<UUID> classIds = studentClasses.stream()
+                .map(StudentClass::getClassId)
+                .collect(Collectors.toList());
+
+        List<Classroom> classrooms = classroomRepository.findAllById(classIds);
+
+        return classrooms.stream()
+                .map(classroomConverter::toResponseStudentDTO)
+                .collect(Collectors.toList());
+    }
+
+    // 클래스 학생목록 조회
+    @Override
+    public List<StudentEnrolledResponseDTO> getStudentByClassId(UUID classId) {
+        Role role = customSecurityUtil.getUserRole();
+
+        if (role != Role.TEACHER) {
+            throw new FailureException(FailureCode._FORBIDDEN);
+        }
+
+        classroomRepository.findById(classId)
+                .orElseThrow(() -> new ClassroomException(ClassroomErrorCode.CLASS_NOT_FOUND));
+
+        List<StudentClass> studentClasses = studentClassRepository.findAllByClassId(classId);
+
+        return studentClasses.stream()
+                .map(sc -> {
+                    User user = userRepository.findById(sc.getUserId())
+                            .orElseThrow(() -> new UserException(UserErrorCode._USER_NOT_FOUND));
+                    return studentClassConverter.toStudentEnrolledResponseDTO(sc, user);
+                })
+                .collect(Collectors.toList());
+    }
+
+    // 오늘의 강의목록 조회
+    @Override
+    public List<TodayLectureResponseDTO> getLectureByStudentIdAndDate(LocalDate date) {
+        UUID studentId = customSecurityUtil.getUserId();
+
+        // 1. 수강 중인 classId 목록
+        List<UUID> classIds = studentClassRepository.findClassIdsByUserId(studentId);
+        if (classIds.isEmpty()) {
+            throw new StudentClassException(StudentClassErrorCode._STUDENT_NOT_IN_CLASS);
+        }
+
+        // 2. 오늘 날짜에 해당하는 강의 목록 조회
+        List<Lecture> lectures = lectureRepository
+                .findByClassroom_IdInAndLectureDateOrderByStartTime(classIds, date);
+
+        if (lectures.isEmpty()) {
+            throw new StudentClassException(StudentClassErrorCode._NO_LECTURE_TODAY);
+        }
+
+        return lectures.stream()
+                .map(lecture -> studentClassConverter.toTodayLectureResponseDTO(lecture.getClassroom(), lecture))
+                .collect(Collectors.toList());
     }
 }

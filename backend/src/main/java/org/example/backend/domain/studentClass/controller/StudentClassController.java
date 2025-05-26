@@ -1,13 +1,18 @@
 package org.example.backend.domain.studentClass.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.example.backend.domain.studentClass.converter.StudentClassConverter;
+import org.example.backend.domain.classroom.dto.response.ClassroomResponseStudentDTO;
 import org.example.backend.domain.studentClass.dto.request.StudentClassRequestDTO;
+import org.example.backend.domain.studentClass.dto.response.StudentEnrolledResponseDTO;
 import org.example.backend.domain.studentClass.dto.response.StudentClassResponseDTO;
+import org.example.backend.domain.studentClass.dto.response.TodayLectureResponseDTO;
 import org.example.backend.domain.studentClass.service.StudentClassService;
 import org.example.backend.global.ApiResponse;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -16,7 +21,6 @@ import java.util.UUID;
 public class StudentClassController {
 
     private final StudentClassService studentClassService;
-    private final StudentClassConverter studentClassConverter;
 
     // 클래스 입장  & 닉네임 설정
     @PostMapping("/create")
@@ -39,6 +43,28 @@ public class StudentClassController {
     public ApiResponse<StudentClassResponseDTO> getNickname(@PathVariable("classId") UUID classId){
 
         StudentClassResponseDTO response = studentClassService.getNicknameByClassId(classId);
+        return ApiResponse.onSuccess(response);
+    }
+
+    // 내가 참여중인 클래스 조회
+    @GetMapping("")
+    public ApiResponse<List<ClassroomResponseStudentDTO>> getClassroomInfo(){
+
+        List<ClassroomResponseStudentDTO> response = studentClassService.getClassroomByStudentId();
+        return ApiResponse.onSuccess(response);
+    }
+
+    // 클래스 학생목록 조회
+    @GetMapping("/{classId}/students")
+    public ApiResponse<List<StudentEnrolledResponseDTO>> getStudentInfo(@PathVariable("classId") UUID classId){
+        List<StudentEnrolledResponseDTO> response = studentClassService.getStudentByClassId(classId);
+        return ApiResponse.onSuccess(response);
+    }
+
+    // 오늘의 강의목록 조회
+    @GetMapping("/today")
+    public ApiResponse<List<TodayLectureResponseDTO>> getTodayLectureInfo(@RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date){
+        List<TodayLectureResponseDTO> response = studentClassService.getLectureByStudentIdAndDate(date);
         return ApiResponse.onSuccess(response);
     }
 
