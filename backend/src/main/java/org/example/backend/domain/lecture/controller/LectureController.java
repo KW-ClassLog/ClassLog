@@ -6,12 +6,15 @@ import org.example.backend.domain.lecture.converter.LectureConverter;
 import org.example.backend.domain.lecture.dto.request.LectureNoteMappingRequestDTO;
 import org.example.backend.domain.lecture.dto.request.LectureRequestDTO;
 import org.example.backend.domain.lecture.dto.response.LectureIdResponseDTO;
+import org.example.backend.domain.lecture.dto.response.LectureRecordingResponseDTO;
 import org.example.backend.domain.lecture.dto.response.LectureNoteMappingResponseDTO;
 import org.example.backend.domain.lecture.dto.response.LectureResponseDTO;
 import org.example.backend.domain.lecture.entity.Lecture;
 import org.example.backend.domain.lecture.service.LectureService;
 import org.example.backend.global.ApiResponse;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.UUID;
@@ -66,6 +69,24 @@ public class LectureController {
         return ApiResponse.onSuccess(new LectureNoteMappingResponseDTO(result));
     }
 
+
+
+    //녹음본 저장
+    @PostMapping(value = "/{lectureId}/recordings", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ApiResponse<LectureRecordingResponseDTO> uploadRecording(
+            @PathVariable UUID lectureId,
+            @RequestPart("file") MultipartFile file) {
+
+        LectureRecordingResponseDTO result = lectureService.uploadLectureRecording(lectureId, file);
+        return ApiResponse.onSuccess(result);
+    }
+
+    //녹음본 조회
+    @GetMapping("/{lectureId}/recordings")
+    public ApiResponse<LectureRecordingResponseDTO> getRecording(@PathVariable UUID lectureId) {
+        LectureRecordingResponseDTO result = lectureService.getLectureRecording(lectureId);
+        return ApiResponse.onSuccess(result);
+    }
 
 
 }
