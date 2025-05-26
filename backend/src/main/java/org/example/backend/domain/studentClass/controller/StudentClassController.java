@@ -47,7 +47,7 @@ public class StudentClassController {
     }
 
     // 내가 참여중인 클래스 조회
-    @GetMapping("/")
+    @GetMapping("")
     public ApiResponse<List<ClassroomResponseStudentDTO>> getClassroomInfo(){
 
         List<ClassroomResponseStudentDTO> response = studentClassService.getClassroomByStudentId();
