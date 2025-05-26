@@ -69,4 +69,25 @@ public class S3Service {
     private boolean doesObjectExist(String key) {
         return amazonS3Client.doesObjectExist(bucket, key);
     }
+
+    /**
+     *  파일 업로드 Public
+     */
+    public String uploadFilePublic(MultipartFile file, String key) throws IOException {
+        ObjectMetadata metadata = new ObjectMetadata();
+        metadata.setContentLength(file.getSize());
+        metadata.setContentType(file.getContentType());
+
+        amazonS3Client.putObject(new PutObjectRequest(bucket, key, file.getInputStream(), metadata));
+
+        return amazonS3Client.getUrl(bucket, key).toString();
+    }
+
+    /**
+     * public url 반환
+     */
+    public String getPublicUrl(String key) {
+        if (key == null) return null;
+        return amazonS3Client.getUrl(bucket, key).toString();
+    }
 }
