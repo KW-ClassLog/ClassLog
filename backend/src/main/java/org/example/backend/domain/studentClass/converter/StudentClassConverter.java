@@ -14,6 +14,7 @@ import org.example.backend.domain.studentClass.dto.response.TodayLectureResponse
 import org.example.backend.domain.studentClass.entity.StudentClass;
 import org.example.backend.domain.user.entity.User;
 import org.example.backend.global.S3.service.S3Service;
+import org.example.backend.domain.user.entity.User;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
