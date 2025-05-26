@@ -1,6 +1,7 @@
 package org.example.backend.domain.classroom.service;
 
 import org.example.backend.domain.classroom.dto.request.ClassroomRequestDTO;
+import org.example.backend.domain.classroom.dto.response.EntryCodeResponseDTO;
 import org.example.backend.domain.classroom.dto.response.ClassLectureResponseDTO;
 import org.example.backend.domain.classroom.dto.response.ClassroomResponseDTO;
 import org.example.backend.domain.classroom.entity.Classroom;
@@ -23,4 +24,6 @@ public interface ClassroomService {
     List<ClassLectureResponseDTO> getLectureDTOs(List<Lecture> lectures);
     String calculateLectureStatus(LocalDate lectureDate, LocalTime startTime, LocalTime endTime);
 
+    EntryCodeResponseDTO generateCode(UUID classId);
+    boolean validateEntryCode(UUID classId, String inputCode);
 }
