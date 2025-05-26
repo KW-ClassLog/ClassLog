@@ -12,6 +12,9 @@ import org.example.backend.domain.classroom.entity.Classroom;
 import org.example.backend.domain.classroom.exception.ClassroomErrorCode;
 import org.example.backend.domain.classroom.service.ClassroomService;
 import org.example.backend.global.ApiResponse;
+import org.example.backend.global.security.auth.CustomUserDetails;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.example.backend.domain.lecture.entity.Lecture;
 import java.util.List;
@@ -81,7 +84,13 @@ public class ClassroomController {
     //입장코드 확인
     @PostMapping("/{classId}/code/verify")
     public ApiResponse<Boolean> verifyCode(@PathVariable UUID classId,
-                                           @RequestBody EntryCodeVerifyRequestDTO request) {
+                                           @RequestBody EntryCodeVerifyRequestDTO request, @RequestHeader("Authorization") String token) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Object principal = authentication.getPrincipal();
+
+        UUID userId = ((CustomUserDetails) principal).getUser().getId();
+        classroomService.checkAlreadyJoined(classId, userId);
+
         boolean valid = classroomService.validateEntryCode(classId, request.getEntry_code());
 
         if (!valid) {

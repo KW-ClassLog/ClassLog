@@ -18,7 +18,11 @@ public enum ClassroomErrorCode implements BaseErrorCode {
             "CLASS400_1", "학생은 클래스를 생성할 수 없습니다."),
 
     INVALID_ENTRY_CODE(HttpStatus.BAD_REQUEST,
-            "ENTRY400", "입장 코드가 올바르지 않거나 만료되었습니다.");
+            "ENTRY400", "입장 코드가 올바르지 않거나 만료되었습니다."),
+
+    ALREADY_JOINED(HttpStatus.BAD_REQUEST,
+            "CLASS400", "이미 입장한 클래스입니다.");
+    ;
 
     private final HttpStatus status;
     private final String code;

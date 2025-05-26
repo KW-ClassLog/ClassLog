@@ -15,6 +15,7 @@ import org.example.backend.domain.lecture.entity.Lecture;
 import org.example.backend.domain.lecture.repository.LectureRepository;
 import org.example.backend.domain.lectureNote.entity.LectureNote;
 import org.example.backend.domain.lectureNote.repository.LectureNoteRepository;
+import org.example.backend.domain.studentClass.repository.StudentClassRepository;
 import org.example.backend.domain.user.entity.Role;
 import org.example.backend.global.S3.service.S3Service;
 import org.example.backend.global.security.auth.CustomUserDetails;
@@ -46,16 +47,18 @@ public class ClassroomServiceImpl implements ClassroomService {
     private S3Service s3Service;
     private LectureRepository lectureRepository;
     private final StringRedisTemplate redisTemplate;
+    private StudentClassRepository studentClassRepository;
 
     //의존성 주입
     @Autowired
-    public ClassroomServiceImpl(ClassroomConverter classroomConverter, ClassroomRepository classroomRepository, LectureNoteRepository lectureNoteRepository, S3Service s3Service, LectureRepository lectureRepository, StringRedisTemplate redisTemplate) {
+    public ClassroomServiceImpl(ClassroomConverter classroomConverter, ClassroomRepository classroomRepository, LectureNoteRepository lectureNoteRepository, S3Service s3Service, LectureRepository lectureRepository, StringRedisTemplate redisTemplate, StudentClassRepository studentClassRepository) {
         this.classroomConverter = classroomConverter;
         this.classroomRepository = classroomRepository;
         this.lectureNoteRepository = lectureNoteRepository;
         this.s3Service = s3Service;
         this.lectureRepository = lectureRepository;
         this.redisTemplate = redisTemplate;
+        this.studentClassRepository = studentClassRepository;
     }
 
     // Classroom 생성
@@ -212,6 +215,15 @@ public class ClassroomServiceImpl implements ClassroomService {
         }
     }
 
+    // 이미 입장한 학생인지 확인
+    public void checkAlreadyJoined(UUID classId, UUID userId) {
 
+        boolean alreadyJoined = studentClassRepository
+                .findByUserIdAndClassId(userId, classId)
+                .isPresent();
 
+        if (alreadyJoined) {
+            throw new ClassroomException(ClassroomErrorCode.ALREADY_JOINED);
+        }
+    }
 }

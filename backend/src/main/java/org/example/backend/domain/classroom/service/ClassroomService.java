@@ -26,4 +26,5 @@ public interface ClassroomService {
 
     EntryCodeResponseDTO generateCode(UUID classId);
     boolean validateEntryCode(UUID classId, String inputCode);
+    void checkAlreadyJoined(UUID classId, UUID studentId);
 }
