@@ -47,7 +47,7 @@ export const TEACHER_ROUTE_CONFIG: Record<
   },
   teacherQuizDashboard: {
     path: ROUTES.teacherQuizDashboard,
-    headerType: TeacherHeaderType.CLASS_SELECTION,
+    headerType: TeacherHeaderType.NONE,
     sidebarType: SiderbarType.NONE,
   },
   teacherLectureDetail: {
