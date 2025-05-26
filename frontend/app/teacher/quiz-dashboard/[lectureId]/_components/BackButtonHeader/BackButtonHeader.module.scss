@@ -1,0 +1,20 @@
+.quizHeader {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  height: 56px;
+  border-bottom: 1px solid $color-neutral-7;
+  padding: 0 24px;
+  margin-bottom: 18px;
+}
+
+.backBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  background-color: white;
+}
