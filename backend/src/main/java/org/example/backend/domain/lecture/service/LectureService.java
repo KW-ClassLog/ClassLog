@@ -4,6 +4,7 @@ import org.example.backend.domain.lecture.dto.request.LectureRequestDTO;
 import org.example.backend.domain.lecture.dto.response.LectureResponseDTO;
 import org.example.backend.domain.lecture.entity.Lecture;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface LectureService {
@@ -14,4 +15,6 @@ public interface LectureService {
     void updateLecture(UUID lectureId, LectureRequestDTO dto);
 
     void deleteLecture(UUID lectureId);
+
+    List<UUID> mapNotes(UUID lectureId, List<UUID> lectureNoteIds);
 }

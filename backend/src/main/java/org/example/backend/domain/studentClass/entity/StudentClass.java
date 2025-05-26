@@ -2,6 +2,7 @@ package org.example.backend.domain.studentClass.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.example.backend.domain.classroom.entity.Classroom;
 import org.example.backend.domain.studentClass.entity.id.StudentClassId;
 import org.example.backend.global.entitiy.BaseEntity;
 
@@ -26,4 +27,8 @@ public class StudentClass extends BaseEntity {
 
     @Column(name = "class_nickname", nullable = false)
     private String classNickname;
+
+    @ManyToOne
+    @JoinColumn(name = "class_id", insertable = false, updatable = false)
+    private Classroom classroom;
 }

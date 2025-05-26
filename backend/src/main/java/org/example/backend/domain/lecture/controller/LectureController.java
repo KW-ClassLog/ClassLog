@@ -3,14 +3,17 @@ package org.example.backend.domain.lecture.controller;
 
 import jakarta.validation.Valid;
 import org.example.backend.domain.lecture.converter.LectureConverter;
+import org.example.backend.domain.lecture.dto.request.LectureNoteMappingRequestDTO;
 import org.example.backend.domain.lecture.dto.request.LectureRequestDTO;
 import org.example.backend.domain.lecture.dto.response.LectureIdResponseDTO;
+import org.example.backend.domain.lecture.dto.response.LectureNoteMappingResponseDTO;
 import org.example.backend.domain.lecture.dto.response.LectureResponseDTO;
 import org.example.backend.domain.lecture.entity.Lecture;
 import org.example.backend.domain.lecture.service.LectureService;
 import org.example.backend.global.ApiResponse;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -52,5 +55,17 @@ public class LectureController {
         lectureService.deleteLecture(lectureId);
         return ApiResponse.onSuccess(null);
     }
+
+    //강의록 맵핑
+    @PostMapping("/{lectureId}/notes/mapping")
+    public ApiResponse<LectureNoteMappingResponseDTO> mapNotesToLecture(
+            @PathVariable UUID lectureId,
+            @RequestBody LectureNoteMappingResponseDTO request) {
+
+        List<UUID> result = lectureService.mapNotes(lectureId, request.getLectureNoteIds());
+        return ApiResponse.onSuccess(new LectureNoteMappingResponseDTO(result));
+    }
+
+
 
 }
