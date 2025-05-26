@@ -2,7 +2,9 @@ package org.example.backend.domain.quiz.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.backend.domain.quiz.dto.request.QuizRequestDTO;
+import org.example.backend.domain.quiz.dto.request.QuizSaveRequestDTO;
 import org.example.backend.domain.quiz.dto.response.QuizResponseDTO;
+import org.example.backend.domain.quiz.dto.response.QuizSaveResponseDTO;
 import org.example.backend.domain.quiz.exception.QuizException;
 import org.example.backend.domain.quiz.service.QuizService;
 import org.example.backend.global.ApiResponse;
@@ -30,6 +32,24 @@ public class QuizController {
                     .status(e.getErrorCode().getReasonHttpStatus().getHttpStatus())
                     .body(ApiResponse.onFailure(e.getErrorCode()));
         } catch (Exception e) {
+            return ResponseEntity
+                    .status(FailureCode._INTERNAL_SERVER_ERROR.getReasonHttpStatus().getHttpStatus())
+                    .body(ApiResponse.onFailure(FailureCode._INTERNAL_SERVER_ERROR));
+        }
+    }
+
+    @PostMapping("/{lectureId}")
+    public ResponseEntity<ApiResponse<QuizSaveResponseDTO>> saveQuiz(@PathVariable UUID lectureId,
+                                                            @RequestBody QuizSaveRequestDTO request) {
+        try {
+            QuizSaveResponseDTO response = quizService.saveQuiz(lectureId, request);
+            return ResponseEntity.ok(ApiResponse.onSuccess(response));
+        } catch (QuizException e) {
+            return ResponseEntity
+                    .status(e.getErrorCode().getReasonHttpStatus().getHttpStatus())
+                    .body(ApiResponse.onFailure(e.getErrorCode()));
+        } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity
                     .status(FailureCode._INTERNAL_SERVER_ERROR.getReasonHttpStatus().getHttpStatus())
                     .body(ApiResponse.onFailure(FailureCode._INTERNAL_SERVER_ERROR));

@@ -1,4 +1,9 @@
 package org.example.backend.domain.option.repository;
 
-public interface OptionRepository {
+
+import org.example.backend.domain.option.entity.Option;
+import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.UUID;
+
+public interface OptionRepository extends JpaRepository<Option, UUID> {
 }
