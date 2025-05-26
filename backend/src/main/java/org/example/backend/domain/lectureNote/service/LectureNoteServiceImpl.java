@@ -11,6 +11,8 @@ import org.example.backend.domain.lectureNote.entity.LectureNote;
 import org.example.backend.domain.lectureNote.exception.LectureNoteErrorCode;
 import org.example.backend.domain.lectureNote.exception.LectureNoteException;
 import org.example.backend.domain.lectureNote.repository.LectureNoteRepository;
+import org.example.backend.domain.lectureNoteMapping.entity.LectureNoteMapping;
+import org.example.backend.domain.lectureNoteMapping.repository.LectureNoteMappingRepository;
 import org.example.backend.global.S3.service.S3Service;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,11 +24,12 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class LectureNoteServiceImpl implements LectureNoteService{
+public class LectureNoteServiceImpl implements LectureNoteService {
 
     private final S3Service s3Service;
     private final LectureNoteRepository lectureNoteRepository;
     private final ClassroomRepository classroomRepository; // ✅ 추가
+    private final LectureNoteMappingRepository lectureNoteMappingRepository;
 
     public List<LectureNote> uploadLectureNotes(UUID classId, List<MultipartFile> files) throws IOException {
         // 1. 여러 파일에 대해 처리
@@ -79,12 +82,14 @@ public class LectureNoteServiceImpl implements LectureNoteService{
 
         // 2. 해당 key로 presigned URL 생성
         String presignedUrl = s3Service.getPresignedUrl(s3Key);
+        String fileSize = s3Service.getFileSize(s3Key);
 
         // 3. DTO에 담아 응답
         return LectureNoteResponseDTO.builder()
                 .lectureNoteId(lectureNote.getId())
                 .classId(lectureNote.getClassroom().getId())
                 .lectureNoteUrl(presignedUrl)
+                .fileSize(fileSize)
                 .build();
     }
 
@@ -102,6 +107,29 @@ public class LectureNoteServiceImpl implements LectureNoteService{
                 .toList();
     }
 
-    //
+    //강의 별 강의록 목록 조회
+    @Override
+    public List<LectureNoteResponseDTO> getLectureNoteListByLecture(UUID lectureId) {
+        List<LectureNoteMapping> mappings = lectureNoteMappingRepository.findAllByLectureId(lectureId);
+
+        return mappings.stream()
+                .map(mapping -> {
+                    LectureNote lectureNote = mapping.getLectureNote();
+                    String s3Key = lectureNote.getNoteUrl();
+                    String presignedUrl = s3Service.getPresignedUrl(s3Key);
+
+                    String fileSize = s3Service.getFileSize(s3Key);
+
+
+                    return LectureNoteResponseDTO.builder()
+                            .lectureNoteId(lectureNote.getId())
+                            .lectureNoteUrl(presignedUrl)
+                            .classId(lectureNote.getClassroom().getId())
+                            .fileSize(fileSize)
+                            .build();
+                })
+                .toList();
+
+    }
 
 }

@@ -90,4 +90,13 @@ public class S3Service {
         if (key == null) return null;
         return amazonS3Client.getUrl(bucket, key).toString();
     }
+
+    /**
+     * S3에 저장된 파일의 크기 (바이트) 반환
+     */
+    public String getFileSize(String key) {
+        ObjectMetadata metadata = amazonS3Client.getObjectMetadata(bucket, key);
+        long bytes = metadata.getContentLength();
+        return String.format("%.2f MB", bytes / 1024.0 / 1024.0);
+    }
 }
