@@ -1,3 +1,11 @@
+import BackButtonHeader from "./_components/BackButtonHeader/BackButtonHeader";
+import DashboardContainer from "./_components/DashboardContainer/DashboardContainer";
+import style from "./page.module.scss";
 export default function TeacherQuizDashboardPage() {
-  return <div>퀴즈 대시보드</div>;
+  return (
+    <div className={style.quizDashboardPage}>
+      <BackButtonHeader />
+      <DashboardContainer />
+    </div>
+  );
 }
