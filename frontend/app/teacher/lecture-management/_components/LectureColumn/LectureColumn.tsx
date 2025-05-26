@@ -1,6 +1,8 @@
 import React from "react";
 import styles from "./LectureColumn.module.scss";
 import { Calendar, Clock, ChevronRight } from "lucide-react";
+import { ROUTES } from "@/constants/routes";
+import { useRouter } from "next/navigation";
 
 interface Lecture {
   lectureId: string;
@@ -26,6 +28,12 @@ const LectureColumn: React.FC<LectureColumnProps> = ({
   lectures,
   columnClassName = "",
 }) => {
+  const router = useRouter();
+
+  const handleLectureClick = (lectureId: string) => {
+    router.push(ROUTES.teacherQuizDashboard(lectureId));
+  };
+
   return (
     <div className={`${styles.lectureColumn} ${columnClassName}`}>
       <div className={styles.columnTitle}>
@@ -36,7 +44,11 @@ const LectureColumn: React.FC<LectureColumnProps> = ({
           <div className={styles.emptyText}>{emptyText}</div>
         ) : (
           lectures.map((l) => (
-            <div key={l.lectureId} className={styles.lectureCard}>
+            <div
+              key={l.lectureId}
+              className={styles.lectureCard}
+              onClick={() => handleLectureClick(l.lectureId)}
+            >
               <div className={styles.lectureHeader}>
                 <div className={styles.lectureTitle}>{l.title}</div>
                 <div className={styles.arrowButton}>
