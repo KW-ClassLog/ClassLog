@@ -13,6 +13,7 @@ import org.example.backend.domain.studentClass.dto.response.StudentClassResponse
 import org.example.backend.domain.studentClass.dto.response.TodayLectureResponseDTO;
 import org.example.backend.domain.studentClass.entity.StudentClass;
 import org.example.backend.domain.user.entity.User;
+import org.example.backend.global.S3.service.S3Service;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
@@ -22,6 +23,7 @@ import java.util.UUID;
 public class StudentClassConverter {
 
     private final ClassroomRepository classroomRepository;
+    private final S3Service s3Service;
 
     // RequestDTO -> Entity
     public StudentClass toClassEnterRequestDTO(UUID userId, StudentClassRequestDTO dto){
@@ -49,12 +51,17 @@ public class StudentClassConverter {
 
     // Entity → ResponseDTO
     public StudentEnrolledResponseDTO toStudentEnrolledResponseDTO(StudentClass studentClass, User user){
+        String profileKey = user.getProfileUrl();
+        String profileUrl = s3Service.getPublicUrl(
+                (profileKey == null || profileKey.isBlank()) ? "profile/default.jpg" : profileKey
+        );
+
         return StudentEnrolledResponseDTO.builder()
                 .userId(user.getId())
                 .name(user.getName())
                 .nickname(studentClass.getClassNickname())
                 .phoneNumber(user.getPhoneNumber())
-                .profileUrl(user.getProfileUrl())
+                .profileUrl(profileUrl)
                 .organization(user.getOrganization())
                 .build();
 
