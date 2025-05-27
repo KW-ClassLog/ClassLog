@@ -53,6 +53,7 @@ public class QuizResultServiceImpl implements QuizResultService {
                             .submitDate(answer.getCreatedAt())
                             .build();
                 })
+                .sorted((a, b) -> a.getSubmitDate().compareTo(b.getSubmitDate()))
                 .toList();
 
         return QuizSubmitListResponseDTO.builder()
