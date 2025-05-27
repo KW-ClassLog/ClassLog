@@ -48,14 +48,18 @@ public class QuizServiceImpl implements QuizService {
     public QuizResponseDTO generateQuiz(UUID lectureId, QuizRequestDTO request) {
 
         Role role = customSecurityUtil.getUserRole();
+        UUID userId = customSecurityUtil.getUserId();
 
         if (role == Role.STUDENT) {
             throw new QuizException(QuizErrorCode.STUDENT_NOT_CREATE_QUIZ);
         }
 
-        // 강의 존재 여부 확인
         Lecture lecture = lectureRepository.findById(lectureId)
                 .orElseThrow(() -> new QuizException(QuizErrorCode.LECTURE_NOT_FOUND));
+
+        if (!lecture.getClassroom().getProfessor().getId().equals(userId)) {
+            throw new QuizException(QuizErrorCode.UNAUTHORIZED_ACCESS);
+        }
 
         // 강의록 매핑 존재 여부 확인
         List<LectureNoteMapping> mappings = lectureNoteMappingRepository.findAllByLectureId(lectureId);
@@ -99,6 +103,8 @@ public class QuizServiceImpl implements QuizService {
     public QuizSaveResponseDTO saveQuiz(UUID lectureId, QuizSaveRequestDTO request) {
 
         Role role = customSecurityUtil.getUserRole();
+        UUID userId = customSecurityUtil.getUserId();
+
 
         if (role == Role.STUDENT) {
             throw new QuizException(QuizErrorCode.STUDENT_NOT_CREATE_QUIZ);
@@ -106,6 +112,10 @@ public class QuizServiceImpl implements QuizService {
 
         Lecture lecture = lectureRepository.findById(lectureId)
                 .orElseThrow(() -> new QuizException(QuizErrorCode.LECTURE_NOT_FOUND));
+
+        if (!lecture.getClassroom().getProfessor().getId().equals(userId)) {
+            throw new QuizException(QuizErrorCode.UNAUTHORIZED_ACCESS);
+        }
 
         List<UUID> savedQuizIds = new ArrayList<>();
 

@@ -10,8 +10,10 @@ import org.example.backend.domain.quiz.repository.QuizRepository;
 import org.example.backend.domain.quiz.dto.response.QuizSubmitListResponseDTO;
 import org.example.backend.domain.quizAnswer.entity.QuizAnswer;
 import org.example.backend.domain.quizAnswer.repository.QuizAnswerRepository;
+import org.example.backend.domain.user.entity.Role;
 import org.example.backend.domain.user.entity.User;
 import org.example.backend.domain.user.repository.UserRepository;
+import org.example.backend.global.security.auth.CustomSecurityUtil;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,12 +27,27 @@ public class QuizResultServiceImpl implements QuizResultService {
     private final QuizRepository quizRepository;
     private final QuizAnswerRepository quizAnswerRepository;
     private final UserRepository userRepository;
+    private final CustomSecurityUtil customSecurityUtil;
+
 
     // 퀴즈 제출 학생 목록 조회
     @Override
     public QuizSubmitListResponseDTO getQuizSubmitList(UUID lectureId) {
+
+        Role role = customSecurityUtil.getUserRole();
+        UUID userId = customSecurityUtil.getUserId();
+
+        if (role == Role.STUDENT) {
+            throw new QuizException(QuizErrorCode.STUDENT_NOT_CREATE_QUIZ);
+        }
+
         Lecture lecture = lectureRepository.findById(lectureId)
                 .orElseThrow(() -> new QuizException(QuizErrorCode.LECTURE_NOT_FOUND));
+
+
+        if (!lecture.getClassroom().getProfessor().getId().equals(userId)) {
+            throw new QuizException(QuizErrorCode.UNAUTHORIZED_ACCESS);
+        }
 
         List<Quiz> quizzes = quizRepository.findByLectureId(lectureId);
         if (quizzes.isEmpty()) {
