@@ -4,4 +4,22 @@
   padding: $spacing-lg;
   border: 1px solid $color-neutral-7;
   height: calc(94vh - $spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+}
+.dashboardContainerInner {
+  height: 100%;
+  display: flex;
+  gap: $spacing-lg;
+}
+.leftSection {
+  width: 50%;
+  height: 100%;
+  display: flex;
+  gap: $spacing-lg;
+}
+.rightSection {
+  width: 50%;
+  height: 100%;
 }
