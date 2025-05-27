@@ -9,6 +9,7 @@ import org.example.backend.domain.user.dto.request.ProfileUpdateRequestDTO;
 import org.example.backend.domain.user.dto.request.ResetPwdRequestDTO;
 import org.example.backend.domain.user.dto.request.RegisterRequestDTO;
 import org.example.backend.domain.user.dto.response.EmailResponseDTO;
+import org.example.backend.domain.user.dto.response.HomeResponseDTO;
 import org.example.backend.domain.user.dto.response.ProfileUpdateResponseDTO;
 import org.example.backend.domain.user.dto.response.UserProfileResponseDTO;
 import org.example.backend.domain.user.exception.UserErrorCode;
@@ -112,5 +113,12 @@ public class UserController {
         return ApiResponse.onSuccess(response);
     }
 
+    // 홈 프로필 조회
+    @GetMapping("profile")
+    public ApiResponse<HomeResponseDTO.ProfileDTO> getHomeProfile(){
+        HomeResponseDTO.ProfileDTO response = userService.getHomeProfileByUser();
+
+        return ApiResponse.onSuccess(response);
+    }
 
 }

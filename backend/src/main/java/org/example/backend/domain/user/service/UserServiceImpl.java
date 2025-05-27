@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.example.backend.domain.user.converter.UserConverter;
 import org.example.backend.domain.user.dto.request.ProfileUpdateRequestDTO;
+import org.example.backend.domain.user.dto.response.HomeResponseDTO;
 import org.example.backend.domain.user.dto.response.ProfileUpdateResponseDTO;
 import org.example.backend.domain.user.dto.response.RefreshTokenResponseDTO;
 import org.example.backend.domain.user.dto.response.UserProfileResponseDTO;
@@ -286,5 +287,15 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new UserException(UserErrorCode._USER_NOT_FOUND));
 
         return userConverter.toUserProfileResponseDTO(user);
+    }
+
+    // 홈 프로필 조회
+    @Override
+    public HomeResponseDTO.ProfileDTO getHomeProfileByUser() {
+        UUID userId = customSecurityUtil.getUserId();
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserException(UserErrorCode._USER_NOT_FOUND));
+
+        return userConverter.toProfileDTO(user);
     }
 }

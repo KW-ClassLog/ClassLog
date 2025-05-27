@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.example.backend.domain.user.dto.request.ProfileUpdateRequestDTO;
 import org.example.backend.domain.user.dto.request.RegisterRequestDTO;
+import org.example.backend.domain.user.dto.response.HomeResponseDTO;
 import org.example.backend.domain.user.dto.response.ProfileUpdateResponseDTO;
 import org.example.backend.domain.user.dto.response.UserProfileResponseDTO;
 import org.springframework.web.multipart.MultipartFile;
@@ -44,4 +45,7 @@ public interface UserService {
 
     // 개인정보 조회
     UserProfileResponseDTO getProfile();
+
+    // 홈 프로필 조회
+    HomeResponseDTO.ProfileDTO getHomeProfileByUser();
 }
