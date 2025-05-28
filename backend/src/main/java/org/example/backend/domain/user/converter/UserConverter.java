@@ -3,6 +3,7 @@ package org.example.backend.domain.user.converter;
 
 import lombok.RequiredArgsConstructor;
 import org.example.backend.domain.user.dto.request.RegisterRequestDTO;
+import org.example.backend.domain.user.dto.response.HomeResponseDTO;
 import org.example.backend.domain.user.dto.response.ProfileUpdateResponseDTO;
 import org.example.backend.domain.user.dto.response.UserProfileResponseDTO;
 import org.example.backend.domain.user.entity.SocialType;
@@ -54,6 +55,19 @@ UserConverter {
                 .phoneNumber(user.getPhoneNumber())
                 .profile(s3Service.getPublicUrl(user.getProfileUrl()))
                 .role(user.getRole().toString())
+                .build();
+    }
+
+    public HomeResponseDTO.ProfileDTO toProfileDTO(User user){
+        String profileKey = user.getProfileUrl();
+        String profileUrl = s3Service.getPublicUrl(
+                (profileKey == null || profileKey.isBlank()) ? "profile/default.jpg" : profileKey
+        );
+
+        return HomeResponseDTO.ProfileDTO.builder()
+                .name(user.getName())
+                .organization(user.getOrganization())
+                .profile(profileUrl)
                 .build();
     }
 }
