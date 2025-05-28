@@ -138,11 +138,13 @@ public class LectureServiceImpl implements LectureService {
         }
 
         String audioUrl = s3Service.getPresignedUrl(s3Key);
+        String fileSize = s3Service.getFileSize(s3Key);
 
         return LectureRecordingResponseDTO.builder()
                 .lectureId(lectureId)
                 .audioKey(s3Key)
                 .audioUrl(audioUrl)
+                .fileSize(fileSize)
                 .build();
     }
 

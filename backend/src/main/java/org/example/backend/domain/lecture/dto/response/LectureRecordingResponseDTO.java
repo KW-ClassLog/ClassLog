@@ -11,4 +11,5 @@ public class LectureRecordingResponseDTO {
     private UUID lectureId;
     private String audioKey;
     private String audioUrl;
+    private String fileSize;
 }

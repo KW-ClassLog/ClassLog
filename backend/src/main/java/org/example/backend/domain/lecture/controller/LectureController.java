@@ -71,11 +71,10 @@ public class LectureController {
 
 
 
-    //녹음본 저장
     @PostMapping(value = "/{lectureId}/recordings", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ApiResponse<LectureRecordingResponseDTO> uploadRecording(
             @PathVariable UUID lectureId,
-            @RequestPart("file") MultipartFile file) {
+            @RequestParam("file") MultipartFile file) {
 
         LectureRecordingResponseDTO result = lectureService.uploadLectureRecording(lectureId, file);
         return ApiResponse.onSuccess(result);
