@@ -22,7 +22,6 @@ import java.util.UUID;
 public class QuizController {
 
     private final QuizService quizService;
-    private final QuizAnswerService quizResultService;
 
     // 퀴즈 생성
     @PostMapping("/{lectureId}/create")
@@ -61,20 +60,4 @@ public class QuizController {
         }
     }
 
-    // 퀴즈 제출 학생 목록 조회
-    @GetMapping("/{lectureId}/result/list")
-    public ResponseEntity<ApiResponse<QuizSubmitListResponseDTO>> getQuizSubmitList(@PathVariable UUID lectureId) {
-        try {
-            QuizSubmitListResponseDTO result = quizResultService.getQuizSubmitList(lectureId);
-            return ResponseEntity.ok(ApiResponse.onSuccess(result));
-        } catch (QuizException e) {
-            return ResponseEntity
-                    .status(e.getErrorCode().getReasonHttpStatus().getHttpStatus())
-                    .body(ApiResponse.onFailure(e.getErrorCode()));
-        } catch (Exception e) {
-            return ResponseEntity
-                    .status(FailureCode._INTERNAL_SERVER_ERROR.getReasonHttpStatus().getHttpStatus())
-                    .body(ApiResponse.onFailure(FailureCode._INTERNAL_SERVER_ERROR));
-        }
-    }
 }
