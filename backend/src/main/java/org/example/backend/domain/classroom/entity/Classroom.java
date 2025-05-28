@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.example.backend.domain.lecture.entity.Lecture;
+import org.example.backend.domain.lectureNote.entity.LectureNote;
 import org.example.backend.domain.lectureNoteMapping.entity.LectureNoteMapping;
 import org.example.backend.domain.studentClass.entity.StudentClass;
 import org.example.backend.domain.user.entity.User;
@@ -48,5 +49,8 @@ public class Classroom extends BaseEntity {
 
     @OneToMany(mappedBy = "classroom", cascade = CascadeType.ALL)
     private List<StudentClass> studentClasses = new ArrayList<>();
+
+    @OneToMany(mappedBy = "classroom", cascade = CascadeType.ALL)
+    private List<LectureNote> lectureNote = new ArrayList<>();
 
 }
