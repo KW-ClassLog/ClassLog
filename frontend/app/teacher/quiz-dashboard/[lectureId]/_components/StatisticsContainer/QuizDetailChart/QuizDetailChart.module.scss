@@ -1,0 +1,28 @@
+.chartCard {
+  border: 1px solid $color-blue;
+  border-radius: $radius-lg;
+  padding: $spacing-md;
+  width: fit-content;
+}
+
+.chartTitle {
+  font-weight: $font-weight-bold;
+  font-size: $font-size-lg;
+  margin-bottom: $spacing-sm;
+}
+
+.top3List {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.top3Item {
+  display: flex;
+  justify-content: space-between;
+  background: #f7f9fb;
+  border-radius: $radius-lg;
+  padding: $spacing-xs $spacing-sm;
+  margin-top: $spacing-xs;
+  font-weight: $font-weight-medium;
+}
