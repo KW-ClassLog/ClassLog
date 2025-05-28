@@ -4,14 +4,19 @@ import jakarta.validation.Valid;
 import org.example.backend.domain.classroom.converter.ClassroomConverter;
 import org.example.backend.domain.classroom.dto.request.ClassroomRequestDTO;
 import org.example.backend.domain.classroom.dto.response.ClassLectureResponseDTO;
+import org.example.backend.domain.classroom.dto.request.EntryCodeVerifyRequestDTO;
 import org.example.backend.domain.classroom.dto.response.ClassroomResponseDTO;
 import org.example.backend.domain.classroom.dto.response.ClassroomResponseStudentDTO;
+import org.example.backend.domain.classroom.dto.response.EntryCodeResponseDTO;
 import org.example.backend.domain.classroom.entity.Classroom;
+import org.example.backend.domain.classroom.exception.ClassroomErrorCode;
 import org.example.backend.domain.classroom.service.ClassroomService;
-import org.example.backend.domain.lecture.entity.Lecture;
 import org.example.backend.global.ApiResponse;
+import org.example.backend.global.security.auth.CustomUserDetails;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-
+import org.example.backend.domain.lecture.entity.Lecture;
 import java.util.List;
 import java.util.UUID;
 
@@ -68,4 +73,31 @@ public class ClassroomController {
         List<ClassroomResponseDTO> responseDTOs = classroomService.getClassListByProfessor();
         return ApiResponse.onSuccess(responseDTOs);
     }
+
+    //클래스 입장코드 발급
+    @GetMapping("/{classId}/code")
+    public ApiResponse<EntryCodeResponseDTO> getEntryCode(@PathVariable UUID classId) {
+        EntryCodeResponseDTO response = classroomService.generateCode(classId);
+        return ApiResponse.onSuccess(response);
+    }
+
+    //입장코드 확인
+    @PostMapping("/{classId}/code/verify")
+    public ApiResponse<Boolean> verifyCode(@PathVariable UUID classId,
+                                           @RequestBody EntryCodeVerifyRequestDTO request, @RequestHeader("Authorization") String token) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Object principal = authentication.getPrincipal();
+
+        UUID userId = ((CustomUserDetails) principal).getUser().getId();
+        classroomService.checkAlreadyJoined(classId, userId);
+
+        boolean valid = classroomService.validateEntryCode(classId, request.getEntry_code());
+
+        if (!valid) {
+            return ApiResponse.onFailure(ClassroomErrorCode.INVALID_ENTRY_CODE);
+        }
+
+        return ApiResponse.onSuccess(true);
+    }
+
 }

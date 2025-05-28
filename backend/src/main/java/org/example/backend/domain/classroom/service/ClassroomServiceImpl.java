@@ -1,7 +1,10 @@
 package org.example.backend.domain.classroom.service;
 
+import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.example.backend.domain.classroom.converter.ClassroomConverter;
 import org.example.backend.domain.classroom.dto.request.ClassroomRequestDTO;
+import org.example.backend.domain.classroom.dto.response.EntryCodeResponseDTO;
 import org.example.backend.domain.classroom.dto.response.ClassLectureResponseDTO;
 import org.example.backend.domain.classroom.dto.response.ClassroomResponseDTO;
 import org.example.backend.domain.classroom.entity.Classroom;
@@ -12,14 +15,21 @@ import org.example.backend.domain.lecture.entity.Lecture;
 import org.example.backend.domain.lecture.repository.LectureRepository;
 import org.example.backend.domain.lectureNote.entity.LectureNote;
 import org.example.backend.domain.lectureNote.repository.LectureNoteRepository;
+import org.example.backend.domain.studentClass.repository.StudentClassRepository;
 import org.example.backend.domain.user.entity.Role;
 import org.example.backend.global.S3.service.S3Service;
 import org.example.backend.global.security.auth.CustomUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.Duration;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -27,6 +37,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@RequiredArgsConstructor
 @Service
 public class ClassroomServiceImpl implements ClassroomService {
 
@@ -35,15 +46,19 @@ public class ClassroomServiceImpl implements ClassroomService {
     private LectureNoteRepository lectureNoteRepository;
     private S3Service s3Service;
     private LectureRepository lectureRepository;
+    private final StringRedisTemplate redisTemplate;
+    private StudentClassRepository studentClassRepository;
 
     //의존성 주입
     @Autowired
-    public ClassroomServiceImpl(ClassroomConverter classroomConverter, ClassroomRepository classroomRepository, LectureNoteRepository lectureNoteRepository, S3Service s3Service, LectureRepository lectureRepository) {
+    public ClassroomServiceImpl(ClassroomConverter classroomConverter, ClassroomRepository classroomRepository, LectureNoteRepository lectureNoteRepository, S3Service s3Service, LectureRepository lectureRepository, StringRedisTemplate redisTemplate, StudentClassRepository studentClassRepository) {
         this.classroomConverter = classroomConverter;
         this.classroomRepository = classroomRepository;
         this.lectureNoteRepository = lectureNoteRepository;
         this.s3Service = s3Service;
         this.lectureRepository = lectureRepository;
+        this.redisTemplate = redisTemplate;
+        this.studentClassRepository = studentClassRepository;
     }
 
     // Classroom 생성
@@ -114,6 +129,34 @@ public class ClassroomServiceImpl implements ClassroomService {
         return classroomRepository.save(classroom);
     }
 
+    //입장코드 레디스 저장
+    public EntryCodeResponseDTO generateCode(UUID classId) {
+        String code = generateRandomCode();
+        Instant expiresAt = Instant.now().plus(Duration.ofMinutes(1)); // 10분 유효
+
+        ZonedDateTime seoulTime = expiresAt.atZone(ZoneId.of("Asia/Seoul"));
+
+
+        String key = "class:entrycode:" + classId;
+
+        // Redis에 저장 (10분 TTL)
+        redisTemplate.opsForValue().set(key, code, Duration.ofMinutes(1));
+
+        return new EntryCodeResponseDTO(classId, code, seoulTime.toString());
+    }
+
+    //입장코드 생성
+    private String generateRandomCode() {
+        return RandomStringUtils.randomAlphanumeric(6).toUpperCase(); // 예: ABC123
+    }
+
+    //입장코드 확인
+    public boolean validateEntryCode(UUID classId, String inputCode) {
+        String key = "class:entrycode:" + classId;
+        String storedCode = redisTemplate.opsForValue().get(key);
+        return inputCode.equals(storedCode);
+    }
+
     //강의 목록 조회
     @Override
     public List<Lecture> getLecturesByClassId(UUID classId) {
@@ -172,6 +215,15 @@ public class ClassroomServiceImpl implements ClassroomService {
         }
     }
 
+    // 이미 입장한 학생인지 확인
+    public void checkAlreadyJoined(UUID classId, UUID userId) {
 
+        boolean alreadyJoined = studentClassRepository
+                .findByUserIdAndClassId(userId, classId)
+                .isPresent();
 
+        if (alreadyJoined) {
+            throw new ClassroomException(ClassroomErrorCode.ALREADY_JOINED);
+        }
+    }
 }
