@@ -3,7 +3,14 @@ package org.example.backend.domain.quiz.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.example.backend.domain.lecture.entity.Lecture;
+import org.example.backend.domain.lectureNoteMapping.entity.LectureNoteMapping;
+import org.example.backend.domain.option.entity.Option;
+import org.example.backend.domain.quizAccuracy.entity.QuizAccuracy;
+import org.example.backend.domain.quizAnswer.entity.QuizAnswer;
 import org.example.backend.global.entitiy.BaseEntity;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -35,4 +42,13 @@ public class Quiz extends BaseEntity {
 
     @Column(name = "quiz_order", nullable = false)
     private Integer quizOrder;
+
+    @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Option> optionList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<QuizAccuracy> quizAccuracyList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<QuizAnswer> quizAnswerList = new ArrayList<>();
 }

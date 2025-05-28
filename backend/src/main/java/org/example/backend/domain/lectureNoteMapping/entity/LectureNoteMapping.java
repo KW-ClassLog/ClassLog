@@ -31,4 +31,5 @@ public class LectureNoteMapping extends BaseEntity {
     public UUID getLectureNoteId() {
         return lectureNote != null ? lectureNote.getId() : null;
     }
+
 }

@@ -14,4 +14,5 @@ public interface LectureNoteService {
     LectureNoteResponseDTO getLectureNoteDetail(UUID lectureNoteId);
     List<LectureNote> uploadLectureNotes(UUID classId, List<MultipartFile> files) throws IOException;
     List<LectureNoteKeyResponseDTO> getLectureNoteList(UUID lectureId);
+    List<LectureNoteResponseDTO> getLectureNoteListByLecture(UUID lectureId);
 }

@@ -17,4 +17,5 @@ public class LectureNoteResponseDTO {
     private UUID lectureNoteId;        // LectureNote ID
     private UUID classId;           // Class ID (Classroom ID)
     private String lectureNoteUrl;  // 저장된 S3 URL
+    private String fileSize;    //파일 크기
 }

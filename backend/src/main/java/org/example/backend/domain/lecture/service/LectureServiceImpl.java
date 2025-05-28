@@ -11,6 +11,10 @@ import org.example.backend.domain.lecture.entity.Lecture;
 import org.example.backend.domain.lecture.exception.LectureErrorCode;
 import org.example.backend.domain.lecture.exception.LectureException;
 import org.example.backend.domain.lecture.repository.LectureRepository;
+import org.example.backend.domain.lectureNote.entity.LectureNote;
+import org.example.backend.domain.lectureNote.repository.LectureNoteRepository;
+import org.example.backend.domain.lectureNoteMapping.entity.LectureNoteMapping;
+import org.example.backend.domain.lectureNoteMapping.repository.LectureNoteMappingRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +27,8 @@ public class LectureServiceImpl implements LectureService {
     private final LectureRepository lectureRepository;
     private final ClassroomRepository classroomRepository;
     private final LectureConverter lectureConverter;
+    private final LectureNoteRepository lectureNoteRepository;
+    private final LectureNoteMappingRepository lectureNoteMappingRepository;
 
     // lecture 생성
     @Override
@@ -88,5 +94,35 @@ public class LectureServiceImpl implements LectureService {
                 .orElseThrow(() -> new LectureException(LectureErrorCode.LECTURE_NOT_FOUND));
 
         lectureRepository.delete(lecture);
+    }
+
+    @Transactional
+    public List<UUID> mapNotes(UUID lectureId, List<UUID> lectureNoteIds) {
+        // 1. 강의 조회
+        Lecture lecture = lectureRepository.findById(lectureId)
+                .orElseThrow(() -> new LectureException(LectureErrorCode.LECTURE_NOT_FOUND));
+
+        // 2. 노트 목록 조회
+        List<LectureNote> notes = lectureNoteRepository.findAllById(lectureNoteIds);
+
+        if (notes.size() != lectureNoteIds.size()) {
+            throw new LectureException(LectureErrorCode.LECTURE_NOT_FOUND);
+        }
+
+        // 3. 매핑 생성
+        List<LectureNoteMapping> mappings = notes.stream()
+                .map(note -> LectureNoteMapping.builder()
+                        .lecture(lecture)
+                        .lectureNote(note)
+                        .build())
+                .toList();
+
+        // 4. 저장
+        lectureNoteMappingRepository.saveAll(mappings);
+
+        // 5. 응답용 lectureNoteId 목록 반환
+        return notes.stream()
+                .map(LectureNote::getId)
+                .toList();
     }
 }

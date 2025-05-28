@@ -56,11 +56,20 @@ public class LectureNoteController {
         return ApiResponse.onSuccess(response);
     }
 
-    @GetMapping("/{class_id}/notes")
+    //클래스 별 강의록 조회
+    @GetMapping("/{class_id}/class/notes")
     public ApiResponse<List<LectureNoteKeyResponseDTO>> getLectureNotes(
             @PathVariable("class_id") UUID classId) {
                 List<LectureNoteKeyResponseDTO> response = lectureNoteService.getLectureNoteList(classId);
                 return ApiResponse.onSuccess(response);
+    }
+
+    //강의 별 강의록 조회
+    @GetMapping("/{lecture_id}/lecture/notes")
+    public ApiResponse<List<LectureNoteResponseDTO>> getLectureNotesByLectureId(
+            @PathVariable("lecture_id") UUID lectureId) {
+        List<LectureNoteResponseDTO> response = lectureNoteService.getLectureNoteListByLecture(lectureId);
+        return ApiResponse.onSuccess(response);
     }
 
 
