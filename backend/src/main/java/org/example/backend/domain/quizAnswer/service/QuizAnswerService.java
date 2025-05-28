@@ -1,4 +1,9 @@
 package org.example.backend.domain.quizAnswer.service;
 
-public class QuizAnswerService {
+import org.example.backend.domain.quizAnswer.dto.response.QuizSubmitListResponseDTO;
+
+import java.util.UUID;
+
+public interface QuizAnswerService {
+    QuizSubmitListResponseDTO getQuizSubmitList(UUID lectureId);
 }
