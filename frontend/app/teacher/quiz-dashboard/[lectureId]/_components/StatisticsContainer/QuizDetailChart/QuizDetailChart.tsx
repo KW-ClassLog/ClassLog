@@ -37,10 +37,14 @@ function MultipleChoiceChart({ data }: { data: Quiz }) {
           layout="vertical"
           align="right"
           verticalAlign="middle"
-          wrapperStyle={{ right: 0, top: 40 }}
-          formatter={(value, entry, idx) =>
-            `${chartData[idx].name}(${chartData[idx].value}%)`
-          }
+          wrapperStyle={{ right: 0, top: 20 }}
+          iconType="circle"
+          iconSize={8}
+          formatter={(value, entry, idx) => (
+            <span style={{ marginLeft: "4px" }}>
+              {chartData[idx].name} ({chartData[idx].value}%)
+            </span>
+          )}
         />
       </PieChart>
     </div>
@@ -69,10 +73,14 @@ function TrueFalseChart({ data }: { data: Quiz }) {
           layout="vertical"
           align="right"
           verticalAlign="middle"
-          wrapperStyle={{ right: 0, top: 60 }}
-          formatter={(value, entry, idx) =>
-            `${chartData[idx].name} (${chartData[idx].value}%)`
-          }
+          wrapperStyle={{ right: 0, top: 50 }}
+          iconType="circle"
+          iconSize={8}
+          formatter={(value, entry, idx) => (
+            <span style={{ marginLeft: "4px" }}>
+              {chartData[idx].name} ({chartData[idx].value}%)
+            </span>
+          )}
         />
       </PieChart>
     </div>
