@@ -10,6 +10,7 @@ import java.util.UUID;
 
 import org.example.backend.domain.classroom.entity.Classroom;
 import org.example.backend.domain.lectureNoteMapping.entity.LectureNoteMapping;
+import org.example.backend.domain.quiz.entity.Quiz;
 import org.example.backend.domain.studentClass.entity.StudentClass;
 import org.example.backend.global.entitiy.BaseEntity;
 import org.hibernate.annotations.OnDelete;
@@ -53,5 +54,8 @@ public class Lecture extends BaseEntity {
 
     @OneToMany(mappedBy = "lecture", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<LectureNoteMapping> lectureNoteMappings = new ArrayList<>();
+
+    @OneToMany(mappedBy = "lecture", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Quiz> quiz = new ArrayList<>();
 
 }
