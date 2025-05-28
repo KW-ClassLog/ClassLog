@@ -6,9 +6,9 @@ import org.example.backend.domain.quiz.dto.request.QuizSaveRequestDTO;
 import org.example.backend.domain.quiz.dto.response.QuizResponseDTO;
 import org.example.backend.domain.quiz.dto.response.QuizSaveResponseDTO;
 import org.example.backend.domain.quiz.exception.QuizException;
-import org.example.backend.domain.quiz.service.QuizResultService;
+import org.example.backend.domain.quizAnswer.service.QuizAnswerService;
 import org.example.backend.domain.quiz.service.QuizService;
-import org.example.backend.domain.quiz.dto.response.QuizSubmitListResponseDTO;
+import org.example.backend.domain.quizAnswer.dto.response.QuizSubmitListResponseDTO;
 import org.example.backend.global.ApiResponse;
 import org.example.backend.global.code.base.FailureCode;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +22,7 @@ import java.util.UUID;
 public class QuizController {
 
     private final QuizService quizService;
-    private final QuizResultService quizResultService;
+    private final QuizAnswerService quizResultService;
 
     // 퀴즈 생성
     @PostMapping("/{lectureId}/create")
