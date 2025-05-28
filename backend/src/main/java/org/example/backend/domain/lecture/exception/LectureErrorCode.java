@@ -15,7 +15,9 @@ public enum LectureErrorCode implements BaseErrorCode {
     LECTURE_NOT_FOUND(HttpStatus.NOT_FOUND,
             "LECTURE404_2", "존재하지 않는 강의입니다."),
     LECTURE_NOT_IN_CLASS(HttpStatus.NOT_FOUND,
-            "LECTURE404_3", "해당 강의는 이 클래스에 속하지 않습니다.");
+            "LECTURE404_3", "해당 강의는 이 클래스에 속하지 않습니다."),
+    NO_AUDIO_FILE(HttpStatus.NOT_FOUND,
+            "CLASS404_4", "녹음본이 존재하지 않습니다.")
     ;
     private final HttpStatus status;
     private final String code;
