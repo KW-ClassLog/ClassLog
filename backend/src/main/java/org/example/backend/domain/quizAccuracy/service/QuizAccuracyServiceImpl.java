@@ -1,16 +1,22 @@
 package org.example.backend.domain.quizAccuracy.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.backend.domain.lecture.entity.Lecture;
+import org.example.backend.domain.lecture.repository.LectureRepository;
 import org.example.backend.domain.option.entity.Option;
 import org.example.backend.domain.option.repository.OptionRepository;
 import org.example.backend.domain.quiz.entity.Quiz;
 import org.example.backend.domain.quiz.entity.QuizType;
+import org.example.backend.domain.quiz.exception.QuizErrorCode;
+import org.example.backend.domain.quiz.exception.QuizException;
 import org.example.backend.domain.quiz.repository.QuizRepository;
 import org.example.backend.domain.quizAccuracy.dto.response.QuizAccuracyResponseDTO;
 import org.example.backend.domain.quizAccuracy.entity.QuizAccuracy;
 import org.example.backend.domain.quizAccuracy.repository.QuizAccuracyRepository;
 import org.example.backend.domain.quizAnswer.entity.QuizAnswer;
 import org.example.backend.domain.quizAnswer.repository.QuizAnswerRepository;
+import org.example.backend.domain.user.entity.Role;
+import org.example.backend.global.security.auth.CustomSecurityUtil;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -26,10 +32,27 @@ public class QuizAccuracyServiceImpl implements QuizAccuracyService {
     private final QuizAnswerRepository quizAnswerRepository;
     private final OptionRepository optionRepository;
     private final QuizAccuracyRepository quizAccuracyRepository;
+    private final LectureRepository lectureRepository;
+    private final CustomSecurityUtil customSecurityUtil;
 
     // 퀴즈 목록, 정답률 조회
     @Override
     public QuizAccuracyResponseDTO getQuizResult(UUID lectureId) {
+
+        Role role = customSecurityUtil.getUserRole();
+        UUID userId = customSecurityUtil.getUserId();
+
+        if (role == Role.STUDENT) {
+            throw new QuizException(QuizErrorCode.STUDENT_NOT_CREATE_QUIZ);
+        }
+
+        Lecture lecture = lectureRepository.findById(lectureId)
+                .orElseThrow(() -> new QuizException(QuizErrorCode.LECTURE_NOT_FOUND));
+
+        if (!lecture.getClassroom().getProfessor().getId().equals(userId)) {
+            throw new QuizException(QuizErrorCode.UNAUTHORIZED_ACCESS);
+        }
+
         List<Quiz> quizzes = quizRepository.findByLectureId(lectureId);
 
         List<QuizAccuracyResponseDTO.QuizDTO> quizList = new ArrayList<>();
