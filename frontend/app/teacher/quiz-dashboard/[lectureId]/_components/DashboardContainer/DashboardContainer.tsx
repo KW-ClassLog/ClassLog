@@ -4,7 +4,6 @@ import styles from "./DashboardContainer.module.scss";
 import QuizInfo from "../QuizInfo/QuizInfo";
 import QuizSubmitList from "../QuizSubmitList/QuizSubmitList";
 import QuizList from "../QuizList/QuizList";
-import OneLineReview from "../OneLineReview/OneLineReview";
 import StatisticsContainer from "../StatisticsContainer/StatisticsContainer";
 
 export default function DashboardContainer() {
@@ -16,10 +15,7 @@ export default function DashboardContainer() {
           <QuizSubmitList />
           <QuizList />
         </section>
-        <section className={styles.rightSection}>
-          <StatisticsContainer />
-          <OneLineReview />
-        </section>
+        <StatisticsContainer />
       </div>
     </div>
   );
