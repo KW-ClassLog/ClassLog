@@ -21,6 +21,7 @@ public class QuizAccuracyController {
 
     private final QuizAccuracyService quizAccuracyService;
 
+    // 퀴즈 목록, 정답률 조회
     @GetMapping("/{lectureId}/result")
     public ResponseEntity<ApiResponse<QuizAccuracyResponseDTO>> getQuizResult(@PathVariable UUID lectureId) {
         try {

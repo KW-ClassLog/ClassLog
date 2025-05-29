@@ -27,6 +27,7 @@ public class QuizAccuracyServiceImpl implements QuizAccuracyService {
     private final OptionRepository optionRepository;
     private final QuizAccuracyRepository quizAccuracyRepository;
 
+    // 퀴즈 목록, 정답률 조회
     @Override
     public QuizAccuracyResponseDTO getQuizResult(UUID lectureId) {
         List<Quiz> quizzes = quizRepository.findByLectureId(lectureId);
@@ -40,6 +41,7 @@ public class QuizAccuracyServiceImpl implements QuizAccuracyService {
             double correctRate;
             Optional<QuizAccuracy> accuracyOpt = quizAccuracyRepository.findByQuizId(quiz.getId());
 
+            // DB에 계산된 정답률이 없는 경우에만 계산
             if (accuracyOpt.isPresent()) {
                 correctRate = accuracyOpt.get().getCorrectRate();
             } else {
