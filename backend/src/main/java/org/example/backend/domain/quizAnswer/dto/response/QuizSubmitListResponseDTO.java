@@ -1,4 +1,4 @@
-package org.example.backend.domain.quiz.dto.response;
+package org.example.backend.domain.quizAnswer.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
