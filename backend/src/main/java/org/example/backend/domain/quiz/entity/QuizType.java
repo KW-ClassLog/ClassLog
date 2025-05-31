@@ -13,4 +13,10 @@ public enum QuizType {
             default -> throw new IllegalArgumentException("Invalid quiz type: " + raw);
         };
     }
+
+    public static String toCamelCase(String enumName) {
+        String[] parts = enumName.toLowerCase().split("_");
+        if (parts.length == 1) return parts[0];
+        return parts[0] + Character.toUpperCase(parts[1].charAt(0)) + parts[1].substring(1);
+    }
 }
