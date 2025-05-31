@@ -1,6 +1,8 @@
 package org.example.backend.domain.quizAccuracy.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.backend.domain.lecture.entity.Lecture;
+import org.example.backend.domain.lecture.repository.LectureRepository;
 import org.example.backend.domain.option.entity.Option;
 import org.example.backend.domain.option.repository.OptionRepository;
 import org.example.backend.domain.quiz.entity.Quiz;
@@ -11,6 +13,8 @@ import org.example.backend.domain.quiz.repository.QuizRepository;
 import org.example.backend.domain.quizAnswer.entity.QuizAnswer;
 import org.example.backend.domain.quizAnswer.repository.QuizAnswerRepository;
 import org.example.backend.domain.quizAccuracy.dto.response.QuizSelectionStatsResponseDTO;
+import org.example.backend.domain.user.entity.Role;
+import org.example.backend.global.security.auth.CustomSecurityUtil;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -23,9 +27,26 @@ public class QuizSelectionStatsServiceImpl implements QuizSelectionStatsService 
     private final QuizRepository quizRepository;
     private final QuizAnswerRepository quizAnswerRepository;
     private final OptionRepository optionRepository;
+    private final LectureRepository lectureRepository;
+    private final CustomSecurityUtil customSecurityUtil;
 
     @Override
     public QuizSelectionStatsResponseDTO getQuizSelectionStats(UUID lectureId) {
+
+        Role role = customSecurityUtil.getUserRole();
+        UUID userId = customSecurityUtil.getUserId();
+
+        if (role == Role.STUDENT) {
+            throw new QuizException(QuizErrorCode.STUDENT_NOT_CREATE_QUIZ);
+        }
+
+        Lecture lecture = lectureRepository.findById(lectureId)
+                .orElseThrow(() -> new QuizException(QuizErrorCode.LECTURE_NOT_FOUND));
+
+        if (!lecture.getClassroom().getProfessor().getId().equals(userId)) {
+            throw new QuizException(QuizErrorCode.UNAUTHORIZED_ACCESS);
+        }
+
         List<Quiz> quizzes = quizRepository.findByLectureId(lectureId);
 
         if (quizzes.isEmpty()) {
