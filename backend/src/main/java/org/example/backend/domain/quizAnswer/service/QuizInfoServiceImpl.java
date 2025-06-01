@@ -6,6 +6,8 @@ import org.example.backend.domain.lecture.repository.LectureRepository;
 import org.example.backend.domain.quiz.exception.QuizErrorCode;
 import org.example.backend.domain.quiz.exception.QuizException;
 import org.example.backend.domain.quizAnswer.dto.response.QuizInfoResponseDTO;
+import org.example.backend.domain.user.entity.Role;
+import org.example.backend.global.security.auth.CustomSecurityUtil;
 import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
@@ -18,12 +20,26 @@ import java.util.UUID;
 public class QuizInfoServiceImpl implements QuizInfoService {
 
     private final LectureRepository lectureRepository;
+    private final CustomSecurityUtil customSecurityUtil;
+
 
     // 퀴즈 정보 조회
     @Override
     public QuizInfoResponseDTO getQuizInfo(UUID lectureId) {
+
+        Role role = customSecurityUtil.getUserRole();
+        UUID userId = customSecurityUtil.getUserId();
+
+        if (role == Role.STUDENT) {
+            throw new QuizException(QuizErrorCode.STUDENT_NOT_CREATE_QUIZ);
+        }
+
         Lecture lecture = lectureRepository.findById(lectureId)
                 .orElseThrow(() -> new QuizException(QuizErrorCode.LECTURE_NOT_FOUND));
+
+        if (!lecture.getClassroom().getProfessor().getId().equals(userId)) {
+            throw new QuizException(QuizErrorCode.UNAUTHORIZED_ACCESS);
+        }
 
         String title = lecture.getLectureName();
         String quizDate = lecture.getLectureDate().toString();
