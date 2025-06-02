@@ -122,59 +122,15 @@ function ShortAnswerTop3({ data }: { data: Quiz }) {
 }
 
 // 실제 QuizDetailChart 컴포넌트
-export default function QuizDetailChart() {
-  // 예시 퀴즈 데이터
-  const quizzes: Quiz[] = [
-    {
-      quizId: "qz-001",
-      quizOrder: 1,
-      type: "multipleChoice",
-      1: 20.0,
-      2: 15.0,
-      3: 5.0,
-      4: 60.0,
-    },
-    {
-      quizId: "qz-002",
-      quizOrder: 2,
-      type: "trueFalse",
-      O: 75.0,
-      X: 15.0,
-    },
-    {
-      quizId: "qz-003",
-      quizOrder: 3,
-      type: "trueFalse",
-      O: 75.0,
-      X: 15.0,
-    },
-    {
-      quizId: "qz-004",
-      quizOrder: 4,
-      type: "shortAnswer",
-      top3Answers: [
-        { answer: "서울", rate: 50.0 },
-        { answer: "인천", rate: 10.0 },
-        { answer: "수원", rate: 5.0 },
-      ],
-      etcAnswers: ["부산", "창원", "대구", "대전"],
-    },
-  ];
-
-  return (
-    <>
-      {quizzes.map((quiz) => {
-        if (quiz.type === "multipleChoice") {
-          return <MultipleChoiceChart key={quiz.quizId} data={quiz} />;
-        }
-        if (quiz.type === "trueFalse") {
-          return <TrueFalseChart key={quiz.quizId} data={quiz} />;
-        }
-        if (quiz.type === "shortAnswer") {
-          return <ShortAnswerTop3 key={quiz.quizId} data={quiz} />;
-        }
-        return null;
-      })}
-    </>
-  );
+export default function QuizDetailChart({ quiz }: { quiz: Quiz }) {
+  if (quiz.type === "multipleChoice") {
+    return <MultipleChoiceChart data={quiz} />;
+  }
+  if (quiz.type === "trueFalse") {
+    return <TrueFalseChart data={quiz} />;
+  }
+  if (quiz.type === "shortAnswer") {
+    return <ShortAnswerTop3 data={quiz} />;
+  }
+  return null;
 }
