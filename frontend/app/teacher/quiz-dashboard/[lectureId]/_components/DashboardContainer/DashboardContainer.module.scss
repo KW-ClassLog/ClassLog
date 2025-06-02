@@ -7,16 +7,16 @@
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: $spacing-lg;
+  gap: $spacing-md;
 }
 .dashboardContainerInner {
   height: 100%;
   display: flex;
-  gap: $spacing-lg;
+  gap: $spacing-md;
 }
 .leftSection {
   width: 50%;
   height: 100%;
   display: flex;
-  gap: $spacing-lg;
+  gap: $spacing-md;
 }

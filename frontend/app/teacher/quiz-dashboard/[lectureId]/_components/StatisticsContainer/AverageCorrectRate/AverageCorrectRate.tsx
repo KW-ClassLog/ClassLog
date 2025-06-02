@@ -21,7 +21,7 @@ export default function AverageCorrectRate({
   return (
     <div className={styles.chartCard}>
       <div className={styles.pieWrapper}>
-        <PieChart width={120} height={120}>
+        <PieChart width={100} height={100}>
           <Pie
             data={data}
             cx="50%"

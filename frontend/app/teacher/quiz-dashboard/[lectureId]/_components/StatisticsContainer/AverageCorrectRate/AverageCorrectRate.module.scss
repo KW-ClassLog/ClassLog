@@ -45,15 +45,15 @@
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  font-size: $font-size-xl;
+  font-size: $font-size-lg;
   font-weight: bold;
   color: #2d3561;
 }
 
 .pieWrapper {
   position: relative;
-  width: 120px;
-  height: 120px;
+  width: 100px;
+  height: 100px;
   display: flex;
   align-items: center;
   justify-content: center;
