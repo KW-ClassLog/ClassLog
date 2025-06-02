@@ -41,3 +41,35 @@
   margin-top: $spacing-xs;
   font-weight: $font-weight-medium;
 }
+
+.etcAnswersBox {
+  margin-top: 1rem;
+  background: #f7f9fb;
+  border-radius: $radius-md;
+  padding: $spacing-xs $spacing-sm;
+}
+
+.etcTitle {
+  font-size: $font-size-sm;
+  color: $color-neutral-6;
+  font-weight: $font-weight-bold;
+  margin-bottom: 0.3rem;
+}
+
+.etcList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.etcItem {
+  background: #e6eaf3;
+  color: $color-neutral-5;
+  border-radius: $radius-sm;
+  padding: 0.2rem 0.7rem;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+}

@@ -100,6 +100,7 @@ function TrueFalseChart({ data }: { data: Quiz }) {
 // ShortAnswerTop3: 리스트
 function ShortAnswerTop3({ data }: { data: Quiz }) {
   const top3 = data.top3Answers as { answer: string; rate: number }[];
+  const etcAnswers = data.etcAnswers as string[] | undefined;
   return (
     <div className={styles.chartCard}>
       <div className={styles.chartTitle}>
@@ -115,6 +116,18 @@ function ShortAnswerTop3({ data }: { data: Quiz }) {
           </li>
         ))}
       </ul>
+      {etcAnswers && etcAnswers.length > 0 && (
+        <div className={styles.etcAnswersBox}>
+          <div className={styles.etcTitle}>기타 답변</div>
+          <ul className={styles.etcList}>
+            {etcAnswers.map((ans) => (
+              <li key={ans} className={styles.etcItem}>
+                {ans}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }
