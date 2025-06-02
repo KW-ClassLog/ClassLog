@@ -2,7 +2,11 @@
   border: 1px solid $color-blue;
   border-radius: $radius-lg;
   padding: $spacing-md;
-  width: fit-content;
+  height: fit-content;
+
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
 
   :global {
     .recharts-legend-item {
@@ -22,5 +26,35 @@
 .chartTitle {
   font-weight: $font-weight-bold;
   font-size: $font-size-lg;
-  margin-bottom: $spacing-sm;
+  margin-bottom: $spacing-xs;
+}
+
+.averageCorrectRateTextBox {
+  display: flex;
+  flex-direction: column;
+}
+
+.averageCorrectRateDesc {
+  color: $color-neutral-5;
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+}
+
+.pieCenterText {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: $font-size-xl;
+  font-weight: bold;
+  color: #2d3561;
+}
+
+.pieWrapper {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

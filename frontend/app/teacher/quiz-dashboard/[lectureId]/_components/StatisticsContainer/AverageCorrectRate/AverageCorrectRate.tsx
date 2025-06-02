@@ -20,27 +20,30 @@ export default function AverageCorrectRate({
   ];
   return (
     <div className={styles.chartCard}>
-      <PieChart width={120} height={120}>
-        <Pie
-          data={data}
-          cx="50%"
-          cy="50%"
-          innerRadius={35}
-          outerRadius={48}
-          startAngle={90}
-          endAngle={-270}
-          dataKey="value"
-        >
-          {data.map((entry, idx) => (
-            <Cell key={`cell-${idx}`} fill={COLORS[idx % COLORS.length]} />
-          ))}
-        </Pie>
-      </PieChart>
-      <div>
+      <div className={styles.pieWrapper}>
+        <PieChart width={120} height={120}>
+          <Pie
+            data={data}
+            cx="50%"
+            cy="50%"
+            innerRadius={35}
+            outerRadius={48}
+            startAngle={90}
+            endAngle={-270}
+            dataKey="value"
+          >
+            {data.map((entry, idx) => (
+              <Cell key={`cell-${idx}`} fill={COLORS[idx % COLORS.length]} />
+            ))}
+          </Pie>
+        </PieChart>
+        <div className={styles.pieCenterText}>{averageCorrectRate}%</div>
+      </div>
+      <div className={styles.averageCorrectRateTextBox}>
         <div className={styles.chartTitle}>
-          평균 정답률 {averageCorrectRate}%
+          평균 정답률 <b>{averageCorrectRate}%</b>
         </div>
-        <div className={styles.averageCorrectRateTextBox}>
+        <div className={styles.averageCorrectRateDesc}>
           총 {totalQuizCount}문제 중 평균{" "}
           {((totalQuizCount * averageCorrectRate) / 100).toFixed(1)}개 정답
         </div>

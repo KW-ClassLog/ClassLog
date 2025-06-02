@@ -3,6 +3,7 @@
   border-radius: $radius-lg;
   padding: $spacing-md;
   width: fit-content;
+  height: fit-content;
 
   :global {
     .recharts-legend-item {
