@@ -72,12 +72,16 @@ public class LangChainClientImpl implements LangChainClient {
                             default -> mappedType = "UNKNOWN";
                         }
 
-                        return QuizDTO.builder()
+                        QuizDTO.QuizDTOBuilder builder = QuizDTO.builder()
                                 .quizBody((String) q.get("quiz_body"))
                                 .solution((String) q.get("solution"))
-                                .type(mappedType)
-                                .choices(choices)
-                                .build();
+                                .type(mappedType);
+
+                        if ("multipleChoice".equals(mappedType)) {
+                            builder.options(choices);
+                        }
+
+                        return builder.build();
                     })
                     .toList();
 

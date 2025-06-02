@@ -1,5 +1,6 @@
 package org.example.backend.domain.quiz.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,7 +21,10 @@ public class QuizResponseDTO {
     public static class QuizDTO {
         private String quizBody;
         private String solution;
-        private List<String> choices;
         private String type;
+
+
+        @JsonInclude(JsonInclude.Include.NON_EMPTY)
+        private List<String> options;
     }
 }
