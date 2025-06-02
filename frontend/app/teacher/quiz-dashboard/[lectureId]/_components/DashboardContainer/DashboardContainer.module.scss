@@ -4,6 +4,7 @@
   padding: $spacing-lg;
   border: 1px solid $color-neutral-7;
   height: calc(94vh - $spacing-lg);
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: $spacing-lg;
