@@ -20,14 +20,11 @@ export default function AverageCorrectRate({
   ];
   return (
     <div className={styles.chartCard}>
-      <div className={styles.chartTitle}>
-        평균 정답률 <b>{averageCorrectRate}%</b>
-      </div>
-      <PieChart width={100} height={100}>
+      <PieChart width={120} height={120}>
         <Pie
           data={data}
-          cx={50}
-          cy={50}
+          cx="50%"
+          cy="50%"
           innerRadius={35}
           outerRadius={48}
           startAngle={90}
@@ -39,8 +36,11 @@ export default function AverageCorrectRate({
           ))}
         </Pie>
       </PieChart>
-      <div className={styles.averageCorrectRateTextBox}>
-        <div className={styles.averageCorrectRateDesc}>
+      <div>
+        <div className={styles.chartTitle}>
+          평균 정답률 {averageCorrectRate}%
+        </div>
+        <div className={styles.averageCorrectRateTextBox}>
           총 {totalQuizCount}문제 중 평균{" "}
           {((totalQuizCount * averageCorrectRate) / 100).toFixed(1)}개 정답
         </div>
