@@ -1,0 +1,55 @@
+.card {
+  background: $color-neutral-8;
+  border-radius: $radius-lg;
+  padding: $spacing-md;
+  box-shadow: none;
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-sm;
+}
+
+.title {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+}
+
+.count {
+  color: $color-blue;
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+}
+
+.list {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $spacing-xs 0;
+  border-bottom: 1px solid $color-neutral-7;
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+}
+
+.name {
+  color: $color-neutral-4;
+}
+
+.date {
+  color: $color-neutral-6;
+  font-size: $font-size-sm;
+}
+
+.lastRow {
+  border-bottom: none;
+}
