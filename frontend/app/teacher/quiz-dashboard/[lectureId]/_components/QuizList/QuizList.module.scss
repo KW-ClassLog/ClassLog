@@ -1,0 +1,130 @@
+.wrapper {
+  background: $color-skyblue;
+  border-radius: $radius-lg;
+  padding: $spacing-md;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  height: 100%;
+  overflow: auto;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-md;
+}
+
+.title {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+}
+
+.count {
+  color: $color-blue;
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.card {
+  background: #fff;
+  border-radius: $radius-md;
+  border: 1px solid $color-neutral-7;
+  padding: 1.2rem 1.2rem 1.5rem 1.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.quizHeader {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  margin-bottom: $spacing-xs;
+}
+
+.quizIndex {
+  font-size: $font-size-md;
+  color: $color-neutral-3;
+}
+
+.correctRate {
+  font-size: $font-size-sm;
+  color: $color-neutral-6;
+  font-weight: $font-weight-medium;
+}
+
+.quizTitle {
+  font-size: $font-size-md;
+  margin-bottom: $spacing-xs;
+  color: $color-neutral-4;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+}
+
+.option {
+  background: #fff;
+  border: 1px solid $color-neutral-7;
+  border-radius: $radius-sm;
+  padding: $spacing-xs $spacing-sm;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: $font-size-sm;
+  color: $color-neutral-4;
+  font-weight: $font-weight-medium;
+}
+
+.optionCorrect {
+  background: $color-blue;
+  color: #fff;
+  border: none;
+}
+
+.oxRow {
+  display: flex;
+  gap: $spacing-xs;
+  margin-bottom: $spacing-xs;
+}
+
+.oxBtn {
+  flex: 1;
+  border-radius: $radius-sm;
+  border: 1px solid $color-neutral-7;
+  background: #fff;
+  color: $color-neutral-4;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  padding: $spacing-xs 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.oxBtnCorrect {
+  background: $color-blue;
+  color: #fff;
+  border: none;
+}
+
+.shortAnswer {
+  margin-top: $spacing-xs;
+  color: $color-blue;
+  font-size: $font-size-sm;
+}
+
+.shortCount {
+  color: $color-neutral-6;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  margin-left: $spacing-xs;
+}
