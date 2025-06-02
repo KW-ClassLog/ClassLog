@@ -15,7 +15,7 @@ export default function StatisticsContainer() {
         quizOrder: 1,
         type: "multipleChoice",
         quizBody: "제가 제일 좋아하는 간식은 무엇일까요?",
-        correctRate: 20.1,
+        correctRate: 40.1,
         solution: "과자",
         options: [
           { optionOrder: 1, option: "과자", count: 20 },
@@ -29,7 +29,7 @@ export default function StatisticsContainer() {
         quizOrder: 2,
         type: "trueFalse",
         quizBody: "저는 부자가 꿈입니다",
-        correctRate: 20.1,
+        correctRate: 80.1,
         solution: "O",
         options: [
           { optionOrder: null, option: "O", count: 50 },

@@ -5,9 +5,9 @@ import {
   Bar,
   XAxis,
   YAxis,
-  Tooltip,
   ResponsiveContainer,
   Cell,
+  LabelList,
 } from "recharts";
 import styles from "./QuizCorrectRates.module.scss";
 
@@ -26,12 +26,28 @@ export default function QuizCorrectRates({ quizList }: QuizCorrectRatesProps) {
   return (
     <div className={styles.chartCard}>
       <div className={styles.chartTitle}>퀴즈별 정답률 분포</div>
-      <ResponsiveContainer width="100%" height={200}>
-        <BarChart data={data} barSize={32}>
-          <XAxis dataKey="name" tickLine={false} axisLine={false} />
-          <YAxis domain={[0, 100]} tickLine={false} axisLine={false} />
-          <Tooltip formatter={(value: number) => `${value}%`} />
-          <Bar dataKey="correctRate">
+      <ResponsiveContainer width="100%" height={250}>
+        <BarChart data={data} barSize={46}>
+          <XAxis
+            dataKey="name"
+            tickLine={false}
+            axisLine={false}
+            className={styles.xAxisLabel}
+          />
+          <YAxis
+            domain={[0, 100]}
+            tickLine={false}
+            axisLine={false}
+            tick={false}
+            width={0}
+          />
+          <Bar dataKey="correctRate" radius={[8, 8, 0, 0]}>
+            <LabelList
+              dataKey="correctRate"
+              position="top"
+              formatter={(v: number) => v.toFixed(1)}
+              className={styles.barLabel}
+            />
             {data.map((_, idx) => (
               <Cell key={`cell-${idx}`} fill={COLORS[idx % COLORS.length]} />
             ))}
