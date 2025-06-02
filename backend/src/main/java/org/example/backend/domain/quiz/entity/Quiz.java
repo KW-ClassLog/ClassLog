@@ -51,4 +51,11 @@ public class Quiz extends BaseEntity {
 
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<QuizAnswer> quizAnswerList = new ArrayList<>();
+
+    public void update(String quizBody, String solution, QuizType type) {
+        this.quiz = quizBody;
+        this.solution = solution;
+        this.type = type;
+    }
 }
+

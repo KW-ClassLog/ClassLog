@@ -27,4 +27,8 @@ public class Option {
 
     @Column(name = "option_order")
     private int optionOrder;
+
+    public void updateText(String text) {
+        this.text = text;
+    }
 }
