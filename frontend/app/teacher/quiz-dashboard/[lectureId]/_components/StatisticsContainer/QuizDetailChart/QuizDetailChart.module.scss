@@ -43,33 +43,35 @@
 }
 
 .etcAnswersBox {
-  margin-top: 1rem;
-  background: #f7f9fb;
+  margin-top: $spacing-sm;
+  border: 1px solid $color-neutral-7;
   border-radius: $radius-md;
   padding: $spacing-xs $spacing-sm;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
 }
 
 .etcTitle {
   font-size: $font-size-sm;
-  color: $color-neutral-6;
-  font-weight: $font-weight-bold;
-  margin-bottom: 0.3rem;
+  color: $color-neutral-5;
+  margin-bottom: $spacing-xs;
 }
 
 .etcList {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: $spacing-xs;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
 .etcItem {
-  background: #e6eaf3;
+  background: #f7f9fb;
   color: $color-neutral-5;
   border-radius: $radius-sm;
-  padding: 0.2rem 0.7rem;
+  padding: $spacing-xs;
   font-size: $font-size-sm;
   font-weight: $font-weight-medium;
 }
