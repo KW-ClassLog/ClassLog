@@ -43,10 +43,9 @@ public class QuizServiceImpl implements QuizService {
     private final CustomSecurityUtil customSecurityUtil;
 
 
-    // 퀴즈 생성
+    // 퀴즈 생성 및 재생성
     @Override
-    public QuizResponseDTO generateQuiz(UUID lectureId, QuizRequestDTO request) {
-
+    public QuizResponseDTO generateQuiz(UUID lectureId, QuizRequestDTO request, boolean isReGenerate) {
         Role role = customSecurityUtil.getUserRole();
         UUID userId = customSecurityUtil.getUserId();
 
@@ -61,42 +60,34 @@ public class QuizServiceImpl implements QuizService {
             throw new QuizException(QuizErrorCode.UNAUTHORIZED_ACCESS);
         }
 
-        // 강의록 매핑 존재 여부 확인
         List<LectureNoteMapping> mappings = lectureNoteMappingRepository.findAllByLectureId(lectureId);
         if (mappings.isEmpty()) {
             throw new QuizException(QuizErrorCode.LECTURE_NOTE_NOT_FOUND);
         }
 
-        // 모든 강의록을 조회
         List<LectureNote> notes = mappings.stream()
-                .map(mapping -> {
-                    LectureNote note = lectureNoteRepository.findById(mapping.getLectureNoteId())
-                            .orElseThrow(() -> new QuizException(QuizErrorCode.LECTURE_NOTE_NOT_FOUND));
-                    return note;
-                })
+                .map(mapping -> lectureNoteRepository.findById(mapping.getLectureNoteId())
+                        .orElseThrow(() -> new QuizException(QuizErrorCode.LECTURE_NOTE_NOT_FOUND)))
                 .collect(Collectors.toList());
 
-        // S3 URL 변환
         String noteUrls = notes.stream()
-                .map(note -> {
-                    String presignedUrl = s3Service.getPresignedUrl(note.getNoteUrl());
-                    return presignedUrl;
-                })
+                .map(note -> s3Service.getPresignedUrl(note.getNoteUrl()))
                 .collect(Collectors.joining(","));
 
         String audioUrl = s3Service.getPresignedUrl(lecture.getAudioUrl());
 
         try {
-            return langChainClient.requestQuiz(
-                    lectureId.toString(),
-                    noteUrls,
-                    request.isUseAudio(),
-                    audioUrl
-            );
+            if (isReGenerate) {
+                return langChainClient.requestQuiz(lectureId.toString(), noteUrls, request.isUseAudio(), audioUrl, true);
+            } else {
+                return langChainClient.requestQuiz(lectureId.toString(), noteUrls, request.isUseAudio(), audioUrl, false);
+            }
         } catch (Exception e) {
             throw new QuizException(QuizErrorCode.AI_CALL_FAILED);
         }
     }
+
+
 
     // 퀴즈 저장
     @Override

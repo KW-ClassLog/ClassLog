@@ -23,7 +23,7 @@ public class LangChainClientImpl implements LangChainClient {
     private final RestTemplate restTemplate = new RestTemplate();
 
     @Override
-    public QuizResponseDTO requestQuiz(String lectureId, String documentUrl, boolean useAudio, String audioUrl) {
+    public QuizResponseDTO requestQuiz(String lectureId, String documentUrl, boolean useAudio, String audioUrl, boolean isRegenerate) {
         try {
             Map<String, Object> body = new HashMap<>();
             body.put("document_path", documentUrl);
@@ -37,7 +37,12 @@ public class LangChainClientImpl implements LangChainClient {
 
             HttpEntity<Map<String, Object>> request = new HttpEntity<>(body, headers);
 
-            String url = langChainServerUrl + "/generate-quiz?lecture_id=" + lectureId;
+            String url;
+            if (isRegenerate){
+                url = langChainServerUrl + "/regenerate-quiz?lecture_id=" + lectureId;
+            } else{
+                url = langChainServerUrl + "/generate-quiz?lecture_id=" + lectureId;
+            }
 
             ResponseEntity<Map> response = restTemplate.postForEntity(
                     url, request, Map.class);
