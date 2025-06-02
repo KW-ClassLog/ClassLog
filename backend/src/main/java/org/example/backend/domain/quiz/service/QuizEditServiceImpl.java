@@ -56,25 +56,32 @@ public class QuizEditServiceImpl implements QuizEditService {
             Quiz quiz = quizRepository.findByLectureIdAndQuizOrder(lectureId, dto.getQuizOrder())
                     .orElseThrow(() -> new QuizException(QuizErrorCode.QUIZ_NOT_FOUND));
 
-            QuizType quizType;
+            QuizType oldType = quiz.getType();
+            QuizType newType;
+
             try {
-                quizType = QuizType.from(dto.getType());
+                newType = QuizType.from(dto.getType());
             } catch (IllegalArgumentException e) {
                 throw new QuizException(QuizErrorCode.INVALID_QUIZ_TYPE);
             }
 
-            quiz.update(dto.getQuizBody(), dto.getSolution(), quizType);
+            quiz.update(dto.getQuizBody(), dto.getSolution(), newType);
 
-            if (quizType == QuizType.MULTIPLE_CHOICE) {
-                List<Option> options = optionRepository.findByQuizId(quiz.getId());
-                Map<Integer, Option> optionMap = options.stream()
-                        .collect(Collectors.toMap(Option::getOptionOrder, o -> o));
 
-                for (QuizEditRequestDTO.QuizDTO.OptionDTO optDto : dto.getOptions()) {
-                    Option target = optionMap.get(optDto.getOptionOrder());
-                    if (target != null) {
-                        target.updateText(optDto.getOption());
-                    }
+            if (oldType != newType) {
+                optionRepository.deleteByQuizId(quiz.getId());
+            }
+
+            if (newType == QuizType.MULTIPLE_CHOICE) {
+                List<QuizEditRequestDTO.QuizDTO.OptionDTO> newOptions = dto.getOptions();
+
+                for (QuizEditRequestDTO.QuizDTO.OptionDTO optDto : newOptions) {
+                    Option option = Option.builder()
+                            .quiz(quiz)
+                            .optionOrder(optDto.getOptionOrder())
+                            .text(optDto.getOption())
+                            .build();
+                    optionRepository.save(option);
                 }
             }
 
