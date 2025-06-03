@@ -2,27 +2,35 @@
 
 import styles from "./ClassList.module.scss";
 import { MoreVertical, Clock, Calendar } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import CreateClassModal from "./CreateClassModal/CreateClassModal";
 import ClosableModal from "@/components/Modal/ClosableModal/ClosableModal";
+import { fetchMyClassList } from "@/api/classes/fetchMyClassList";
+import { FetchMyClassListResult } from "@/types/classes/fetchMyClassListTypes";
 
-interface Class {
-  classId: string;
-  className: string;
-  classDate: string;
-  startDate: string;
-  endDate: string;
-}
-
-interface ClassListProps {
-  classes: Class[];
-}
-
-export default function ClassList({ classes }: ClassListProps) {
+export default function ClassList() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [classes, setClasses] = useState<FetchMyClassListResult[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      setError(null);
+      const res = await fetchMyClassList();
+      if (res && res.isSuccess) {
+        setClasses(res.result || []);
+      } else {
+        setError(res?.message || "클래스 목록을 불러오지 못했습니다.");
+      }
+      setLoading(false);
+    };
+    fetchData();
+  }, []);
 
   return (
     <div className={styles.container}>
@@ -33,28 +41,36 @@ export default function ClassList({ classes }: ClassListProps) {
         </button>
       </div>
       <div className={styles.classList}>
-        {classes.map((classItem) => (
-          <div key={classItem.classId} className={styles.classCard}>
-            <div className={styles.header}>
-              <h3 className={styles.title}>{classItem.className}</h3>
-              <button className={styles.moreButton}>
-                <MoreVertical size={20} />
-              </button>
-            </div>
-            <div className={styles.infoList}>
-              <div className={styles.infoItem}>
-                <Clock className={styles.icon} size={16} />
-                <span className={styles.infoText}>{classItem.classDate}</span>
+        {loading ? (
+          <div>로딩 중...</div>
+        ) : error ? (
+          <div>{error}</div>
+        ) : classes.length === 0 ? (
+          <div>클래스가 없습니다.</div>
+        ) : (
+          classes.map((classItem) => (
+            <div key={classItem.classId} className={styles.classCard}>
+              <div className={styles.header}>
+                <h3 className={styles.title}>{classItem.className}</h3>
+                <button className={styles.moreButton}>
+                  <MoreVertical size={20} />
+                </button>
               </div>
-              <div className={styles.infoItem}>
-                <Calendar className={styles.icon} size={16} />
-                <span className={styles.infoText}>
-                  {classItem.startDate} ~ {classItem.endDate}
-                </span>
+              <div className={styles.infoList}>
+                <div className={styles.infoItem}>
+                  <Clock className={styles.icon} size={16} />
+                  <span className={styles.infoText}>{classItem.classDate}</span>
+                </div>
+                <div className={styles.infoItem}>
+                  <Calendar className={styles.icon} size={16} />
+                  <span className={styles.infoText}>
+                    {classItem.startDate} ~ {classItem.endDate}
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
 
       {isModalOpen && (

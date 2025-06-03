@@ -26,65 +26,6 @@ const mockLectures = [
   // 더 많은 강의 데이터를 추가할 수 있습니다
 ];
 
-const mockClasses = [
-  {
-    classId: "1",
-    className: "자료구조",
-    classDate: "월 (10:15-11:45) / 수 (12:00-13:15)",
-    startDate: "2024.03.04",
-    endDate: "2025.06.13",
-  },
-  {
-    classId: "2",
-    className: "자료구조",
-    classDate: "월 (10:15-11:45) / 수 (12:00-13:15)",
-    startDate: "2024.03.04",
-    endDate: "2025.06.13",
-  },
-  {
-    classId: "3",
-    className: "자료구조",
-    classDate: "월 (10:15-11:45) / 수 (12:00-13:15)",
-    startDate: "2024.03.04",
-    endDate: "2025.06.13",
-  },
-  {
-    classId: "4",
-    className: "자료구조",
-    classDate: "월 (10:15-11:45) / 수 (12:00-13:15)",
-    startDate: "2024.03.04",
-    endDate: "2025.06.13",
-  },
-  {
-    classId: "5",
-    className: "자료구조",
-    classDate: "월 (10:15-11:45) / 수 (12:00-13:15)",
-    startDate: "2024.03.04",
-    endDate: "2025.06.13",
-  },
-  {
-    classId: "6",
-    className: "자료구조",
-    classDate: "월 (10:15-11:45) / 수 (12:00-13:15)",
-    startDate: "2024.03.04",
-    endDate: "2025.06.13",
-  },
-  {
-    classId: "7",
-    className: "자료구조",
-    classDate: "월 (10:15-11:45) / 수 (12:00-13:15)",
-    startDate: "2024.03.04",
-    endDate: "2025.06.13",
-  },
-  {
-    classId: "8",
-    className: "자료구조",
-    classDate: "월 (10:15-11:45) / 수 (12:00-13:15)",
-    startDate: "2024.03.04",
-    endDate: "2025.06.13",
-  },
-];
-
 export default function TeacherHomePage() {
   const [selectedDate, setSelectedDate] = useState(new Date());
 
@@ -104,7 +45,7 @@ export default function TeacherHomePage() {
         </div>
       </div>
       <div className={styles.rightSection}>
-        <ClassList classes={mockClasses} />
+        <ClassList />
       </div>
     </div>
   );
