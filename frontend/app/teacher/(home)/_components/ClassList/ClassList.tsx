@@ -7,6 +7,9 @@ import CreateClassModal from "./CreateClassModal/CreateClassModal";
 import ClosableModal from "@/components/Modal/ClosableModal/ClosableModal";
 import { fetchMyClassList } from "@/api/classes/fetchMyClassList";
 import { FetchMyClassListResult } from "@/types/classes/fetchMyClassListTypes";
+import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
+import NoDataView from "@/components/NoDataView/NoDataView";
+import { School } from "lucide-react";
 
 export default function ClassList() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -42,11 +45,15 @@ export default function ClassList() {
       </div>
       <div className={styles.classList}>
         {loading ? (
-          <div>로딩 중...</div>
+          <LoadingSpinner />
         ) : error ? (
           <div>{error}</div>
         ) : classes.length === 0 ? (
-          <div>클래스가 없습니다.</div>
+          <NoDataView
+            icon={School}
+            title={"강의 없음"}
+            description={"생성된 클래스가 없습니다."}
+          />
         ) : (
           classes.map((classItem) => (
             <div key={classItem.classId} className={styles.classCard}>
