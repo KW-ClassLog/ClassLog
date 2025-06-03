@@ -1,4 +1,4 @@
-export interface MyClassResult {
+export interface FetchMyClassListResult {
   classId: string;
   className: string;
   startDate: string;
