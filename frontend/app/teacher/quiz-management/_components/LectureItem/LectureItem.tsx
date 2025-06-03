@@ -2,6 +2,8 @@ import { Calendar, Clock } from "lucide-react";
 import styles from "./LectureItem.module.scss";
 import { useState } from "react";
 import MakeQuizModal from "@/components/Modal/MakeQuizModal/MakeQuizModal";
+import { ROUTES } from "@/constants/routes";
+import { useRouter } from "next/navigation";
 
 interface LectureItemProps {
   lectureId: string;
@@ -22,12 +24,21 @@ export default function LectureItem({
 }: LectureItemProps) {
   const [showQuizModal, setShowQuizModal] = useState(false);
 
+  const router = useRouter();
+
   const getActionButton = (status: LectureItemProps["status"]) => {
     switch (status) {
       case "beforeLecture":
         return <div className={styles.beforeLecture}>강의 전</div>;
       case "showDashboard":
-        return <button className={styles.showDashboard}>대시보드 확인</button>;
+        return (
+          <button
+            className={styles.showDashboard}
+            onClick={() => router.push(ROUTES.teacherQuizDashboard(lectureId))}
+          >
+            대시보드 확인
+          </button>
+        );
       case "quizCreation":
         return (
           <button
