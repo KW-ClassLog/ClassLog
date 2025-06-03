@@ -10,7 +10,6 @@ export async function logout() {
       ENDPOINTS.USERS.LOGOUT
     );
 
-    delete axiosInstance.defaults.headers.common["Authorization"];
     useAuthStore.getState().logout();
     return response.data;
   } catch (error: unknown) {

@@ -20,13 +20,6 @@ export async function refreshToken() {
       setAccessToken(accessToken);
     }
 
-    // axios의 기본 헤더에 access token 설정
-    if (accessToken) {
-      axiosInstance.defaults.headers.common[
-        "Authorization"
-      ] = `Bearer ${accessToken}`;
-    }
-
     return response.data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error) && error.response) {
