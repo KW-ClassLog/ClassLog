@@ -174,12 +174,15 @@ public class ClassroomServiceImpl implements ClassroomService {
         Object principal = authentication.getPrincipal();
 
         UUID professorId = ((CustomUserDetails) principal).getUser().getId();
+        LocalDate today = LocalDate.now();
+
 
         // 교수 ID로 해당 교수의 클래스 목록 조회
         List<Classroom> classrooms = classroomRepository.findByProfessorId(professorId);
 
         // Classroom 객체를 ClassroomResponseDTO로 변환
         return classrooms.stream()
+                .filter(classroom -> classroom.getEndDate().isAfter(today) || classroom.getEndDate().isEqual(today))
                 .map(classroomConverter::toResponseDTO)
                 .collect(Collectors.toList());
     }
