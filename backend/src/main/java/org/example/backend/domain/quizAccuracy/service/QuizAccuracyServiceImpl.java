@@ -81,7 +81,7 @@ public class QuizAccuracyServiceImpl implements QuizAccuracyService {
             sumRate += correctRate;
 
             QuizType type = quiz.getType();
-            String camelType = toCamelCase(type.name());
+            String camelType = QuizType.toCamelCase(type.name());
 
             QuizAccuracyResponseDTO.QuizDTO.QuizDTOBuilder builder = QuizAccuracyResponseDTO.QuizDTO.builder()
                     .quizId(quiz.getId())
@@ -128,11 +128,5 @@ public class QuizAccuracyServiceImpl implements QuizAccuracyService {
                 .averageCorrectRate(Math.round(average * 10) / 10.0)
                 .quizList(quizList)
                 .build();
-    }
-
-    private String toCamelCase(String enumName) {
-        String[] parts = enumName.toLowerCase().split("_");
-        if (parts.length == 1) return parts[0];
-        return parts[0] + Character.toUpperCase(parts[1].charAt(0)) + parts[1].substring(1);
     }
 }
