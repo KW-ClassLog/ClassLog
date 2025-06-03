@@ -188,15 +188,14 @@ public class LectureServiceImpl implements LectureService {
     }
 
     @Override
-    public List<TodayLectureResponseDTO> getClassListByProfessor() {
+    public List<TodayLectureResponseDTO> getClassListByProfessor(LocalDate date) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Object principal = authentication.getPrincipal();
 
         UUID professorId = ((CustomUserDetails) principal).getUser().getId();
         List<Classroom> classrooms = classroomRepository.findByProfessorId(professorId);
-        LocalDate today = LocalDate.now();
 
-        List<Lecture> lectures = lectureRepository.findByClassroomInAndLectureDate(classrooms, today);
+        List<Lecture> lectures = lectureRepository.findByClassroomInAndLectureDate(classrooms, date);
 
         LocalTime now = LocalTime.now();
 

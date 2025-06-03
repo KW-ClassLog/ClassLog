@@ -7,6 +7,7 @@ import org.example.backend.domain.lecture.dto.response.TodayLectureResponseDTO;
 import org.example.backend.domain.lecture.entity.Lecture;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,5 +26,5 @@ public interface LectureService {
 
     List<UUID> mapNotes(UUID lectureId, List<UUID> lectureNoteIds);
 
-    List<TodayLectureResponseDTO> getClassListByProfessor();
+    List<TodayLectureResponseDTO> getClassListByProfessor(LocalDate date);
 }
