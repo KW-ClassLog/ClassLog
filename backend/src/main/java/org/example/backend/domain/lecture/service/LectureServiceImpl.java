@@ -208,7 +208,7 @@ public class LectureServiceImpl implements LectureService {
                     if (today.isAfter(lecture.getLectureDate())) {
                         status = "afterLecture";
                     } else if (today.isEqual(lecture.getLectureDate())) {
-                        status = now.isBefore(lecture.getEndTime()) ? "beforeLecture" : "afterddLecture";
+                        status = now.isBefore(lecture.getEndTime()) ? "beforeLecture" : "afterLecture";
                     } else {
                         status = "beforeLecture";
                     }
