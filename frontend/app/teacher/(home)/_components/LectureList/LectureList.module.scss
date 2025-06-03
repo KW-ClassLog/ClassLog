@@ -23,15 +23,14 @@
 }
 
 .lectureItem {
-  padding: $spacing-lg;
+  padding: $spacing-md;
   background-color: $color-white;
   border: 1px solid $color-neutral-7;
   border-radius: $radius-lg;
   transition: $transition-fast;
 
   &:hover {
-    border-color: $color-neutral-5;
-    box-shadow: $shadow-sm;
+    border-color: $color-blue;
     cursor: pointer;
   }
 }
@@ -49,12 +48,12 @@
     color: $color-neutral-1;
 
     .lectureTitleText {
-      font-size: $font-size-lg;
+      font-size: $font-size-md;
       font-weight: $font-weight-medium;
     }
 
     .className {
-      font-size: $font-size-md;
+      font-size: $font-size-sm;
       border-radius: $radius-sm;
       margin-left: $spacing-sm;
       color: $color-mutedblue;
@@ -69,15 +68,11 @@
 
     .buttonText {
       font-weight: $font-weight-medium;
-      &.강의전 {
+      &.beforeLecture {
         color: $color-blue;
       }
 
-      &.강의중 {
-        color: $color-blue;
-      }
-
-      &.강의종료 {
+      &.afterLecture {
         color: $color-neutral-5;
       }
     }
@@ -92,6 +87,7 @@
 
     .buttonText {
       font-weight: $font-weight-medium;
+      font-size: $font-size-md;
     }
 
     .buttonIcon {

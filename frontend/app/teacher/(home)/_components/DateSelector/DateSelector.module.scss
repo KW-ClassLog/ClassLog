@@ -27,6 +27,7 @@
   background: none;
   cursor: pointer;
   transition: $transition-fast;
+  font-family: $font-default;
 
   &:hover {
     background-color: $color-neutral-8;

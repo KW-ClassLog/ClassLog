@@ -57,7 +57,7 @@ export const ENDPOINTS = {
       `${BASE_API}/lectures/${classId}/${lectureId}`,
     DELETE: (lectureId: string) => `${BASE_API}/lectures/${lectureId}`,
     GET_LECTURES_BY_DATE: (date: string) =>
-      `${BASE_API}/lectures/teacher/today/?date=${date}`,
+      `${BASE_API}/lectures/teacher/today?date=${date}`,
 
     // 노트 관련
     UPLOAD_NOTE: (lectureId: string) =>
