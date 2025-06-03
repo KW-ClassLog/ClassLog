@@ -8,6 +8,7 @@ import org.example.backend.domain.lecture.converter.LectureConverter;
 import org.example.backend.domain.lecture.dto.request.LectureRequestDTO;
 import org.example.backend.domain.lecture.dto.response.LectureRecordingResponseDTO;
 import org.example.backend.domain.lecture.dto.response.LectureResponseDTO;
+import org.example.backend.domain.lecture.dto.response.TodayLectureResponseDTO;
 import org.example.backend.domain.lecture.entity.Lecture;
 import org.example.backend.domain.lecture.exception.LectureErrorCode;
 import org.example.backend.domain.lecture.exception.LectureException;
@@ -19,13 +20,20 @@ import org.example.backend.domain.lectureNote.entity.LectureNote;
 import org.example.backend.domain.lectureNote.repository.LectureNoteRepository;
 import org.example.backend.domain.lectureNoteMapping.entity.LectureNoteMapping;
 import org.example.backend.domain.lectureNoteMapping.repository.LectureNoteMappingRepository;
+import org.example.backend.global.security.auth.CustomUserDetails;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -178,4 +186,35 @@ public class LectureServiceImpl implements LectureService {
                 .map(LectureNote::getId)
                 .toList();
     }
+
+    @Override
+    public List<TodayLectureResponseDTO> getClassListByProfessor(LocalDate date) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Object principal = authentication.getPrincipal();
+
+        UUID professorId = ((CustomUserDetails) principal).getUser().getId();
+        List<Classroom> classrooms = classroomRepository.findByProfessorId(professorId);
+
+        List<Lecture> lectures = lectureRepository.findByClassroomInAndLectureDate(classrooms, date);
+
+        LocalTime now = LocalTime.now();
+
+        return lectures.stream()
+                .sorted(Comparator.comparing(Lecture::getStartTime))
+                .map(lecture -> {
+                    String status = now.isBefore(lecture.getEndTime()) ? "beforeLecture" : "afterLecture";
+
+                    return new TodayLectureResponseDTO(
+                            lecture.getId(),
+                            lecture.getLectureName(),
+                            lecture.getLectureDate(),
+                            lecture.getClassroom().getClassName(),
+                            lecture.getStartTime(),
+                            lecture.getEndTime(),
+                            status
+                    );
+                })
+                .collect(Collectors.toList());
+    }
+
 }
