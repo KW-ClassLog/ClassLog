@@ -51,20 +51,7 @@ export default function StatisticsContainer({
         { answer: "인천", rate: 10.0 },
         { answer: "수원", rate: 5.0 },
       ],
-      etcAnswers: [
-        "부산",
-        "창원",
-        "대전",
-        "대구",
-        "부산",
-        "창원",
-        "대전",
-        "대구",
-        "부산",
-        "창원",
-        "대전",
-        "대구",
-      ],
+      etcAnswers: ["부산", "창원", "대전", "대구"],
     },
   ];
 

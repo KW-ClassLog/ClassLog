@@ -8,6 +8,7 @@ import {
   ResponsiveContainer,
   Cell,
   LabelList,
+  CartesianGrid,
 } from "recharts";
 import styles from "./QuizCorrectRates.module.scss";
 
@@ -28,6 +29,11 @@ export default function QuizCorrectRates({ quizList }: QuizCorrectRatesProps) {
       <div className={styles.chartTitle}>퀴즈별 정답률 분포</div>
       <ResponsiveContainer width="100%" height={250}>
         <BarChart data={data} barSize={46}>
+          <CartesianGrid
+            strokeDasharray="6 6"
+            stroke="#d9d9d9"
+            vertical={false}
+          />
           <XAxis
             dataKey="name"
             tickLine={false}
@@ -38,8 +44,9 @@ export default function QuizCorrectRates({ quizList }: QuizCorrectRatesProps) {
             domain={[0, 100]}
             tickLine={false}
             axisLine={false}
-            tick={false}
+            tick={true}
             width={0}
+            ticks={[0, 20, 40, 60, 80, 100]}
           />
           <Bar dataKey="correctRate" radius={[8, 8, 0, 0]}>
             <LabelList

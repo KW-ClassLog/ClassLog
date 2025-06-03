@@ -27,7 +27,7 @@ function MultipleChoiceChart({ data }: { data: Quiz }) {
   return (
     <div className={styles.chartCard}>
       <div className={styles.chartTitle}>퀴즈{data.quizOrder} 선택 분포</div>
-      <PieChart width={230} height={140}>
+      <PieChart width={250} height={140}>
         <Pie
           data={chartData}
           cx="50%"
@@ -45,6 +45,7 @@ function MultipleChoiceChart({ data }: { data: Quiz }) {
           verticalAlign="middle"
           iconType="circle"
           iconSize={8}
+          wrapperStyle={{ right: -20 }}
           formatter={(value, entry, idx) => (
             <span style={{ marginLeft: "4px" }}>
               {chartData[idx].name} ({chartData[idx].value}%)
@@ -65,7 +66,7 @@ function TrueFalseChart({ data }: { data: Quiz }) {
   return (
     <div className={styles.chartCard}>
       <div className={styles.chartTitle}>퀴즈{data.quizOrder} OX 응답 비율</div>
-      <PieChart width={230} height={140}>
+      <PieChart width={250} height={140}>
         <Pie
           data={chartData}
           cx="50%"
@@ -86,6 +87,7 @@ function TrueFalseChart({ data }: { data: Quiz }) {
           verticalAlign="middle"
           iconType="circle"
           iconSize={8}
+          wrapperStyle={{ right: -20 }}
           formatter={(value, entry, idx) => (
             <span style={{ marginLeft: "4px" }}>
               {chartData[idx].name} ({chartData[idx].value}%)
