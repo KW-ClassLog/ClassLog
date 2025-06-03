@@ -10,6 +10,7 @@ import { FetchMyClassListResult } from "@/types/classes/fetchMyClassListTypes";
 import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
 import NoDataView from "@/components/NoDataView/NoDataView";
 import { School, PencilLine, Trash2 } from "lucide-react";
+import { deleteClass } from "@/api/classes/deleteClass";
 
 export default function ClassList() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -45,9 +46,14 @@ export default function ClassList() {
     alert(`수정: ${classId}`);
   };
 
-  const handleDelete = (classId: string) => {
+  const handleDelete = async (classId: string) => {
     setDropdownOpenId(null);
-    alert(`삭제: ${classId}`);
+    const res = await deleteClass(classId);
+    if (res && res.isSuccess) {
+      setClasses(classes.filter((classItem) => classItem.classId !== classId));
+    } else {
+      setError(res?.message || "클래스를 삭제하지 못했습니다.");
+    }
   };
 
   return (
