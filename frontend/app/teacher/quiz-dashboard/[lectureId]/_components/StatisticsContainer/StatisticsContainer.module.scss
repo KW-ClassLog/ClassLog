@@ -1,8 +1,12 @@
 .statisticsContainer {
-  width: 50%;
-  height: 100%;
   display: flex;
-  flex-wrap: wrap;
+  width: 45%;
   gap: 1rem;
-  align-content: flex-start;
+  justify-content: center;
+}
+
+.statisticsColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }

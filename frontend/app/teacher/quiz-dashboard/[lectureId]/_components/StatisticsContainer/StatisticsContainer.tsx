@@ -4,6 +4,7 @@ import QuizCorrectRates from "./QuizCorrectRates/QuizCorrectRates";
 import AverageCorrectRate from "./AverageCorrectRate/AverageCorrectRate";
 import QuizDetailChart from "./QuizDetailChart/QuizDetailChart";
 import styles from "./StatisticsContainer.module.scss";
+import Masonry from "react-masonry-css";
 
 interface StatisticsContainerProps {
   statData: any;
@@ -67,14 +68,12 @@ export default function StatisticsContainer({
     },
   ];
 
-  const breakpointColumnsObj = {
-    default: 2,
-    1100: 2,
-    700: 1,
-  };
-
   return (
-    <div className={styles.statisticsContainer}>
+    <Masonry
+      breakpointCols={{ default: 2, 900: 1 }}
+      className={styles.statisticsContainer}
+      columnClassName={styles.statisticsColumn}
+    >
       <AverageCorrectRate
         averageCorrectRate={statData.averageCorrectRate}
         totalQuizCount={statData.totalQuizCount}
@@ -89,6 +88,6 @@ export default function StatisticsContainer({
           }}
         />
       ))}
-    </div>
+    </Masonry>
   );
 }
