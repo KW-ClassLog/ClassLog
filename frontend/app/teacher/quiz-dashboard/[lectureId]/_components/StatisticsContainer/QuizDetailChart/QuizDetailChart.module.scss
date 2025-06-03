@@ -1,0 +1,77 @@
+.chartCard {
+  border: 1px solid $color-blue;
+  border-radius: $radius-lg;
+  padding: $spacing-md;
+  width: 100%;
+  height: fit-content;
+
+  :global {
+    .recharts-legend-item {
+      margin: 4px auto !important;
+      padding: 4px 8px !important;
+      border-radius: $radius-sm !important;
+      font-size: $font-size-sm !important;
+      font-weight: $font-weight-bold !important;
+    }
+
+    .recharts-legend-item-symbol {
+      margin-right: 4px !important;
+    }
+  }
+}
+
+.chartTitle {
+  font-weight: $font-weight-bold;
+  font-size: $font-size-lg;
+  margin-bottom: $spacing-sm;
+}
+
+.top3List {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.top3Item {
+  display: flex;
+  justify-content: space-between;
+  background: #f7f9fb;
+  border-radius: $radius-lg;
+  padding: $spacing-xs $spacing-sm;
+  margin-top: $spacing-xs;
+  font-weight: $font-weight-medium;
+}
+
+.etcAnswersBox {
+  margin-top: $spacing-sm;
+  border: 1px solid $color-neutral-7;
+  border-radius: $radius-md;
+  padding: $spacing-xs $spacing-sm;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+}
+
+.etcTitle {
+  font-size: $font-size-sm;
+  color: $color-neutral-5;
+  margin-bottom: $spacing-xs;
+}
+
+.etcList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-xs;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.etcItem {
+  background: #f7f9fb;
+  color: $color-neutral-5;
+  border-radius: $radius-sm;
+  padding: $spacing-xs;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+}

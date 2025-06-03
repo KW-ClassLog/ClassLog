@@ -46,9 +46,11 @@
   flex-direction: column;
   gap: $spacing-xs;
   cursor: pointer;
-  transition: border 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+
   &:hover {
-    border: 2px solid $color-blue;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
 }
 

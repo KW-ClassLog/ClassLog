@@ -1,0 +1,61 @@
+.chartCard {
+  border: 1px solid $color-blue;
+  border-radius: $radius-lg;
+  padding: $spacing-md;
+  height: fit-content;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: $spacing-md;
+
+  :global {
+    .recharts-legend-item {
+      margin: 4px auto !important;
+      padding: 4px 8px !important;
+      border-radius: $radius-sm !important;
+      font-size: $font-size-sm !important;
+      font-weight: $font-weight-bold !important;
+    }
+
+    .recharts-legend-item-symbol {
+      margin-right: 4px !important;
+    }
+  }
+}
+
+.chartTitle {
+  font-weight: $font-weight-bold;
+  font-size: $font-size-lg;
+  margin-bottom: $spacing-xs;
+}
+
+.averageCorrectRateTextBox {
+  display: flex;
+  flex-direction: column;
+}
+
+.averageCorrectRateDesc {
+  color: $color-neutral-5;
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+}
+
+.pieCenterText {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: $font-size-lg;
+  font-weight: bold;
+  color: #2d3561;
+}
+
+.pieWrapper {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
