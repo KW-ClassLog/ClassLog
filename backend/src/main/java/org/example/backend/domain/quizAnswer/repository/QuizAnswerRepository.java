@@ -10,4 +10,6 @@ import java.util.UUID;
 
 public interface QuizAnswerRepository extends JpaRepository<QuizAnswer, UUID> {
     List<QuizAnswer> findAllByQuizId(UUID quizId);
+    int countByQuizIdAndAnswer(UUID quizId, String answer);
+    int countByQuizIdAndIsCollectTrue(UUID quizId);
 }

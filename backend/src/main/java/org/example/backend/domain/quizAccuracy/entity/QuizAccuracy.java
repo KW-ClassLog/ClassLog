@@ -11,6 +11,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Getter
 public class QuizAccuracy {
 
     @Id
@@ -24,4 +25,8 @@ public class QuizAccuracy {
 
     @Column(name = "correct_rate", nullable = false)
     private double correctRate;
+
+    public double getCorrectRate() {
+        return this.correctRate;
+    }
 }
