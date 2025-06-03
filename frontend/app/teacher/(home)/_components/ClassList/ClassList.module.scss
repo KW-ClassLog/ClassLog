@@ -1,7 +1,7 @@
 .container {
   display: flex;
   flex-direction: column;
-  gap: $spacing-md;
+  gap: $spacing-sm;
   background: $color-white;
   border: 1px solid $color-neutral-7;
   border-radius: $radius-lg;
@@ -50,23 +50,26 @@
   border-bottom: 1.5px solid $color-neutral-7;
 }
 
+.classCard:last-child {
+  border-bottom: none;
+}
+
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: $spacing-xs;
 }
 
 .title {
   font-family: $font-default;
   font-weight: $font-weight-medium;
   font-size: $font-size-md;
+  margin-bottom: $spacing-xs;
 }
 
 .moreButton {
   background: none;
   border: none;
-  padding: $spacing-xs;
   cursor: pointer;
   display: flex;
   align-items: center;
