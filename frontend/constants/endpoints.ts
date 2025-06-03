@@ -46,6 +46,7 @@ export const ENDPOINTS = {
     GET_ENTRY_CODE: (classId: string) => `${BASE_API}/classes/${classId}/code`,
     ENTER: (classId: string) => `${BASE_API}/classes/${classId}/enter`,
     GET_ALL_NOTES: (classId: string) => `${BASE_API}/classes/${classId}/notes`,
+    GET_MY_CLASSES: `${BASE_API}/classes/teacher/myclass`,
   },
 
   // 강의 관련
