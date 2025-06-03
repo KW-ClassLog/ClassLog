@@ -198,12 +198,20 @@ public class LectureServiceImpl implements LectureService {
         List<Lecture> lectures = lectureRepository.findByClassroomInAndLectureDate(classrooms, date);
 
         LocalTime now = LocalTime.now();
+        LocalDate today = LocalDate.now();
 
         return lectures.stream()
                 .sorted(Comparator.comparing(Lecture::getStartTime))
                 .map(lecture -> {
-                    String status = now.isBefore(lecture.getEndTime()) ? "beforeLecture" : "afterLecture";
 
+                    String status;
+                    if (today.isAfter(lecture.getLectureDate())) {
+                        status = "afterLecture";
+                    } else if (today.isEqual(lecture.getLectureDate())) {
+                        status = now.isBefore(lecture.getEndTime()) ? "beforeLecture" : "afterLecture";
+                    } else {
+                        status = "beforeLecture";
+                    }
                     return new TodayLectureResponseDTO(
                             lecture.getId(),
                             lecture.getLectureName(),
