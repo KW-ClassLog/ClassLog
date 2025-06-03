@@ -9,13 +9,14 @@ import { fetchMyClassList } from "@/api/classes/fetchMyClassList";
 import { FetchMyClassListResult } from "@/types/classes/fetchMyClassListTypes";
 import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
 import NoDataView from "@/components/NoDataView/NoDataView";
-import { School } from "lucide-react";
+import { School, PencilLine, Trash2 } from "lucide-react";
 
 export default function ClassList() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [classes, setClasses] = useState<FetchMyClassListResult[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [dropdownOpenId, setDropdownOpenId] = useState<string | null>(null);
 
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
@@ -34,6 +35,20 @@ export default function ClassList() {
     };
     fetchData();
   }, []);
+
+  const handleMoreClick = (classId: string) => {
+    setDropdownOpenId((prev) => (prev === classId ? null : classId));
+  };
+
+  const handleEdit = (classId: string) => {
+    setDropdownOpenId(null);
+    alert(`수정: ${classId}`);
+  };
+
+  const handleDelete = (classId: string) => {
+    setDropdownOpenId(null);
+    alert(`삭제: ${classId}`);
+  };
 
   return (
     <div className={styles.container}>
@@ -56,12 +71,32 @@ export default function ClassList() {
           />
         ) : (
           classes.map((classItem) => (
-            <div key={classItem.classId} className={styles.classCard}>
+            <div
+              key={classItem.classId}
+              className={styles.classCard}
+              style={{ position: "relative" }}
+            >
               <div className={styles.header}>
                 <h3 className={styles.title}>{classItem.className}</h3>
-                <button className={styles.moreButton}>
+                <button
+                  className={styles.moreButton}
+                  onClick={() => handleMoreClick(classItem.classId)}
+                  type="button"
+                >
                   <MoreVertical size={20} />
                 </button>
+                {dropdownOpenId === classItem.classId && (
+                  <div className={styles.dropdownMenu}>
+                    <button onClick={() => handleEdit(classItem.classId)}>
+                      <PencilLine size={16} />
+                      <span>수정하기</span>
+                    </button>
+                    <button onClick={() => handleDelete(classItem.classId)}>
+                      <Trash2 size={16} />
+                      <span>삭제하기</span>
+                    </button>
+                  </div>
+                )}
               </div>
               <div className={styles.infoList}>
                 <div className={styles.infoItem}>

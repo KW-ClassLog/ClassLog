@@ -2,7 +2,7 @@
 
 import styles from "./LectureList.module.scss";
 import LectureItem from "./LectureItem";
-import { FetchLecturesByDateResult } from "@/types/classes/fetchLecturesByDate";
+import { FetchLecturesByDateResult } from "@/types/lectures/fetchLecturesByDate";
 import { BookOpenText } from "lucide-react";
 import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
 import NoDataView from "@/components/NoDataView/NoDataView";

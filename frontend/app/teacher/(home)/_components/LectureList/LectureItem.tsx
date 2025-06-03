@@ -1,6 +1,6 @@
 import { Calendar, Clock, ChevronRight } from "lucide-react";
 import styles from "./LectureList.module.scss";
-import { FetchLecturesByDateResult } from "@/types/classes/fetchLecturesByDate";
+import { FetchLecturesByDateResult } from "@/types/lectures/fetchLecturesByDate";
 import { useRouter } from "next/navigation";
 import { ROUTES } from "@/constants/routes";
 

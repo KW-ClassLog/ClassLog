@@ -5,8 +5,8 @@ import styles from "./page.module.scss";
 import DateSelector from "./_components/DateSelector/DateSelector";
 import LectureList from "./_components/LectureList/LectureList";
 import ClassList from "./_components/ClassList/ClassList";
-import { fetchLecturesByDate } from "@/api/classes/fetchLecturesByDate";
-import { FetchLecturesByDateResult } from "@/types/classes/fetchLecturesByDate";
+import { fetchLecturesByDate } from "@/api/lectures/fetchLecturesByDate";
+import { FetchLecturesByDateResult } from "@/types/lectures/fetchLecturesByDate";
 import { format } from "date-fns";
 
 export default function TeacherHomePage() {
