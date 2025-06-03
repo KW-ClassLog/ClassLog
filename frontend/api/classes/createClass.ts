@@ -13,10 +13,11 @@ export async function createClass({
   startDate,
   endDate,
 }: CreateClassRequest) {
+  console.log("createClass", { className, classDate, startDate, endDate });
   try {
     const response = await axiosInstance.post<
       ApiResponse<CreateClassResult | null>
-    >(ENDPOINTS.USERS.SIGNUP, { className, classDate, startDate, endDate });
+    >(ENDPOINTS.CLASSES.CREATE, { className, classDate, startDate, endDate });
     return response.data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error) && error.response) {
