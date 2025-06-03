@@ -86,7 +86,7 @@ export default function ClassList() {
         ) : classes.length === 0 ? (
           <NoDataView
             icon={School}
-            title={"강의 없음"}
+            title={"클래스 없음"}
             description={"생성된 클래스가 없습니다."}
           />
         ) : (

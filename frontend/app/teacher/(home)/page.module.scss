@@ -4,6 +4,7 @@
   gap: $spacing-lg;
   margin: 0 auto;
   padding: $spacing-lg;
+  height: 100%;
 }
 
 .leftSection,
@@ -12,6 +13,7 @@
   flex-direction: column;
   gap: $spacing-lg;
   width: 100%;
+  height: 100%;
 }
 
 .calendarSection,

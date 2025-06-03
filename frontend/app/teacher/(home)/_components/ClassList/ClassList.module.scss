@@ -6,6 +6,7 @@
   border: 1px solid $color-neutral-7;
   border-radius: $radius-lg;
   padding: $spacing-lg;
+  height: 100%;
 }
 
 .topHeader {
@@ -42,6 +43,9 @@
 .classList {
   display: flex;
   flex-direction: column;
+  flex: 1 1 auto;
+  overflow-y: auto;
+  height: 100%;
 }
 
 .classCard {

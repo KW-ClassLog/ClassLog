@@ -1,5 +1,6 @@
 .container {
   width: 100%;
+  height: 100%;
 }
 
 .header {
@@ -20,6 +21,8 @@
   display: flex;
   flex-direction: column;
   gap: $spacing-md;
+  height: 100%;
+  background: $color-white;
 }
 
 .lectureItem {
