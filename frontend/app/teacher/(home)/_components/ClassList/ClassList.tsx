@@ -11,6 +11,8 @@ import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
 import NoDataView from "@/components/NoDataView/NoDataView";
 import { School, PencilLine, Trash2 } from "lucide-react";
 import { deleteClass } from "@/api/classes/deleteClass";
+import AlertModal from "@/components/Modal/AlertModal/AlertModal";
+import ConfirmModal from "@/components/Modal/ConfirmModal/ConfirmModal";
 
 export default function ClassList() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -18,6 +20,8 @@ export default function ClassList() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [dropdownOpenId, setDropdownOpenId] = useState<string | null>(null);
+  const [alert, setAlert] = useState<string | null>(null);
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
 
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
@@ -43,17 +47,27 @@ export default function ClassList() {
 
   const handleEdit = (classId: string) => {
     setDropdownOpenId(null);
-    alert(`수정: ${classId}`);
+    setAlert(`수정: ${classId}`);
   };
 
   const handleDelete = async (classId: string) => {
     setDropdownOpenId(null);
-    const res = await deleteClass(classId);
+    setConfirmDeleteId(classId);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!confirmDeleteId) return;
+    const res = await deleteClass(confirmDeleteId);
     if (res && res.isSuccess) {
-      setClasses(classes.filter((classItem) => classItem.classId !== classId));
+      setClasses(
+        classes.filter((classItem) => classItem.classId !== confirmDeleteId)
+      );
+      setAlert("클래스가 성공적으로 삭제되었습니다.");
     } else {
       setError(res?.message || "클래스를 삭제하지 못했습니다.");
+      setAlert(res?.message || "클래스를 삭제하지 못했습니다.");
     }
+    setConfirmDeleteId(null);
   };
 
   return (
@@ -126,6 +140,16 @@ export default function ClassList() {
           <CreateClassModal onClose={handleCloseModal} />
         </ClosableModal>
       )}
+
+      {confirmDeleteId && (
+        <ConfirmModal
+          onClose={() => setConfirmDeleteId(null)}
+          onConfirm={handleConfirmDelete}
+        >
+          정말로 클래스를 삭제하시겠습니까?
+        </ConfirmModal>
+      )}
+      {alert && <AlertModal onClose={() => setAlert(null)}>{alert}</AlertModal>}
     </div>
   );
 }
