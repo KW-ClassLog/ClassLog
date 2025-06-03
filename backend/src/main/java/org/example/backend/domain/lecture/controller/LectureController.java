@@ -5,10 +5,7 @@ import jakarta.validation.Valid;
 import org.example.backend.domain.lecture.converter.LectureConverter;
 import org.example.backend.domain.lecture.dto.request.LectureNoteMappingRequestDTO;
 import org.example.backend.domain.lecture.dto.request.LectureRequestDTO;
-import org.example.backend.domain.lecture.dto.response.LectureIdResponseDTO;
-import org.example.backend.domain.lecture.dto.response.LectureRecordingResponseDTO;
-import org.example.backend.domain.lecture.dto.response.LectureNoteMappingResponseDTO;
-import org.example.backend.domain.lecture.dto.response.LectureResponseDTO;
+import org.example.backend.domain.lecture.dto.response.*;
 import org.example.backend.domain.lecture.entity.Lecture;
 import org.example.backend.domain.lecture.service.LectureService;
 import org.example.backend.global.ApiResponse;
@@ -85,6 +82,14 @@ public class LectureController {
     public ApiResponse<LectureRecordingResponseDTO> getRecording(@PathVariable UUID lectureId) {
         LectureRecordingResponseDTO result = lectureService.getLectureRecording(lectureId);
         return ApiResponse.onSuccess(result);
+    }
+
+    //교수의 오늘의 강의 조회
+    @GetMapping("/teacher/today")
+    public ApiResponse<List<TodayLectureResponseDTO>> getTeacherLecture() {
+        List<TodayLectureResponseDTO> responseDTOs = lectureService.getClassListByProfessor();
+        return ApiResponse.onSuccess(responseDTOs);
+
     }
 
 

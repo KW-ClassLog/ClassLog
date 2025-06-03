@@ -3,6 +3,7 @@ package org.example.backend.domain.lecture.service;
 import org.example.backend.domain.lecture.dto.request.LectureRequestDTO;
 import org.example.backend.domain.lecture.dto.response.LectureRecordingResponseDTO;
 import org.example.backend.domain.lecture.dto.response.LectureResponseDTO;
+import org.example.backend.domain.lecture.dto.response.TodayLectureResponseDTO;
 import org.example.backend.domain.lecture.entity.Lecture;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,4 +24,6 @@ public interface LectureService {
     LectureRecordingResponseDTO getLectureRecording(UUID lectureId);
 
     List<UUID> mapNotes(UUID lectureId, List<UUID> lectureNoteIds);
+
+    List<TodayLectureResponseDTO> getClassListByProfessor();
 }
