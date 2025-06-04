@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import java.time.LocalTime;
 
 import java.util.List;
 
@@ -26,9 +27,9 @@ public class ClassQuizResponseDTO {
         private String date;
         private String day;
         @JsonFormat(pattern = "HH:mm")
-        private String startTime;
+        private LocalTime startTime;
         @JsonFormat(pattern = "HH:mm")
-        private String endTime;
+        private LocalTime endTime;
         private String status;
     }
 }

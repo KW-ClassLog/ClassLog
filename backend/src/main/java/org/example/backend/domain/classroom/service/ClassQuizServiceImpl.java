@@ -67,8 +67,8 @@ public class ClassQuizServiceImpl implements ClassQuizService {
                             .title(lecture.getLectureName())
                             .date(date.toString())
                             .day(date.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.KOREAN))
-                            .startTime(start.toString())
-                            .endTime(end.toString())
+                            .startTime(start)
+                            .endTime(end)
                             .status(status)
                             .build()
             );
