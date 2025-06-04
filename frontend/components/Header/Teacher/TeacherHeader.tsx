@@ -8,7 +8,7 @@ import { ROUTES } from "@/constants/routes";
 import { useRouter } from "next/navigation";
 import { logout } from "@/api/users/logout";
 import ConfirmModal from "@/components/Modal/ConfirmModal/ConfirmModal";
-import useClassStore from "@/store/useClassStore";
+import useSelectedClassStore from "@/store/useSelectedClassStore";
 import useClassListStore from "@/store/useClassListStore";
 
 type TeacherHeaderProps = {
@@ -23,7 +23,7 @@ const TeacherHeader: React.FC<TeacherHeaderProps> = ({ mode }) => {
 
   const { classList, isLoading, error, fetchClassList } = useClassListStore();
   const { selectedClassId, selectedClassName, setSelectedClass } =
-    useClassStore();
+    useSelectedClassStore();
   const router = useRouter();
 
   const dropdownRef = useRef<HTMLDivElement>(null);

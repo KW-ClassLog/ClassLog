@@ -1,7 +1,7 @@
 "use client";
 
 import styles from "./page.module.scss";
-import useClassStore from "@/store/useClassStore";
+import useSelectedClassStore from "@/store/useSelectedClassStore";
 import { useEffect, useState } from "react";
 import NoDataView from "@/components/NoDataView/NoDataView";
 import { BookOpenText } from "lucide-react";
@@ -20,7 +20,7 @@ interface Lecture {
 }
 
 export default function TeacherLectureManagementPage() {
-  const { selectedClassId, selectedClassName } = useClassStore();
+  const { selectedClassId, selectedClassName } = useSelectedClassStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
