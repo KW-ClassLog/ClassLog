@@ -3,6 +3,7 @@ package org.example.backend.domain.quizAccuracy.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.example.backend.domain.quiz.entity.Quiz;
+import org.example.backend.global.entitiy.BaseEntity;
 
 import java.util.UUID;
 
@@ -12,7 +13,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 @Getter
-public class QuizAccuracy {
+public class QuizAccuracy extends BaseEntity {
 
     @Id
     @GeneratedValue
