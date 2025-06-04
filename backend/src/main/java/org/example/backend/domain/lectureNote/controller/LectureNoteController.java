@@ -1,7 +1,6 @@
 package org.example.backend.domain.lectureNote.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.example.backend.domain.lectureNote.converter.LectureNoteConverter;
 import org.example.backend.domain.lectureNote.dto.response.LectureNoteKeyResponseDTO;
 import org.example.backend.domain.lectureNote.dto.response.LectureNoteResponseDTO;
 import org.example.backend.domain.lectureNote.entity.LectureNote;
@@ -25,16 +24,13 @@ public class LectureNoteController {
 
 
     @PostMapping("/{class_id}/note/upload")
-    public ApiResponse<List<LectureNoteKeyResponseDTO>> uploadLectureNote(
+    public ApiResponse<String> uploadLectureNote(
             @PathVariable("class_id") UUID classId,
             @RequestParam("file") List<MultipartFile> files) throws IOException {
         List<LectureNote> lectureNotes = lectureNoteService.uploadLectureNotes(classId, files);
 
-        // LectureNote를 LectureNoteKeyResponseDTO로 변환
-        List<LectureNoteKeyResponseDTO> responseDTOs = LectureNoteConverter.toDTOList(lectureNotes);
 
-        // 성공적인 응답 반환
-        return ApiResponse.onSuccess(responseDTOs);
+        return ApiResponse.onSuccess("저장 성공");
     }
 
     //강의록 삭제
