@@ -2,19 +2,16 @@ import { axiosInstance } from "@/api/axiosInstance";
 import axios from "axios";
 import { ENDPOINTS } from "@/constants/endpoints";
 import { ApiResponse } from "@/types/apiResponseTypes";
-import { useAuthStore } from "@/store/useAuthStore";
 
-export async function logout() {
+export async function deleteClass(classId: string) {
   try {
-    const response = await axiosInstance.post<ApiResponse<string>>(
-      ENDPOINTS.USERS.LOGOUT
+    const response = await axiosInstance.delete<ApiResponse<void>>(
+      ENDPOINTS.CLASSES.DELETE(classId)
     );
-
-    useAuthStore.getState().logout();
     return response.data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error) && error.response) {
-      return error.response.data as ApiResponse<string>;
+      return error.response.data as ApiResponse<string | null>;
     }
     throw error;
   }

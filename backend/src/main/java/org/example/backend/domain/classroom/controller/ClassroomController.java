@@ -39,20 +39,20 @@ public class ClassroomController {
     }
     // 클래스 조회
     @GetMapping("/{classId}")
-    public ApiResponse<ClassroomResponseStudentDTO> getClassroom(@PathVariable UUID classId) {
+    public ApiResponse<ClassroomResponseStudentDTO> getClassroom(@PathVariable("classId") UUID classId) {
         Classroom classroom = classroomService.getClassroom(classId);
         ClassroomResponseStudentDTO response = classroomConverter.toResponseStudentDTO(classroom);
         return ApiResponse.onSuccess(response);
     }
     // 클래스 삭제
     @DeleteMapping("/{classId}")
-    public ApiResponse<String> deleteClassroom(@PathVariable UUID classId) {
+    public ApiResponse<String> deleteClassroom(@PathVariable("classId") UUID classId) {
         classroomService.deleteClassroom(classId);
         return ApiResponse.onSuccess("Classroom deleted successfully");
     }
     //클래스 수정
     @PatchMapping("/{classId}")
-    public ApiResponse<ClassroomResponseDTO> updateClassroom(@PathVariable UUID classId, @RequestBody ClassroomRequestDTO classroomRequestDTO) {
+    public ApiResponse<ClassroomResponseDTO> updateClassroom(@PathVariable("classId") UUID classId, @RequestBody ClassroomRequestDTO classroomRequestDTO) {
         Classroom classroom = classroomService.updateClassroom(classId, classroomRequestDTO);
         ClassroomResponseDTO response = classroomConverter.toResponseDTO(classroom);
 
@@ -60,7 +60,7 @@ public class ClassroomController {
     }
 
     @GetMapping("/{classId}/lectures")
-    public ApiResponse<List<ClassLectureResponseDTO>> getLectureList(@PathVariable UUID classId){
+    public ApiResponse<List<ClassLectureResponseDTO>> getLectureList(@PathVariable("classId") UUID classId){
         List<Lecture> lectures = classroomService.getLecturesByClassId(classId);
         List<ClassLectureResponseDTO> responseDTOs = classroomService.getLectureDTOs(lectures);
         return ApiResponse.onSuccess(responseDTOs);
@@ -76,14 +76,14 @@ public class ClassroomController {
 
     //클래스 입장코드 발급
     @GetMapping("/{classId}/code")
-    public ApiResponse<EntryCodeResponseDTO> getEntryCode(@PathVariable UUID classId) {
+    public ApiResponse<EntryCodeResponseDTO> getEntryCode(@PathVariable("classId") UUID classId) {
         EntryCodeResponseDTO response = classroomService.generateCode(classId);
         return ApiResponse.onSuccess(response);
     }
 
     //입장코드 확인
     @PostMapping("/{classId}/code/verify")
-    public ApiResponse<Boolean> verifyCode(@PathVariable UUID classId,
+    public ApiResponse<Boolean> verifyCode(@PathVariable("classId") UUID classId,
                                            @RequestBody EntryCodeVerifyRequestDTO request, @RequestHeader("Authorization") String token) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Object principal = authentication.getPrincipal();
