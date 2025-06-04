@@ -9,6 +9,7 @@ import AlertModal from "@/components/Modal/AlertModal/AlertModal";
 import { uploadLectureNote } from "@/api/lectures/uploadLectureNote";
 import { fetchLectureNotesByClass } from "@/api/lectures/fetchLectureNotesByClass";
 import { FetchLectureNotesByClassResult } from "@/types/lectures/fetchLectureNotesByClassTypes";
+import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
 
 export default function TeacherLectureNoteManagementPage() {
   const { selectedClassId, selectedClassName } = useSelectedClassStore();
@@ -17,6 +18,7 @@ export default function TeacherLectureNoteManagementPage() {
     FetchLectureNotesByClassResult[]
   >([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isUploading, setIsUploading] = useState(false);
 
   // 강의자료 목록 불러오기
   const loadLectureNotes = async (classId: string) => {
@@ -64,6 +66,7 @@ export default function TeacherLectureNoteManagementPage() {
       validFiles.push(file);
     }
 
+    setIsUploading(true);
     try {
       const response = await uploadLectureNote(selectedClassId, validFiles);
       if (response.isSuccess) {
@@ -77,7 +80,7 @@ export default function TeacherLectureNoteManagementPage() {
     } catch {
       setAlert("강의자료 업로드 중 오류가 발생했습니다.");
     }
-
+    setIsUploading(false);
     // 파일 입력 초기화
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
@@ -124,6 +127,12 @@ export default function TeacherLectureNoteManagementPage() {
         />
       </div>
       {alert && <AlertModal onClose={() => setAlert(null)}>{alert}</AlertModal>}
+      {isUploading && (
+        <AlertModal hideButton onClose={() => setIsUploading(false)}>
+          <LoadingSpinner />
+          <div style={{ marginTop: 16 }}>업로드 중입니다...</div>
+        </AlertModal>
+      )}
     </div>
   );
 }
