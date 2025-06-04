@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -98,12 +99,32 @@ public class LectureNoteServiceImpl implements LectureNoteService {
     public List<LectureNoteKeyResponseDTO> getLectureNoteList(UUID classId) {
         List<LectureNote> notes = lectureNoteRepository.findByClassroom_Id(classId);
 
+
+
         return notes.stream()
-                .map(note -> LectureNoteKeyResponseDTO.builder()
-                        .lectureNoteId(note.getId())
-                        .lectureNoteKey(note.getNoteUrl())
-                        .classId(note.getClassroom().getId())
-                        .build())
+                .map(note -> {
+                    String s3Key = note.getNoteUrl();
+                    String presignedUrl = s3Service.getPresignedUrl(s3Key);
+                    String fileSize = s3Service.getFileSize(s3Key);
+                    String lectureNoteName = s3Key.substring(s3Key.lastIndexOf('/') + 1);
+                    List<LectureNoteMapping> mappings = lectureNoteMappingRepository.findByLectureNote_Id(note.getId());
+
+
+                    List<Integer> sessionList = mappings.stream()
+                            .map(mapping -> mapping.getLecture().getSession())
+                            .filter(Objects::nonNull)
+                            .sorted()
+                            .toList();
+
+                    return LectureNoteKeyResponseDTO.builder()
+                            .lectureNoteId(note.getId())
+                            .classId(note.getClassroom().getId())
+                            .lectureNoteUrl(presignedUrl)
+                            .fileSize(fileSize)
+                            .lectureNoteName(lectureNoteName)
+                            .session(sessionList)
+                            .build();
+                })
                 .toList();
     }
 
@@ -118,13 +139,16 @@ public class LectureNoteServiceImpl implements LectureNoteService {
                     String s3Key = lectureNote.getNoteUrl();
                     String presignedUrl = s3Service.getPresignedUrl(s3Key);
 
+
                     String fileSize = s3Service.getFileSize(s3Key);
+                    String lectureNoteName = s3Key.substring(s3Key.lastIndexOf('/') + 1);
 
 
                     return LectureNoteResponseDTO.builder()
                             .lectureNoteId(lectureNote.getId())
                             .lectureNoteUrl(presignedUrl)
                             .classId(lectureNote.getClassroom().getId())
+                            .lectureNoteName(lectureNoteName)
                             .fileSize(fileSize)
                             .build();
                 })

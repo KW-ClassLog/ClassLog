@@ -12,16 +12,4 @@ import java.util.stream.Collectors;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class LectureNoteConverter {
 
-    public static LectureNoteKeyResponseDTO toDTO(LectureNote lectureNote) {
-        return LectureNoteKeyResponseDTO.builder()
-                .lectureNoteId(lectureNote.getId())
-                .classId(lectureNote.getClassroom().getId())
-                .lectureNoteKey(lectureNote.getNoteUrl()) // S3 Key 또는 URL
-                .build();
-    }
-    public static List<LectureNoteKeyResponseDTO> toDTOList(List<LectureNote> lectureNotes) {
-        return lectureNotes.stream()
-                .map(LectureNoteConverter::toDTO)
-                .collect(Collectors.toList());
-    }
 }
