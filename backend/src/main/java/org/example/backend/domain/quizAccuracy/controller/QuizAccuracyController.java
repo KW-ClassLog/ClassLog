@@ -26,7 +26,7 @@ public class QuizAccuracyController {
 
     // 퀴즈 목록, 정답률 조회
     @GetMapping("/{lectureId}/result")
-    public ResponseEntity<ApiResponse<QuizAccuracyResponseDTO>> getQuizResult(@PathVariable UUID lectureId) {
+    public ResponseEntity<ApiResponse<QuizAccuracyResponseDTO>> getQuizResult(@PathVariable("lectureId") UUID lectureId) {
         try {
             QuizAccuracyResponseDTO result = quizAccuracyService.getQuizResult(lectureId);
             return ResponseEntity.ok(ApiResponse.onSuccess(result));
@@ -40,7 +40,7 @@ public class QuizAccuracyController {
     }
 
     @GetMapping("/{lectureId}/result/statistics")
-    public ResponseEntity<ApiResponse<QuizSelectionStatsResponseDTO>> getQuizSelectionStats(@PathVariable UUID lectureId){
+    public ResponseEntity<ApiResponse<QuizSelectionStatsResponseDTO>> getQuizSelectionStats(@PathVariable("lectureId") UUID lectureId){
         try{
             QuizSelectionStatsResponseDTO result = quizSelectionStatsService.getQuizSelectionStats(lectureId);
             return ResponseEntity.ok(ApiResponse.onSuccess(result));
