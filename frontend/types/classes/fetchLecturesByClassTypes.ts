@@ -4,6 +4,6 @@ export interface FetchLecturesByClassResult {
   lectureDate: string;
   startTime: string;
   endTime: string;
-  status: "beforeLecture" | "showDashboard" | "quizCreation";
+  status: "beforeLecture" | "onLecture" | "afterLecture";
   session: number;
 }

@@ -2,92 +2,37 @@
 
 import styles from "./page.module.scss";
 import useSelectedClassStore from "@/store/useSelectedClassStore";
+import useLectureListStore from "@/store/useLectureListStore";
 import { useEffect, useState } from "react";
 import NoDataView from "@/components/NoDataView/NoDataView";
 import { BookOpenText } from "lucide-react";
-import dayjs from "dayjs";
 import LectureColumn from "./_components/LectureColumn/LectureColumn";
 import ClosableModal from "@/components/Modal/ClosableModal/ClosableModal";
 import CreateLectureModal from "./_components/CreateLectureModal/CreateLectureModal";
-
-interface Lecture {
-  lectureId: string;
-  title: string;
-  lectureDate: string;
-  status: "beforeLecture" | "showDashboard" | "quizCreation";
-  startTime: string;
-  endTime: string;
-}
+import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
 
 export default function TeacherLectureManagementPage() {
   const { selectedClassId, selectedClassName } = useSelectedClassStore();
+  const { lectureList, isLoading, error, fetchLectureList } =
+    useLectureListStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
+
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
 
-  const [lectures, setLectures] = useState<Lecture[]>([
-    {
-      lectureId: "1",
-      title: "1주차",
-      lectureDate: "2025.03.18 (화)",
-      status: "beforeLecture",
-      startTime: "10:30",
-      endTime: "11:45",
-    },
-    {
-      lectureId: "2",
-      title: "2주차",
-      lectureDate: "2025.03.18 (화)",
-      status: "showDashboard",
-      startTime: "10:30",
-      endTime: "11:45",
-    },
-    {
-      lectureId: "3",
-      title: "3주차",
-      lectureDate: "2025.03.18 (화)",
-      status: "quizCreation",
-      startTime: "10:30",
-      endTime: "11:45",
-    },
-    {
-      lectureId: "4",
-      title: "4주차",
-      lectureDate: "2025.03.18 (화)",
-      status: "beforeLecture",
-      startTime: "10:30",
-      endTime: "11:45",
-    },
-  ]);
-
   useEffect(() => {
     if (selectedClassId) {
-      // TODO: API 호출하여 해당 클래스의 강의 목록을 가져옴
-      console.log("Selected Class ID:", selectedClassId);
+      fetchLectureList(selectedClassId);
     }
-  }, [selectedClassId]);
+  }, [selectedClassId, fetchLectureList]);
 
-  // 강의 상태 분류 함수
-  const getLectureStatus = (lecture: Lecture) => {
-    // 날짜에서 (화) 등 요일 제거
-    const dateStr = lecture.lectureDate.split(" ")[0];
-    const start = dayjs(`${dateStr} ${lecture.startTime}`, "YYYY.MM.DD HH:mm");
-    const end = dayjs(`${dateStr} ${lecture.endTime}`, "YYYY.MM.DD HH:mm");
-    const now = dayjs();
-    if (now.isAfter(start) && now.isBefore(end)) {
-      return "inProgress";
-    }
-    if (lecture.status === "beforeLecture") return "before";
-    return "ended";
-  };
-
-  const beforeLectures = lectures.filter(
-    (l) => getLectureStatus(l) === "before"
+  const beforeLectures = lectureList.filter(
+    (l) => l.status === "beforeLecture"
   );
-  const inProgressLectures = lectures.filter(
-    (l) => getLectureStatus(l) === "inProgress"
+  const inProgressLectures = lectureList.filter(
+    (l) => l.status === "onLecture"
   );
-  const endedLectures = lectures.filter((l) => getLectureStatus(l) === "ended");
+  const endedLectures = lectureList.filter((l) => l.status === "afterLecture");
 
   if (!selectedClassId || !selectedClassName) {
     return (
@@ -101,6 +46,25 @@ export default function TeacherLectureManagementPage() {
       </div>
     );
   }
+
+  if (isLoading) {
+    return (
+      <div className={styles.container}>
+        <h1>[{selectedClassName}] 강의 관리</h1>
+        <LoadingSpinner />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className={styles.container}>
+        <h1>[{selectedClassName}] 강의 관리</h1>
+        <div className={styles.error}>{error}</div>
+      </div>
+    );
+  }
+
   return (
     <div className={styles.container}>
       <h1>[{selectedClassName}] 강의 관리</h1>

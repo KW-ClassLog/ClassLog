@@ -5,5 +5,5 @@ export interface FetchLecturesByDateResult {
   className: string;
   startTime: string;
   endTime: string;
-  status: "afterLecture" | "beforeLecture";
+  status: "beforeLecture" | "onLecture" | "afterLecture";
 }
