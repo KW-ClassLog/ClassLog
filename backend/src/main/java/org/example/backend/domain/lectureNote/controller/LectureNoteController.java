@@ -33,7 +33,7 @@ public class LectureNoteController {
     }
 
     //강의록 삭제
-    @DeleteMapping("/notes")
+    @DeleteMapping("/note")
     public ApiResponse<String> deleteLectureNote(
             @RequestParam("keys") String keys) throws IOException {
         List<UUID> lectureNoteIds = Arrays.stream(keys.split(","))
