@@ -5,7 +5,6 @@ import org.example.backend.domain.lectureNote.dto.response.LectureNoteKeyRespons
 import org.example.backend.domain.lectureNote.dto.response.LectureNoteResponseDTO;
 import org.example.backend.domain.lectureNote.entity.LectureNote;
 import org.example.backend.domain.lectureNote.service.LectureNoteService;
-import org.example.backend.domain.lectureNote.service.LectureNoteServiceImpl;
 import org.example.backend.global.ApiResponse;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,7 +13,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/lectures")
@@ -24,9 +22,9 @@ public class LectureNoteController {
     private final LectureNoteService lectureNoteService;
 
 
-    @PostMapping("/{class_id}/note/upload")
+    @PostMapping("/{classId}/note/upload")
     public ApiResponse<String> uploadLectureNote(
-            @PathVariable("class_id") UUID classId,
+            @PathVariable("classId") UUID classId,
             @RequestParam("file") List<MultipartFile> files) throws IOException {
         List<LectureNote> lectureNotes = lectureNoteService.uploadLectureNotes(classId, files);
 
@@ -50,9 +48,9 @@ public class LectureNoteController {
     }
 
     //강의록 개별 조회
-    @GetMapping("/{lecture_note_id}")
+    @GetMapping("/{lectureNoteId}")
     public ApiResponse<LectureNoteResponseDTO> getLectureNote(
-            @PathVariable("lecture_note_id") UUID lectureNoteId) {
+            @PathVariable("lectureNoteId") UUID lectureNoteId) {
 
         // 서비스에서 presigned URL 포함된 DTO 받아오기
         LectureNoteResponseDTO response = lectureNoteService.getLectureNoteDetail(lectureNoteId);
@@ -61,17 +59,17 @@ public class LectureNoteController {
     }
 
     //클래스 별 강의록 조회
-    @GetMapping("/{class_id}/class/notes")
+    @GetMapping("/{classId}/class/notes")
     public ApiResponse<List<LectureNoteKeyResponseDTO>> getLectureNotes(
-            @PathVariable("class_id") UUID classId) {
+            @PathVariable("classId") UUID classId) {
                 List<LectureNoteKeyResponseDTO> response = lectureNoteService.getLectureNoteList(classId);
                 return ApiResponse.onSuccess(response);
     }
 
     //강의 별 강의록 조회
-    @GetMapping("/{lecture_id}/lecture/notes")
+    @GetMapping("/{lectureId}/lecture/notes")
     public ApiResponse<List<LectureNoteResponseDTO>> getLectureNotesByLectureId(
-            @PathVariable("lecture_id") UUID lectureId) {
+            @PathVariable("lectureId") UUID lectureId) {
         List<LectureNoteResponseDTO> response = lectureNoteService.getLectureNoteListByLecture(lectureId);
         return ApiResponse.onSuccess(response);
     }
