@@ -3,14 +3,14 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-interface ClassStore {
+interface SelectedClassStore {
   selectedClassId: string | null;
   selectedClassName: string | null;
   setSelectedClass: (classId: string, className: string) => void;
   resetSelectedClass: () => void;
 }
 
-const useClassStore = create<ClassStore>()(
+const useSelectedClassStore = create<SelectedClassStore>()(
   persist(
     (set) => ({
       selectedClassId: null,
@@ -32,4 +32,4 @@ const useClassStore = create<ClassStore>()(
   )
 );
 
-export default useClassStore;
+export default useSelectedClassStore;

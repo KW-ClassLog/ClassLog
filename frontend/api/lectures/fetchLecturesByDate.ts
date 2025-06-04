@@ -2,7 +2,7 @@ import { axiosInstance } from "@/api/axiosInstance";
 import axios from "axios"; // 추가
 import { ENDPOINTS } from "@/constants/endpoints";
 import { ApiResponse } from "@/types/apiResponseTypes";
-import { FetchLecturesByDateResult } from "@/types/classes/fetchLecturesByDate";
+import { FetchLecturesByDateResult } from "@/types/lectures/fetchLecturesByDate";
 
 export async function fetchLecturesByDate(date: string) {
   try {

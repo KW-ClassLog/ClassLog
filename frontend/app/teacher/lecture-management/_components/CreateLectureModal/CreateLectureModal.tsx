@@ -7,14 +7,18 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { ko } from "date-fns/locale";
 import { formatInTimeZone } from "date-fns-tz";
+import useSelectedClassStore from "@/store/useSelectedClassStore";
+import { createLecture } from "@/api/lectures/createLecture";
+import useLectureListStore from "@/store/useLectureListStore";
+import AlertModal from "@/components/Modal/AlertModal/AlertModal";
 
 interface CreateLectureModalProps {
   onClose: () => void;
 }
 
 interface FormData {
-  className: string;
-  classDate: Date | null;
+  lectureName: string;
+  lectureDate: Date | null;
   startTime: string;
   endTime: string;
 }
@@ -22,9 +26,12 @@ interface FormData {
 export default function CreateLectureModal({
   onClose,
 }: CreateLectureModalProps) {
+  const { selectedClassId } = useSelectedClassStore();
+  const { refreshLectureList } = useLectureListStore();
+  const [alert, setAlert] = useState<string | null>(null);
   const [formData, setFormData] = useState<FormData>({
-    className: "",
-    classDate: null,
+    lectureName: "",
+    lectureDate: null,
     startTime: "",
     endTime: "",
   });
@@ -38,19 +45,51 @@ export default function CreateLectureModal({
     };
 
   const handleDateChange = (date: Date | null) => {
-    setFormData((prev) => ({ ...prev, classDate: date }));
+    setFormData((prev) => ({ ...prev, lectureDate: date }));
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    if (!selectedClassId) {
+      setAlert("클래스를 선택해주세요.");
+      return;
+    }
+
+    if (
+      !formData.lectureName ||
+      !formData.lectureDate ||
+      !formData.startTime ||
+      !formData.endTime
+    ) {
+      setAlert("모든 필드를 입력해주세요.");
+      return;
+    }
+
     const koreanTimeZone = "Asia/Seoul";
-    const submissionData = {
-      ...formData,
-      classDate: formData.classDate
-        ? formatInTimeZone(formData.classDate, koreanTimeZone, "yyyy-MM-dd")
-        : "",
-    };
-    console.log(submissionData);
-    onClose();
+    const lectureDate = formatInTimeZone(
+      formData.lectureDate,
+      koreanTimeZone,
+      "yyyy-MM-dd"
+    );
+
+    try {
+      const response = await createLecture({
+        lectureName: formData.lectureName,
+        lectureDate,
+        classId: selectedClassId,
+        startTime: formData.startTime,
+        endTime: formData.endTime,
+      });
+
+      if (response.isSuccess) {
+        await refreshLectureList(selectedClassId);
+        onClose();
+      } else {
+        setAlert(response.message || "강의 생성에 실패했습니다.");
+      }
+    } catch (error) {
+      console.error("Failed to create lecture:", error);
+      setAlert("강의 생성 중 오류가 발생했습니다.");
+    }
   };
 
   return (
@@ -60,15 +99,15 @@ export default function CreateLectureModal({
         <div className={styles.form}>
           <div className={styles.formGroup}>
             <BasicInput
-              value={formData.className}
-              onChange={handleChange("className")}
+              value={formData.lectureName}
+              onChange={handleChange("lectureName")}
               placeholder="강의 제목을 입력하세요 (차시는 자동으로 입력됩니다)"
             />
           </div>
           <div className={styles.formGroup}>
             <div className={styles.datePickerWrapper}>
               <DatePicker
-                selected={formData.classDate}
+                selected={formData.lectureDate}
                 onChange={handleDateChange}
                 locale={ko}
                 dateFormat="yyyy-MM-dd"
@@ -97,6 +136,7 @@ export default function CreateLectureModal({
         </div>
       </div>
       <FullWidthButton onClick={handleSubmit}>생성하기</FullWidthButton>
+      {alert && <AlertModal onClose={() => setAlert(null)}>{alert}</AlertModal>}
     </div>
   );
 }
