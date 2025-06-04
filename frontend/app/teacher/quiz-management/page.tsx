@@ -42,19 +42,17 @@ export default function TeacherQuizManagementPage() {
     <div className={styles.container}>
       <h1>[{selectedClassName}] 퀴즈 관리</h1>
       <div className={styles.lectureList}>
-        {lectures.map((lecture) => (
-          <LectureItem
-            key={lecture.lectureId}
-            lectureId={lecture.lectureId}
-            session={lecture.session}
-            title={lecture.title}
-            date={lecture.date}
-            day={lecture.day}
-            startTime={lecture.startTime}
-            endTime={lecture.endTime}
-            status={lecture.status}
+        {lectures.length === 0 ? (
+          <NoDataView
+            icon={MessageCircleQuestion}
+            title="강의가 없습니다"
+            description="퀴즈를 생성하기 전에 강의를 먼저 등록해주세요!"
           />
-        ))}
+        ) : (
+          lectures.map((lecture) => (
+            <LectureItem key={lecture.lectureId} {...lecture} />
+          ))
+        )}
       </div>
     </div>
   );
