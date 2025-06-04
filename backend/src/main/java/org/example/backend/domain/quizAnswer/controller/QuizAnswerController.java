@@ -27,7 +27,7 @@ public class QuizAnswerController {
 
     // 퀴즈 제출 학생 목록 조회
     @GetMapping("/{lectureId}/result/list")
-    public ResponseEntity<ApiResponse<QuizSubmitListResponseDTO>> getQuizSubmitList(@PathVariable UUID lectureId) {
+    public ResponseEntity<ApiResponse<QuizSubmitListResponseDTO>> getQuizSubmitList(@PathVariable("lectureId") UUID lectureId) {
         try {
             QuizSubmitListResponseDTO result = quizResultService.getQuizSubmitList(lectureId);
             return ResponseEntity.ok(ApiResponse.onSuccess(result));
@@ -44,7 +44,7 @@ public class QuizAnswerController {
 
     // 퀴즈 정보 조회
     @GetMapping("/{lectureId}/result/info")
-    public ResponseEntity<ApiResponse<QuizInfoResponseDTO>> getQuizInfo(@PathVariable UUID lectureId) {
+    public ResponseEntity<ApiResponse<QuizInfoResponseDTO>> getQuizInfo(@PathVariable("lectureId") UUID lectureId) {
         try{
             QuizInfoResponseDTO result = quizInfoService.getQuizInfo(lectureId);
             return ResponseEntity.ok(ApiResponse.onSuccess(result));

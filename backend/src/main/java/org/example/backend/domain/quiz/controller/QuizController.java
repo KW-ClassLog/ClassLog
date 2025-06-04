@@ -27,7 +27,7 @@ public class QuizController {
 
     // 퀴즈 생성
     @PostMapping("/{lectureId}/create")
-    public ResponseEntity<ApiResponse<QuizResponseDTO>> generateQuiz(@PathVariable UUID lectureId,
+    public ResponseEntity<ApiResponse<QuizResponseDTO>> generateQuiz(@PathVariable("lectureId") UUID lectureId,
                                                                      @RequestBody QuizRequestDTO request) {
         try {
             QuizResponseDTO response = quizService.generateQuiz(lectureId, request, false);
@@ -45,7 +45,7 @@ public class QuizController {
 
     // 퀴즈 재생성
     @PostMapping("/{lectureId}/re-create")
-    public ResponseEntity<ApiResponse<QuizResponseDTO>> regenerateQuiz(@PathVariable UUID lectureId,
+    public ResponseEntity<ApiResponse<QuizResponseDTO>> regenerateQuiz(@PathVariable("lectureId") UUID lectureId,
                                                                        @RequestBody QuizRequestDTO request) {
         try {
             QuizResponseDTO response = quizService.generateQuiz(lectureId, request, true);
@@ -63,7 +63,7 @@ public class QuizController {
 
     // 퀴즈 저장
     @PostMapping("/{lectureId}")
-    public ResponseEntity<ApiResponse<QuizSaveResponseDTO>> saveQuiz(@PathVariable UUID lectureId,
+    public ResponseEntity<ApiResponse<QuizSaveResponseDTO>> saveQuiz(@PathVariable("lectureId") UUID lectureId,
                                                             @RequestBody QuizSaveRequestDTO request) {
         try {
             QuizSaveResponseDTO response = quizService.saveQuiz(lectureId, request);
@@ -82,7 +82,7 @@ public class QuizController {
 
     // 퀴즈 문제 수정
     @PatchMapping("/{lectureId}/edit")
-    public ResponseEntity<ApiResponse<QuizEditResponseDTO>> editQuiz(@PathVariable UUID lectureId,
+    public ResponseEntity<ApiResponse<QuizEditResponseDTO>> editQuiz(@PathVariable("lectureId") UUID lectureId,
                                                                      @RequestBody QuizEditRequestDTO request) {
         try {
             QuizEditResponseDTO response = quizEditService.editQuiz(lectureId, request);
