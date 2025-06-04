@@ -4,42 +4,28 @@ import { useState } from "react";
 import MakeQuizModal from "@/components/Modal/MakeQuizModal/MakeQuizModal";
 import { ROUTES } from "@/constants/routes";
 import { useRouter } from "next/navigation";
+import { FetchQuizzesByClassResult } from "@/types/classes/fetchQuizzesByClassTypes";
 
-interface LectureItemProps {
-  lectureId: string;
-  title: string;
-  lectureDate: string;
-  status: "beforeLecture" | "showDashboard" | "quizCreation";
-  startTime: string;
-  endTime: string;
-}
-
-export default function LectureItem({
-  lectureId,
-  title,
-  lectureDate,
-  status,
-  startTime,
-  endTime,
-}: LectureItemProps) {
+export default function LectureItem(lecture: FetchQuizzesByClassResult) {
   const [showQuizModal, setShowQuizModal] = useState(false);
-
   const router = useRouter();
 
-  const getActionButton = (status: LectureItemProps["status"]) => {
+  const getActionButton = (status: string) => {
     switch (status) {
       case "beforeLecture":
         return <div className={styles.beforeLecture}>강의 전</div>;
-      case "showDashboard":
+      case "checkDashboard":
         return (
           <button
             className={styles.showDashboard}
-            onClick={() => router.push(ROUTES.teacherQuizDashboard(lectureId))}
+            onClick={() =>
+              router.push(ROUTES.teacherQuizDashboard(lecture.lectureId))
+            }
           >
             대시보드 확인
           </button>
         );
-      case "quizCreation":
+      case "makeQuiz":
         return (
           <button
             className={styles.quizCreation}
@@ -55,25 +41,27 @@ export default function LectureItem({
     <>
       <div className={styles.lectureItem}>
         <div className={styles.lectureInfo}>
-          <span className={styles.title}>{title}</span>
+          <span className={styles.title}>
+            {lecture.session}. {lecture.title}
+          </span>
           <div className={styles.dateTime}>
             <div className={styles.date}>
               <Calendar size={16} />
-              <span>{lectureDate}</span>
+              <span>{`${lecture.date} (${lecture.day})`}</span>
             </div>
             <div className={styles.time}>
               <Clock size={16} />
               <span>
-                {startTime} - {endTime} AM
+                {lecture.startTime} - {lecture.endTime} AM
               </span>
             </div>
           </div>
         </div>
-        <div className={styles.action}>{getActionButton(status)}</div>
+        <div className={styles.action}>{getActionButton(lecture.status)}</div>
       </div>
       {showQuizModal && (
         <MakeQuizModal
-          lectureId={lectureId}
+          lectureId={lecture.lectureId}
           onClose={() => setShowQuizModal(false)}
         />
       )}
