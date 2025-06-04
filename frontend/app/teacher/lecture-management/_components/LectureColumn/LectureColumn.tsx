@@ -23,7 +23,7 @@ const LectureColumn: React.FC<LectureColumnProps> = ({
   const router = useRouter();
 
   const handleLectureClick = (lectureId: string) => {
-    router.push(ROUTES.teacherQuizDashboard(lectureId));
+    router.push(ROUTES.teacherLectureDetail(lectureId));
   };
 
   return (
