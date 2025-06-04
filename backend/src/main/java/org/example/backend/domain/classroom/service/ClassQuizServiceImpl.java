@@ -28,7 +28,7 @@ public class ClassQuizServiceImpl implements ClassQuizService {
     private final ClassroomRepository classroomRepository;
 
 
-    public ClassQuizResponseDTO getQuizzesByClass(UUID classId) {
+    public List<ClassQuizResponseDTO> getQuizzesByClass(UUID classId) {
         List<Lecture> lectures = lectureRepository.findByClassroom_Id(classId);
 
         Classroom classroom = classroomRepository.findById(classId)
@@ -38,11 +38,11 @@ public class ClassQuizServiceImpl implements ClassQuizService {
             throw new QuizException(QuizErrorCode.LECTURE_NOT_FOUND);
         }
 
-        // 날짜+시간 정렬
-        lectures.sort(Comparator.comparing((Lecture l) -> l.getLectureDate())
+        lectures.sort(Comparator.comparing(Lecture::getLectureDate)
                 .thenComparing(Lecture::getStartTime));
 
-        List<ClassQuizResponseDTO.QuizInfoDTO> quizList = new ArrayList<>();
+        List<ClassQuizResponseDTO> quizList = new ArrayList<>();
+
         int session = 1;
         LocalDateTime now = LocalDateTime.now();
 
@@ -50,7 +50,6 @@ public class ClassQuizServiceImpl implements ClassQuizService {
             LocalDate date = lecture.getLectureDate();
             LocalTime start = lecture.getStartTime();
             LocalTime end = lecture.getEndTime();
-            LocalDateTime startDateTime = LocalDateTime.of(date, start);
             LocalDateTime endDateTime = LocalDateTime.of(date, end);
 
             String status;
@@ -62,7 +61,7 @@ public class ClassQuizServiceImpl implements ClassQuizService {
             }
 
             quizList.add(
-                    ClassQuizResponseDTO.QuizInfoDTO.builder()
+                    ClassQuizResponseDTO.builder()
                             .session(session++)
                             .title(lecture.getLectureName())
                             .date(date.toString())
@@ -70,13 +69,11 @@ public class ClassQuizServiceImpl implements ClassQuizService {
                             .startTime(start)
                             .endTime(end)
                             .status(status)
+                            .lectureId(lecture.getId())
                             .build()
             );
         }
 
-        return ClassQuizResponseDTO.builder()
-                .className(classroom.getClassName())
-                .quizzes(quizList)
-                .build();
+        return quizList;
     }
 }

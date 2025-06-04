@@ -8,28 +8,25 @@ import lombok.NoArgsConstructor;
 import java.time.LocalTime;
 
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class ClassQuizResponseDTO {
-    private String className;
-    private List<QuizInfoDTO> quizzes;
+    private int session;
+    private String title;
+    private String date;
+    private String day;
 
-    @Getter
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class QuizInfoDTO {
-        private int session;
-        private String title;
-        private String date;
-        private String day;
-        @JsonFormat(pattern = "HH:mm")
-        private LocalTime startTime;
-        @JsonFormat(pattern = "HH:mm")
-        private LocalTime endTime;
-        private String status;
-    }
+    @JsonFormat(pattern = "HH:mm")
+    private LocalTime startTime;
+
+    @JsonFormat(pattern = "HH:mm")
+    private LocalTime endTime;
+
+    private String status;
+
+    private UUID lectureId;
 }

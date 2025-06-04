@@ -105,8 +105,8 @@ public class ClassroomController {
 
     // 퀴즈 조회
     @GetMapping("/{classId}/quiz")
-    public ApiResponse<ClassQuizResponseDTO> getClassQuizInfo(@PathVariable UUID classId) {
-        ClassQuizResponseDTO result = classQuizService.getQuizzesByClass(classId);
+    public ApiResponse<List<ClassQuizResponseDTO>> getClassQuizInfo(@PathVariable UUID classId) {
+        List<ClassQuizResponseDTO> result = classQuizService.getQuizzesByClass(classId);
         return ApiResponse.onSuccess(result);
     }
 }
