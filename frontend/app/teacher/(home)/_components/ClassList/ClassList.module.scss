@@ -1,12 +1,12 @@
 .container {
   display: flex;
   flex-direction: column;
-  gap: $spacing-md;
+  gap: $spacing-sm;
   background: $color-white;
   border: 1px solid $color-neutral-7;
   border-radius: $radius-lg;
-  box-shadow: $shadow-sm;
   padding: $spacing-lg;
+  height: 100%;
 }
 
 .topHeader {
@@ -43,6 +43,9 @@
 .classList {
   display: flex;
   flex-direction: column;
+  flex: 1 1 auto;
+  overflow-y: auto;
+  height: 100%;
 }
 
 .classCard {
@@ -50,23 +53,27 @@
   border-bottom: 1.5px solid $color-neutral-7;
 }
 
+.classCard:last-child {
+  border-bottom: none;
+  padding: $spacing-md 0 0 0;
+}
+
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: $spacing-xs;
 }
 
 .title {
   font-family: $font-default;
   font-weight: $font-weight-medium;
   font-size: $font-size-md;
+  margin-bottom: $spacing-xs;
 }
 
 .moreButton {
   background: none;
   border: none;
-  padding: $spacing-xs;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -97,6 +104,40 @@
 
 .infoText {
   font-family: $font-default;
-  font-size: $font-size-md;
+  font-size: $font-size-sm;
   color: $color-neutral-4;
+}
+
+.dropdownMenu {
+  position: absolute;
+  right: 0;
+  top: 36px;
+  background: #fff;
+  border: 1px solid $color-neutral-7;
+  border-radius: $radius-md;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  min-width: 120px;
+  padding: 4px 0;
+
+  button {
+    font-family: $font-default;
+    background: none;
+    border: none;
+    padding: 10px 20px;
+    text-align: left;
+    cursor: pointer;
+    font-size: $font-size-md;
+    color: $color-neutral-2;
+    transition: background 0.15s;
+    display: flex;
+    align-items: center;
+    gap: $spacing-xs;
+
+    &:hover {
+      background: $color-neutral-8;
+    }
+  }
 }

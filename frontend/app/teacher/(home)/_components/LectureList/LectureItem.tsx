@@ -1,47 +1,36 @@
 import { Calendar, Clock, ChevronRight } from "lucide-react";
-import { useLectureStatus } from "@/hooks/useLectureStatus";
 import styles from "./LectureList.module.scss";
-
-interface LectureItemProps {
-  lectureId: string;
-  title: string;
-  className: string;
-  lectureDate: string;
-  startTime: string;
-  endTime: string;
-}
+import { FetchLecturesByDateResult } from "@/types/lectures/fetchLecturesByDate";
+import { useRouter } from "next/navigation";
+import { ROUTES } from "@/constants/routes";
 
 export default function LectureItem({
   lectureId,
-  title,
+  lectureName,
   className,
   lectureDate,
   startTime,
   endTime,
-}: LectureItemProps) {
-  const status = useLectureStatus({
-    lectureDate,
-    startTime,
-    endTime,
-  });
+  status,
+}: FetchLecturesByDateResult) {
+  const router = useRouter();
+
+  const handleClick = () => {
+    router.push(ROUTES.teacherLectureDetail(lectureId));
+  };
 
   return (
-    <div className={styles.lectureItem}>
+    <div className={styles.lectureItem} onClick={handleClick}>
       <div className={styles.lectureMain}>
         <div className={styles.lectureTitle}>
-          <span className={styles.lectureTitleText}>
-            {lectureId}. {title}
-          </span>
+          <span className={styles.lectureTitleText}>{lectureName}</span>
           <span className={styles.className}>{className}</span>
         </div>
         <div className={styles.actionButton}>
-          <span
-            className={`${styles.buttonText} ${
-              styles[status.replace(" ", "")]
-            }`}
-          >
-            {status}
+          <span className={`${styles.buttonText} ${styles[status]}`}>
+            {status === "beforeLecture" ? "강의 전" : "강의 종료"}
           </span>
+
           <div className={styles.buttonIcon}>
             <ChevronRight size={16} />
           </div>

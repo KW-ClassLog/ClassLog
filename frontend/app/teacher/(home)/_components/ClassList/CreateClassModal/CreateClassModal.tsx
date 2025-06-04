@@ -7,6 +7,9 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { ko } from "date-fns/locale";
 import { formatInTimeZone } from "date-fns-tz";
+import { createClass } from "@/api/classes/createClass";
+import AlertModal from "@/components/Modal/AlertModal/AlertModal";
+import { CreateClassRequest } from "@/types/classes/createClassTypes";
 
 interface CreateClassModalProps {
   onClose: () => void;
@@ -27,6 +30,8 @@ export default function CreateClassModal({ onClose }: CreateClassModalProps) {
     null,
   ]);
   const [startDate, endDate] = dateRange;
+  const [alert, setAlert] = useState<null | { message: string }>();
+  const [loading, setLoading] = useState(false);
 
   const handleChange =
     (field: keyof typeof formData) => (e: ChangeEvent<HTMLInputElement>) => {
@@ -36,10 +41,13 @@ export default function CreateClassModal({ onClose }: CreateClassModalProps) {
       }));
     };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    if (loading) return;
+    setLoading(true);
     const koreanTimeZone = "Asia/Seoul";
-    const submissionData = {
-      ...formData,
+    const submissionData: CreateClassRequest = {
+      className: formData.className,
+      classDate: formData.classTime,
       startDate: startDate
         ? formatInTimeZone(startDate, koreanTimeZone, "yyyy-MM-dd")
         : "",
@@ -47,9 +55,26 @@ export default function CreateClassModal({ onClose }: CreateClassModalProps) {
         ? formatInTimeZone(endDate, koreanTimeZone, "yyyy-MM-dd")
         : "",
     };
-    console.log(submissionData);
-    onClose();
+    try {
+      const res = await createClass(submissionData);
+      if (res && res.isSuccess) {
+        setAlert({ message: "클래스가 성공적으로 생성되었습니다." });
+      } else {
+        setAlert({ message: res?.message || "클래스 생성에 실패했습니다." });
+      }
+    } catch (error) {
+      console.error(error);
+      setAlert({ message: "클래스 생성에 실패했습니다." });
+    } finally {
+      setLoading(false);
+    }
   };
+
+  const isFormValid =
+    formData.className.trim() !== "" &&
+    formData.classTime.trim() !== "" &&
+    startDate !== null &&
+    endDate !== null;
 
   return (
     <div className={styles.container}>
@@ -87,7 +112,22 @@ export default function CreateClassModal({ onClose }: CreateClassModalProps) {
           </div>
         </div>
       </div>
-      <FullWidthButton onClick={handleSubmit}>생성하기</FullWidthButton>
+      <FullWidthButton
+        onClick={handleSubmit}
+        disabled={!isFormValid || loading}
+      >
+        {loading ? "생성 중..." : "생성하기"}
+      </FullWidthButton>
+      {alert && (
+        <AlertModal
+          onClose={() => {
+            setAlert(null);
+            if (alert.message.includes("성공")) onClose();
+          }}
+        >
+          {alert.message}
+        </AlertModal>
+      )}
     </div>
   );
 }
