@@ -9,11 +9,7 @@ import { useRouter } from "next/navigation";
 import { logout } from "@/api/users/logout";
 import ConfirmModal from "@/components/Modal/ConfirmModal/ConfirmModal";
 import useClassStore from "@/store/useClassStore";
-
-interface Class {
-  classId: string;
-  className: string;
-}
+import useClassListStore from "@/store/useClassListStore";
 
 type TeacherHeaderProps = {
   mode: "classSelection" | "default";
@@ -24,12 +20,8 @@ const TeacherHeader: React.FC<TeacherHeaderProps> = ({ mode }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
   const [toggleClassSelectionOpen, setToggleClassSelectionOpen] =
     useState<boolean>(false);
-  const [classList] = useState<Class[]>([
-    { classId: "1", className: "클래스 1" },
-    { classId: "2", className: "클래스 2" },
-    { classId: "3", className: "클래스 3" },
-  ]);
 
+  const { classList, isLoading, error, fetchClassList } = useClassListStore();
   const { selectedClassId, selectedClassName, setSelectedClass } =
     useClassStore();
   const router = useRouter();
@@ -38,6 +30,10 @@ const TeacherHeader: React.FC<TeacherHeaderProps> = ({ mode }) => {
   const classListDropdownRef = useRef<HTMLDivElement>(null);
   const profileRef = useRef<HTMLDivElement>(null);
   const classSelectionRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    fetchClassList();
+  }, [fetchClassList]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -119,21 +115,27 @@ const TeacherHeader: React.FC<TeacherHeaderProps> = ({ mode }) => {
 
       {toggleClassSelectionOpen && mode === "classSelection" && (
         <div ref={classListDropdownRef} className={styles.classListDropdown}>
-          <ul>
-            {classList.map((classItem) => (
-              <li
-                key={classItem.classId}
-                className={`${styles.classListItem} ${
-                  selectedClassId === classItem.classId ? styles.selected : ""
-                }`}
-                onClick={() =>
-                  handleClassSelect(classItem.classId, classItem.className)
-                }
-              >
-                {classItem.className}
-              </li>
-            ))}
-          </ul>
+          {isLoading ? (
+            <div className={styles.loading}>로딩 중...</div>
+          ) : error ? (
+            <div className={styles.error}>{error}</div>
+          ) : (
+            <ul>
+              {classList.map((classItem) => (
+                <li
+                  key={classItem.classId}
+                  className={`${styles.classListItem} ${
+                    selectedClassId === classItem.classId ? styles.selected : ""
+                  }`}
+                  onClick={() =>
+                    handleClassSelect(classItem.classId, classItem.className)
+                  }
+                >
+                  {classItem.className}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       )}
 
