@@ -203,18 +203,17 @@ public class ClassroomServiceImpl implements ClassroomService {
         LocalTime now = LocalTime.now();
 
         if (lectureDate.isAfter(today)) {
-            // 강의 날짜가 오늘 이후
             return "beforeLecture";
         } else if (lectureDate.isEqual(today)) {
-            // 오늘이라면 시간도 확인
             if (now.isBefore(startTime)) {
                 return "beforeLecture";
+            } else if (!now.isBefore(startTime) && now.isBefore(endTime)) {
+                return "onLecture";
             } else {
-                return "quizCreation";
+                return "afterLecture";
             }
         } else {
-            // 과거 날짜
-            return "quizCreation";
+            return "afterLecture";
         }
     }
 

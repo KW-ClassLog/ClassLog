@@ -203,12 +203,17 @@ public class LectureServiceImpl implements LectureService {
         return lectures.stream()
                 .sorted(Comparator.comparing(Lecture::getStartTime))
                 .map(lecture -> {
-
                     String status;
                     if (today.isAfter(lecture.getLectureDate())) {
                         status = "afterLecture";
                     } else if (today.isEqual(lecture.getLectureDate())) {
-                        status = now.isBefore(lecture.getEndTime()) ? "beforeLecture" : "afterLecture";
+                        if (now.isBefore(lecture.getStartTime())) {
+                            status = "beforeLecture";
+                        } else if (!now.isBefore(lecture.getStartTime()) && now.isBefore(lecture.getEndTime())) {
+                            status = "onLecture";
+                        } else {
+                            status = "afterLecture";
+                        }
                     } else {
                         status = "beforeLecture";
                     }
