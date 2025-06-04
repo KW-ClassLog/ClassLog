@@ -54,6 +54,7 @@ public class LectureServiceImpl implements LectureService {
 
         Lecture lecture = lectureConverter.toEntity(dto, classroom);
         lectureRepository.save(lecture);
+        updateLectureSessions(classId);
         return lecture;
     }
 
@@ -100,6 +101,9 @@ public class LectureServiceImpl implements LectureService {
                     .orElseThrow(() -> new LectureException(LectureErrorCode.CLASS_NOT_FOUND));
             lecture.setClassroom(classroom);
         }
+        UUID classId = lecture.getClassroom().getId();
+        updateLectureSessions(classId);
+
     }
 
     // lecture 삭제
@@ -107,8 +111,9 @@ public class LectureServiceImpl implements LectureService {
     public void deleteLecture(UUID lectureId) {
         Lecture lecture = lectureRepository.findById(lectureId)
                 .orElseThrow(() -> new LectureException(LectureErrorCode.LECTURE_NOT_FOUND));
-
+        UUID classId = lecture.getClassroom().getId();
         lectureRepository.delete(lecture);
+        updateLectureSessions(classId);
     }
 
     //녹음본 저장
@@ -156,7 +161,7 @@ public class LectureServiceImpl implements LectureService {
                 .build();
     }
 
-
+    //강의록 강의 맵핑
     @Transactional
     public List<UUID> mapNotes(UUID lectureId, List<UUID> lectureNoteIds) {
         // 1. 강의 조회
@@ -187,6 +192,7 @@ public class LectureServiceImpl implements LectureService {
                 .toList();
     }
 
+    // 교수 날짜별 강의 조회
     @Override
     public List<TodayLectureResponseDTO> getClassListByProfessor(LocalDate date) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -229,5 +235,15 @@ public class LectureServiceImpl implements LectureService {
                 })
                 .collect(Collectors.toList());
     }
+
+    //몇차시인지 입력하는 함수
+    public void updateLectureSessions(UUID classId) {
+        List<Lecture> lectures = lectureRepository.findByClassroom_IdOrderByLectureDateAsc(classId);
+        for (int i = 0; i < lectures.size(); i++) {
+            lectures.get(i).setSession(i + 1);
+        }
+        lectureRepository.saveAll(lectures);
+    }
+
 
 }

@@ -8,4 +8,6 @@ import java.util.UUID;
 
 public interface LectureNoteMappingRepository  extends JpaRepository<LectureNoteMapping, UUID> {
     List<LectureNoteMapping> findAllByLectureId(UUID lectureId);
+    List<LectureNoteMapping> findByLectureNote_Id(UUID lectureNoteId);
+
 }

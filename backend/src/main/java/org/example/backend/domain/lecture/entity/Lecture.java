@@ -61,4 +61,5 @@ public class Lecture extends BaseEntity {
     @OneToMany(mappedBy = "lecture", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Quiz> quiz = new ArrayList<>();
 
+
 }
