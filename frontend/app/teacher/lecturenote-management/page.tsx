@@ -19,15 +19,18 @@ export default function TeacherLectureNoteManagementPage() {
   >([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   // 강의자료 목록 불러오기
   const loadLectureNotes = async (classId: string) => {
+    setIsLoading(true);
     const response = await fetchLectureNotesByClass(classId);
     if (response.isSuccess && response.result) {
       setLectureNotes(response.result);
     } else {
       setLectureNotes([]);
     }
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -91,6 +94,15 @@ export default function TeacherLectureNoteManagementPage() {
     fileInputRef.current?.click();
   };
 
+  if (isLoading) {
+    return (
+      <div className={styles.container}>
+        <h1>[{selectedClassName}] 강의자료 관리</h1>
+        <LoadingSpinner />
+      </div>
+    );
+  }
+
   if (!selectedClassId || !selectedClassName) {
     return (
       <div className={styles.container}>
@@ -130,7 +142,7 @@ export default function TeacherLectureNoteManagementPage() {
       {isUploading && (
         <AlertModal hideButton onClose={() => setIsUploading(false)}>
           <LoadingSpinner />
-          <div style={{ marginTop: 16 }}>업로드 중입니다...</div>
+          <div>강의자료를 업로드 중입니다...</div>
         </AlertModal>
       )}
     </div>
