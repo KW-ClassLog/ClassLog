@@ -3,13 +3,11 @@ package org.example.backend.domain.classroom.controller;
 import jakarta.validation.Valid;
 import org.example.backend.domain.classroom.converter.ClassroomConverter;
 import org.example.backend.domain.classroom.dto.request.ClassroomRequestDTO;
-import org.example.backend.domain.classroom.dto.response.ClassLectureResponseDTO;
+import org.example.backend.domain.classroom.dto.response.*;
 import org.example.backend.domain.classroom.dto.request.EntryCodeVerifyRequestDTO;
-import org.example.backend.domain.classroom.dto.response.ClassroomResponseDTO;
-import org.example.backend.domain.classroom.dto.response.ClassroomResponseStudentDTO;
-import org.example.backend.domain.classroom.dto.response.EntryCodeResponseDTO;
 import org.example.backend.domain.classroom.entity.Classroom;
 import org.example.backend.domain.classroom.exception.ClassroomErrorCode;
+import org.example.backend.domain.classroom.service.ClassQuizService;
 import org.example.backend.domain.classroom.service.ClassroomService;
 import org.example.backend.global.ApiResponse;
 import org.example.backend.global.security.auth.CustomUserDetails;
@@ -25,11 +23,16 @@ import java.util.UUID;
 public class ClassroomController {
     private final ClassroomService classroomService;
     private final ClassroomConverter classroomConverter;
+    private final ClassQuizService classQuizService;
 
-    public ClassroomController(ClassroomService classroomService, ClassroomConverter classroomConverter) {
+    public ClassroomController(ClassroomService classroomService,
+                               ClassroomConverter classroomConverter,
+                               ClassQuizService classQuizService) {
         this.classroomService = classroomService;
         this.classroomConverter = classroomConverter;
+        this.classQuizService = classQuizService;
     }
+
     // 클래스 생성
     @PostMapping("/create")
     public ApiResponse<ClassroomResponseDTO> createClassroom(@Valid @RequestBody ClassroomRequestDTO classroomRequestDTO) {
@@ -100,4 +103,10 @@ public class ClassroomController {
         return ApiResponse.onSuccess(true);
     }
 
+    // 퀴즈 조회
+    @GetMapping("/{classId}/quiz")
+    public ApiResponse<List<ClassQuizResponseDTO>> getClassQuizInfo(@PathVariable UUID classId) {
+        List<ClassQuizResponseDTO> result = classQuizService.getQuizzesByClass(classId);
+        return ApiResponse.onSuccess(result);
+    }
 }
