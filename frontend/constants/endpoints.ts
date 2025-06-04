@@ -70,6 +70,8 @@ export const ENDPOINTS = {
       `${BASE_API}/lectures/${lectureId}/${lectureNoteId}`,
     GET_NOTE_LIST: (lectureId: string) =>
       `${BASE_API}/lectures/${lectureId}/notes`,
+    GET_NOTE_LIST_BY_CLASS: (classId: string) =>
+      `${BASE_API}/lectures/${classId}/class/notes`,
 
     // 녹음 관련
     SAVE_RECORDING: (lectureId: string) =>
