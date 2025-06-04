@@ -6,6 +6,7 @@ import NoDataView from "@/components/NoDataView/NoDataView";
 import { FileText } from "lucide-react";
 import { useRef, useState } from "react";
 import AlertModal from "@/components/Modal/AlertModal/AlertModal";
+import { uploadLectureNote } from "@/api/lectures/uploadLectureNote";
 
 export default function TeacherLectureNoteManagementPage() {
   const { selectedClassId, selectedClassName } = useSelectedClassStore();
@@ -40,56 +41,38 @@ export default function TeacherLectureNoteManagementPage() {
   const handleFileSelect = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
+    const files = event.target.files;
+    if (!files || files.length === 0) return;
 
     if (!selectedClassId) {
       setAlert("클래스를 선택해주세요.");
       return;
     }
 
-    // 파일 크기 제한 (10MB)
-    const maxSize = 10 * 1024 * 1024;
-    if (file.size > maxSize) {
-      setAlert("파일 크기는 10MB를 초과할 수 없습니다.");
-      return;
-    }
+    // 파일 유효성 검사
+    const maxSize = 50 * 1024 * 1024;
 
-    // 파일 형식 검사
-    const allowedTypes = [
-      "application/pdf",
-      "application/msword",
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-      "application/vnd.ms-powerpoint",
-      "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-      "application/vnd.ms-excel",
-      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    ];
-
-    if (!allowedTypes.includes(file.type)) {
-      setAlert(
-        "지원하지 않는 파일 형식입니다. (지원 형식: PDF, DOC, DOCX, PPT, PPTX, XLS, XLSX)"
-      );
-      return;
+    const validFiles: File[] = [];
+    for (const file of Array.from(files)) {
+      if (file.size > maxSize) {
+        setAlert(`파일 ${file.name}의 크기가 50MB를 초과합니다.`);
+        return;
+      }
+      // 파일 형식 제한 없음
+      validFiles.push(file);
     }
 
     try {
-      // TODO: API 연동
-      // const formData = new FormData();
-      // formData.append("file", file);
-      // formData.append("classId", selectedClassId);
-
-      // const response = await createLectureNote(formData);
-
-      // if (response.isSuccess) {
-      //   // 성공 처리
-      // } else {
-      //   setAlert(response.message || "강의자료 업로드에 실패했습니다.");
-      // }
-
-      console.log("Selected file:", file);
-    } catch (error) {
-      console.error("Failed to upload lecture note:", error);
+      const response = await uploadLectureNote(selectedClassId, validFiles);
+      if (response.isSuccess) {
+        setAlert(
+          `총 ${validFiles.length}개의 강의자료가 클래스에 업로드 되었습니다.`
+        );
+        // TODO: 업로드 성공 후 목록 갱신 등 추가 처리
+      } else {
+        setAlert(response.message || "강의자료 업로드에 실패했습니다.");
+      }
+    } catch {
       setAlert("강의자료 업로드 중 오류가 발생했습니다.");
     }
 
@@ -125,7 +108,7 @@ export default function TeacherLectureNoteManagementPage() {
           ref={fileInputRef}
           onChange={handleFileSelect}
           style={{ display: "none" }}
-          accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx"
+          multiple
         />
         <button className={styles.addButton} onClick={handleAddButtonClick}>
           + 강의자료 추가하기
