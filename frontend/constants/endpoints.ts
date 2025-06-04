@@ -60,8 +60,8 @@ export const ENDPOINTS = {
       `${BASE_API}/lectures/teacher/today?date=${date}`,
 
     // 노트 관련
-    UPLOAD_NOTE: (lectureId: string) =>
-      `${BASE_API}/lectures/${lectureId}/notes`,
+    UPLOAD_NOTE: (classId: string) =>
+      `${BASE_API}/lectures/${classId}/note/upload`,
     SELECT_NOTE: (lectureId: string) =>
       `${BASE_API}/lectures/${lectureId}/notes/mapping`,
     DELETE_NOTE: (lectureId: string) =>
