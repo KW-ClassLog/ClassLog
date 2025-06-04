@@ -64,8 +64,8 @@ export const ENDPOINTS = {
       `${BASE_API}/lectures/${classId}/note/upload`,
     SELECT_NOTE: (lectureId: string) =>
       `${BASE_API}/lectures/${lectureId}/notes/mapping`,
-    DELETE_NOTE: (lectureId: string) =>
-      `${BASE_API}/lectures/${lectureId}/notes`,
+    DELETE_NOTE: (lectureNoteIds: string[]) =>
+      `${BASE_API}/lectures/note?keys=${lectureNoteIds.join(",")}`,
     GET_NOTE_DETAIL: (lectureId: string, lectureNoteId: string) =>
       `${BASE_API}/lectures/${lectureId}/${lectureNoteId}`,
     GET_NOTE_LIST: (lectureId: string) =>

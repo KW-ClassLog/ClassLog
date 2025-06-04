@@ -2,7 +2,7 @@ export interface FetchLectureNotesByClassResult {
   lectureNoteId: string;
   classId: string;
   lectureNoteUrl: string;
-  lectureName: string;
+  lectureNoteName: string;
   fileSize: string;
   session: number[];
 }
