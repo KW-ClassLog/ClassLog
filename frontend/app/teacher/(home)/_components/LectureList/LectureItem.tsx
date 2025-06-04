@@ -28,7 +28,11 @@ export default function LectureItem({
         </div>
         <div className={styles.actionButton}>
           <span className={`${styles.buttonText} ${styles[status]}`}>
-            {status === "beforeLecture" ? "강의 전" : "강의 종료"}
+            {status === "beforeLecture"
+              ? "강의 전"
+              : status === "onLecture"
+              ? "강의 중"
+              : "강의 종료"}
           </span>
 
           <div className={styles.buttonIcon}>

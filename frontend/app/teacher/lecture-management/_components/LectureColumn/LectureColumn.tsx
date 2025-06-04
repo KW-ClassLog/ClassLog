@@ -3,21 +3,13 @@ import styles from "./LectureColumn.module.scss";
 import { Calendar, Clock, ChevronRight } from "lucide-react";
 import { ROUTES } from "@/constants/routes";
 import { useRouter } from "next/navigation";
-
-interface Lecture {
-  lectureId: string;
-  title: string;
-  lectureDate: string;
-  status: "beforeLecture" | "showDashboard" | "quizCreation";
-  startTime: string;
-  endTime: string;
-}
+import { FetchLecturesByClassResult } from "@/types/classes/fetchLecturesByClassTypes";
 
 interface LectureColumnProps {
   title: string;
   count: number;
   emptyText: string;
-  lectures: Lecture[];
+  lectures: FetchLecturesByClassResult[];
   columnClassName?: string;
 }
 
@@ -31,7 +23,7 @@ const LectureColumn: React.FC<LectureColumnProps> = ({
   const router = useRouter();
 
   const handleLectureClick = (lectureId: string) => {
-    router.push(ROUTES.teacherQuizDashboard(lectureId));
+    router.push(ROUTES.teacherLectureDetail(lectureId));
   };
 
   return (
@@ -50,7 +42,7 @@ const LectureColumn: React.FC<LectureColumnProps> = ({
               onClick={() => handleLectureClick(l.lectureId)}
             >
               <div className={styles.lectureHeader}>
-                <div className={styles.lectureTitle}>{l.title}</div>
+                <div className={styles.lectureTitle}>{l.lectureName}</div>
                 <div className={styles.arrowButton}>
                   <ChevronRight color="#4894fe" size={20} />
                 </div>

@@ -1,3 +1,3 @@
 export default function TeacherLectureDetailPage() {
-  return <div>클래스 상세</div>;
+  return <div>강의 상세</div>;
 }

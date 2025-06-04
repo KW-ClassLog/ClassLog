@@ -5,41 +5,28 @@ import { MoreVertical, Clock, Calendar } from "lucide-react";
 import { useState, useEffect } from "react";
 import CreateClassModal from "./CreateClassModal/CreateClassModal";
 import ClosableModal from "@/components/Modal/ClosableModal/ClosableModal";
-import { fetchMyClassList } from "@/api/classes/fetchMyClassList";
-import { FetchMyClassListResult } from "@/types/classes/fetchMyClassListTypes";
 import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
 import NoDataView from "@/components/NoDataView/NoDataView";
 import { School, PencilLine, Trash2 } from "lucide-react";
 import { deleteClass } from "@/api/classes/deleteClass";
 import AlertModal from "@/components/Modal/AlertModal/AlertModal";
 import ConfirmModal from "@/components/Modal/ConfirmModal/ConfirmModal";
+import useClassListStore from "@/store/useClassListStore";
 
 export default function ClassList() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [classes, setClasses] = useState<FetchMyClassListResult[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [dropdownOpenId, setDropdownOpenId] = useState<string | null>(null);
   const [alert, setAlert] = useState<string | null>(null);
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
 
-  const handleOpenModal = () => setIsModalOpen(true);
-  const handleCloseModal = () => setIsModalOpen(false);
+  const { classList, isLoading, error, fetchClassList } = useClassListStore();
 
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      setError(null);
-      const res = await fetchMyClassList();
-      if (res && res.isSuccess) {
-        setClasses(res.result || []);
-      } else {
-        setError(res?.message || "클래스 목록을 불러오지 못했습니다.");
-      }
-      setLoading(false);
-    };
-    fetchData();
-  }, []);
+    fetchClassList();
+  }, [fetchClassList]);
+
+  const handleOpenModal = () => setIsModalOpen(true);
+  const handleCloseModal = () => setIsModalOpen(false);
 
   const handleMoreClick = (classId: string) => {
     setDropdownOpenId((prev) => (prev === classId ? null : classId));
@@ -59,12 +46,8 @@ export default function ClassList() {
     if (!confirmDeleteId) return;
     const res = await deleteClass(confirmDeleteId);
     if (res && res.isSuccess) {
-      setClasses(
-        classes.filter((classItem) => classItem.classId !== confirmDeleteId)
-      );
       setAlert("클래스가 성공적으로 삭제되었습니다.");
     } else {
-      setError(res?.message || "클래스를 삭제하지 못했습니다.");
       setAlert(res?.message || "클래스를 삭제하지 못했습니다.");
     }
     setConfirmDeleteId(null);
@@ -79,18 +62,18 @@ export default function ClassList() {
         </button>
       </div>
       <div className={styles.classList}>
-        {loading ? (
+        {isLoading ? (
           <LoadingSpinner />
         ) : error ? (
           <div>{error}</div>
-        ) : classes.length === 0 ? (
+        ) : classList.length === 0 ? (
           <NoDataView
             icon={School}
             title={"클래스 없음"}
             description={"생성된 클래스가 없습니다."}
           />
         ) : (
-          classes.map((classItem) => (
+          classList.map((classItem) => (
             <div
               key={classItem.classId}
               className={styles.classCard}

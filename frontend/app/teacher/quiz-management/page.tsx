@@ -1,7 +1,7 @@
 "use client";
 
 import styles from "./page.module.scss";
-import useClassStore from "@/store/useClassStore";
+import useSelectedClassStore from "@/store/useSelectedClassStore";
 import { useEffect, useState } from "react";
 import LectureItem from "./_components/LectureItem/LectureItem";
 import NoDataView from "@/components/NoDataView/NoDataView";
@@ -17,7 +17,7 @@ interface Lecture {
 }
 
 export default function TeacherQuizManagementPage() {
-  const { selectedClassId, selectedClassName } = useClassStore();
+  const { selectedClassId, selectedClassName } = useSelectedClassStore();
   const [lectures, setLectures] = useState<Lecture[]>([
     {
       lectureId: "1",
