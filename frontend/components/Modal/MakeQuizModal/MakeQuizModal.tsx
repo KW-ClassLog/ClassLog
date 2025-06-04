@@ -1,15 +1,8 @@
 // MakeQuizModal.tsx
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styles from "./MakeQuizModal.module.scss";
 import ClosableModal from "../ClosableModal/ClosableModal";
 import QuizPreview from "./QuizPreview/QuizPreview";
-
-interface Quiz {
-  quizBody: string;
-  solution: string;
-  choices: string[];
-  type: "객관식" | "단답형" | "OX";
-}
 
 interface MakeQuizModalProps {
   onClose: () => void;
@@ -17,70 +10,7 @@ interface MakeQuizModalProps {
 }
 
 const MakeQuizModal = ({ onClose, lectureId }: MakeQuizModalProps) => {
-  const [quizzes, setQuizzes] = useState<Quiz[] | null>(null);
   const [useAudio, setUseAudio] = useState(false);
-
-  useEffect(() => {
-    // TODO: Replace with actual data fetch using lectureId
-    setTimeout(() => {
-      setQuizzes([
-        {
-          quizBody: "오늘 내가 먹고싶은 과일은?",
-          solution: "바나나",
-          choices: ["바나나", "딸기", "참외", "수박"],
-          type: "객관식",
-        },
-        {
-          quizBody: "오늘 나는 과일이 먹고싶다",
-          solution: "O",
-          choices: [],
-          type: "OX",
-        },
-        {
-          quizBody: "오늘 내가 먹고싶은 과일은?",
-          solution: "바나나",
-          choices: [],
-          type: "단답형",
-        },
-        {
-          quizBody: "오늘 내가 먹고싶은 과일은?",
-          solution: "바나나",
-          choices: [],
-          type: "단답형",
-        },
-        {
-          quizBody: "오늘 내가 먹고싶은 과일은?",
-          solution: "바나나",
-          choices: [],
-          type: "단답형",
-        },
-        {
-          quizBody: "오늘 내가 먹고싶은 과일은?",
-          solution: "바나나",
-          choices: [],
-          type: "단답형",
-        },
-        {
-          quizBody: "오늘 내가 먹고싶은 과일은?",
-          solution: "바나나",
-          choices: [],
-          type: "단답형",
-        },
-        {
-          quizBody: "오늘 내가 먹고싶은 과일은?",
-          solution: "바나나",
-          choices: [],
-          type: "단답형",
-        },
-        {
-          quizBody: "오늘 내가 먹고싶은 과일은?",
-          solution: "바나나",
-          choices: [],
-          type: "단답형",
-        },
-      ]);
-    }, 2000);
-  }, []);
 
   const handleCustomize = () => {
     // TODO: Implement customization logic
@@ -130,9 +60,11 @@ const MakeQuizModal = ({ onClose, lectureId }: MakeQuizModalProps) => {
           </div>
         </div>
         <QuizPreview
-          quizzes={quizzes}
+          lectureId={lectureId}
+          useAudio={useAudio}
           onCustomize={handleCustomize}
           onSubmit={handleSubmit}
+          onClose={onClose}
         />
       </div>
     </ClosableModal>

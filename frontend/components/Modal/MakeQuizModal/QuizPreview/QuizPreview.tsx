@@ -1,27 +1,50 @@
 // _components/QuizPreview.tsx
 import styles from "./QuizPreview.module.scss";
 import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Masonry from "react-masonry-css";
 import SelectableButton from "@/components/Button/SelectableButton/SelectableButton";
 import AlertModal from "@/components/Modal/AlertModal/AlertModal";
-
-interface Quiz {
-  quizBody: string;
-  solution: string;
-  choices: string[];
-  type: "객관식" | "단답형" | "OX";
-}
+import { createQuiz } from "@/api/quizzes/createQuiz";
+import { Quiz } from "@/types/quizzes/createQuizTypes";
 
 interface QuizPreviewProps {
-  quizzes: Quiz[] | null;
+  lectureId: string;
+  useAudio: boolean;
   onCustomize?: () => void;
   onSubmit?: () => void;
+  onClose?: () => void;
 }
 
-const QuizPreview = ({ quizzes, onCustomize, onSubmit }: QuizPreviewProps) => {
+const QuizPreview = ({
+  lectureId,
+  useAudio,
+  onCustomize,
+  onSubmit,
+  onClose,
+}: QuizPreviewProps) => {
+  const [quizzes, setQuizzes] = useState<Quiz[] | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const [selectedQuizzes, setSelectedQuizzes] = useState<number[]>([]);
   const [showAlert, setShowAlert] = useState(false);
+
+  useEffect(() => {
+    setQuizzes(null); // 로딩 상태
+    setError(null); // 에러 초기화
+    createQuiz({ lectureId, useAudio })
+      .then((res) => {
+        if (res.isSuccess && res.result && Array.isArray(res.result.quizzes)) {
+          setQuizzes(res.result.quizzes);
+        } else {
+          setQuizzes([]);
+          setError(res.message || "퀴즈 생성에 실패했습니다.");
+        }
+      })
+      .catch(() => {
+        setQuizzes([]);
+        setError("퀴즈 생성 중 오류가 발생했습니다.");
+      });
+  }, [lectureId, useAudio]);
 
   const toggleQuizSelection = (index: number) => {
     setSelectedQuizzes((prev) => {
@@ -48,6 +71,16 @@ const QuizPreview = ({ quizzes, onCustomize, onSubmit }: QuizPreviewProps) => {
 
   return (
     <div className={styles.wrapper}>
+      {error && (
+        <AlertModal
+          onClose={() => {
+            setError(null);
+            if (onClose) onClose();
+          }}
+        >
+          {error}
+        </AlertModal>
+      )}
       {showAlert && (
         <AlertModal onClose={() => setShowAlert(false)}>
           최대 4개의 퀴즈만 선택할 수 있습니다.
@@ -79,7 +112,13 @@ const QuizPreview = ({ quizzes, onCustomize, onSubmit }: QuizPreviewProps) => {
                   onClick={() => toggleQuizSelection(index)}
                 >
                   <div className={styles.quizCardHeader}>
-                    <div className={styles.type}>{quiz.type}</div>
+                    <div className={styles.type}>
+                      {quiz.type === "multipleChoice"
+                        ? "객관식"
+                        : quiz.type === "shortAnswer"
+                        ? "단답형"
+                        : "O/X"}
+                    </div>
                     <div className={styles.question}>{quiz.quizBody}</div>
                     <div className={styles.selectButtonWrapper}>
                       <SelectableButton
@@ -94,15 +133,17 @@ const QuizPreview = ({ quizzes, onCustomize, onSubmit }: QuizPreviewProps) => {
                       />
                     </div>
                   </div>
-                  {quiz.type === "객관식" && quiz.choices.length > 0 && (
-                    <ul className={styles.choices}>
-                      {quiz.choices.map((choice, index) => (
-                        <li key={index}>
-                          {index + 1}. {choice}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
+                  {quiz.type === "multipleChoice" &&
+                    quiz.options &&
+                    quiz.options.length > 0 && (
+                      <ul className={styles.choices}>
+                        {quiz.options.map((option, index) => (
+                          <li key={index}>
+                            {index + 1}. {option}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
                   <div className={styles.answer}>정답: {quiz.solution}</div>
                 </div>
               ))}
