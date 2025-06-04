@@ -4,38 +4,42 @@ import styles from "./page.module.scss";
 import useSelectedClassStore from "@/store/useSelectedClassStore";
 import NoDataView from "@/components/NoDataView/NoDataView";
 import { FileText } from "lucide-react";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import AlertModal from "@/components/Modal/AlertModal/AlertModal";
 import { uploadLectureNote } from "@/api/lectures/uploadLectureNote";
+import { fetchLectureNotesByClass } from "@/api/lectures/fetchLectureNotesByClass";
+import { FetchLectureNotesByClassResult } from "@/types/lectures/fetchLectureNotesByClassTypes";
 
 export default function TeacherLectureNoteManagementPage() {
   const { selectedClassId, selectedClassName } = useSelectedClassStore();
   const [alert, setAlert] = useState<string | null>(null);
+  const [lectureNotes, setLectureNotes] = useState<
+    FetchLectureNotesByClassResult[]
+  >([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const lectureNotes = [
-    {
-      lectureNoteId: "note1",
-      lectureId: "lec1",
-      session: [1],
-      lectureNoteUrl: "Proposal.docx",
-      fileSize: "2.9 MB",
-    },
-    {
-      lectureNoteId: "note2",
-      lectureId: "lec1",
-      session: [1, 2],
-      lectureNoteUrl: "Proposal.docx",
-      fileSize: "2.9 MB",
-    },
-    // Additional data...
-  ];
+  // 강의자료 목록 불러오기
+  const loadLectureNotes = async (classId: string) => {
+    const response = await fetchLectureNotesByClass(classId);
+    if (response.isSuccess && response.result) {
+      setLectureNotes(response.result);
+    } else {
+      setLectureNotes([]);
+    }
+  };
+
+  useEffect(() => {
+    if (selectedClassId) {
+      loadLectureNotes(selectedClassId);
+    }
+  }, [selectedClassId]);
 
   const handleDelete = (selectedIds: string[]) => {
     const updatedLectureNotes = lectureNotes.filter(
       (note) => !selectedIds.includes(note.lectureNoteId)
     );
-    console.log("Updated Lecture Notes:", updatedLectureNotes);
+    setLectureNotes(updatedLectureNotes);
+    // 실제 삭제 API 연동 필요
   };
 
   const handleFileSelect = async (
@@ -51,14 +55,12 @@ export default function TeacherLectureNoteManagementPage() {
 
     // 파일 유효성 검사
     const maxSize = 50 * 1024 * 1024;
-
     const validFiles: File[] = [];
     for (const file of Array.from(files)) {
       if (file.size > maxSize) {
         setAlert(`파일 ${file.name}의 크기가 50MB를 초과합니다.`);
         return;
       }
-      // 파일 형식 제한 없음
       validFiles.push(file);
     }
 
@@ -68,7 +70,7 @@ export default function TeacherLectureNoteManagementPage() {
         setAlert(
           `총 ${validFiles.length}개의 강의자료가 클래스에 업로드 되었습니다.`
         );
-        // TODO: 업로드 성공 후 목록 갱신 등 추가 처리
+        await loadLectureNotes(selectedClassId); // 업로드 성공 시 목록 새로고침
       } else {
         setAlert(response.message || "강의자료 업로드에 실패했습니다.");
       }

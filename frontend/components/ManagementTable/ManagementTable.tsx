@@ -6,15 +6,9 @@ import Image from "next/image";
 import styles from "./ManagementTable.module.scss";
 import AlertModal from "../Modal/AlertModal/AlertModal";
 import ConfirmModal from "../Modal/ConfirmModal/ConfirmModal";
-
-// lectureNote 타입 정의
-type LectureNoteData = {
-  lectureNoteId: string;
-  lectureId: string;
-  session: number[];
-  lectureNoteUrl: string;
-  fileSize: string;
-};
+import { FetchLectureNotesByClassResult } from "@/types/lectures/fetchLectureNotesByClassTypes";
+import NoDataView from "../NoDataView/NoDataView";
+import { FileText } from "lucide-react";
 
 // student 타입 정의
 type StudentData = {
@@ -28,7 +22,7 @@ type StudentData = {
 
 type ManagementTableProps = {
   type: "lectureNote" | "student"; // 데이터 유형
-  data: (LectureNoteData | StudentData)[]; // lectureNote와 student에 맞는 데이터
+  data: (FetchLectureNotesByClassResult | StudentData)[]; // lectureNote와 student에 맞는 데이터
   onDelete: (index: string[]) => void; // 삭제 이벤트 처리 함수
 };
 
@@ -54,7 +48,7 @@ const ManagementTable: React.FC<ManagementTableProps> = ({
       const allSelectedItems = new Set(
         data.map((item) =>
           type === "lectureNote"
-            ? (item as LectureNoteData).lectureNoteId
+            ? (item as FetchLectureNotesByClassResult).lectureNoteId
             : (item as StudentData).userId
         )
       );
@@ -98,152 +92,185 @@ const ManagementTable: React.FC<ManagementTableProps> = ({
 
   return (
     <div className={styles.managementTable}>
-      <table>
-        <thead>
-          <tr>
-            {isEditMode && (
-              <th>
-                <button
-                  className={`${styles.selectButton} ${
-                    selectedItems.size === data.length ? styles.selected : ""
-                  }`}
-                  onClick={() =>
-                    handleSelectAll(selectedItems.size !== data.length)
-                  }
-                >
-                  <Check size={20} color="white" />
-                </button>
-              </th>
-            )}
-            {type === "lectureNote" ? (
-              <>
-                <th>차시</th>
-                <th>파일명</th>
-                <th>용량</th>
-              </>
-            ) : (
-              <>
-                <th>이름</th>
-                <th>소속</th>
-                <th>휴대전화</th>
-              </>
-            )}
-            <th className={styles.buttonContainer}>
-              {isEditMode ? (
-                <>
-                  <button
-                    className={styles.cancelButton}
-                    onClick={handleCancel}
-                  >
-                    <X size={14} color={"#606060"} />
-                    닫기
-                  </button>
-                  <button
-                    className={styles.deleteButton}
-                    onClick={() => setDeleteConfirmModalOpen(true)}
-                  >
-                    <Trash2 size={14} color={"#ea4335"} />
-                    삭제
-                  </button>
-                </>
-              ) : (
-                <Trash2
-                  className={styles.trashIcon}
-                  onClick={() => setIsEditMode(true)}
-                />
-              )}
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((item) => (
-            <tr
-              key={
-                type === "lectureNote"
-                  ? (item as LectureNoteData).lectureNoteId
-                  : (item as StudentData).userId
-              }
-              className={
-                selectedItems.has(
-                  type === "lectureNote"
-                    ? (item as LectureNoteData).lectureNoteId
-                    : (item as StudentData).userId
-                )
-                  ? styles.selectedRow
-                  : ""
-              }
-            >
+      {type === "lectureNote" && data.length === 0 ? (
+        <NoDataView
+          icon={FileText}
+          title="강의자료가 없습니다"
+          description="아직 업로드된 강의자료가 없습니다."
+        />
+      ) : (
+        <table>
+          <thead>
+            <tr>
               {isEditMode && (
-                <td>
+                <th>
                   <button
                     className={`${styles.selectButton} ${
-                      selectedItems.has(
-                        type === "lectureNote"
-                          ? (item as LectureNoteData).lectureNoteId
-                          : (item as StudentData).userId
-                      )
-                        ? styles.selected
-                        : ""
+                      selectedItems.size === data.length ? styles.selected : ""
                     }`}
                     onClick={() =>
-                      toggleSelection(
-                        type === "lectureNote"
-                          ? (item as LectureNoteData).lectureNoteId
-                          : (item as StudentData).userId
-                      )
-                    } // 버튼 클릭 시 선택/해제
+                      handleSelectAll(selectedItems.size !== data.length)
+                    }
                   >
                     <Check size={20} color="white" />
                   </button>
-                </td>
+                </th>
               )}
               {type === "lectureNote" ? (
                 <>
-                  <td>{(item as LectureNoteData).session.join(", ")}</td>
-                  <td>{(item as LectureNoteData).lectureNoteUrl}</td>
-                  <td>{(item as LectureNoteData).fileSize}</td>
-                  <td></td>
+                  <th>차시</th>
+                  <th>파일명</th>
+                  <th>용량</th>
                 </>
               ) : (
                 <>
-                  <td className={styles.profileContainer}>
-                    <Image
-                      src={
-                        (item as StudentData).profile ||
-                        "/images/default_profile.jpg"
-                      }
-                      alt={(item as StudentData).name}
-                      width={40}
-                      height={40}
-                      className={styles.profileImage}
-                    />
-                    {(item as StudentData).nickname}
-                  </td>
-                  <td>{(item as StudentData).organization}</td>
-                  <td>
-                    {(item as StudentData).phoneNumber}{" "}
-                    {!isEditMode ? (
-                      <button
-                        className={styles.copyButton}
-                        onClick={() =>
-                          handleCopyPhoneNumber(
-                            (item as StudentData).phoneNumber
-                          )
-                        }
-                      >
-                        <Copy className={styles.pasteIcon} />
-                      </button>
-                    ) : (
-                      <></>
-                    )}
-                  </td>
-                  <td></td>
+                  <th>이름</th>
+                  <th>소속</th>
+                  <th>휴대전화</th>
                 </>
               )}
+              <th className={styles.buttonContainer}>
+                {isEditMode ? (
+                  <>
+                    <button
+                      className={styles.cancelButton}
+                      onClick={handleCancel}
+                    >
+                      <X size={14} color={"#606060"} />
+                      닫기
+                    </button>
+                    <button
+                      className={styles.deleteButton}
+                      onClick={() => setDeleteConfirmModalOpen(true)}
+                    >
+                      <Trash2 size={14} color={"#ea4335"} />
+                      삭제
+                    </button>
+                  </>
+                ) : (
+                  <Trash2
+                    className={styles.trashIcon}
+                    onClick={() => setIsEditMode(true)}
+                  />
+                )}
+              </th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {data.map((item) => (
+              <tr
+                key={
+                  type === "lectureNote"
+                    ? (item as FetchLectureNotesByClassResult).lectureNoteId
+                    : (item as StudentData).userId
+                }
+                className={
+                  selectedItems.has(
+                    type === "lectureNote"
+                      ? (item as FetchLectureNotesByClassResult).lectureNoteId
+                      : (item as StudentData).userId
+                  )
+                    ? styles.selectedRow
+                    : ""
+                }
+              >
+                {isEditMode && (
+                  <td>
+                    <button
+                      className={`${styles.selectButton} ${
+                        selectedItems.has(
+                          type === "lectureNote"
+                            ? (item as FetchLectureNotesByClassResult)
+                                .lectureNoteId
+                            : (item as StudentData).userId
+                        )
+                          ? styles.selected
+                          : ""
+                      }`}
+                      onClick={() =>
+                        toggleSelection(
+                          type === "lectureNote"
+                            ? (item as FetchLectureNotesByClassResult)
+                                .lectureNoteId
+                            : (item as StudentData).userId
+                        )
+                      } // 버튼 클릭 시 선택/해제
+                    >
+                      <Check size={20} color="white" />
+                    </button>
+                  </td>
+                )}
+                {type === "lectureNote" ? (
+                  <>
+                    <td>
+                      {(item as FetchLectureNotesByClassResult).session.join(
+                        ", "
+                      )}
+                    </td>
+                    <td>
+                      <a
+                        href={
+                          (item as FetchLectureNotesByClassResult)
+                            .lectureNoteUrl
+                        }
+                        download
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{
+                          color: "#4894fe",
+                          textDecoration: "underline",
+                          cursor: "pointer",
+                        }}
+                      >
+                        {(item as FetchLectureNotesByClassResult).lectureName ||
+                          (item as FetchLectureNotesByClassResult)
+                            .lectureNoteUrl}
+                      </a>
+                    </td>
+                    <td>{(item as FetchLectureNotesByClassResult).fileSize}</td>
+                    <td></td>
+                  </>
+                ) : (
+                  <>
+                    <td className={styles.profileContainer}>
+                      <Image
+                        src={
+                          (item as StudentData).profile ||
+                          "/images/default_profile.jpg"
+                        }
+                        alt={(item as StudentData).name}
+                        width={40}
+                        height={40}
+                        className={styles.profileImage}
+                      />
+                      {(item as StudentData).nickname}
+                    </td>
+                    <td>{(item as StudentData).organization}</td>
+                    <td>
+                      {(item as StudentData).phoneNumber}{" "}
+                      {!isEditMode ? (
+                        <button
+                          className={styles.copyButton}
+                          onClick={() =>
+                            handleCopyPhoneNumber(
+                              (item as StudentData).phoneNumber
+                            )
+                          }
+                        >
+                          <Copy className={styles.pasteIcon} />
+                        </button>
+                      ) : (
+                        <></>
+                      )}
+                    </td>
+                    <td></td>
+                  </>
+                )}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
       {phoneNumberCopyAlertModalOpen && (
         <AlertModal onClose={() => setPhoneNumberCopyAlertModalOpen(false)}>
           전화번호가 복사되었습니다.
