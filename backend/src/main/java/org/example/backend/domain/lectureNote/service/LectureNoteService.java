@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface LectureNoteService {
-    void deleteLectureNote(UUID lectureNoteId);
+    void deleteLectureNote(List<UUID> lectureNoteIds);
     LectureNoteResponseDTO getLectureNoteDetail(UUID lectureNoteId);
     List<LectureNote> uploadLectureNotes(UUID classId, List<MultipartFile> files) throws IOException;
     List<LectureNoteKeyResponseDTO> getLectureNoteList(UUID lectureId);

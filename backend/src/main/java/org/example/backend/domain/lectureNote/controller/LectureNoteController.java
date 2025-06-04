@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -34,14 +35,21 @@ public class LectureNoteController {
     }
 
     //강의록 삭제
-    @DeleteMapping("/{lecture_note_id}/notes")
+    @DeleteMapping("/notes")
     public ApiResponse<String> deleteLectureNote(
-            @PathVariable("lecture_note_id") UUID lectureNoteId) throws IOException {
+            @RequestParam("keys") String keys) throws IOException {
+        List<UUID> lectureNoteIds = Arrays.stream(keys.split(","))
+                .map(String::trim) // 공백 제거
+                .filter(s -> !s.isEmpty()) // 빈 문자열 제거
+                .map(UUID::fromString)
+                .toList();
 
-        lectureNoteService.deleteLectureNote(lectureNoteId);
+        lectureNoteService.deleteLectureNote(lectureNoteIds);
 
         return ApiResponse.onSuccess("LectureNote deleted.");
     }
+
+    //강의록 개별 조회
     @GetMapping("/{lecture_note_id}")
     public ApiResponse<LectureNoteResponseDTO> getLectureNote(
             @PathVariable("lecture_note_id") UUID lectureNoteId) {
