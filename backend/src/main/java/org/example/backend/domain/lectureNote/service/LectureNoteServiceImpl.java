@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -59,17 +60,19 @@ public class LectureNoteServiceImpl implements LectureNoteService {
     }
 
     //파일 삭제
-    public void deleteLectureNote(UUID lectureNoteId) {
-        // 1. DB에서 LectureNote 조회
+    public void deleteLectureNote(List<UUID> lectureNoteIds) {
+
+        for (UUID lectureNoteId : lectureNoteIds) {
+
         LectureNote lectureNote = lectureNoteRepository.findById(lectureNoteId)
                 .orElseThrow(() -> new LectureNoteException(LectureNoteErrorCode.LECTURE_NOTE_NOT_FOUND));
 
-        // 2. S3에 저장된 파일 삭제 (key는 noteUrl로 저장돼 있다고 가정)
-        String s3Key = lectureNote.getNoteUrl(); // noteUrl 필드에 key가 저장돼 있어야 함
+        String s3Key = lectureNote.getNoteUrl();
         s3Service.deleteFile(s3Key);
 
-        // 3. LectureNote 삭제
         lectureNoteRepository.deleteById(lectureNoteId);
+
+        }
     }
 
     //파일 개별 조회
@@ -98,12 +101,32 @@ public class LectureNoteServiceImpl implements LectureNoteService {
     public List<LectureNoteKeyResponseDTO> getLectureNoteList(UUID classId) {
         List<LectureNote> notes = lectureNoteRepository.findByClassroom_Id(classId);
 
+
+
         return notes.stream()
-                .map(note -> LectureNoteKeyResponseDTO.builder()
-                        .lectureNoteId(note.getId())
-                        .lectureNoteKey(note.getNoteUrl())
-                        .classId(note.getClassroom().getId())
-                        .build())
+                .map(note -> {
+                    String s3Key = note.getNoteUrl();
+                    String presignedUrl = s3Service.getPresignedUrl(s3Key);
+                    String fileSize = s3Service.getFileSize(s3Key);
+                    String lectureNoteName = s3Key.substring(s3Key.lastIndexOf('/') + 1);
+                    List<LectureNoteMapping> mappings = lectureNoteMappingRepository.findByLectureNote_Id(note.getId());
+
+
+                    List<Integer> sessionList = mappings.stream()
+                            .map(mapping -> mapping.getLecture().getSession())
+                            .filter(Objects::nonNull)
+                            .sorted()
+                            .toList();
+
+                    return LectureNoteKeyResponseDTO.builder()
+                            .lectureNoteId(note.getId())
+                            .classId(note.getClassroom().getId())
+                            .lectureNoteUrl(presignedUrl)
+                            .fileSize(fileSize)
+                            .lectureNoteName(lectureNoteName)
+                            .session(sessionList)
+                            .build();
+                })
                 .toList();
     }
 
@@ -118,13 +141,16 @@ public class LectureNoteServiceImpl implements LectureNoteService {
                     String s3Key = lectureNote.getNoteUrl();
                     String presignedUrl = s3Service.getPresignedUrl(s3Key);
 
+
                     String fileSize = s3Service.getFileSize(s3Key);
+                    String lectureNoteName = s3Key.substring(s3Key.lastIndexOf('/') + 1);
 
 
                     return LectureNoteResponseDTO.builder()
                             .lectureNoteId(lectureNote.getId())
                             .lectureNoteUrl(presignedUrl)
                             .classId(lectureNote.getClassroom().getId())
+                            .lectureNoteName(lectureNoteName)
                             .fileSize(fileSize)
                             .build();
                 })

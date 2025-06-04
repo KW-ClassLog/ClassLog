@@ -52,10 +52,14 @@ public class Lecture extends BaseEntity {
     @Column(name = "end_time")
     private LocalTime endTime;
 
+    @Column(name = "session")
+    private Integer session;
+
     @OneToMany(mappedBy = "lecture", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<LectureNoteMapping> lectureNoteMappings = new ArrayList<>();
 
     @OneToMany(mappedBy = "lecture", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Quiz> quiz = new ArrayList<>();
+
 
 }
