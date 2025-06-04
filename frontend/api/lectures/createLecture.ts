@@ -4,7 +4,7 @@ import { ENDPOINTS } from "@/constants/endpoints";
 import { ApiResponse } from "@/types/apiResponseTypes";
 import { CreateLectureRequest } from "@/types/lectures/createLectureTypes";
 
-export async function createClass({
+export async function createLecture({
   lectureName,
   lectureDate,
   classId,
