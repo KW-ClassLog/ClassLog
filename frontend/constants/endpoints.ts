@@ -90,6 +90,8 @@ export const ENDPOINTS = {
   // 퀴즈 관련
   QUIZZES: {
     CREATE: (lectureId: string) => `${BASE_API}/quizzes/${lectureId}/create`,
+    RECREATE: (lectureId: string) =>
+      `${BASE_API}/quizzes/${lectureId}/re-create`,
     SAVE: (lectureId: string) => `${BASE_API}/quizzes/${lectureId}`,
     UPDATE: (lectureId: string) => `${BASE_API}/quizzes/${lectureId}`,
     GET: (lectureId: string) => `${BASE_API}/quizzes/${lectureId}`,
