@@ -3,6 +3,7 @@ package org.example.backend.domain.option.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.example.backend.domain.quiz.entity.Quiz;
+import org.example.backend.global.entitiy.BaseEntity;
 
 import java.util.UUID;
 
@@ -12,7 +13,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Option {
+public class Option extends BaseEntity {
     @Id
     @GeneratedValue
     @Column(name = "id", nullable = false)
