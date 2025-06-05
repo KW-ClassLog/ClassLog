@@ -172,7 +172,7 @@ public class LectureServiceImpl implements LectureService {
         List<LectureNote> notes = lectureNoteRepository.findAllById(lectureNoteIds);
 
         if (notes.size() != lectureNoteIds.size()) {
-            throw new LectureException(LectureErrorCode.LECTURE_NOT_FOUND);
+            throw new LectureException(LectureErrorCode.LECTURE_NOTE_NOT_FOUND);
         }
 
         // 3. 매핑 생성
