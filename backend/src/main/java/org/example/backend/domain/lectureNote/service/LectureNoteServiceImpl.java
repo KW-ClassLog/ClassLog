@@ -60,17 +60,19 @@ public class LectureNoteServiceImpl implements LectureNoteService {
     }
 
     //파일 삭제
-    public void deleteLectureNote(UUID lectureNoteId) {
-        // 1. DB에서 LectureNote 조회
+    public void deleteLectureNote(List<UUID> lectureNoteIds) {
+
+        for (UUID lectureNoteId : lectureNoteIds) {
+
         LectureNote lectureNote = lectureNoteRepository.findById(lectureNoteId)
                 .orElseThrow(() -> new LectureNoteException(LectureNoteErrorCode.LECTURE_NOTE_NOT_FOUND));
 
-        // 2. S3에 저장된 파일 삭제 (key는 noteUrl로 저장돼 있다고 가정)
-        String s3Key = lectureNote.getNoteUrl(); // noteUrl 필드에 key가 저장돼 있어야 함
+        String s3Key = lectureNote.getNoteUrl();
         s3Service.deleteFile(s3Key);
 
-        // 3. LectureNote 삭제
         lectureNoteRepository.deleteById(lectureNoteId);
+
+        }
     }
 
     //파일 개별 조회
