@@ -62,10 +62,8 @@ public class QuizController {
     }
 
     // 퀴즈 저장
-    @PostMapping("/{lectureId}")
-    public ResponseEntity<ApiResponse<QuizSaveResponseDTO>> saveQuiz(@PathVariable("lectureId") UUID lectureId,
     @PostMapping("/{lectureId}/save")
-    public ResponseEntity<ApiResponse<QuizSaveResponseDTO>> saveQuiz(@PathVariable UUID lectureId,
+    public ResponseEntity<ApiResponse<QuizSaveResponseDTO>> saveQuiz(@PathVariable("lectureId") UUID lectureId,
                                                             @RequestBody QuizSaveRequestDTO request) {
         try {
             QuizSaveResponseDTO response = quizService.saveQuiz(lectureId, request);
