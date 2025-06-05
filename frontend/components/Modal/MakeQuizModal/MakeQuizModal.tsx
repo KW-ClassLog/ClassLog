@@ -3,6 +3,10 @@ import { useState } from "react";
 import styles from "./MakeQuizModal.module.scss";
 import ClosableModal from "../ClosableModal/ClosableModal";
 import QuizPreview from "./QuizPreview/QuizPreview";
+import { saveQuiz } from "@/api/quizzes/saveQuiz";
+import AlertModal from "@/components/Modal/AlertModal/AlertModal";
+import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
+import { Quiz } from "@/types/quizzes/createQuizTypes";
 
 interface MakeQuizModalProps {
   onClose: () => void;
@@ -11,13 +15,30 @@ interface MakeQuizModalProps {
 
 const MakeQuizModal = ({ onClose, lectureId }: MakeQuizModalProps) => {
   const [useAudio, setUseAudio] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveSuccess, setSaveSuccess] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
 
   const handleCustomize = () => {
     // TODO: Implement customization logic
   };
 
-  const handleSubmit = () => {
-    // TODO: Implement submit logic
+  const handleSubmit = async (quizzes: Quiz[]) => {
+    setIsSaving(true);
+    setSaveSuccess(false);
+    setSaveError(null);
+    try {
+      const res = await saveQuiz(lectureId, quizzes);
+      if (res && res.isSuccess) {
+        setSaveSuccess(true);
+      } else {
+        setSaveError(res?.message || "퀴즈 저장에 실패했습니다.");
+      }
+    } catch {
+      setSaveError("퀴즈 저장 중 오류가 발생했습니다.");
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
@@ -64,8 +85,23 @@ const MakeQuizModal = ({ onClose, lectureId }: MakeQuizModalProps) => {
           useAudio={useAudio}
           onCustomize={handleCustomize}
           onSubmit={handleSubmit}
-          onClose={onClose}
         />
+        {isSaving && (
+          <AlertModal hideButton onClose={() => {}}>
+            <LoadingSpinner />
+            <div style={{ marginTop: 16 }}>퀴즈 저장중...</div>
+          </AlertModal>
+        )}
+        {saveSuccess && !isSaving && (
+          <AlertModal onClose={onClose}>
+            퀴즈가 성공적으로 저장되었습니다.
+          </AlertModal>
+        )}
+        {saveError && (
+          <AlertModal onClose={() => setSaveError(null)}>
+            {saveError}
+          </AlertModal>
+        )}
       </div>
     </ClosableModal>
   );

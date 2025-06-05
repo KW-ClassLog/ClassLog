@@ -14,7 +14,7 @@ interface QuizPreviewProps {
   lectureId: string;
   useAudio: boolean;
   onCustomize?: () => void;
-  onSubmit?: () => void;
+  onSubmit?: (quizzes: Quiz[]) => void;
   onClose?: () => void;
 }
 
@@ -27,7 +27,7 @@ const QuizPreview = ({
 }: QuizPreviewProps) => {
   const [quizzes, setQuizzes] = useState<Quiz[] | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [selectedQuizzes, setSelectedQuizzes] = useState<number[]>([]);
+  const [selectedQuizzes, setSelectedQuizzes] = useState<Quiz[]>([]);
   const [showAlert, setShowAlert] = useState(false);
 
   useEffect(() => {
@@ -49,15 +49,18 @@ const QuizPreview = ({
   }, [lectureId, useAudio]);
 
   const toggleQuizSelection = (index: number) => {
+    if (!quizzes) return;
+    const quiz = quizzes[index];
     setSelectedQuizzes((prev) => {
-      if (prev.includes(index)) {
-        return prev.filter((i) => i !== index);
+      const exists = prev.some((q) => q === quiz);
+      if (exists) {
+        return prev.filter((q) => q !== quiz);
       } else {
         if (prev.length >= 4) {
           setShowAlert(true);
           return prev;
         }
-        return [...prev, index];
+        return [...prev, quiz];
       }
     });
   };
@@ -127,7 +130,7 @@ const QuizPreview = ({
                 <div
                   key={index}
                   className={`${styles.quizCard} ${
-                    selectedQuizzes.includes(index) ? styles.selected : ""
+                    selectedQuizzes.includes(quiz) ? styles.selected : ""
                   }`}
                   onClick={() => toggleQuizSelection(index)}
                 >
@@ -142,7 +145,7 @@ const QuizPreview = ({
                     <div className={styles.question}>{quiz.quizBody}</div>
                     <div className={styles.selectButtonWrapper}>
                       <SelectableButton
-                        selected={selectedQuizzes.includes(index)}
+                        selected={selectedQuizzes.includes(quiz)}
                         onClick={(
                           e?: React.MouseEvent<Element, MouseEvent>
                         ) => {
@@ -182,7 +185,11 @@ const QuizPreview = ({
           </button>
           <button
             className={styles.submit}
-            onClick={onSubmit}
+            onClick={() => {
+              if (onSubmit && selectedQuizzes.length > 0) {
+                onSubmit(selectedQuizzes);
+              }
+            }}
             disabled={selectedQuizzes.length === 0}
           >
             이대로 퀴즈 제출하기

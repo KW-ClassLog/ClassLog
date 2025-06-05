@@ -5,12 +5,13 @@ import { ApiResponse } from "@/types/apiResponseTypes";
 import { Quiz } from "@/types/quizzes/createQuizTypes";
 import { SaveQuizRequest, SaveQuizResult } from "@/types/quizzes/saveQuizTypes";
 
-export async function saveq(lectureId: string, quizzes: Quiz[]) {
+export async function saveQuiz(lectureId: string, quizzes: Quiz[]) {
   try {
     const quizzesWithOrder = quizzes.map((quiz, idx) => ({
       ...quiz,
       quizOrder: idx + 1,
     }));
+    console.log({ quizzes: quizzesWithOrder });
 
     const response = await axiosInstance.post<ApiResponse<SaveQuizRequest>>(
       ENDPOINTS.QUIZZES.SAVE(lectureId),
