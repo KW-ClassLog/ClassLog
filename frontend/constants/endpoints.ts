@@ -92,7 +92,7 @@ export const ENDPOINTS = {
     CREATE: (lectureId: string) => `${BASE_API}/quizzes/${lectureId}/create`,
     RECREATE: (lectureId: string) =>
       `${BASE_API}/quizzes/${lectureId}/re-create`,
-    SAVE: (lectureId: string) => `${BASE_API}/quizzes/${lectureId}`,
+    SAVE: (lectureId: string) => `${BASE_API}/quizzes/${lectureId}/save`,
     UPDATE: (lectureId: string) => `${BASE_API}/quizzes/${lectureId}`,
     GET: (lectureId: string) => `${BASE_API}/quizzes/${lectureId}`,
     SUBMIT: (lectureId: string) => `${BASE_API}/quizzes/${lectureId}/submit`,
