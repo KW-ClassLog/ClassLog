@@ -38,14 +38,14 @@ public class LectureController {
 
     // Lecture 조회
     @GetMapping("/{classId}/{lectureId}")
-    public ApiResponse<LectureResponseDTO> getLecture(@PathVariable UUID lectureId , @PathVariable UUID classId) {
+    public ApiResponse<LectureResponseDTO> getLecture(@PathVariable("lectureId") UUID lectureId , @PathVariable UUID classId) {
         LectureResponseDTO dto = lectureService.getLectureDetail(classId,lectureId);
         return ApiResponse.onSuccess(dto);
     }
 
     // Lecture 수정
     @PatchMapping("/{lectureId}")
-    public ApiResponse<Void> updateLecture(@PathVariable UUID lectureId,
+    public ApiResponse<Void> updateLecture(@PathVariable("lectureId") UUID lectureId,
                                            @RequestBody LectureRequestDTO dto) {
         lectureService.updateLecture(lectureId, dto);
         return ApiResponse.onSuccess(null);
@@ -53,7 +53,7 @@ public class LectureController {
 
     // Lecture 삭제
     @DeleteMapping("/{lectureId}")
-    public ApiResponse<Void> deleteLecture(@PathVariable UUID lectureId) {
+    public ApiResponse<Void> deleteLecture(@PathVariable("lectureId") UUID lectureId) {
         lectureService.deleteLecture(lectureId);
         return ApiResponse.onSuccess(null);
     }
@@ -61,8 +61,8 @@ public class LectureController {
     //강의록 맵핑
     @PostMapping("/{lectureId}/notes/mapping")
     public ApiResponse<LectureNoteMappingResponseDTO> mapNotesToLecture(
-            @PathVariable UUID lectureId,
-            @RequestBody LectureNoteMappingResponseDTO request) {
+            @PathVariable("lectureId") UUID lectureId,
+            @RequestBody LectureNoteMappingRequestDTO request) {
 
         List<UUID> result = lectureService.mapNotes(lectureId, request.getLectureNoteIds());
         return ApiResponse.onSuccess(new LectureNoteMappingResponseDTO(result));
@@ -72,7 +72,7 @@ public class LectureController {
 
     @PostMapping(value = "/{lectureId}/recordings", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ApiResponse<LectureRecordingResponseDTO> uploadRecording(
-            @PathVariable UUID lectureId,
+            @PathVariable("lectureId") UUID lectureId,
             @RequestParam("file") MultipartFile file) {
 
         LectureRecordingResponseDTO result = lectureService.uploadLectureRecording(lectureId, file);
@@ -81,7 +81,7 @@ public class LectureController {
 
     //녹음본 조회
     @GetMapping("/{lectureId}/recordings")
-    public ApiResponse<LectureRecordingResponseDTO> getRecording(@PathVariable UUID lectureId) {
+    public ApiResponse<LectureRecordingResponseDTO> getRecording(@PathVariable("lectureId") UUID lectureId) {
         LectureRecordingResponseDTO result = lectureService.getLectureRecording(lectureId);
         return ApiResponse.onSuccess(result);
     }
