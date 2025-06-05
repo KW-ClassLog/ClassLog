@@ -62,7 +62,7 @@ public class QuizController {
     }
 
     // 퀴즈 저장
-    @PostMapping("/{lectureId}")
+    @PostMapping("/{lectureId}/save")
     public ResponseEntity<ApiResponse<QuizSaveResponseDTO>> saveQuiz(@PathVariable("lectureId") UUID lectureId,
                                                             @RequestBody QuizSaveRequestDTO request) {
         try {
