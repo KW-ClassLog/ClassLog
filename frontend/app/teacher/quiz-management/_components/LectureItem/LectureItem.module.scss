@@ -66,6 +66,20 @@
         color: $color-blue;
         border: 1px solid $color-blue;
       }
+
+      &.showDashboardNotYet {
+        background-color: $color-neutral-8;
+        color: $color-neutral-6;
+        border: 1px solid $color-neutral-6;
+        &:hover {
+          transform: scale(1);
+          cursor: not-allowed;
+        }
+
+        &:active {
+          transform: scale(1);
+        }
+      }
     }
     .beforeLecture {
       color: $color-neutral-6;

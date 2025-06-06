@@ -5,6 +5,7 @@ import MakeQuizModal from "@/components/Modal/MakeQuizModal/MakeQuizModal";
 import { ROUTES } from "@/constants/routes";
 import { useRouter } from "next/navigation";
 import { FetchQuizzesByClassResult } from "@/types/classes/fetchQuizzesByClassTypes";
+import dayjs from "dayjs";
 
 export default function LectureItem(lecture: FetchQuizzesByClassResult) {
   const [showQuizModal, setShowQuizModal] = useState(false);
@@ -14,7 +15,19 @@ export default function LectureItem(lecture: FetchQuizzesByClassResult) {
     switch (status) {
       case "beforeLecture":
         return <div className={styles.beforeLecture}>강의 전</div>;
-      case "checkDashboard":
+      case "checkDashboard": {
+        const now = dayjs();
+        const lectureDate = dayjs(lecture.date, "YYYY-MM-DD");
+        const isToday = now.isSame(lectureDate, "day");
+        const midnight = lectureDate.add(1, "day").startOf("day");
+        const isBeforeMidnight = now.isBefore(midnight);
+        if (isToday && isBeforeMidnight) {
+          return (
+            <button className={styles.showDashboardNotYet} disabled>
+              오늘 밤 12:00 확인 가능
+            </button>
+          );
+        }
         return (
           <button
             className={styles.showDashboard}
@@ -25,6 +38,7 @@ export default function LectureItem(lecture: FetchQuizzesByClassResult) {
             대시보드 확인
           </button>
         );
+      }
       case "makeQuiz":
         return (
           <button
@@ -52,7 +66,7 @@ export default function LectureItem(lecture: FetchQuizzesByClassResult) {
             <div className={styles.time}>
               <Clock size={16} />
               <span>
-                {lecture.startTime} - {lecture.endTime} AM
+                {lecture.startTime} - {lecture.endTime}
               </span>
             </div>
           </div>
