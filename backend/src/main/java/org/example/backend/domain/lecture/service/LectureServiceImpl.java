@@ -32,6 +32,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -174,6 +175,21 @@ public class LectureServiceImpl implements LectureService {
         if (notes.size() != lectureNoteIds.size()) {
             throw new LectureException(LectureErrorCode.LECTURE_NOTE_NOT_FOUND);
         }
+
+        List<LectureNoteMapping> existingMappings = lectureNoteMappingRepository.findAllByLectureId(lectureId);
+
+        Set<UUID> alreadyMappedNoteIds = existingMappings.stream()
+                .map(m -> m.getLectureNote().getId())
+                .collect(Collectors.toSet());
+
+        List<UUID> duplicates = lectureNoteIds.stream()
+                .filter(alreadyMappedNoteIds::contains)
+                .toList();
+
+        if (!duplicates.isEmpty()) {
+            throw new LectureException(LectureErrorCode.LECTURE_NOTE_ALREADY_MAPPED);
+        }
+
 
         // 3. 매핑 생성
         List<LectureNoteMapping> mappings = notes.stream()
