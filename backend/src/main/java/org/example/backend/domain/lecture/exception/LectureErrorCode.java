@@ -19,7 +19,11 @@ public enum LectureErrorCode implements BaseErrorCode {
     NO_AUDIO_FILE(HttpStatus.NOT_FOUND,
             "CLASS404_4", "녹음본이 존재하지 않습니다."),
     LECTURE_NOTE_NOT_FOUND(HttpStatus.NOT_FOUND,
-                           "LECTURE404_4", "존재하지 않는 강의자료입니다.");
+                           "LECTURE404_4", "존재하지 않는 강의자료입니다."),
+
+    LECTURE_NOTE_ALREADY_MAPPED(HttpStatus.NOT_FOUND,
+                           "LECTURE404_5", "이미 맵핑된 강의록 입니다.")
+    ;
 
     private final HttpStatus status;
     private final String code;
