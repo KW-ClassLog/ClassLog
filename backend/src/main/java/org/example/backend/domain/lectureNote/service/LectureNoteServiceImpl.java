@@ -115,6 +115,7 @@ public class LectureNoteServiceImpl implements LectureNoteService {
                     List<Integer> sessionList = mappings.stream()
                             .map(mapping -> mapping.getLecture().getSession())
                             .filter(Objects::nonNull)
+                            .distinct()
                             .sorted()
                             .toList();
 
