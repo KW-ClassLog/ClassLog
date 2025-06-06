@@ -130,16 +130,14 @@
 
   .quizCardHeader {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: $spacing-sm;
     position: relative;
   }
 
   .selectButtonWrapper {
-    position: absolute;
-    top: 0;
-    right: 0;
-    z-index: 2;
+    white-space: nowrap;
+    height: fit-content;
   }
 
   .type {
@@ -148,6 +146,7 @@
     background-color: $color-skyblue;
     padding: $spacing-xs $spacing-sm;
     border-radius: $radius-full;
+    white-space: nowrap;
   }
 
   .question {
@@ -186,11 +185,15 @@
 .quizContainer {
   display: flex;
   flex-direction: column;
-  gap: $spacing-xl;
+  gap: $spacing-md;
 }
 
 .moreQuiz {
-  text-align: center;
+  display: flex;
+  gap: $spacing-xs;
+  align-items: center;
+  justify-content: end;
+
   color: $color-blue;
   cursor: pointer;
   &:hover {

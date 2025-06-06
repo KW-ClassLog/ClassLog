@@ -6,7 +6,7 @@ import { useAuthStore } from "@/store/useAuthStore";
 
 export async function refreshToken() {
   try {
-    const response = await axiosInstance.post<ApiResponse<string>>(
+    const response = await axiosInstance.post<ApiResponse<string | null>>(
       ENDPOINTS.USERS.REFRESH_TOKEN
     );
 
@@ -18,15 +18,19 @@ export async function refreshToken() {
     const setAccessToken = useAuthStore.getState().setAccessToken;
     if (accessToken) {
       setAccessToken(accessToken);
+    } else {
+      // accessToken이 없으면 logout() 호출
+      useAuthStore.getState().logout();
     }
 
     return response.data;
   } catch (error: unknown) {
-    if (axios.isAxiosError(error) && error.response) {
-      useAuthStore.getState().logout(); // 로그아웃 처리
-      return error.response.data as ApiResponse<string>;
+    if (
+      axios.isAxiosError(error) &&
+      (error.response?.status === 401 || error.response?.status === 403)
+    ) {
+      useAuthStore.getState().logout(); // 갱신 실패 (401 또는 403) 시 logout() 호출
     }
-
     throw error;
   }
 }

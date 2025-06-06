@@ -1,38 +1,66 @@
 // _components/QuizPreview.tsx
 import styles from "./QuizPreview.module.scss";
 import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Masonry from "react-masonry-css";
 import SelectableButton from "@/components/Button/SelectableButton/SelectableButton";
 import AlertModal from "@/components/Modal/AlertModal/AlertModal";
-
-interface Quiz {
-  quizBody: string;
-  solution: string;
-  choices: string[];
-  type: "객관식" | "단답형" | "OX";
-}
+import { createQuiz } from "@/api/quizzes/createQuiz";
+import { recreateQuiz } from "@/api/quizzes/recreateQuiz";
+import { Quiz } from "@/types/quizzes/createQuizTypes";
+import { RotateCcw } from "lucide-react";
 
 interface QuizPreviewProps {
-  quizzes: Quiz[] | null;
+  lectureId: string;
+  useAudio: boolean;
   onCustomize?: () => void;
-  onSubmit?: () => void;
+  onSubmit?: (quizzes: Quiz[]) => void;
+  onClose?: () => void;
 }
 
-const QuizPreview = ({ quizzes, onCustomize, onSubmit }: QuizPreviewProps) => {
-  const [selectedQuizzes, setSelectedQuizzes] = useState<number[]>([]);
+const QuizPreview = ({
+  lectureId,
+  useAudio,
+  onCustomize,
+  onSubmit,
+  onClose,
+}: QuizPreviewProps) => {
+  const [quizzes, setQuizzes] = useState<Quiz[] | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [selectedQuizzes, setSelectedQuizzes] = useState<Quiz[]>([]);
   const [showAlert, setShowAlert] = useState(false);
 
+  useEffect(() => {
+    setQuizzes(null); // 로딩 상태
+    setError(null); // 에러 초기화
+    createQuiz({ lectureId, useAudio })
+      .then((res) => {
+        if (res.isSuccess && res.result && Array.isArray(res.result.quizzes)) {
+          setQuizzes(res.result.quizzes);
+        } else {
+          setQuizzes([]);
+          setError(res.message || "퀴즈 생성에 실패했습니다.");
+        }
+      })
+      .catch(() => {
+        setQuizzes([]);
+        setError("퀴즈 생성 중 오류가 발생했습니다.");
+      });
+  }, [lectureId, useAudio]);
+
   const toggleQuizSelection = (index: number) => {
+    if (!quizzes) return;
+    const quiz = quizzes[index];
     setSelectedQuizzes((prev) => {
-      if (prev.includes(index)) {
-        return prev.filter((i) => i !== index);
+      const exists = prev.some((q) => q === quiz);
+      if (exists) {
+        return prev.filter((q) => q !== quiz);
       } else {
         if (prev.length >= 4) {
           setShowAlert(true);
           return prev;
         }
-        return [...prev, index];
+        return [...prev, quiz];
       }
     });
   };
@@ -43,11 +71,35 @@ const QuizPreview = ({ quizzes, onCustomize, onSubmit }: QuizPreviewProps) => {
   };
 
   const handleMoreQuiz = () => {
-    console.log("moreQuiz");
+    setQuizzes(null); // 로딩 상태
+    setError(null); // 에러 초기화
+    recreateQuiz({ lectureId, useAudio })
+      .then((res) => {
+        if (res.isSuccess && res.result && Array.isArray(res.result.quizzes)) {
+          setQuizzes(res.result.quizzes);
+        } else {
+          setQuizzes([]);
+          setError(res.message || "퀴즈 생성에 실패했습니다.");
+        }
+      })
+      .catch(() => {
+        setQuizzes([]);
+        setError("퀴즈 재생성 중 오류가 발생했습니다.");
+      });
   };
 
   return (
     <div className={styles.wrapper}>
+      {error && (
+        <AlertModal
+          onClose={() => {
+            setError(null);
+            if (onClose) onClose();
+          }}
+        >
+          {error}
+        </AlertModal>
+      )}
       {showAlert && (
         <AlertModal onClose={() => setShowAlert(false)}>
           최대 4개의 퀴즈만 선택할 수 있습니다.
@@ -65,6 +117,10 @@ const QuizPreview = ({ quizzes, onCustomize, onSubmit }: QuizPreviewProps) => {
           </div>
         ) : (
           <div className={styles.quizContainer}>
+            <div className={styles.moreQuiz} onClick={handleMoreQuiz}>
+              <p>퀴즈 재생성</p>
+              <RotateCcw size={15} />
+            </div>
             <Masonry
               breakpointCols={breakpointColumnsObj}
               className={styles.masonryGrid}
@@ -74,16 +130,22 @@ const QuizPreview = ({ quizzes, onCustomize, onSubmit }: QuizPreviewProps) => {
                 <div
                   key={index}
                   className={`${styles.quizCard} ${
-                    selectedQuizzes.includes(index) ? styles.selected : ""
+                    selectedQuizzes.includes(quiz) ? styles.selected : ""
                   }`}
                   onClick={() => toggleQuizSelection(index)}
                 >
                   <div className={styles.quizCardHeader}>
-                    <div className={styles.type}>{quiz.type}</div>
+                    <div className={styles.type}>
+                      {quiz.type === "multipleChoice"
+                        ? "객관식"
+                        : quiz.type === "shortAnswer"
+                        ? "단답형"
+                        : "O/X"}
+                    </div>
                     <div className={styles.question}>{quiz.quizBody}</div>
                     <div className={styles.selectButtonWrapper}>
                       <SelectableButton
-                        selected={selectedQuizzes.includes(index)}
+                        selected={selectedQuizzes.includes(quiz)}
                         onClick={(
                           e?: React.MouseEvent<Element, MouseEvent>
                         ) => {
@@ -94,22 +156,21 @@ const QuizPreview = ({ quizzes, onCustomize, onSubmit }: QuizPreviewProps) => {
                       />
                     </div>
                   </div>
-                  {quiz.type === "객관식" && quiz.choices.length > 0 && (
-                    <ul className={styles.choices}>
-                      {quiz.choices.map((choice, index) => (
-                        <li key={index}>
-                          {index + 1}. {choice}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
+                  {quiz.type === "multipleChoice" &&
+                    quiz.options &&
+                    quiz.options.length > 0 && (
+                      <ul className={styles.choices}>
+                        {quiz.options.map((option, index) => (
+                          <li key={index}>
+                            {index + 1}. {option}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
                   <div className={styles.answer}>정답: {quiz.solution}</div>
                 </div>
               ))}
             </Masonry>
-            <p className={styles.moreQuiz} onClick={handleMoreQuiz}>
-              + 다른 퀴즈도 보고싶어요
-            </p>
           </div>
         )}
       </div>
@@ -124,7 +185,11 @@ const QuizPreview = ({ quizzes, onCustomize, onSubmit }: QuizPreviewProps) => {
           </button>
           <button
             className={styles.submit}
-            onClick={onSubmit}
+            onClick={() => {
+              if (onSubmit && selectedQuizzes.length > 0) {
+                onSubmit(selectedQuizzes);
+              }
+            }}
             disabled={selectedQuizzes.length === 0}
           >
             이대로 퀴즈 제출하기

@@ -14,7 +14,6 @@ export async function createClass({
   startDate,
   endDate,
 }: CreateClassRequest) {
-  console.log("createClass", { className, classDate, startDate, endDate });
   try {
     const response = await axiosInstance.post<
       ApiResponse<CreateClassResult | null>

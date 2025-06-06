@@ -11,13 +11,6 @@ export async function createLecture({
   startTime,
   endTime,
 }: CreateLectureRequest) {
-  console.log("createClass", {
-    lectureName,
-    lectureDate,
-    classId,
-    startTime,
-    endTime,
-  });
   try {
     const response = await axiosInstance.post<ApiResponse<null>>(
       ENDPOINTS.LECTURES.CREATE,

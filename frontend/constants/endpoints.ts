@@ -47,6 +47,7 @@ export const ENDPOINTS = {
     ENTER: (classId: string) => `${BASE_API}/classes/${classId}/enter`,
     GET_ALL_NOTES: (classId: string) => `${BASE_API}/classes/${classId}/notes`,
     GET_MY_CLASSES: `${BASE_API}/classes/teacher/myclass`,
+    GET_QUIZZES: (classId: string) => `${BASE_API}/classes/${classId}/quiz`,
   },
 
   // 강의 관련
@@ -60,16 +61,18 @@ export const ENDPOINTS = {
       `${BASE_API}/lectures/teacher/today?date=${date}`,
 
     // 노트 관련
-    UPLOAD_NOTE: (lectureId: string) =>
-      `${BASE_API}/lectures/${lectureId}/notes`,
+    UPLOAD_NOTE: (classId: string) =>
+      `${BASE_API}/lectures/${classId}/note/upload`,
     SELECT_NOTE: (lectureId: string) =>
       `${BASE_API}/lectures/${lectureId}/notes/mapping`,
-    DELETE_NOTE: (lectureId: string) =>
-      `${BASE_API}/lectures/${lectureId}/notes`,
+    DELETE_NOTE: (lectureNoteIds: string[]) =>
+      `${BASE_API}/lectures/note?keys=${lectureNoteIds.join(",")}`,
     GET_NOTE_DETAIL: (lectureId: string, lectureNoteId: string) =>
       `${BASE_API}/lectures/${lectureId}/${lectureNoteId}`,
     GET_NOTE_LIST: (lectureId: string) =>
       `${BASE_API}/lectures/${lectureId}/notes`,
+    GET_NOTE_LIST_BY_CLASS: (classId: string) =>
+      `${BASE_API}/lectures/${classId}/class/notes`,
 
     // 녹음 관련
     SAVE_RECORDING: (lectureId: string) =>
@@ -87,7 +90,9 @@ export const ENDPOINTS = {
   // 퀴즈 관련
   QUIZZES: {
     CREATE: (lectureId: string) => `${BASE_API}/quizzes/${lectureId}/create`,
-    SAVE: (lectureId: string) => `${BASE_API}/quizzes/${lectureId}`,
+    RECREATE: (lectureId: string) =>
+      `${BASE_API}/quizzes/${lectureId}/re-create`,
+    SAVE: (lectureId: string) => `${BASE_API}/quizzes/${lectureId}/save`,
     UPDATE: (lectureId: string) => `${BASE_API}/quizzes/${lectureId}`,
     GET: (lectureId: string) => `${BASE_API}/quizzes/${lectureId}`,
     SUBMIT: (lectureId: string) => `${BASE_API}/quizzes/${lectureId}/submit`,

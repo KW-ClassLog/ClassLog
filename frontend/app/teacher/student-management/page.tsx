@@ -43,7 +43,6 @@ export default function TeacherStudentManagementPage() {
     );
 
     // 이제 삭제된 학생을 반영하는 로직을 추가할 수 있습니다.
-    console.log("Updated Students:", updatedStudents);
   };
 
   return (
