@@ -13,6 +13,6 @@ public interface LectureRepository extends JpaRepository<Lecture, UUID> {
     List<Lecture> findByClassroom_Id(UUID classId);
     List<Lecture> findByClassroom_IdInAndLectureDateOrderByStartTime(List<UUID> classIds, LocalDate lectureDate);
     List<Lecture> findByClassroomInAndLectureDate(List<Classroom> classrooms, LocalDate lectureDate);
-    List<Lecture> findByClassroom_IdOrderByLectureDateAsc(UUID classId);
+    List<Lecture> findByClassroom_IdOrderByLectureDateAscStartTimeAsc(UUID classId);
 
 }

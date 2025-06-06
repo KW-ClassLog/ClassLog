@@ -68,16 +68,7 @@ public class LectureServiceImpl implements LectureService {
             throw new LectureException(LectureErrorCode.LECTURE_NOT_IN_CLASS);
         }
 
-        List<Lecture> lecturesInClass = lectureRepository
-                .findByClassroom_IdOrderByLectureDateAscCreatedAtAsc(classId);
-
-        int session = 1;
-        for (int i = 0; i < lecturesInClass.size(); i++) {
-            if (lecturesInClass.get(i).getId().equals(lectureId)) {
-                session = i + 1;
-                break;
-            }
-        }
+        int session = lecture.getSession();
         return lectureConverter.toResponseDTO(lecture, session);
     }
 
@@ -238,7 +229,7 @@ public class LectureServiceImpl implements LectureService {
 
     //몇차시인지 입력하는 함수
     public void updateLectureSessions(UUID classId) {
-        List<Lecture> lectures = lectureRepository.findByClassroom_IdOrderByLectureDateAsc(classId);
+        List<Lecture> lectures = lectureRepository.findByClassroom_IdOrderByLectureDateAscStartTimeAsc(classId);
         for (int i = 0; i < lectures.size(); i++) {
             lectures.get(i).setSession(i + 1);
         }
