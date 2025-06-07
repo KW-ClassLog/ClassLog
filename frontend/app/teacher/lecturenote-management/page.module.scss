@@ -1,0 +1,47 @@
+.container {
+  padding: $spacing-xl;
+  height: calc(100vh - 80px);
+  display: flex;
+  flex-direction: column;
+
+  h1 {
+    font-size: $font-size-xl;
+    font-weight: $font-weight-bold;
+  }
+
+  // NoDataView가 있을 때는 중앙 정렬
+  :global(.noDataView) {
+    height: 100%;
+    display: flex;
+    align-items: center;
+  }
+}
+
+.addButtonContainer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.addButton {
+  font-family: $font-default;
+  padding: $spacing-sm $spacing-md;
+  background-color: $color-blue;
+  color: $color-white;
+  font-weight: $font-weight-medium;
+  border: none;
+  border-radius: $radius-md;
+  font-size: $font-size-sm;
+  cursor: pointer;
+  transition: $transition-fast;
+  font-size: $font-size-md;
+
+  &:hover {
+    background-color: $color-lightblue;
+  }
+}
+
+.lectureNoteListContainer {
+  display: flex;
+  gap: $spacing-lg;
+  height: fit-content;
+}

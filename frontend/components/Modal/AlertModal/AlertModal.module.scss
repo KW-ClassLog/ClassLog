@@ -4,6 +4,6 @@
 
 .modal {
   @include modal-base; // 공통 스타일
-  width: 300px;
+  min-width: 300px;
   height: fit-content;
 }

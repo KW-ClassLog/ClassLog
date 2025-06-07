@@ -60,16 +60,18 @@ export const ENDPOINTS = {
       `${BASE_API}/lectures/teacher/today?date=${date}`,
 
     // 노트 관련
-    UPLOAD_NOTE: (lectureId: string) =>
-      `${BASE_API}/lectures/${lectureId}/notes`,
+    UPLOAD_NOTE: (classId: string) =>
+      `${BASE_API}/lectures/${classId}/note/upload`,
     SELECT_NOTE: (lectureId: string) =>
       `${BASE_API}/lectures/${lectureId}/notes/mapping`,
-    DELETE_NOTE: (lectureId: string) =>
-      `${BASE_API}/lectures/${lectureId}/notes`,
+    DELETE_NOTE: (lectureNoteIds: string[]) =>
+      `${BASE_API}/lectures/note?keys=${lectureNoteIds.join(",")}`,
     GET_NOTE_DETAIL: (lectureId: string, lectureNoteId: string) =>
       `${BASE_API}/lectures/${lectureId}/${lectureNoteId}`,
     GET_NOTE_LIST: (lectureId: string) =>
       `${BASE_API}/lectures/${lectureId}/notes`,
+    GET_NOTE_LIST_BY_CLASS: (classId: string) =>
+      `${BASE_API}/lectures/${classId}/class/notes`,
 
     // 녹음 관련
     SAVE_RECORDING: (lectureId: string) =>
