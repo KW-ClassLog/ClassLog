@@ -25,6 +25,7 @@ import org.example.backend.global.S3.service.S3Service;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -70,10 +71,6 @@ public class QuizServiceImpl implements QuizService {
                         .orElseThrow(() -> new QuizException(QuizErrorCode.LECTURE_NOTE_NOT_FOUND)))
                 .collect(Collectors.toList());
 
-        String noteUrls = notes.stream()
-                .map(note -> s3Service.getPresignedUrl(note.getNoteUrl()))
-                .collect(Collectors.joining(","));
-
         String audioUrl = null;
         if (request.isUseAudio()) {
             if (lecture.getAudioUrl() == null) {
@@ -81,6 +78,23 @@ public class QuizServiceImpl implements QuizService {
             }
             audioUrl = s3Service.getPresignedUrl(lecture.getAudioUrl());
         }
+
+        List<String> allowedExtensions = Arrays.asList(".pdf", ".pptx", ".docx", ".hwp");
+
+        List<LectureNote> filteredNotes = notes.stream()
+                .filter(note -> {
+                    String url = note.getNoteUrl().toLowerCase();
+                    return allowedExtensions.stream().anyMatch(url::endsWith);
+                })
+                .toList();
+
+        if (filteredNotes.isEmpty()) {
+            throw new QuizException(QuizErrorCode.UNSUPPORTED_NOTE_FORMAT);
+        }
+
+        String noteUrls = filteredNotes.stream()
+                .map(note -> s3Service.getPresignedUrl(note.getNoteUrl()))
+                .collect(Collectors.joining(","));
 
         try {
             if (isReGenerate) {
