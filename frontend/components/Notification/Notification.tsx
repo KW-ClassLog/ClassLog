@@ -38,7 +38,6 @@ const Notification: React.FC<NotificationProps> = ({
       }
 
       if (activeTab) {
-        console.log(`활성화된 탭: ${activeTab}`);
         // TODO: activeTab을 관리하는 로직을 추가
       }
     } else if (mode === "teacher") {

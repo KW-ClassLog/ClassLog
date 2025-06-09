@@ -102,6 +102,7 @@ public class LectureServiceImpl implements LectureService {
                 .endTime(lecture.getEndTime())
                 .status(status)
                 .build();
+
     }
 
     // lecture 수정
@@ -276,7 +277,7 @@ public class LectureServiceImpl implements LectureService {
 
     //몇차시인지 입력하는 함수
     public void updateLectureSessions(UUID classId) {
-        List<Lecture> lectures = lectureRepository.findByClassroom_IdOrderByLectureDateAsc(classId);
+        List<Lecture> lectures = lectureRepository.findByClassroom_IdOrderByLectureDateAscStartTimeAsc(classId);
         for (int i = 0; i < lectures.size(); i++) {
             lectures.get(i).setSession(i + 1);
         }

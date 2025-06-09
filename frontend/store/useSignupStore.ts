@@ -21,7 +21,6 @@ export const useSignupStore = create<SignupState>((set) => ({
   email: "",
   password: "",
   setField: (field, value) => {
-    console.log(`[useSignupStore] ${field} updated to`, value);
     set({ [field]: value });
   },
 }));

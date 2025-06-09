@@ -30,9 +30,7 @@ const ManagementTable: React.FC<ManagementTableProps> = ({
   const [deleteConfirmModalOpen, setDeleteConfirmModalOpen] =
     useState<boolean>(false);
 
-  useEffect(() => {
-    console.log("selectedItems", selectedItems);
-  }, [selectedItems]);
+  useEffect(() => {}, [selectedItems]);
 
   // 전체 선택 체크박스 클릭 시 모든 항목을 선택/해제
   const handleSelectAll = (isChecked: boolean) => {

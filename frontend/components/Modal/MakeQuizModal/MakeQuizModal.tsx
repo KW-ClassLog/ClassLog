@@ -1,15 +1,12 @@
 // MakeQuizModal.tsx
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styles from "./MakeQuizModal.module.scss";
 import ClosableModal from "../ClosableModal/ClosableModal";
 import QuizPreview from "./QuizPreview/QuizPreview";
-
-interface Quiz {
-  quizBody: string;
-  solution: string;
-  choices: string[];
-  type: "객관식" | "단답형" | "OX";
-}
+import { saveQuiz } from "@/api/quizzes/saveQuiz";
+import AlertModal from "@/components/Modal/AlertModal/AlertModal";
+import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
+import { Quiz } from "@/types/quizzes/createQuizTypes";
 
 interface MakeQuizModalProps {
   onClose: () => void;
@@ -17,77 +14,31 @@ interface MakeQuizModalProps {
 }
 
 const MakeQuizModal = ({ onClose, lectureId }: MakeQuizModalProps) => {
-  const [quizzes, setQuizzes] = useState<Quiz[] | null>(null);
   const [useAudio, setUseAudio] = useState(false);
-
-  useEffect(() => {
-    // TODO: Replace with actual data fetch using lectureId
-    setTimeout(() => {
-      setQuizzes([
-        {
-          quizBody: "오늘 내가 먹고싶은 과일은?",
-          solution: "바나나",
-          choices: ["바나나", "딸기", "참외", "수박"],
-          type: "객관식",
-        },
-        {
-          quizBody: "오늘 나는 과일이 먹고싶다",
-          solution: "O",
-          choices: [],
-          type: "OX",
-        },
-        {
-          quizBody: "오늘 내가 먹고싶은 과일은?",
-          solution: "바나나",
-          choices: [],
-          type: "단답형",
-        },
-        {
-          quizBody: "오늘 내가 먹고싶은 과일은?",
-          solution: "바나나",
-          choices: [],
-          type: "단답형",
-        },
-        {
-          quizBody: "오늘 내가 먹고싶은 과일은?",
-          solution: "바나나",
-          choices: [],
-          type: "단답형",
-        },
-        {
-          quizBody: "오늘 내가 먹고싶은 과일은?",
-          solution: "바나나",
-          choices: [],
-          type: "단답형",
-        },
-        {
-          quizBody: "오늘 내가 먹고싶은 과일은?",
-          solution: "바나나",
-          choices: [],
-          type: "단답형",
-        },
-        {
-          quizBody: "오늘 내가 먹고싶은 과일은?",
-          solution: "바나나",
-          choices: [],
-          type: "단답형",
-        },
-        {
-          quizBody: "오늘 내가 먹고싶은 과일은?",
-          solution: "바나나",
-          choices: [],
-          type: "단답형",
-        },
-      ]);
-    }, 2000);
-  }, []);
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveSuccess, setSaveSuccess] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
 
   const handleCustomize = () => {
     // TODO: Implement customization logic
   };
 
-  const handleSubmit = () => {
-    // TODO: Implement submit logic
+  const handleSubmit = async (quizzes: Quiz[]) => {
+    setIsSaving(true);
+    setSaveSuccess(false);
+    setSaveError(null);
+    try {
+      const res = await saveQuiz(lectureId, quizzes);
+      if (res && res.isSuccess) {
+        setSaveSuccess(true);
+      } else {
+        setSaveError(res?.message || "퀴즈 저장에 실패했습니다.");
+      }
+    } catch {
+      setSaveError("퀴즈 저장 중 오류가 발생했습니다.");
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
@@ -130,10 +81,27 @@ const MakeQuizModal = ({ onClose, lectureId }: MakeQuizModalProps) => {
           </div>
         </div>
         <QuizPreview
-          quizzes={quizzes}
+          lectureId={lectureId}
+          useAudio={useAudio}
           onCustomize={handleCustomize}
           onSubmit={handleSubmit}
         />
+        {isSaving && (
+          <AlertModal hideButton onClose={() => {}}>
+            <LoadingSpinner />
+            <div style={{ marginTop: 16 }}>퀴즈 저장중...</div>
+          </AlertModal>
+        )}
+        {saveSuccess && !isSaving && (
+          <AlertModal onClose={onClose}>
+            퀴즈가 성공적으로 저장되었습니다.
+          </AlertModal>
+        )}
+        {saveError && (
+          <AlertModal onClose={() => setSaveError(null)}>
+            {saveError}
+          </AlertModal>
+        )}
       </div>
     </ClosableModal>
   );
