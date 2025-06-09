@@ -2,7 +2,7 @@
 
 import FitContentButton from "@/components/Button/FitContentButton/FitContentButton";
 import styles from "./LectureHeader.module.scss";
-import { Clock, Calendar } from "lucide-react";
+import { Clock, Calendar, ChevronRight } from "lucide-react";
 import { useEffect, useState } from "react";
 
 interface LectureData {
@@ -17,8 +17,13 @@ interface LectureData {
   status: "beforeLecture" | "afterLecture" | "onLecture";
 }
 
-export default function LectureHeader() {
+interface LectureHeaderProps {
+  lectureId: string;
+}
+
+export default function LectureHeader({ lectureId }: LectureHeaderProps) {
   const [lectureData, setLectureData] = useState<LectureData | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // TODO: API 호출로 변경
@@ -33,8 +38,10 @@ export default function LectureHeader() {
       endTime: "11:35",
       status: "onLecture",
     });
-  }, []);
+    setLoading(false);
+  }, [lectureId]);
 
+  if (loading) return <div>로딩 중...</div>;
   if (!lectureData) return null;
 
   const handleStartLecture = () => {
@@ -58,6 +65,7 @@ export default function LectureHeader() {
         return (
           <FitContentButton onClick={handleStartLecture}>
             강의 시작하기
+            <ChevronRight />
           </FitContentButton>
         );
       case "afterLecture":
