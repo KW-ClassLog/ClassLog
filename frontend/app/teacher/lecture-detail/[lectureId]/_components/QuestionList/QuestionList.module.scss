@@ -1,0 +1,71 @@
+.card {
+  background: white;
+  border-radius: $radius-md;
+  padding: $spacing-lg;
+  border: 1px solid $color-neutral-7;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.title {
+  display: block;
+  margin-bottom: $spacing-md;
+  font-size: $font-size-lg;
+}
+
+.questionList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.questionItem {
+  padding: $spacing-sm 0;
+  border-bottom: 1px solid $color-neutral-7;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.questionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-xs;
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+}
+
+.profileImage {
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.userName {
+  font-weight: $font-weight-medium;
+
+  font-size: $font-size-sm;
+}
+
+.timestamp {
+  font-size: $font-size-xs;
+}
+
+.message {
+  font-size: $font-size-sm;
+  line-height: 1.4;
+  word-break: break-word;
+  margin-left: 32px; // 프로필 이미지 너비 + 간격
+}
+
+.emptyState {
+  color: $color-neutral-6;
+  font-size: $font-size-sm;
+  text-align: center;
+  padding: $spacing-lg 0;
+}
