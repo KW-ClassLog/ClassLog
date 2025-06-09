@@ -47,6 +47,7 @@ export const ENDPOINTS = {
     ENTER: (classId: string) => `${BASE_API}/classes/${classId}/enter`,
     GET_ALL_NOTES: (classId: string) => `${BASE_API}/classes/${classId}/notes`,
     GET_MY_CLASSES: `${BASE_API}/classes/teacher/myclass`,
+    GET_QUIZZES: (classId: string) => `${BASE_API}/classes/${classId}/quiz`,
   },
 
   // 강의 관련
@@ -89,7 +90,9 @@ export const ENDPOINTS = {
   // 퀴즈 관련
   QUIZZES: {
     CREATE: (lectureId: string) => `${BASE_API}/quizzes/${lectureId}/create`,
-    SAVE: (lectureId: string) => `${BASE_API}/quizzes/${lectureId}`,
+    RECREATE: (lectureId: string) =>
+      `${BASE_API}/quizzes/${lectureId}/re-create`,
+    SAVE: (lectureId: string) => `${BASE_API}/quizzes/${lectureId}/save`,
     UPDATE: (lectureId: string) => `${BASE_API}/quizzes/${lectureId}`,
     GET: (lectureId: string) => `${BASE_API}/quizzes/${lectureId}`,
     SUBMIT: (lectureId: string) => `${BASE_API}/quizzes/${lectureId}/submit`,
