@@ -30,10 +30,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.time.format.TextStyle;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -69,17 +67,41 @@ public class LectureServiceImpl implements LectureService {
             throw new LectureException(LectureErrorCode.LECTURE_NOT_IN_CLASS);
         }
 
-        List<Lecture> lecturesInClass = lectureRepository
-                .findByClassroom_IdOrderByLectureDateAscCreatedAtAsc(classId);
 
-        int session = 1;
-        for (int i = 0; i < lecturesInClass.size(); i++) {
-            if (lecturesInClass.get(i).getId().equals(lectureId)) {
-                session = i + 1;
-                break;
+        LocalDate today = LocalDate.now();
+        LocalTime now = LocalTime.now();
+        String status;
+
+        if (today.isAfter(lecture.getLectureDate())) {
+            status = "afterLecture";
+        } else if (today.isEqual(lecture.getLectureDate())) {
+            if (now.isBefore(lecture.getStartTime())) {
+                status = "beforeLecture";
+            } else if (!now.isBefore(lecture.getStartTime()) && now.isBefore(lecture.getEndTime())) {
+                status = "onLecture";
+            } else {
+                status = "afterLecture";
             }
+        } else {
+            status = "beforeLecture";
         }
-        return lectureConverter.toResponseDTO(lecture, session);
+
+        String weekDay = lecture.getLectureDate()
+                .getDayOfWeek()
+                .getDisplayName(TextStyle.FULL, Locale.KOREAN);
+
+
+        return LectureResponseDTO.builder()
+                .lectureId(lecture.getId())
+                .classId(lecture.getClassroom().getId().toString())
+                .lectureName(lecture.getLectureName())
+                .lectureDate(lecture.getLectureDate())
+                .weekDay(weekDay)
+                .session(lecture.getSession())
+                .startTime(lecture.getStartTime())
+                .endTime(lecture.getEndTime())
+                .status(status)
+                .build();
     }
 
     // lecture 수정
