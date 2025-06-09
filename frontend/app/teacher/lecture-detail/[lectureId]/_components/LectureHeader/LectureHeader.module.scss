@@ -1,0 +1,48 @@
+@import "@/styles/variables";
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 $spacing-md $spacing-md $spacing-md;
+  border-bottom: 1px solid $color-neutral-7;
+}
+
+.title {
+  font-size: $font-size-2xl;
+  font-weight: $font-weight-bold;
+}
+
+.info {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  margin-top: $spacing-xs;
+  color: $color-mutedblue;
+  font-size: $font-size-md;
+}
+
+.date,
+.time {
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+
+  svg {
+    width: 16px;
+    height: 16px;
+    color: $color-neutral-5;
+  }
+}
+
+.beforeLectureText {
+  color: $color-blue;
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+}
+
+.afterLectureText {
+  color: $color-neutral-6;
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+}

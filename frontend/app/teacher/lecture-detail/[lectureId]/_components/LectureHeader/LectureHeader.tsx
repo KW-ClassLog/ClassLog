@@ -1,40 +1,93 @@
 "use client";
 
 import FitContentButton from "@/components/Button/FitContentButton/FitContentButton";
+import styles from "./LectureHeader.module.scss";
+import { Clock, Calendar } from "lucide-react";
+import { useEffect, useState } from "react";
 
-interface LectureHeaderProps {
-  title: string;
-  date: string;
-  time: string;
-  onStartLecture: () => void;
+interface LectureData {
+  lectureId: string;
+  classId: string;
+  lectureName: string;
+  lectureDate: string;
+  weekDay: string;
+  session: number;
+  startTime: string;
+  endTime: string;
+  status: "beforeLecture" | "afterLecture" | "onLecture";
 }
 
-export default function LectureHeader({
-  title,
-  date,
-  time,
-  onStartLecture,
-}: LectureHeaderProps) {
+export default function LectureHeader() {
+  const [lectureData, setLectureData] = useState<LectureData | null>(null);
+
+  useEffect(() => {
+    // TODO: API 호출로 변경
+    setLectureData({
+      lectureId: "53d51ffb-729d-432f-82c4-f414d9d84860",
+      classId: "93f9564f-0fdc-4d76-8577-eee7f1585df1",
+      lectureName: "운영체제 이론",
+      lectureDate: "2025-04-14",
+      weekDay: "월",
+      session: 1,
+      startTime: "11:33",
+      endTime: "11:35",
+      status: "onLecture",
+    });
+  }, []);
+
+  if (!lectureData) return null;
+
+  const handleStartLecture = () => {
+    // TODO: 강의 시작 로직 구현
+    console.log("강의 시작");
+  };
+
+  const formatDate = (date: string, weekDay: string) => {
+    return `${date} (${weekDay})`;
+  };
+
+  const formatTime = (start: string, end: string) => {
+    return `${start} ~ ${end}`;
+  };
+
+  const renderButton = () => {
+    switch (lectureData.status) {
+      case "beforeLecture":
+        return <span className={styles.beforeLectureText}>강의 시작 전</span>;
+      case "onLecture":
+        return (
+          <FitContentButton onClick={handleStartLecture}>
+            강의 시작하기
+          </FitContentButton>
+        );
+      case "afterLecture":
+        return <span className={styles.afterLectureText}>종료된 강의</span>;
+    }
+  };
+
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        marginBottom: 24,
-      }}
-    >
+    <div className={styles.container}>
       <div>
-        <h1 style={{ fontSize: 32, fontWeight: 700 }}>{title}</h1>
-        <div style={{ color: "#888", fontSize: 16, marginTop: 4 }}>
-          <span style={{ marginRight: 16 }}>{date}</span>
-          <span>{time}</span>
+        <h1 className={styles.title}>
+          {lectureData.session}. {lectureData.lectureName}
+        </h1>
+        <div className={styles.info}>
+          <div className={styles.date}>
+            <Calendar />
+            <span>
+              {formatDate(lectureData.lectureDate, lectureData.weekDay)}
+            </span>
+          </div>
+          <div className={styles.time}>
+            <Clock />
+            <span>
+              {formatTime(lectureData.startTime, lectureData.endTime)}
+            </span>
+          </div>
         </div>
       </div>
 
-      <FitContentButton onClick={onStartLecture}>
-        강의 시작하기
-      </FitContentButton>
+      {renderButton()}
     </div>
   );
 }
