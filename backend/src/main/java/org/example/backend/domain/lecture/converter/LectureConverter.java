@@ -27,16 +27,6 @@ public class LectureConverter {
                 .build();
     }
 
-    // Entity → ResponseDTO
-    public LectureResponseDTO toResponseDTO(Lecture lecture, int session) {
-        return LectureResponseDTO.builder()
-                .lectureId(lecture.getId())
-                .classId(String.valueOf(lecture.getClassroom().getId())) // UUID → String
-                .lectureName(lecture.getLectureName())
-                .lectureDate(lecture.getLectureDate())
-                .session(session)
-                .build();
-    }
 
     // Entity → ResponseDTO
     public LectureIdResponseDTO toResponseIdDTO(Lecture lecture) {
