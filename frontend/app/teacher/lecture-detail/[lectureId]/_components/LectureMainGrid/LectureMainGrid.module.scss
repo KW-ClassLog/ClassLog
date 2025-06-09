@@ -1,0 +1,102 @@
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $spacing-lg;
+  height: 100%;
+}
+
+.leftColumn {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+  height: 100%;
+}
+
+.rightColumn {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.card {
+  background: white;
+  border-radius: $radius-md;
+  padding: $spacing-lg;
+  border: 1px solid $color-neutral-7;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.title {
+  display: block;
+  margin-bottom: $spacing-md;
+  font-size: $font-size-lg;
+}
+
+.materialList {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+}
+
+.materialItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $spacing-xs 0;
+  border-bottom: 1px solid $color-neutral-7;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.questionList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.questionItem {
+  padding: $spacing-xs 0;
+  border-bottom: 1px solid $color-neutral-7;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.size {
+  color: $color-neutral-6;
+  font-size: $font-size-sm;
+}
+
+.userName {
+  font-weight: $font-weight-medium;
+  color: $color-neutral-6;
+}
+
+.audioInfo {
+  padding: $spacing-xs 0;
+}
+
+.quizInfo {
+  margin-top: $spacing-lg;
+}
+
+.quizItem {
+  margin-bottom: $spacing-md;
+}
+
+.detailsButton {
+  margin-top: $spacing-md;
+  background: $color-neutral-7;
+  border: none;
+  border-radius: $radius-md;
+  padding: $spacing-md $spacing-lg;
+  cursor: pointer;
+
+  &:hover {
+    background: $color-neutral-2;
+  }
+}
