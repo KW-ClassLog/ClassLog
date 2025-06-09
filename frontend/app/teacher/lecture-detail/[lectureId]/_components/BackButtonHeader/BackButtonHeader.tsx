@@ -13,7 +13,7 @@ export default function BackButtonHeader() {
     <header className={styles.quizHeader}>
       <IconButton
         icon={<ArrowLeft />}
-        onClick={() => router.push(ROUTES.teacherQuizManagement)}
+        onClick={() => router.push(ROUTES.teacherLectureManagement)}
         ariaLabel={""}
       ></IconButton>
     </header>
