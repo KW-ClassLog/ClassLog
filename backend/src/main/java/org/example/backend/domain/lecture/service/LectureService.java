@@ -14,7 +14,7 @@ import java.util.UUID;
 public interface LectureService {
     Lecture createLecture(LectureRequestDTO dto);
 
-    LectureResponseDTO getLectureDetail(UUID lectureId, UUID id);
+    LectureResponseDTO getLectureDetail(UUID lectureId);
 
     void updateLecture(UUID lectureId, LectureRequestDTO dto);
 
