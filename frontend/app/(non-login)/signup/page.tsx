@@ -33,7 +33,7 @@ export default function SignupPage() {
           <Image
             src="/images/logo3.png"
             alt="ClassLog Logo"
-            width={200}
+            width={190}
             height={60}
             className={styles.logo}
           />
