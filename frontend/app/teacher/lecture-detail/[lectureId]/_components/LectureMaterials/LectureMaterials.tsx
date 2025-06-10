@@ -2,6 +2,8 @@
 
 import styles from "./LectureMaterials.module.scss";
 import FileDisplay from "@/components/FileDisplay/FileDisplay";
+import FileSelectModal from "@/components/Modal/FileSelectModal/FileSelectModal";
+import { Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 
 interface LectureNote {
@@ -19,6 +21,7 @@ interface LectureMaterialsProps {
 export default function LectureMaterials({ lectureId }: LectureMaterialsProps) {
   const [lectureNotes, setLectureNotes] = useState<LectureNote[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     // TODO: API 호출로 변경
@@ -49,11 +52,23 @@ export default function LectureMaterials({ lectureId }: LectureMaterialsProps) {
     setLoading(false);
   }, [lectureId]);
 
+  const handleAddMaterials = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+  };
+
   if (loading) return <div>로딩 중...</div>;
 
   return (
     <div className={styles.card}>
       <h2 className={styles.title}>강의자료</h2>
+      <div className={styles.addButton} onClick={handleAddMaterials}>
+        <Plus size={16} />
+        강의자료 선택하기
+      </div>
       <div className={styles.materialList}>
         {lectureNotes.length === 0 ? (
           <div className={styles.emptyState}>등록된 강의자료가 없습니다.</div>
@@ -61,11 +76,18 @@ export default function LectureMaterials({ lectureId }: LectureMaterialsProps) {
           lectureNotes.map((note) => (
             <div key={note.lectureNoteId} className={styles.materialItem}>
               <FileDisplay fileName={note.lectureNoteName} />
-              <span className={styles.size}>({note.fileSize})</span>
+              <span className={styles.size}>{note.fileSize}</span>
             </div>
           ))
         )}
       </div>
+
+      {isModalOpen && (
+        <FileSelectModal
+          classId={lectureNotes[0]?.classId || ""}
+          onClose={handleModalClose}
+        />
+      )}
     </div>
   );
 }
