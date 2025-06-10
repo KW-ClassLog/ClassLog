@@ -3,6 +3,7 @@
 import styles from "./QuestionList.module.scss";
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { useLectureDetail } from "../LectureDetailContext";
 
 interface Question {
   sender: string;
@@ -11,11 +12,8 @@ interface Question {
   profileUrl: string;
 }
 
-interface QuestionListProps {
-  lectureId: string;
-}
-
-export default function QuestionList({ lectureId }: QuestionListProps) {
+export default function QuestionList() {
+  const { lectureId } = useLectureDetail();
   const [questions, setQuestions] = useState<Question[]>([]);
   const [loading, setLoading] = useState(true);
 

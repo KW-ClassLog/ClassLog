@@ -5,19 +5,15 @@ import LectureMaterials from "../LectureMaterials/LectureMaterials";
 import QuestionList from "../QuestionList/QuestionList";
 import LectureRecording from "../LectureRecording/LectureRecording";
 
-interface LectureMainGridProps {
-  lectureId: string;
-}
-
-export default function LectureMainGrid({ lectureId }: LectureMainGridProps) {
+export default function LectureMainGrid() {
   return (
     <div className={styles.grid}>
       <div className={styles.leftColumn}>
-        <LectureMaterials lectureId={lectureId} />
-        <LectureRecording lectureId={lectureId} />
+        <LectureMaterials />
+        <LectureRecording />
       </div>
       <div className={styles.rightColumn}>
-        <QuestionList lectureId={lectureId} />
+        <QuestionList />
       </div>
     </div>
   );

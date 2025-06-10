@@ -5,17 +5,15 @@ import styles from "./LectureRecording.module.scss";
 import { useEffect, useState } from "react";
 import { Download } from "lucide-react";
 import { fetchAudioFile } from "@/api/lectures/fetchAudioFile";
+import { useLectureDetail } from "../LectureDetailContext";
 
 interface Audio {
   lectureId: string;
   audioUrl: string;
 }
 
-interface LectureRecordingProps {
-  lectureId: string;
-}
-
-export default function LectureRecording({ lectureId }: LectureRecordingProps) {
+export default function LectureRecording() {
+  const { lectureId } = useLectureDetail();
   const [audio, setAudio] = useState<Audio | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

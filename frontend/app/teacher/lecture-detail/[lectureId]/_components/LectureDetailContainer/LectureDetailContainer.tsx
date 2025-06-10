@@ -2,6 +2,7 @@
 import { useParams } from "next/navigation";
 import LectureHeader from "../LectureHeader/LectureHeader";
 import LectureMainGrid from "../LectureMainGrid/LectureMainGrid";
+import { LectureDetailProvider } from "../LectureDetailContext";
 import style from "./LectureDetailContainer.module.scss";
 
 export default function LectureDetailContainer() {
@@ -14,10 +15,10 @@ export default function LectureDetailContainer() {
   return (
     <div className={style.lectureDetailContainer}>
       {lectureId && (
-        <>
-          <LectureHeader lectureId={lectureId} />
-          <LectureMainGrid lectureId={lectureId} />
-        </>
+        <LectureDetailProvider lectureId={lectureId}>
+          <LectureHeader />
+          <LectureMainGrid />
+        </LectureDetailProvider>
       )}
     </div>
   );

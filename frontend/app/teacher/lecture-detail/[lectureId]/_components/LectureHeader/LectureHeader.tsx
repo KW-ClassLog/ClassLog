@@ -8,12 +8,10 @@ import { useLectureStatusAction } from "@/hooks/useLectureStatusAction";
 import MakeQuizModal from "@/components/Modal/MakeQuizModal/MakeQuizModal";
 import { FetchLectureDetailResult } from "@/types/lectures/fetchLectureDetailTypes";
 import { fetchLectureDetail } from "@/api/lectures/fetchLectureDetail";
+import { useLectureDetail } from "../LectureDetailContext";
 
-interface LectureHeaderProps {
-  lectureId: string;
-}
-
-export default function LectureHeader({ lectureId }: LectureHeaderProps) {
+export default function LectureHeader() {
+  const { lectureId, setClassId } = useLectureDetail();
   const [lectureData, setLectureData] =
     useState<FetchLectureDetailResult | null>(null);
   const [showQuizModal, setShowQuizModal] = useState(false);
@@ -27,6 +25,7 @@ export default function LectureHeader({ lectureId }: LectureHeaderProps) {
 
         if (response.isSuccess && response.result) {
           setLectureData(response.result);
+          setClassId(response.result.classId);
         } else {
           console.error(
             "강의 데이터를 불러오는데 실패했습니다:",
@@ -41,7 +40,7 @@ export default function LectureHeader({ lectureId }: LectureHeaderProps) {
     };
 
     fetchData();
-  }, [lectureId]);
+  }, [lectureId, setClassId]);
 
   const handleStartLecture = () => {
     // TODO: 강의 시작 로직 구현

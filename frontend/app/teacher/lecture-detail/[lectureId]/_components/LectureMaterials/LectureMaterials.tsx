@@ -7,12 +7,10 @@ import { Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { fetchLectureNoteByLectureId } from "@/api/lectures/fetchLectureNoteByLectureId";
 import { FetchLectureNoteByLectureIdResult } from "@/types/lectures/fetchLectureNoteByLectureIdTypes";
+import { useLectureDetail } from "../LectureDetailContext";
 
-interface LectureMaterialsProps {
-  lectureId: string;
-}
-
-export default function LectureMaterials({ lectureId }: LectureMaterialsProps) {
+export default function LectureMaterials() {
+  const { lectureId, classId } = useLectureDetail();
   const [lectureNotes, setLectureNotes] = useState<
     FetchLectureNoteByLectureIdResult[]
   >([]);
@@ -72,11 +70,8 @@ export default function LectureMaterials({ lectureId }: LectureMaterialsProps) {
         )}
       </div>
 
-      {isModalOpen && (
-        <FileSelectModal
-          classId={lectureNotes[0]?.classId || ""}
-          onClose={handleModalClose}
-        />
+      {isModalOpen && classId && (
+        <FileSelectModal classId={classId} onClose={handleModalClose} />
       )}
     </div>
   );
