@@ -34,26 +34,30 @@
       border-radius: $radius-full;
       padding: 5px 10px;
       min-width: 120px;
-      .delelteIcon {
+      .deleteIcon {
         cursor: pointer;
       }
     }
   }
   .fileList {
-    margin-top: $spacing-xs;
+    margin-top: $spacing-md;
     max-height: 300px;
     overflow-y: auto;
     width: 100%;
+    display: flex;
+    flex-direction: column;
     .fileItem {
       display: flex;
       align-items: center;
       border-bottom: 1px solid $color-neutral-7;
       width: 100%; /* 부모의 너비를 100%로 설정 */
-      gap: 10px; /* 아이템 간의 간격을 추가 */
+      gap: $spacing-sm; /* 아이템 간의 간격을 추가 */
+      padding: $spacing-xs 0;
+
       .fileDisplay {
         flex: 0 0 70%; /* FileDisplay는 70% 너비를 차지 */
         @include respond-to(lg) {
-          flex: 0 0 40%; /* FileDisplay는 70% 너비를 차지 */
+          flex: 0 0 40%; /* FileDisplay는 40% 너비를 차지 */
         }
         overflow: hidden;
       }
