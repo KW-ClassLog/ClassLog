@@ -2,8 +2,10 @@
 
 import FitContentButton from "@/components/Button/FitContentButton/FitContentButton";
 import styles from "./LectureHeader.module.scss";
-import { Clock, Calendar, ChevronRight } from "lucide-react";
+import { Clock, Calendar } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useLectureStatusAction } from "@/hooks/useLectureStatusAction";
+import MakeQuizModal from "@/components/Modal/MakeQuizModal/MakeQuizModal";
 
 interface LectureData {
   lectureId: string;
@@ -23,6 +25,7 @@ interface LectureHeaderProps {
 
 export default function LectureHeader({ lectureId }: LectureHeaderProps) {
   const [lectureData, setLectureData] = useState<LectureData | null>(null);
+  const [showQuizModal, setShowQuizModal] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -36,28 +39,26 @@ export default function LectureHeader({ lectureId }: LectureHeaderProps) {
       session: 1,
       startTime: "11:33",
       endTime: "11:35",
-      status: "onLecture",
+      status: "makeQuiz",
     });
     setLoading(false);
   }, [lectureId]);
-
-  if (loading) return <div>로딩 중...</div>;
-  if (!lectureData) return null;
 
   const handleStartLecture = () => {
     // TODO: 강의 시작 로직 구현
     console.log("강의 시작");
   };
 
-  const handleMakeQuiz = () => {
-    // TODO: 퀴즈 생성 로직 구현
-    console.log("퀴즈 생성");
-  };
+  const actionConfig = useLectureStatusAction({
+    status: lectureData?.status || "beforeLecture",
+    lectureId: lectureData?.lectureId || "",
+    lectureDate: lectureData?.lectureDate,
+    onStartLecture: handleStartLecture,
+    setShowQuizModal,
+  });
 
-  const handleCheckDashboard = () => {
-    // TODO: 대시보드 확인 로직 구현
-    console.log("대시보드 확인");
-  };
+  if (loading) return <div>로딩 중...</div>;
+  if (!lectureData) return null;
 
   const formatDate = (date: string, weekDay: string) => {
     return `${date} (${weekDay})`;
@@ -68,29 +69,18 @@ export default function LectureHeader({ lectureId }: LectureHeaderProps) {
   };
 
   const renderButton = () => {
-    switch (lectureData.status) {
-      case "onLecture":
-        return (
-          <FitContentButton onClick={handleStartLecture}>
-            강의 시작하기
-            <ChevronRight />
-          </FitContentButton>
-        );
-      case "makeQuiz":
-        return (
-          <FitContentButton onClick={handleMakeQuiz}>
-            퀴즈 생성하기
-            <ChevronRight />
-          </FitContentButton>
-        );
-      case "checkDashboard":
-        return (
-          <FitContentButton onClick={handleCheckDashboard}>
-            대시보드 확인하기
-            <ChevronRight />
-          </FitContentButton>
-        );
-    }
+    if (!actionConfig || lectureData?.status === "beforeLecture") return null;
+
+    const IconComponent = actionConfig.icon;
+    return (
+      <FitContentButton
+        disabled={actionConfig.disabled || false}
+        onClick={actionConfig.onClick || (() => {})}
+      >
+        {actionConfig.text}
+        {IconComponent && <IconComponent />}
+      </FitContentButton>
+    );
   };
 
   return (
@@ -116,6 +106,12 @@ export default function LectureHeader({ lectureId }: LectureHeaderProps) {
       </div>
 
       {renderButton()}
+      {showQuizModal && (
+        <MakeQuizModal
+          lectureId={lectureId}
+          onClose={() => setShowQuizModal(false)}
+        />
+      )}
     </div>
   );
 }

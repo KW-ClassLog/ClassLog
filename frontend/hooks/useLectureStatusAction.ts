@@ -14,8 +14,6 @@ interface UseLectureStatusActionProps {
   lectureId: string;
   lectureDate?: string;
   onStartLecture?: () => void;
-  onMakeQuiz?: () => void;
-  onCheckDashboard?: () => void;
   setShowQuizModal?: (show: boolean) => void;
 }
 
@@ -32,8 +30,6 @@ export const useLectureStatusAction = ({
   lectureId,
   lectureDate,
   onStartLecture,
-  onMakeQuiz,
-  onCheckDashboard,
   setShowQuizModal,
 }: UseLectureStatusActionProps): ActionButtonConfig | null => {
   const router = useRouter();
@@ -55,7 +51,7 @@ export const useLectureStatusAction = ({
     case "makeQuiz":
       return {
         text: "퀴즈 생성하기",
-        onClick: onMakeQuiz || (() => setShowQuizModal?.(true)),
+        onClick: () => setShowQuizModal?.(true),
         icon: ChevronRight,
         className: "makeQuiz",
       };
@@ -79,9 +75,7 @@ export const useLectureStatusAction = ({
 
       return {
         text: "대시보드 확인하기",
-        onClick:
-          onCheckDashboard ||
-          (() => router.push(ROUTES.teacherQuizDashboard(lectureId))),
+        onClick: () => router.push(ROUTES.teacherQuizDashboard(lectureId)),
         icon: ChevronRight,
         className: "checkDashboard",
       };
