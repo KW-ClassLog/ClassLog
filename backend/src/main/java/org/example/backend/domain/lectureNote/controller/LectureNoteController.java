@@ -48,7 +48,7 @@ public class LectureNoteController {
     }
 
     //강의록 개별 조회
-    @GetMapping("/{lectureNoteId}")
+    @GetMapping("/note/{lectureNoteId}")
     public ApiResponse<LectureNoteResponseDTO> getLectureNote(
             @PathVariable("lectureNoteId") UUID lectureNoteId) {
 
