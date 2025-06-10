@@ -13,8 +13,12 @@ export default function LectureDetailContainer() {
 
   return (
     <div className={style.lectureDetailContainer}>
-      <LectureHeader lectureId={lectureId} />
-      <LectureMainGrid lectureId={lectureId} />
+      {lectureId && (
+        <>
+          <LectureHeader lectureId={lectureId} />
+          <LectureMainGrid lectureId={lectureId} />
+        </>
+      )}
     </div>
   );
 }
