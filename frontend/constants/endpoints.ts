@@ -69,7 +69,7 @@ export const ENDPOINTS = {
     GET_NOTE_DETAIL: (lectureId: string, lectureNoteId: string) =>
       `${BASE_API}/lectures/${lectureId}/${lectureNoteId}`,
     GET_NOTE_LIST: (lectureId: string) =>
-      `${BASE_API}/lectures/${lectureId}/notes`,
+      `${BASE_API}/lectures/${lectureId}/lecture/notes`,
     GET_NOTE_LIST_BY_CLASS: (classId: string) =>
       `${BASE_API}/lectures/${classId}/class/notes`,
 

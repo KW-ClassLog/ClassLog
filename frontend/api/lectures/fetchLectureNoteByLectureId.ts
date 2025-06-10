@@ -7,13 +7,13 @@ import { FetchLectureNoteByLectureIdResult } from "@/types/lectures/fetchLecture
 export async function fetchLectureNoteByLectureId(lectureId: string) {
   try {
     const response = await axiosInstance.get<
-      ApiResponse<FetchLectureNoteByLectureIdResult[]>
+      ApiResponse<FetchLectureNoteByLectureIdResult[] | null>
     >(ENDPOINTS.LECTURES.GET_NOTE_LIST(lectureId));
     return response.data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error) && error.response) {
       return error.response.data as ApiResponse<
-        FetchLectureNoteByLectureIdResult[]
+        FetchLectureNoteByLectureIdResult[] | null
       >;
     }
     throw error;
