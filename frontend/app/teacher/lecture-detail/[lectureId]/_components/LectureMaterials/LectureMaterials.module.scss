@@ -12,7 +12,7 @@
 .title {
   display: block;
   margin-bottom: $spacing-md;
-  font-size: $font-size-lg;
+  font-size: $font-size-xl;
 }
 
 .addButton {
@@ -52,7 +52,7 @@
 
 .emptyState {
   color: $color-neutral-6;
-  font-size: $font-size-sm;
+  font-size: $font-size-md;
   text-align: center;
-  padding: $spacing-lg 0;
+  padding: $spacing-3xl 0;
 }
