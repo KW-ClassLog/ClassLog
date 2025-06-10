@@ -14,7 +14,7 @@ interface LectureData {
   session: number;
   startTime: string;
   endTime: string;
-  status: "beforeLecture" | "afterLecture" | "onLecture";
+  status: "beforeLecture" | "onLecture" | "makeQuiz" | "checkDashboard";
 }
 
 interface LectureHeaderProps {
@@ -49,6 +49,16 @@ export default function LectureHeader({ lectureId }: LectureHeaderProps) {
     console.log("강의 시작");
   };
 
+  const handleMakeQuiz = () => {
+    // TODO: 퀴즈 생성 로직 구현
+    console.log("퀴즈 생성");
+  };
+
+  const handleCheckDashboard = () => {
+    // TODO: 대시보드 확인 로직 구현
+    console.log("대시보드 확인");
+  };
+
   const formatDate = (date: string, weekDay: string) => {
     return `${date} (${weekDay})`;
   };
@@ -59,8 +69,6 @@ export default function LectureHeader({ lectureId }: LectureHeaderProps) {
 
   const renderButton = () => {
     switch (lectureData.status) {
-      case "beforeLecture":
-        return <span className={styles.beforeLectureText}>강의 시작 전</span>;
       case "onLecture":
         return (
           <FitContentButton onClick={handleStartLecture}>
@@ -68,8 +76,20 @@ export default function LectureHeader({ lectureId }: LectureHeaderProps) {
             <ChevronRight />
           </FitContentButton>
         );
-      case "afterLecture":
-        return <span className={styles.afterLectureText}>종료된 강의</span>;
+      case "makeQuiz":
+        return (
+          <FitContentButton onClick={handleMakeQuiz}>
+            퀴즈 생성하기
+            <ChevronRight />
+          </FitContentButton>
+        );
+      case "checkDashboard":
+        return (
+          <FitContentButton onClick={handleCheckDashboard}>
+            대시보드 확인하기
+            <ChevronRight />
+          </FitContentButton>
+        );
     }
   };
 
