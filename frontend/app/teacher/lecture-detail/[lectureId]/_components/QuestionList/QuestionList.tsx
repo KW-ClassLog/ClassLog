@@ -76,8 +76,8 @@ export default function QuestionList() {
                   <Image
                     src={q.profileUrl}
                     alt="프로필"
-                    width={24}
-                    height={24}
+                    width={30}
+                    height={30}
                     className={styles.profileImage}
                   />
                   <span className={styles.userName}>{q.sender}</span>

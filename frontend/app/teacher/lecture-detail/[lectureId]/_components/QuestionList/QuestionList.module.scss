@@ -44,28 +44,32 @@
 .profileImage {
   border-radius: 50%;
   object-fit: cover;
+  border: 1px solid $color-neutral-6;
 }
 
 .userName {
   font-weight: $font-weight-medium;
-
-  font-size: $font-size-sm;
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
 }
 
 .timestamp {
-  font-size: $font-size-xs;
+  font-size: $font-size-sm;
+  color: $color-neutral-5;
 }
 
 .message {
-  font-size: $font-size-sm;
+  font-size: $font-size-md;
   line-height: 1.4;
   word-break: break-word;
-  margin-left: 32px; // 프로필 이미지 너비 + 간격
+  margin-left: 38px;
+  font-weight: $font-weight-light;
 }
 
 .emptyState {
   color: $color-neutral-6;
-  font-size: $font-size-sm;
+  font-size: $font-size-md;
   text-align: center;
-  padding: $spacing-lg 0;
+  padding: $spacing-3xl 0;
+  font-weight: $font-weight-medium;
 }
