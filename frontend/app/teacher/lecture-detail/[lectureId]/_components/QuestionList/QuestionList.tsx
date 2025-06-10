@@ -66,7 +66,7 @@ export default function QuestionList({ lectureId }: QuestionListProps) {
 
   return (
     <div className={styles.card}>
-      <b className={styles.title}>질문 목록</b>
+      <h2 className={styles.title}>질문 목록</h2>
       <ul className={styles.questionList}>
         {questions.length === 0 ? (
           <div className={styles.emptyState}>등록된 질문이 없습니다.</div>

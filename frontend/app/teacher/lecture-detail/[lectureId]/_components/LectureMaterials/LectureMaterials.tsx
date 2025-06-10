@@ -53,7 +53,7 @@ export default function LectureMaterials({ lectureId }: LectureMaterialsProps) {
 
   return (
     <div className={styles.card}>
-      <b className={styles.title}>강의자료</b>
+      <h2 className={styles.title}>강의자료</h2>
       <div className={styles.materialList}>
         {lectureNotes.length === 0 ? (
           <div className={styles.emptyState}>등록된 강의자료가 없습니다.</div>
