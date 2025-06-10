@@ -6,42 +6,41 @@ import { Clock, Calendar } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useLectureStatusAction } from "@/hooks/useLectureStatusAction";
 import MakeQuizModal from "@/components/Modal/MakeQuizModal/MakeQuizModal";
-
-interface LectureData {
-  lectureId: string;
-  classId: string;
-  lectureName: string;
-  lectureDate: string;
-  weekDay: string;
-  session: number;
-  startTime: string;
-  endTime: string;
-  status: "beforeLecture" | "onLecture" | "makeQuiz" | "checkDashboard";
-}
+import { FetchLectureDetailResult } from "@/types/lectures/fetchLectureDetailTypes";
+import { fetchLectureDetail } from "@/api/lectures/fetchLectureDetail";
 
 interface LectureHeaderProps {
   lectureId: string;
 }
 
 export default function LectureHeader({ lectureId }: LectureHeaderProps) {
-  const [lectureData, setLectureData] = useState<LectureData | null>(null);
+  const [lectureData, setLectureData] =
+    useState<FetchLectureDetailResult | null>(null);
   const [showQuizModal, setShowQuizModal] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // TODO: API 호출로 변경
-    setLectureData({
-      lectureId: "53d51ffb-729d-432f-82c4-f414d9d84860",
-      classId: "93f9564f-0fdc-4d76-8577-eee7f1585df1",
-      lectureName: "운영체제 이론",
-      lectureDate: "2025-04-14",
-      weekDay: "월",
-      session: 1,
-      startTime: "11:33",
-      endTime: "11:35",
-      status: "beforeLecture",
-    });
-    setLoading(false);
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const response = await fetchLectureDetail(lectureId);
+
+        if (response.isSuccess && response.result) {
+          setLectureData(response.result);
+        } else {
+          console.error(
+            "강의 데이터를 불러오는데 실패했습니다:",
+            response.message
+          );
+        }
+      } catch (error) {
+        console.error("강의 데이터를 불러오는 중 오류가 발생했습니다:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
   }, [lectureId]);
 
   const handleStartLecture = () => {

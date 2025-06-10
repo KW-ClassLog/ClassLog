@@ -54,8 +54,7 @@ export const ENDPOINTS = {
   LECTURES: {
     CREATE: `${BASE_API}/lectures/create`,
     UPDATE: (lectureId: string) => `${BASE_API}/lectures/${lectureId}`,
-    GET_DETAIL: (classId: string, lectureId: string) =>
-      `${BASE_API}/lectures/${classId}/${lectureId}`,
+    GET_DETAIL: (lectureId: string) => `${BASE_API}/lectures/${lectureId}`,
     DELETE: (lectureId: string) => `${BASE_API}/lectures/${lectureId}`,
     GET_LECTURES_BY_DATE: (date: string) =>
       `${BASE_API}/lectures/teacher/today?date=${date}`,
