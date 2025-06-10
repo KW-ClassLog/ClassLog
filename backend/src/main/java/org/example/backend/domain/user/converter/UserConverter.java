@@ -67,7 +67,7 @@ UserConverter {
         return HomeResponseDTO.ProfileDTO.builder()
                 .name(user.getName())
                 .organization(user.getOrganization())
-                .profile(profileUrl)
+                .profile(profileKey)
                 .build();
     }
 }
