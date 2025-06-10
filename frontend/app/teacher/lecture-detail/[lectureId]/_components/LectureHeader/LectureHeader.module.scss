@@ -8,6 +8,12 @@
   border-bottom: 1px solid $color-neutral-7;
 }
 
+.titleContainer {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+}
+
 .title {
   font-size: $font-size-2xl;
   font-weight: $font-weight-bold;
@@ -32,6 +38,31 @@
     width: 16px;
     height: 16px;
   }
+}
+
+.tag {
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  padding: $spacing-xs $spacing-sm;
+  border-radius: $radius-full;
+}
+
+// 강의 전 상태
+.tagBeforeLecture {
+  color: $color-blue;
+  background-color: $color-skyblue;
+}
+
+// 강의 중 상태
+.tagOnLecture {
+  color: $color-white;
+  background-color: $color-blue;
+}
+
+// 강의 종료 상태 (makeQuiz, checkDashboard)
+.tagAfterLecture {
+  color: $color-white;
+  background-color: $color-neutral-6;
 }
 
 .beforeLectureText {

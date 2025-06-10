@@ -39,7 +39,7 @@ export default function LectureHeader({ lectureId }: LectureHeaderProps) {
       session: 1,
       startTime: "11:33",
       endTime: "11:35",
-      status: "makeQuiz",
+      status: "beforeLecture",
     });
     setLoading(false);
   }, [lectureId]);
@@ -68,6 +68,35 @@ export default function LectureHeader({ lectureId }: LectureHeaderProps) {
     return `${start} ~ ${end}`;
   };
 
+  const getStatusText = (status: string) => {
+    switch (status) {
+      case "beforeLecture":
+        return "강의 전";
+      case "onLecture":
+        return "강의 중";
+      case "makeQuiz":
+        return "강의 종료";
+      case "checkDashboard":
+        return "강의 종료";
+      default:
+        return "";
+    }
+  };
+
+  const getTagClassName = (status: string) => {
+    switch (status) {
+      case "beforeLecture":
+        return `${styles.tag} ${styles.tagBeforeLecture}`;
+      case "onLecture":
+        return `${styles.tag} ${styles.tagOnLecture}`;
+      case "makeQuiz":
+      case "checkDashboard":
+        return `${styles.tag} ${styles.tagAfterLecture}`;
+      default:
+        return styles.tag;
+    }
+  };
+
   const renderButton = () => {
     if (!actionConfig || lectureData?.status === "beforeLecture") return null;
 
@@ -86,9 +115,15 @@ export default function LectureHeader({ lectureId }: LectureHeaderProps) {
   return (
     <div className={styles.container}>
       <div>
-        <h1 className={styles.title}>
-          {lectureData.session}. {lectureData.lectureName}
-        </h1>
+        <div className={styles.titleContainer}>
+          <h1 className={styles.title}>
+            {lectureData.session}. {lectureData.lectureName}
+          </h1>
+          <div className={getTagClassName(lectureData.status)}>
+            {getStatusText(lectureData.status)}
+          </div>
+        </div>
+
         <div className={styles.info}>
           <div className={styles.date}>
             <Calendar />
