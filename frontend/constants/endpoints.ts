@@ -76,8 +76,8 @@ export const ENDPOINTS = {
     // 녹음 관련
     SAVE_RECORDING: (lectureId: string) =>
       `${BASE_API}/lectures/${lectureId}/recordings`,
-    GET_RECORDING: (lectureId: string, mode: string) =>
-      `${BASE_API}/lectures/${lectureId}/recordings?mode=${mode}`,
+    GET_RECORDING: (lectureId: string) =>
+      `${BASE_API}/lectures/${lectureId}/recordings`,
 
     // 채팅 관련
     SAVE_CHAT: (lectureId: string) =>

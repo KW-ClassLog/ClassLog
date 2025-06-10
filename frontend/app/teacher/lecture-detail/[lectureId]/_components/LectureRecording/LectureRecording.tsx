@@ -4,6 +4,7 @@ import FileDisplay from "@/components/FileDisplay/FileDisplay";
 import styles from "./LectureRecording.module.scss";
 import { useEffect, useState } from "react";
 import { Download } from "lucide-react";
+import { fetchAudioFile } from "@/api/lectures/fetchAudioFile";
 
 interface Audio {
   lectureId: string;
@@ -17,14 +18,33 @@ interface LectureRecordingProps {
 export default function LectureRecording({ lectureId }: LectureRecordingProps) {
   const [audio, setAudio] = useState<Audio | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // TODO: API 호출로 변경
-    setAudio({
-      lectureId: "53d51ffb-729d-432f-82c4-f414d9d84860",
-      audioUrl: "https://s3.amazonaws.com/bucket-name/lecture1.mp3",
-    });
-    setLoading(false);
+    const fetchAudio = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const response = await fetchAudioFile(lectureId);
+
+        if (response.isSuccess && response.result) {
+          setAudio({
+            lectureId: response.result.lectureId,
+            audioUrl: response.result.audioUrl,
+          });
+        } else {
+          setAudio(null);
+        }
+      } catch (err) {
+        console.error("오디오 파일 조회 실패:", err);
+        setError("오디오 파일을 불러오는 중 오류가 발생했습니다.");
+        setAudio(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAudio();
   }, [lectureId]);
 
   const getFileNameFromUrl = (url: string) => {
@@ -38,6 +58,15 @@ export default function LectureRecording({ lectureId }: LectureRecordingProps) {
   };
 
   if (loading) return <div>로딩 중...</div>;
+
+  if (error) {
+    return (
+      <div className={styles.card}>
+        <h2 className={styles.title}>강의 녹음본</h2>
+        <div className={styles.errorState}>{error}</div>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.card}>
