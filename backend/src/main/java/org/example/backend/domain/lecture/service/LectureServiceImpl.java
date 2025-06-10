@@ -59,13 +59,9 @@ public class LectureServiceImpl implements LectureService {
 
     // lecture 조회
     @Override
-    public LectureResponseDTO getLectureDetail(UUID classId, UUID lectureId) {
+    public LectureResponseDTO getLectureDetail(UUID lectureId) {
         Lecture lecture = lectureRepository.findById(lectureId)
                 .orElseThrow(() -> new LectureException(LectureErrorCode.LECTURE_NOT_FOUND));
-
-        if (!lecture.getClassroom().getId().equals(classId)) {
-            throw new LectureException(LectureErrorCode.LECTURE_NOT_IN_CLASS);
-        }
 
 
         LocalDate today = LocalDate.now();
