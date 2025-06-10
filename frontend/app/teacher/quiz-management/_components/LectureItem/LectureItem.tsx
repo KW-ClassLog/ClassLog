@@ -2,53 +2,49 @@ import { Calendar, Clock } from "lucide-react";
 import styles from "./LectureItem.module.scss";
 import { useState } from "react";
 import MakeQuizModal from "@/components/Modal/MakeQuizModal/MakeQuizModal";
-import { ROUTES } from "@/constants/routes";
-import { useRouter } from "next/navigation";
+
 import { FetchQuizzesByClassResult } from "@/types/classes/fetchQuizzesByClassTypes";
-import dayjs from "dayjs";
+
+import { useLectureStatusAction } from "@/hooks/useLectureStatusAction";
 
 export default function LectureItem(lecture: FetchQuizzesByClassResult) {
   const [showQuizModal, setShowQuizModal] = useState(false);
-  const router = useRouter();
 
-  const getActionButton = (status: string) => {
-    switch (status) {
-      case "beforeLecture":
-        return <div className={styles.beforeLecture}>강의 전</div>;
-      case "checkDashboard": {
-        const now = dayjs();
-        const lectureDate = dayjs(lecture.date, "YYYY-MM-DD");
-        const isToday = now.isSame(lectureDate, "day");
-        const midnight = lectureDate.add(1, "day").startOf("day");
-        const isBeforeMidnight = now.isBefore(midnight);
-        if (isToday && isBeforeMidnight) {
-          return (
-            <button className={styles.showDashboardNotYet} disabled>
-              오늘 밤 12:00 확인 가능
-            </button>
-          );
-        }
-        return (
-          <button
-            className={styles.showDashboard}
-            onClick={() =>
-              router.push(ROUTES.teacherQuizDashboard(lecture.lectureId))
-            }
-          >
-            대시보드 확인
-          </button>
-        );
-      }
-      case "makeQuiz":
-        return (
-          <button
-            className={styles.quizCreation}
-            onClick={() => setShowQuizModal(true)}
-          >
-            퀴즈 생성하기
-          </button>
-        );
+  const actionConfig = useLectureStatusAction({
+    status: lecture.status,
+    lectureId: lecture.lectureId,
+    lectureDate: lecture.date,
+    setShowQuizModal,
+  });
+
+  const getActionButton = () => {
+    if (!actionConfig) return null;
+
+    if (actionConfig.className === "beforeLecture") {
+      const IconComponent = actionConfig.icon;
+      return (
+        <span className={styles[actionConfig.className]}>
+          {actionConfig.text}
+          {IconComponent && <IconComponent size={16} />}
+        </span>
+      );
     }
+
+    if (actionConfig.className) {
+      const IconComponent = actionConfig.icon;
+      return (
+        <button
+          className={styles[actionConfig.className]}
+          onClick={actionConfig.onClick}
+          disabled={actionConfig.disabled}
+        >
+          {actionConfig.text}
+          {IconComponent && <IconComponent size={16} />}
+        </button>
+      );
+    }
+
+    return null;
   };
 
   return (
@@ -71,7 +67,7 @@ export default function LectureItem(lecture: FetchQuizzesByClassResult) {
             </div>
           </div>
         </div>
-        <div className={styles.action}>{getActionButton(lecture.status)}</div>
+        <div className={styles.action}>{getActionButton()}</div>
       </div>
       {showQuizModal && (
         <MakeQuizModal
