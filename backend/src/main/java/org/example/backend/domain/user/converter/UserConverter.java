@@ -59,15 +59,11 @@ UserConverter {
     }
 
     public HomeResponseDTO.ProfileDTO toProfileDTO(User user){
-        String profileKey = user.getProfileUrl();
-        String profileUrl = s3Service.getPublicUrl(
-                (profileKey == null || profileKey.isBlank()) ? "profile/default.jpg" : profileKey
-        );
 
         return HomeResponseDTO.ProfileDTO.builder()
                 .name(user.getName())
                 .organization(user.getOrganization())
-                .profile(profileKey)
+                .profile(s3Service.getPublicUrl(user.getProfileUrl()))
                 .build();
     }
 }
