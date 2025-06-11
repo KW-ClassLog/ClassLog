@@ -33,7 +33,7 @@ public class MailServiceImpl implements MailService{
 
         try{
             MimeMessage emailForm = createEmailForm(email,authCode,
-                    "[ClassLog] 이메일 인증을 위한 인증번호 안내 드립니다.","emailVerification");
+                    "[ClassLog] 이메일 인증을 위한 인증번호 안내 드립니다.","EmailVerification");
             mailSender.send(emailForm);
         } catch (MessagingException | MailSendException e){
             throw new UserException(UserErrorCode._EMAIL_SEND_FAILURE);
@@ -48,7 +48,7 @@ public class MailServiceImpl implements MailService{
 
         try{
             MimeMessage emailForm = createEmailForm(email, tempPassword,
-                    "[ClassLog] 임시 비밀번호 안내 드립니다.","tempPassword");
+                    "[ClassLog] 임시 비밀번호 안내 드립니다.","TempPassword");
             mailSender.send(emailForm);
         } catch (MessagingException | MailSendException e){
             throw new UserException(UserErrorCode._EMAIL_SEND_FAILURE);
