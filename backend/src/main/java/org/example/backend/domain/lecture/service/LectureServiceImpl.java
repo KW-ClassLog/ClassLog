@@ -159,9 +159,11 @@ public class LectureServiceImpl implements LectureService {
         lecture.setAudioUrl(key);
         lectureRepository.save(lecture);
 
+        String audioName = key.substring(key.lastIndexOf('/') + 1);
+
         return LectureRecordingResponseDTO.builder()
                 .lectureId(lecture.getId())
-                .audioKey(key)
+                .audioName(audioName)
                 .audioUrl(s3Service.getPresignedUrl(key))
                 .build();
     }
@@ -177,13 +179,13 @@ public class LectureServiceImpl implements LectureService {
             throw new LectureException(LectureErrorCode.NO_AUDIO_FILE);
         }
 
-        String audioUrl = s3Service.getPresignedUrl(s3Key);
+        String audioName = s3Key.substring(s3Key.lastIndexOf('/') + 1);
         String fileSize = s3Service.getFileSize(s3Key);
 
         return LectureRecordingResponseDTO.builder()
                 .lectureId(lectureId)
-                .audioKey(s3Key)
-                .audioUrl(audioUrl)
+                .audioName(s3Key)
+                .audioUrl(audioName)
                 .fileSize(fileSize)
                 .build();
     }
