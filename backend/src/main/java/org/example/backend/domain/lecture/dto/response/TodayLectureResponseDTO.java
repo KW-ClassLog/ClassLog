@@ -21,6 +21,7 @@ public class TodayLectureResponseDTO {
     private LocalTime startTime;   // 강의 시작 시간
     @JsonFormat(pattern = "HH:mm")
     private LocalTime endTime;   // 강의 종료 시간
+    private Integer session;
     private String status;  //'beforeLecture' | 'afterLecture'
 
 }
