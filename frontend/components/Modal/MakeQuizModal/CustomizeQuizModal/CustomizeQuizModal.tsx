@@ -5,24 +5,34 @@ import { Quiz } from "@/types/quizzes/createQuizTypes";
 import ClosableModal from "@/components/Modal/ClosableModal/ClosableModal";
 import BasicInput from "@/components/Input/BasicInput/BasicInput";
 import styles from "./CustomizeQuizModal.module.scss";
+import { useQuizStore } from "@/store/useQuizStore";
 
 interface CustomizeQuizModalProps {
   quizzes: Quiz[];
   onSubmit: (quizzes: Quiz[]) => void;
   onClose: () => void;
+  lectureId: string;
 }
 
 const CustomizeQuizModal = ({
   quizzes,
   onSubmit,
   onClose,
+  lectureId,
 }: CustomizeQuizModalProps) => {
   const [editedQuizzes, setEditedQuizzes] = useState<Quiz[]>(quizzes);
+  const { resetLectureQuizzes } = useQuizStore();
 
   const handleQuizChange = (idx: number, field: string, value: string) => {
     setEditedQuizzes((prev) =>
       prev.map((quiz, i) => (i === idx ? { ...quiz, [field]: value } : quiz))
     );
+  };
+
+  const handleClose = () => {
+    // 선택 상태 초기화 (lectureId별로)
+    resetLectureQuizzes(lectureId);
+    onClose();
   };
 
   const renderOXAnswer = (quiz: Quiz, idx: number) => (
@@ -62,7 +72,7 @@ const CustomizeQuizModal = ({
   );
 
   return (
-    <ClosableModal onClose={onClose}>
+    <ClosableModal onClose={handleClose}>
       <div className={styles.wrapper}>
         <h2 className={styles.title}>퀴즈 커스터마이징</h2>
         <p className={styles.description}>
@@ -129,8 +139,8 @@ const CustomizeQuizModal = ({
         </div>
 
         <div className={styles.buttonSection}>
-          <button onClick={onClose} className={styles.cancelButton}>
-            취소
+          <button onClick={handleClose} className={styles.cancelButton}>
+            이전
           </button>
           <button
             onClick={() => onSubmit(editedQuizzes)}

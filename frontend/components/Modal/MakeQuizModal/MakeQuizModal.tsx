@@ -9,6 +9,7 @@ import AlertModal from "@/components/Modal/AlertModal/AlertModal";
 import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
 import { Quiz } from "@/types/quizzes/createQuizTypes";
 import CustomizeQuizModal from "./CustomizeQuizModal/CustomizeQuizModal";
+import { useQuizStore } from "@/store/useQuizStore";
 
 interface MakeQuizModalProps {
   onClose: () => void;
@@ -23,6 +24,9 @@ const MakeQuizModal = ({ onClose, lectureId }: MakeQuizModalProps) => {
   const [customizingQuizzes, setCustomizingQuizzes] = useState<Quiz[] | null>(
     null
   );
+
+  // 퀴즈 스토어 사용
+  const { resetLectureQuizzes } = useQuizStore();
 
   const handleCustomize = (selectedQuizzes: Quiz[]) => {
     setCustomizingQuizzes(selectedQuizzes);
@@ -46,11 +50,18 @@ const MakeQuizModal = ({ onClose, lectureId }: MakeQuizModalProps) => {
     }
   };
 
+  const handleClose = () => {
+    // 모달이 닫힐 때 해당 lectureId의 퀴즈 리셋
+    resetLectureQuizzes(lectureId);
+    onClose();
+  };
+
   return (
     <>
       {customizingQuizzes ? (
         <CustomizeQuizModal
           quizzes={customizingQuizzes}
+          lectureId={lectureId}
           onClose={() => setCustomizingQuizzes(null)}
           onSubmit={async (editedQuizzes: Quiz[]) => {
             setCustomizingQuizzes(null);
@@ -58,7 +69,7 @@ const MakeQuizModal = ({ onClose, lectureId }: MakeQuizModalProps) => {
           }}
         />
       ) : (
-        <ClosableModal onClose={onClose}>
+        <ClosableModal onClose={handleClose}>
           <div className={styles.wrapper}>
             <h2 className={styles.title}>
               퀴즈에 활용할 자료를 선택하고, 아래에서 자동으로 생성된 퀴즈를
@@ -111,7 +122,7 @@ const MakeQuizModal = ({ onClose, lectureId }: MakeQuizModalProps) => {
               </AlertModal>
             )}
             {saveSuccess && !isSaving && (
-              <AlertModal onClose={onClose}>
+              <AlertModal onClose={handleClose}>
                 퀴즈가 성공적으로 저장되었습니다.
               </AlertModal>
             )}
