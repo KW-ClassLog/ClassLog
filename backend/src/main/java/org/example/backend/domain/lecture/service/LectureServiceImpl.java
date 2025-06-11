@@ -13,6 +13,7 @@ import org.example.backend.domain.lecture.entity.Lecture;
 import org.example.backend.domain.lecture.exception.LectureErrorCode;
 import org.example.backend.domain.lecture.exception.LectureException;
 import org.example.backend.domain.lecture.repository.LectureRepository;
+import org.example.backend.domain.quiz.repository.QuizRepository;
 import org.example.backend.global.S3.exception.S3ErrorCode;
 import org.example.backend.global.S3.exception.S3Exception;
 import org.example.backend.global.S3.service.S3Service;
@@ -29,6 +30,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.TextStyle;
 import java.util.*;
@@ -43,6 +45,7 @@ public class LectureServiceImpl implements LectureService {
     private final S3Service s3Service;
     private final LectureNoteRepository lectureNoteRepository;
     private final LectureNoteMappingRepository lectureNoteMappingRepository;
+    private final QuizRepository quizRepository;
 
     // lecture 생성
     @Override
@@ -64,23 +67,22 @@ public class LectureServiceImpl implements LectureService {
                 .orElseThrow(() -> new LectureException(LectureErrorCode.LECTURE_NOT_FOUND));
 
 
-        LocalDate today = LocalDate.now();
-        LocalTime now = LocalTime.now();
+        LocalDateTime now = LocalDateTime.now();
+
+        LocalDateTime startDateTime = LocalDateTime.of(lecture.getLectureDate(), lecture.getStartTime());
+        LocalDateTime endDateTime = LocalDateTime.of(lecture.getLectureDate(), lecture.getEndTime());
+
         String status;
 
-        if (today.isAfter(lecture.getLectureDate())) {
-            status = "afterLecture";
-        } else if (today.isEqual(lecture.getLectureDate())) {
-            if (now.isBefore(lecture.getStartTime())) {
-                status = "beforeLecture";
-            } else if (!now.isBefore(lecture.getStartTime()) && now.isBefore(lecture.getEndTime())) {
-                status = "onLecture";
-            } else {
-                status = "afterLecture";
-            }
-        } else {
+        if (now.isBefore(startDateTime)) {
             status = "beforeLecture";
+        } else if (!now.isBefore(startDateTime) && now.isBefore(endDateTime)) {
+            status = "onLecture";
+        } else {
+            boolean hasQuiz = quizRepository.existsByLectureId(lecture.getId());
+            status = hasQuiz ? "checkDashboard" : "makeQuiz";
         }
+
 
         String weekDay = lecture.getLectureDate()
                 .getDayOfWeek()
@@ -181,50 +183,56 @@ public class LectureServiceImpl implements LectureService {
                 .build();
     }
 
-    //강의록 강의 맵핑
     @Transactional
-    public List<UUID> mapNotes(UUID lectureId, List<UUID> lectureNoteIds) {
+    public List<UUID> mapNotes(UUID lectureId, List<UUID> requestedNoteIds) {
         // 1. 강의 조회
         Lecture lecture = lectureRepository.findById(lectureId)
                 .orElseThrow(() -> new LectureException(LectureErrorCode.LECTURE_NOT_FOUND));
 
-        // 2. 노트 목록 조회
-        List<LectureNote> notes = lectureNoteRepository.findAllById(lectureNoteIds);
-
-        if (notes.size() != lectureNoteIds.size()) {
+        // 2. 요청한 강의자료들 존재 여부 확인
+        List<LectureNote> requestedNotes = lectureNoteRepository.findAllById(requestedNoteIds);
+        if (requestedNotes.size() != requestedNoteIds.size()) {
             throw new LectureException(LectureErrorCode.LECTURE_NOTE_NOT_FOUND);
         }
 
+        // 3. 기존 매핑 조회
         List<LectureNoteMapping> existingMappings = lectureNoteMappingRepository.findAllByLectureId(lectureId);
+        Map<UUID, LectureNoteMapping> existingMapByNoteId = existingMappings.stream()
+                .collect(Collectors.toMap(m -> m.getLectureNote().getId(), m -> m));
 
-        Set<UUID> alreadyMappedNoteIds = existingMappings.stream()
-                .map(m -> m.getLectureNote().getId())
-                .collect(Collectors.toSet());
+        Set<UUID> existingNoteIds = existingMapByNoteId.keySet();
+        Set<UUID> requestedNoteIdSet = new HashSet<>(requestedNoteIds);
 
-        List<UUID> duplicates = lectureNoteIds.stream()
-                .filter(alreadyMappedNoteIds::contains)
+        // 4. 제거 대상: 기존에 있었지만 요청에 없는 것
+        Set<UUID> toRemove = new HashSet<>(existingNoteIds);
+        toRemove.removeAll(requestedNoteIdSet);
+
+        // 5. 추가 대상: 요청에 있지만 기존에 없던 것
+        Set<UUID> toAdd = new HashSet<>(requestedNoteIdSet);
+        toAdd.removeAll(existingNoteIds);
+
+        // 6. 삭제
+        List<LectureNoteMapping> mappingsToDelete = toRemove.stream()
+                .map(existingMapByNoteId::get)
+                .toList();
+        lectureNoteMappingRepository.deleteAll(mappingsToDelete);
+
+        // 7. 추가
+        List<LectureNote> notesToAdd = requestedNotes.stream()
+                .filter(note -> toAdd.contains(note.getId()))
                 .toList();
 
-        if (!duplicates.isEmpty()) {
-            throw new LectureException(LectureErrorCode.LECTURE_NOTE_ALREADY_MAPPED);
-        }
-
-
-        // 3. 매핑 생성
-        List<LectureNoteMapping> mappings = notes.stream()
+        List<LectureNoteMapping> newMappings = notesToAdd.stream()
                 .map(note -> LectureNoteMapping.builder()
                         .lecture(lecture)
                         .lectureNote(note)
                         .build())
                 .toList();
+        lectureNoteMappingRepository.saveAll(newMappings);
 
-        // 4. 저장
-        lectureNoteMappingRepository.saveAll(mappings);
-
-        // 5. 응답용 lectureNoteId 목록 반환
-        return notes.stream()
-                .map(LectureNote::getId)
-                .toList();
+        // 8. 최종 매핑된 노트 ID 반환
+        Set<UUID> finalMappedIds = new HashSet<>(requestedNoteIdSet); // 요청된 ID가 최종 상태
+        return new ArrayList<>(finalMappedIds);
     }
 
     // 교수 날짜별 강의 조회
