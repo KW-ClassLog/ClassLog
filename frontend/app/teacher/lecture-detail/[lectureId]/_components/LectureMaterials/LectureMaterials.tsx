@@ -17,26 +17,26 @@ export default function LectureMaterials() {
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  useEffect(() => {
-    const fetchLectureNotes = async () => {
-      try {
-        setLoading(true);
-        const response = await fetchLectureNoteByLectureId(lectureId);
+  const fetchLectureNotes = async () => {
+    try {
+      setLoading(true);
+      const response = await fetchLectureNoteByLectureId(lectureId);
 
-        if (response.isSuccess && response.result) {
-          setLectureNotes(response.result);
-        } else {
-          console.error("강의자료 조회 실패:", response.message);
-          setLectureNotes([]);
-        }
-      } catch (error) {
-        console.error("강의자료 조회 중 오류 발생:", error);
+      if (response.isSuccess && response.result) {
+        setLectureNotes(response.result);
+      } else {
+        console.error("강의자료 조회 실패:", response.message);
         setLectureNotes([]);
-      } finally {
-        setLoading(false);
       }
-    };
+    } catch (error) {
+      console.error("강의자료 조회 중 오류 발생:", error);
+      setLectureNotes([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchLectureNotes();
   }, [lectureId]);
 
@@ -46,6 +46,11 @@ export default function LectureMaterials() {
 
   const handleModalClose = () => {
     setIsModalOpen(false);
+  };
+
+  const handleComplete = () => {
+    // 강의자료 선택 완료 시 파일 목록 다시 불러오기
+    fetchLectureNotes();
   };
 
   if (loading) return <div>로딩 중...</div>;
@@ -73,8 +78,10 @@ export default function LectureMaterials() {
       {isModalOpen && classId && (
         <FileSelectModal
           classId={classId}
+          lectureId={lectureId}
           onClose={handleModalClose}
           registeredFiles={lectureNotes.map((note) => note.lectureNoteName)}
+          onComplete={handleComplete}
         />
       )}
     </div>
