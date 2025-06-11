@@ -6,22 +6,31 @@ import ClosableModal from "@/components/Modal/ClosableModal/ClosableModal";
 import BasicInput from "@/components/Input/BasicInput/BasicInput";
 import styles from "./CustomizeQuizModal.module.scss";
 import { useQuizStore } from "@/store/useQuizStore";
+import { saveQuiz } from "@/api/quizzes/saveQuiz";
+import AlertModal from "@/components/Modal/AlertModal/AlertModal";
+import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
 
 interface CustomizeQuizModalProps {
   quizzes: Quiz[];
-  onSubmit: (quizzes: Quiz[]) => void;
   onClose: () => void;
   lectureId: string;
 }
 
 const CustomizeQuizModal = ({
   quizzes,
-  onSubmit,
   onClose,
   lectureId,
 }: CustomizeQuizModalProps) => {
   const [editedQuizzes, setEditedQuizzes] = useState<Quiz[]>(quizzes);
-  const { resetLectureQuizzes } = useQuizStore();
+  const {
+    resetLectureQuizzes,
+    isSaving,
+    saveSuccess,
+    saveError,
+    setIsSaving,
+    setSaveSuccess,
+    setSaveError,
+  } = useQuizStore();
 
   const handleQuizChange = (idx: number, field: string, value: string) => {
     setEditedQuizzes((prev) =>
@@ -33,6 +42,29 @@ const CustomizeQuizModal = ({
     // 선택 상태 초기화 (lectureId별로)
     resetLectureQuizzes(lectureId);
     onClose();
+  };
+
+  const handleGoBack = () => {
+    // QuizPreview로 돌아가기 (선택 상태는 유지)
+    onClose();
+  };
+
+  const handleSubmit = async () => {
+    setIsSaving(true);
+    setSaveSuccess(false);
+    setSaveError(null);
+    try {
+      const res = await saveQuiz(lectureId, editedQuizzes);
+      if (res && res.isSuccess) {
+        setSaveSuccess(true);
+      } else {
+        setSaveError(res?.message || "퀴즈 저장에 실패했습니다.");
+      }
+    } catch {
+      setSaveError("퀴즈 저장 중 오류가 발생했습니다.");
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const renderOXAnswer = (quiz: Quiz, idx: number) => (
@@ -56,18 +88,23 @@ const CustomizeQuizModal = ({
   const renderMultipleChoiceAnswer = (quiz: Quiz, idx: number) => (
     <div className={styles.answerRow}>
       <span className={styles.label}>정답 :</span>
-      {quiz.options?.map((_, oIdx) => (
-        <button
-          key={oIdx}
-          type="button"
-          className={`${styles.answerBtn} ${
-            quiz.solution === String(oIdx + 1) ? styles.selected : ""
-          }`}
-          onClick={() => handleQuizChange(idx, "solution", String(oIdx + 1))}
-        >
-          {oIdx + 1}
-        </button>
-      ))}
+      {quiz.options?.map((option, oIdx) => {
+        const optionNumber = oIdx + 1;
+        const isSelected = quiz.solution === option;
+
+        return (
+          <button
+            key={oIdx}
+            type="button"
+            className={`${styles.answerBtn} ${
+              isSelected ? styles.selected : ""
+            }`}
+            onClick={() => handleQuizChange(idx, "solution", option)}
+          >
+            {optionNumber}
+          </button>
+        );
+      })}
     </div>
   );
 
@@ -139,17 +176,32 @@ const CustomizeQuizModal = ({
         </div>
 
         <div className={styles.buttonSection}>
-          <button onClick={handleClose} className={styles.cancelButton}>
+          <button onClick={handleGoBack} className={styles.cancelButton}>
             이전
           </button>
           <button
-            onClick={() => onSubmit(editedQuizzes)}
+            onClick={handleSubmit}
             className={styles.submitButton}
+            disabled={isSaving}
           >
             퀴즈 제출하기
           </button>
         </div>
       </div>
+      {isSaving && (
+        <AlertModal hideButton onClose={() => {}}>
+          <LoadingSpinner />
+          <div style={{ marginTop: 16 }}>퀴즈 저장중...</div>
+        </AlertModal>
+      )}
+      {saveSuccess && !isSaving && (
+        <AlertModal onClose={handleClose}>
+          퀴즈가 성공적으로 저장되었습니다.
+        </AlertModal>
+      )}
+      {saveError && (
+        <AlertModal onClose={() => setSaveError(null)}>{saveError}</AlertModal>
+      )}
     </ClosableModal>
   );
 };

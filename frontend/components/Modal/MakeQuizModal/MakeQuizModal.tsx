@@ -18,15 +18,20 @@ interface MakeQuizModalProps {
 
 const MakeQuizModal = ({ onClose, lectureId }: MakeQuizModalProps) => {
   const [useAudio, setUseAudio] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
-  const [saveSuccess, setSaveSuccess] = useState(false);
-  const [saveError, setSaveError] = useState<string | null>(null);
   const [customizingQuizzes, setCustomizingQuizzes] = useState<Quiz[] | null>(
     null
   );
 
   // 퀴즈 스토어 사용
-  const { resetLectureQuizzes } = useQuizStore();
+  const {
+    resetLectureQuizzes,
+    isSaving,
+    saveSuccess,
+    saveError,
+    setIsSaving,
+    setSaveSuccess,
+    setSaveError,
+  } = useQuizStore();
 
   const handleCustomize = (selectedQuizzes: Quiz[]) => {
     setCustomizingQuizzes(selectedQuizzes);
@@ -63,10 +68,6 @@ const MakeQuizModal = ({ onClose, lectureId }: MakeQuizModalProps) => {
           quizzes={customizingQuizzes}
           lectureId={lectureId}
           onClose={() => setCustomizingQuizzes(null)}
-          onSubmit={async (editedQuizzes: Quiz[]) => {
-            setCustomizingQuizzes(null);
-            await handleSubmit(editedQuizzes);
-          }}
         />
       ) : (
         <ClosableModal onClose={handleClose}>

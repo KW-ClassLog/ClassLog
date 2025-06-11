@@ -11,6 +11,11 @@ interface QuizState {
   isLoading: boolean;
   isLoadingMore: boolean;
 
+  // 저장 상태
+  isSaving: boolean;
+  saveSuccess: boolean;
+  saveError: string | null;
+
   // 액션들
   setQuizzes: (lectureId: string, quizzes: Quiz[] | null) => void;
   getQuizzes: (lectureId: string) => Quiz[] | null;
@@ -21,6 +26,11 @@ interface QuizState {
   setError: (error: string | null) => void;
   setIsLoading: (isLoading: boolean) => void;
   setIsLoadingMore: (isLoadingMore: boolean) => void;
+
+  // 저장 관련 액션들
+  setIsSaving: (isSaving: boolean) => void;
+  setSaveSuccess: (saveSuccess: boolean) => void;
+  setSaveError: (saveError: string | null) => void;
 
   // 특정 lectureId의 퀴즈만 리셋
   resetLectureQuizzes: (lectureId: string) => void;
@@ -34,6 +44,9 @@ const initialState = {
   error: null,
   isLoading: false,
   isLoadingMore: false,
+  isSaving: false,
+  saveSuccess: false,
+  saveError: null,
 };
 
 export const useQuizStore = create<QuizState>((set, get) => ({
@@ -99,6 +112,12 @@ export const useQuizStore = create<QuizState>((set, get) => ({
 
   setIsLoadingMore: (isLoadingMore) => set({ isLoadingMore }),
 
+  setIsSaving: (isSaving) => set({ isSaving }),
+
+  setSaveSuccess: (saveSuccess) => set({ saveSuccess }),
+
+  setSaveError: (saveError) => set({ saveError }),
+
   resetLectureQuizzes: (lectureId) => {
     set((state) => {
       const newQuizzesByLecture = { ...state.quizzesByLecture };
@@ -109,6 +128,9 @@ export const useQuizStore = create<QuizState>((set, get) => ({
         error: null,
         isLoading: false,
         isLoadingMore: false,
+        isSaving: false,
+        saveSuccess: false,
+        saveError: null,
       };
     });
   },
