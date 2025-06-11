@@ -67,7 +67,8 @@ const MakeQuizModal = ({ onClose, lectureId }: MakeQuizModalProps) => {
         <CustomizeQuizModal
           quizzes={customizingQuizzes}
           lectureId={lectureId}
-          onClose={() => setCustomizingQuizzes(null)}
+          onClose={handleClose}
+          onGoBack={() => setCustomizingQuizzes(null)}
         />
       ) : (
         <ClosableModal onClose={handleClose}>

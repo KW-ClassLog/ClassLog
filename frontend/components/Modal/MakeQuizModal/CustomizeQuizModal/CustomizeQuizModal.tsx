@@ -13,12 +13,14 @@ import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
 interface CustomizeQuizModalProps {
   quizzes: Quiz[];
   onClose: () => void;
+  onGoBack: () => void;
   lectureId: string;
 }
 
 const CustomizeQuizModal = ({
   quizzes,
   onClose,
+  onGoBack,
   lectureId,
 }: CustomizeQuizModalProps) => {
   const [editedQuizzes, setEditedQuizzes] = useState<Quiz[]>(quizzes);
@@ -46,7 +48,7 @@ const CustomizeQuizModal = ({
 
   const handleGoBack = () => {
     // QuizPreview로 돌아가기 (선택 상태는 유지)
-    onClose();
+    onGoBack();
   };
 
   const handleSubmit = async () => {
