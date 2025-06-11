@@ -9,51 +9,41 @@ import SelectableButton from "@/components/Button/SelectableButton/SelectableBut
 import { X } from "lucide-react";
 import { fetchLectureNotesByClass } from "@/api/lectures/fetchLectureNotesByClass";
 import { FetchLectureNotesByClassResult } from "@/types/lectures/fetchLectureNotesByClassTypes";
+import { uploadLectureNote } from "@/api/lectures/uploadLectureNote";
 
 type FileSelectModalProps = {
   classId: string;
   onClose: () => void; // 모달을 닫을 함수
 };
 
-// 파일 타입 정의
-type FileItem = {
-  id: string;
-  name: string;
-  size: string;
-};
-
 const FileSelectModal: React.FC<FileSelectModalProps> = ({
   classId,
   onClose,
 }) => {
-  const [fileList, setFileList] = useState<FileItem[]>([]); // 업로드된 파일 관리
+  const [fileList, setFileList] = useState<FetchLectureNotesByClassResult[]>(
+    []
+  ); // 업로드된 파일 관리
   const [selectedFiles, setSelectedFiles] = useState<string[]>([]); // 선택된 파일 이름만 저장
   const [isLoading, setIsLoading] = useState(true);
+  const [isUploading, setIsUploading] = useState(false);
 
   // classId로 파일 목록 가져오기
-  useEffect(() => {
-    const loadFiles = async () => {
-      try {
-        setIsLoading(true);
-        const response = await fetchLectureNotesByClass(classId);
+  const loadFiles = async () => {
+    try {
+      setIsLoading(true);
+      const response = await fetchLectureNotesByClass(classId);
 
-        if (response.isSuccess && response.result) {
-          const files: FileItem[] = response.result.map(
-            (item: FetchLectureNotesByClassResult) => ({
-              id: item.lectureNoteId,
-              name: item.lectureNoteName,
-              size: item.fileSize,
-            })
-          );
-          setFileList(files);
-        }
-      } catch (error) {
-        console.error("파일 목록을 가져오는데 실패했습니다:", error);
-      } finally {
-        setIsLoading(false);
+      if (response.isSuccess && response.result) {
+        setFileList(response.result);
       }
-    };
+    } catch (error) {
+      console.error("파일 목록을 가져오는데 실패했습니다:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
+  useEffect(() => {
     loadFiles();
   }, [classId]);
 
@@ -72,31 +62,33 @@ const FileSelectModal: React.FC<FileSelectModalProps> = ({
     // 선택한 파일들을 강의와 맵핑하는 api 호출
     onClose(); // 모달 닫기
   };
-  const formatFileSize = (sizeInBytes: number) => {
-    if (sizeInBytes < 1024) {
-      return `${sizeInBytes} bytes`;
-    } else if (sizeInBytes < 1024 * 1024) {
-      return `${(sizeInBytes / 1024).toFixed(2)} KB`;
-    } else if (sizeInBytes < 1024 * 1024 * 1024) {
-      return `${(sizeInBytes / (1024 * 1024)).toFixed(2)} MB`;
-    } else {
-      return `${(sizeInBytes / (1024 * 1024 * 1024)).toFixed(2)} GB`;
-    }
-  };
 
   // 파일 업로드 처리
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
-    if (files) {
-      // FileList를 배열로 변환하여 기존 fileList에 추가
-      const newFiles: FileItem[] = Array.from(files).map((file) => ({
-        id: file.name, // id는 파일 이름을 사용 (고유해야 함)
-        name: file.name,
-        size: formatFileSize(file.size), // 파일 크기 표시
-      }));
-      // TODO: 서버에 파일 업로드 처리 추가
+    if (!files || files.length === 0) return;
 
-      setFileList((prevFileList: FileItem[]) => [...prevFileList, ...newFiles]);
+    try {
+      setIsUploading(true);
+      const fileArray = Array.from(files);
+
+      const response = await uploadLectureNote(classId, fileArray);
+
+      if (response.isSuccess) {
+        console.log("파일 업로드 성공:", response.result);
+        // 파일 업로드 성공 후 파일 목록 다시 불러오기
+        await loadFiles();
+        // 파일 input 초기화
+        e.target.value = "";
+      } else {
+        console.error("파일 업로드 실패:", response.message);
+        alert("파일 업로드에 실패했습니다.");
+      }
+    } catch (error) {
+      console.error("파일 업로드 중 오류 발생:", error);
+      alert("파일 업로드 중 오류가 발생했습니다.");
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -110,7 +102,7 @@ const FileSelectModal: React.FC<FileSelectModalProps> = ({
             className={styles.uploadLink}
             onClick={() => document.getElementById("fileInput")?.click()}
           >
-            강의자료 업로드하기
+            {isUploading ? "업로드 중..." : "강의자료 업로드하기"}
           </span>
         </div>
 
@@ -140,6 +132,7 @@ const FileSelectModal: React.FC<FileSelectModalProps> = ({
           type="file"
           multiple
           onChange={handleFileUpload}
+          disabled={isUploading}
           style={{ display: "none" }}
         />
 
@@ -153,14 +146,14 @@ const FileSelectModal: React.FC<FileSelectModalProps> = ({
             </div>
           ) : (
             fileList.map((file) => (
-              <div key={file.id} className={styles.fileItem}>
+              <div key={file.lectureNoteId} className={styles.fileItem}>
                 <div className={styles.fileDisplay}>
-                  <FileDisplay fileName={file.name} />
+                  <FileDisplay fileName={file.lectureNoteName} />
                 </div>
-                <span className={styles.fileSize}>{file.size}</span>
+                <span className={styles.fileSize}>{file.fileSize}</span>
                 <SelectableButton
-                  selected={selectedFiles.includes(file.name)}
-                  onClick={() => handleSelectFile(file.name)}
+                  selected={selectedFiles.includes(file.lectureNoteName)}
+                  onClick={() => handleSelectFile(file.lectureNoteName)}
                 />
               </div>
             ))
