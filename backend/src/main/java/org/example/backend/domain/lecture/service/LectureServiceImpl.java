@@ -273,6 +273,7 @@ public class LectureServiceImpl implements LectureService {
                             lecture.getClassroom().getClassName(),
                             lecture.getStartTime(),
                             lecture.getEndTime(),
+                            lecture.getSession(),
                             status
                     );
                 })
