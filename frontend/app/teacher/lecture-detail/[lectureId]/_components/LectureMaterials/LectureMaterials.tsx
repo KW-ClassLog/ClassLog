@@ -71,7 +71,11 @@ export default function LectureMaterials() {
       </div>
 
       {isModalOpen && classId && (
-        <FileSelectModal classId={classId} onClose={handleModalClose} />
+        <FileSelectModal
+          classId={classId}
+          onClose={handleModalClose}
+          registeredFiles={lectureNotes.map((note) => note.lectureNoteName)}
+        />
       )}
     </div>
   );

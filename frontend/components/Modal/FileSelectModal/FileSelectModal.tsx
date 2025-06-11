@@ -14,16 +14,20 @@ import { uploadLectureNote } from "@/api/lectures/uploadLectureNote";
 type FileSelectModalProps = {
   classId: string;
   onClose: () => void; // 모달을 닫을 함수
+  registeredFiles?: string[]; // 이미 등록된 파일 이름 목록
 };
 
 const FileSelectModal: React.FC<FileSelectModalProps> = ({
   classId,
   onClose,
+  registeredFiles,
 }) => {
   const [fileList, setFileList] = useState<FetchLectureNotesByClassResult[]>(
     []
   ); // 업로드된 파일 관리
-  const [selectedFiles, setSelectedFiles] = useState<string[]>([]); // 선택된 파일 이름만 저장
+  const [selectedFiles, setSelectedFiles] = useState<string[]>(
+    registeredFiles || []
+  ); // 선택된 파일 이름만 저장
   const [isLoading, setIsLoading] = useState(true);
   const [isUploading, setIsUploading] = useState(false);
 
