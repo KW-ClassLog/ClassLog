@@ -8,7 +8,7 @@
 
   min-width: 30vw;
   min-height: 60vh;
-  max-height: 70vh;
+  max-height: 80vh;
   display: flex;
   flex-direction: column; /* 세로 정렬 */
   @include respond-to(sm) {
