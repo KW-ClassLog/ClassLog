@@ -74,7 +74,13 @@ public class QuizServiceImpl implements QuizService {
                 .map(note -> s3Service.getPresignedUrl(note.getNoteUrl()))
                 .collect(Collectors.joining(","));
 
-        String audioUrl = s3Service.getPresignedUrl(lecture.getAudioUrl());
+        String audioUrl = null;
+        if (request.isUseAudio()) {
+            if (lecture.getAudioUrl() == null) {
+                throw new QuizException(QuizErrorCode.AUDIO_NOT_FOUND);
+            }
+            audioUrl = s3Service.getPresignedUrl(lecture.getAudioUrl());
+        }
 
         try {
             if (isReGenerate) {
