@@ -12,6 +12,7 @@ export default function LectureItem({
   startTime,
   endTime,
   status,
+  session,
 }: FetchLecturesByDateResult) {
   const router = useRouter();
 
@@ -23,7 +24,9 @@ export default function LectureItem({
     <div className={styles.lectureItem} onClick={handleClick}>
       <div className={styles.lectureMain}>
         <div className={styles.lectureTitle}>
-          <span className={styles.lectureTitleText}>{lectureName}</span>
+          <span className={styles.lectureTitleText}>
+            {session}. {lectureName}
+          </span>
           <span className={styles.className}>{className}</span>
         </div>
         <div className={styles.actionButton}>

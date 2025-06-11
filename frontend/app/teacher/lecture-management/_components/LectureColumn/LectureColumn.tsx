@@ -42,7 +42,9 @@ const LectureColumn: React.FC<LectureColumnProps> = ({
               onClick={() => handleLectureClick(l.lectureId)}
             >
               <div className={styles.lectureHeader}>
-                <div className={styles.lectureTitle}>{l.lectureName}</div>
+                <div className={styles.lectureTitle}>
+                  {l.session}. {l.lectureName}
+                </div>
                 <div className={styles.arrowButton}>
                   <ChevronRight color="#4894fe" size={20} />
                 </div>
