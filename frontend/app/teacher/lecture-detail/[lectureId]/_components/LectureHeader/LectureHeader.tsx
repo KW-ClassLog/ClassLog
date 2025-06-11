@@ -17,34 +17,40 @@ export default function LectureHeader() {
   const [showQuizModal, setShowQuizModal] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const response = await fetchLectureDetail(lectureId);
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const response = await fetchLectureDetail(lectureId);
 
-        if (response.isSuccess && response.result) {
-          setLectureData(response.result);
-          setClassId(response.result.classId);
-        } else {
-          console.error(
-            "강의 데이터를 불러오는데 실패했습니다:",
-            response.message
-          );
-        }
-      } catch (error) {
-        console.error("강의 데이터를 불러오는 중 오류가 발생했습니다:", error);
-      } finally {
-        setLoading(false);
+      if (response.isSuccess && response.result) {
+        setLectureData(response.result);
+        setClassId(response.result.classId);
+      } else {
+        console.error(
+          "강의 데이터를 불러오는데 실패했습니다:",
+          response.message
+        );
       }
-    };
+    } catch (error) {
+      console.error("강의 데이터를 불러오는 중 오류가 발생했습니다:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchData();
   }, [lectureId, setClassId]);
 
   const handleStartLecture = () => {
     // TODO: 강의 시작 로직 구현
     console.log("강의 시작");
+  };
+
+  const handleQuizModalClose = () => {
+    setShowQuizModal(false);
+    // 퀴즈 모달이 닫힐 때 강의 데이터를 다시 불러옴
+    fetchData();
   };
 
   const actionConfig = useLectureStatusAction({
@@ -140,10 +146,7 @@ export default function LectureHeader() {
 
       {renderButton()}
       {showQuizModal && (
-        <MakeQuizModal
-          lectureId={lectureId}
-          onClose={() => setShowQuizModal(false)}
-        />
+        <MakeQuizModal lectureId={lectureId} onClose={handleQuizModalClose} />
       )}
     </div>
   );

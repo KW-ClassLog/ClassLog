@@ -7,7 +7,14 @@ import { FetchQuizzesByClassResult } from "@/types/classes/fetchQuizzesByClassTy
 
 import { useLectureStatusAction } from "@/hooks/useLectureStatusAction";
 
-export default function LectureItem(lecture: FetchQuizzesByClassResult) {
+interface LectureItemProps extends FetchQuizzesByClassResult {
+  onRefresh?: () => void;
+}
+
+export default function LectureItem({
+  onRefresh,
+  ...lecture
+}: LectureItemProps) {
   const [showQuizModal, setShowQuizModal] = useState(false);
 
   const actionConfig = useLectureStatusAction({
@@ -16,6 +23,13 @@ export default function LectureItem(lecture: FetchQuizzesByClassResult) {
     lectureDate: lecture.date,
     setShowQuizModal,
   });
+
+  const handleQuizModalClose = () => {
+    setShowQuizModal(false);
+    if (onRefresh) {
+      onRefresh();
+    }
+  };
 
   const getActionButton = () => {
     if (!actionConfig) return null;
@@ -72,7 +86,7 @@ export default function LectureItem(lecture: FetchQuizzesByClassResult) {
       {showQuizModal && (
         <MakeQuizModal
           lectureId={lecture.lectureId}
-          onClose={() => setShowQuizModal(false)}
+          onClose={handleQuizModalClose}
         />
       )}
     </>

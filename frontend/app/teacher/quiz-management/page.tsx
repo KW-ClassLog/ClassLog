@@ -13,16 +13,19 @@ export default function TeacherQuizManagementPage() {
   const { selectedClassId, selectedClassName } = useSelectedClassStore();
   const [lectures, setLectures] = useState<FetchQuizzesByClassResult[]>([]);
 
-  useEffect(() => {
+  const fetchLectures = async () => {
     if (selectedClassId) {
-      fetchQuizzesByClass(selectedClassId).then((res) => {
-        if (res.isSuccess && res.result) {
-          setLectures(res.result);
-        } else {
-          setLectures([]);
-        }
-      });
+      const res = await fetchQuizzesByClass(selectedClassId);
+      if (res.isSuccess && res.result) {
+        setLectures(res.result);
+      } else {
+        setLectures([]);
+      }
     }
+  };
+
+  useEffect(() => {
+    fetchLectures();
   }, [selectedClassId]);
 
   if (!selectedClassId || !selectedClassName) {
@@ -50,7 +53,11 @@ export default function TeacherQuizManagementPage() {
           />
         ) : (
           lectures.map((lecture) => (
-            <LectureItem key={lecture.lectureId} {...lecture} />
+            <LectureItem
+              key={lecture.lectureId}
+              {...lecture}
+              onRefresh={fetchLectures}
+            />
           ))
         )}
       </div>
