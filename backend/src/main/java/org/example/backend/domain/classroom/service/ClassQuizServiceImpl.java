@@ -13,9 +13,7 @@ import org.example.backend.domain.quiz.exception.QuizException;
 import org.example.backend.domain.quiz.repository.QuizRepository;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
 import java.time.format.TextStyle;
 import java.util.*;
 
@@ -31,8 +29,6 @@ public class ClassQuizServiceImpl implements ClassQuizService {
     public List<ClassQuizResponseDTO> getQuizzesByClass(UUID classId) {
         List<Lecture> lectures = lectureRepository.findByClassroom_Id(classId);
 
-        Classroom classroom = classroomRepository.findById(classId)
-                .orElseThrow(() -> new ClassroomException(ClassroomErrorCode.CLASS_NOT_FOUND));
 
         if (lectures.isEmpty()) {
             throw new QuizException(QuizErrorCode.LECTURE_NOT_FOUND);
@@ -43,14 +39,13 @@ public class ClassQuizServiceImpl implements ClassQuizService {
 
         List<ClassQuizResponseDTO> quizList = new ArrayList<>();
 
-        int session = 1;
-        LocalDateTime now = LocalDateTime.now();
+        ZonedDateTime now = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
 
         for (Lecture lecture : lectures) {
             LocalDate date = lecture.getLectureDate();
-            LocalTime start = lecture.getStartTime();
             LocalTime end = lecture.getEndTime();
-            LocalDateTime endDateTime = LocalDateTime.of(date, end);
+
+            ZonedDateTime endDateTime = ZonedDateTime.of(date, end, ZoneId.of("Asia/Seoul"));
 
             String status;
             if (now.isBefore(endDateTime)) {
@@ -59,14 +54,13 @@ public class ClassQuizServiceImpl implements ClassQuizService {
                 boolean hasQuiz = quizRepository.existsByLectureId(lecture.getId());
                 status = hasQuiz ? "checkDashboard" : "makeQuiz";
             }
-
             quizList.add(
                     ClassQuizResponseDTO.builder()
-                            .session(session++)
+                            .session(lecture.getSession())
                             .title(lecture.getLectureName())
                             .date(date.toString())
                             .day(date.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.KOREAN))
-                            .startTime(start)
+                            .startTime(lecture.getStartTime())
                             .endTime(end)
                             .status(status)
                             .lectureId(lecture.getId())

@@ -29,9 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
 import java.time.format.TextStyle;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -67,11 +65,18 @@ public class LectureServiceImpl implements LectureService {
                 .orElseThrow(() -> new LectureException(LectureErrorCode.LECTURE_NOT_FOUND));
 
 
-        LocalDateTime now = LocalDateTime.now();
+        // 서울 시간 기준 now
+        ZonedDateTime now = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
 
-        LocalDateTime startDateTime = LocalDateTime.of(lecture.getLectureDate(), lecture.getStartTime());
-        LocalDateTime endDateTime = LocalDateTime.of(lecture.getLectureDate(), lecture.getEndTime());
+        ZonedDateTime startDateTime = ZonedDateTime.of(
+                LocalDateTime.of(lecture.getLectureDate(), lecture.getStartTime()),
+                ZoneId.of("Asia/Seoul")
+        );
 
+        ZonedDateTime endDateTime = ZonedDateTime.of(
+                LocalDateTime.of(lecture.getLectureDate(), lecture.getEndTime()),
+                ZoneId.of("Asia/Seoul")
+        );
         String status;
 
         if (now.isBefore(startDateTime)) {
@@ -246,8 +251,9 @@ public class LectureServiceImpl implements LectureService {
 
         List<Lecture> lectures = lectureRepository.findByClassroomInAndLectureDate(classrooms, date);
 
-        LocalTime now = LocalTime.now();
-        LocalDate today = LocalDate.now();
+        ZonedDateTime seoulNow = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
+        LocalTime now = seoulNow.toLocalTime();
+        LocalDate today = seoulNow.toLocalDate();
 
         return lectures.stream()
                 .sorted(Comparator.comparing(Lecture::getStartTime))

@@ -26,13 +26,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Duration;
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -199,19 +194,17 @@ public class ClassroomServiceImpl implements ClassroomService {
     }
 
     public String calculateLectureStatus(LocalDate lectureDate, LocalTime startTime, LocalTime endTime) {
-        LocalDate today = LocalDate.now();
-        LocalTime now = LocalTime.now();
+        // 서울 시간 기준 now
+        ZonedDateTime now = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
 
-        if (lectureDate.isAfter(today)) {
+        // 강의 시작/종료 시간도 서울 시간대로 맞춰서 LocalDateTime -> ZonedDateTime
+        ZonedDateTime startDateTime = ZonedDateTime.of(LocalDateTime.of(lectureDate, startTime), ZoneId.of("Asia/Seoul"));
+        ZonedDateTime endDateTime = ZonedDateTime.of(LocalDateTime.of(lectureDate, endTime), ZoneId.of("Asia/Seoul"));
+
+        if (now.isBefore(startDateTime)) {
             return "beforeLecture";
-        } else if (lectureDate.isEqual(today)) {
-            if (now.isBefore(startTime)) {
-                return "beforeLecture";
-            } else if (!now.isBefore(startTime) && now.isBefore(endTime)) {
-                return "onLecture";
-            } else {
-                return "afterLecture";
-            }
+        } else if (!now.isBefore(startDateTime) && now.isBefore(endDateTime)) {
+            return "onLecture";
         } else {
             return "afterLecture";
         }
