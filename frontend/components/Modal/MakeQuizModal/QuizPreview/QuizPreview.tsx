@@ -8,7 +8,6 @@ import AlertModal from "@/components/Modal/AlertModal/AlertModal";
 import { createQuiz } from "@/api/quizzes/createQuiz";
 import { recreateQuiz } from "@/api/quizzes/recreateQuiz";
 import { Quiz } from "@/types/quizzes/createQuizTypes";
-import { RotateCcw } from "lucide-react";
 
 interface QuizPreviewProps {
   lectureId: string;
@@ -29,6 +28,7 @@ const QuizPreview = ({
   const [error, setError] = useState<string | null>(null);
   const [selectedQuizzes, setSelectedQuizzes] = useState<Quiz[]>([]);
   const [showAlert, setShowAlert] = useState(false);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
 
   useEffect(() => {
     setQuizzes(null); // 로딩 상태
@@ -71,20 +71,24 @@ const QuizPreview = ({
   };
 
   const handleMoreQuiz = () => {
-    setQuizzes(null); // 로딩 상태
+    if (!quizzes) return;
+
+    setIsLoadingMore(true); // 추가 로딩 상태
     setError(null); // 에러 초기화
+
     recreateQuiz({ lectureId, useAudio })
       .then((res) => {
         if (res.isSuccess && res.result && Array.isArray(res.result.quizzes)) {
-          setQuizzes(res.result.quizzes);
+          setQuizzes([...quizzes, ...res.result.quizzes]);
         } else {
-          setQuizzes([]);
-          setError(res.message || "퀴즈 생성에 실패했습니다.");
+          setError(res.message || "새로운 퀴즈 생성에 실패했습니다.");
         }
       })
       .catch(() => {
-        setQuizzes([]);
-        setError("퀴즈 재생성 중 오류가 발생했습니다.");
+        setError("새로운 퀴즈 생성 중 오류가 발생했습니다.");
+      })
+      .finally(() => {
+        setIsLoadingMore(false);
       });
   };
 
@@ -117,10 +121,6 @@ const QuizPreview = ({
           </div>
         ) : (
           <div className={styles.quizContainer}>
-            <div className={styles.moreQuiz} onClick={handleMoreQuiz}>
-              <p>퀴즈 재생성</p>
-              <RotateCcw size={15} />
-            </div>
             <Masonry
               breakpointCols={breakpointColumnsObj}
               className={styles.masonryGrid}
@@ -171,6 +171,13 @@ const QuizPreview = ({
                 </div>
               ))}
             </Masonry>
+            <div className={styles.moreQuiz} onClick={handleMoreQuiz}>
+              <p>
+                {isLoadingMore
+                  ? "추가 퀴즈를 생성하고 있어요..."
+                  : "+ 다른 퀴즈도 보고싶어요"}
+              </p>
+            </div>
           </div>
         )}
       </div>

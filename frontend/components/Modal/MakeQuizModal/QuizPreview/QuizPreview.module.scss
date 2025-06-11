@@ -189,11 +189,8 @@
 }
 
 .moreQuiz {
-  display: flex;
-  gap: $spacing-xs;
+  padding: $spacing-md;
   align-items: center;
-  justify-content: end;
-
   color: $color-blue;
   cursor: pointer;
   &:hover {
