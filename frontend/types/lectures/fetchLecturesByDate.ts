@@ -6,4 +6,5 @@ export interface FetchLecturesByDateResult {
   startTime: string;
   endTime: string;
   status: "beforeLecture" | "onLecture" | "afterLecture";
+  session: number;
 }
