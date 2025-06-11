@@ -210,9 +210,20 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserException(UserErrorCode._USER_NOT_FOUND));
 
-        // 이미지 업데이트
         MultipartFile newProfile = request.getProfile();
-        if (newProfile != null && !newProfile.isEmpty()) {
+
+        // 이미지 삭제
+        if (newProfile != null && newProfile.isEmpty()) {
+            String oldKey = user.getProfileUrl();
+            if(oldKey != null && !oldKey.isBlank()){
+                s3Service.deleteFile(oldKey);
+                user.setProfileUrl(null);
+            }
+
+        }
+
+        // 이미지 업로드
+        if(newProfile != null && !newProfile.isEmpty()){
             String key = uploadProfile(newProfile, userId);
             user.setProfileUrl(key);
         }
