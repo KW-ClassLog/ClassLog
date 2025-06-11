@@ -37,6 +37,69 @@
       }
     }
 
+    .fileLink {
+      display: flex;
+      align-items: center;
+
+      color: $color-neutral-5;
+      text-decoration: none;
+      font-weight: $font-weight-medium;
+      transition: $transition-fast;
+      padding: $spacing-xs;
+      border-radius: $radius-sm;
+      gap: $spacing-md;
+
+      &:hover {
+        color: $color-lightblue;
+        text-decoration: underline;
+        color: $color-blue;
+      }
+
+      &:active {
+        transform: scale(0.98);
+      }
+
+      span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+
+    .viewButton {
+      display: flex;
+      align-items: center;
+      gap: $spacing-xs;
+      padding: $spacing-xs $spacing-sm;
+      background: linear-gradient(
+        135deg,
+        $color-blue 0%,
+        $color-lightblue 100%
+      );
+      color: white;
+      border: none;
+      border-radius: $radius-md;
+      font-size: $font-size-xs;
+      font-weight: $font-weight-medium;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 2px 4px rgba($color-blue, 0.2);
+
+      &:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba($color-blue, 0.3);
+      }
+
+      &:active {
+        transform: translateY(0);
+        box-shadow: 0 2px 4px rgba($color-blue, 0.2);
+      }
+
+      span {
+        font-size: $font-size-xs;
+      }
+    }
+
     .profileContainer {
       display: flex;
       align-items: center;
@@ -139,6 +202,29 @@
         blue($color-danger),
         0.1
       );
+    }
+
+    .sessionLabel {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 8px;
+      background-color: $color-skyblue;
+      color: $color-blue;
+      border-radius: $radius-md;
+      font-size: $font-size-xs;
+      font-weight: $font-weight-medium;
+      border: 1px solid rgba($color-blue, 0.2);
+      white-space: nowrap;
+      max-width: 200px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .sessionLabelContainer {
+      display: flex;
+      flex-wrap: wrap;
+      gap: $spacing-xs;
+      max-width: 100%;
     }
 
     .selectButton {
