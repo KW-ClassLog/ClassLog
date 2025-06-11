@@ -1,0 +1,102 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 800px;
+  transition: $transition-fast;
+  @include respond-to(md) {
+    max-width: 100%;
+  }
+  gap: $spacing-md;
+  overflow: hidden;
+}
+
+.quizList {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+  overflow: auto;
+}
+
+.quizBox {
+  background: $color-skyblue;
+  border-radius: $radius-md;
+  padding: $spacing-md;
+  border: none;
+  height: 100%;
+}
+
+.typeLabel {
+  color: $color-blue;
+  background: $color-white;
+  border-radius: $radius-full;
+  padding: $spacing-xs $spacing-sm;
+  font-weight: bold;
+  display: inline-block;
+  font-size: $font-size-md;
+  width: fit-content;
+  white-space: nowrap;
+}
+
+.labelRow {
+  display: flex;
+  align-items: center;
+  margin-bottom: $spacing-sm;
+  gap: $spacing-sm;
+}
+
+.label {
+  font-weight: bold;
+  min-width: $spacing-lg;
+  margin-right: $spacing-sm;
+  color: $color-neutral-5;
+  white-space: nowrap;
+}
+
+.options {
+  margin-bottom: $spacing-md;
+}
+
+.optionRow {
+  display: flex;
+  align-items: center;
+  margin-bottom: $spacing-sm;
+}
+
+.optionNumber {
+  font-weight: bold;
+  margin-right: $spacing-sm;
+  width: $spacing-lg;
+  text-align: right;
+  color: $color-blue;
+}
+
+.answerRow {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  margin-top: $spacing-sm;
+}
+
+.answerBtn {
+  border: 1px solid $color-neutral-6;
+  background: $color-white;
+  border-radius: $radius-full;
+  padding: $spacing-xs $spacing-sm;
+  font-size: $font-size-md;
+  cursor: pointer;
+  color: $color-neutral-5;
+  transition: border 0.2s, color 0.2s;
+}
+
+.answerBtn.selected {
+  border: 2px solid $color-blue;
+  color: $color-blue;
+  font-weight: bold;
+}
+
+.buttonRow {
+  display: flex;
+  justify-content: flex-end;
+  gap: $spacing-sm;
+  margin-top: $spacing-md;
+}
