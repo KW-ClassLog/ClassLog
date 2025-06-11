@@ -9,13 +9,13 @@
   flex: 1;
   overflow-y: auto;
   padding: $spacing-md;
-  border-top: 1px solid $color-neutral-7;
+  border-top: 1px solid $color-neutral-6;
   min-height: 0;
 }
 
 .buttonSection {
   margin-top: auto;
-  border-top: 1px solid $color-neutral-7;
+  border-top: 1px solid $color-neutral-6;
   padding: $spacing-sm 0;
   display: flex;
   justify-content: center;
@@ -78,20 +78,11 @@
 }
 
 .loading {
-  grid-column: span 2;
-  display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: $spacing-3xl;
+
   height: 100%;
   min-height: 300px;
-  .loadingText {
-    text-align: center;
-    font-size: $font-size-md;
-    color: $color-neutral-5;
-    line-height: 1.6;
-  }
 }
 
 @keyframes blink {
@@ -185,7 +176,7 @@
 .quizContainer {
   display: flex;
   flex-direction: column;
-  gap: $spacing-md;
+  gap: $spacing-sm;
 }
 
 .moreQuiz {
@@ -193,6 +184,7 @@
   align-items: center;
   color: $color-blue;
   cursor: pointer;
+  font-weight: $font-weight-medium;
   &:hover {
     text-decoration: underline;
   }

@@ -112,12 +112,9 @@ const QuizPreview = ({
       <div className={styles.content}>
         {quizzes === null ? (
           <div className={styles.loading}>
-            <LoadingSpinner />
-            <div className={styles.loadingText}>
-              AI가 퀴즈를 만들고 있어요
-              <br />
-              잠시만 기다려주세요!
-            </div>
+            <LoadingSpinner
+              text={["AI가 퀴즈를 만들고 있어요", "잠시만 기다려주세요!"]}
+            />
           </div>
         ) : (
           <div className={styles.quizContainer}>
