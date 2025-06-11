@@ -13,6 +13,7 @@ import org.example.backend.domain.lecture.entity.Lecture;
 import org.example.backend.domain.lecture.exception.LectureErrorCode;
 import org.example.backend.domain.lecture.exception.LectureException;
 import org.example.backend.domain.lecture.repository.LectureRepository;
+import org.example.backend.domain.quiz.repository.QuizRepository;
 import org.example.backend.global.S3.exception.S3ErrorCode;
 import org.example.backend.global.S3.exception.S3Exception;
 import org.example.backend.global.S3.service.S3Service;
@@ -29,6 +30,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.TextStyle;
 import java.util.*;
@@ -43,6 +45,7 @@ public class LectureServiceImpl implements LectureService {
     private final S3Service s3Service;
     private final LectureNoteRepository lectureNoteRepository;
     private final LectureNoteMappingRepository lectureNoteMappingRepository;
+    private final QuizRepository quizRepository;
 
     // lecture 생성
     @Override
@@ -68,23 +71,22 @@ public class LectureServiceImpl implements LectureService {
         }
 
 
-        LocalDate today = LocalDate.now();
-        LocalTime now = LocalTime.now();
+        LocalDateTime now = LocalDateTime.now();
+
+        LocalDateTime startDateTime = LocalDateTime.of(lecture.getLectureDate(), lecture.getStartTime());
+        LocalDateTime endDateTime = LocalDateTime.of(lecture.getLectureDate(), lecture.getEndTime());
+
         String status;
 
-        if (today.isAfter(lecture.getLectureDate())) {
-            status = "afterLecture";
-        } else if (today.isEqual(lecture.getLectureDate())) {
-            if (now.isBefore(lecture.getStartTime())) {
-                status = "beforeLecture";
-            } else if (!now.isBefore(lecture.getStartTime()) && now.isBefore(lecture.getEndTime())) {
-                status = "onLecture";
-            } else {
-                status = "afterLecture";
-            }
-        } else {
+        if (now.isBefore(startDateTime)) {
             status = "beforeLecture";
+        } else if (!now.isBefore(startDateTime) && now.isBefore(endDateTime)) {
+            status = "onLecture";
+        } else {
+            boolean hasQuiz = quizRepository.existsByLectureId(lecture.getId());
+            status = hasQuiz ? "checkDashboard" : "makeQuiz";
         }
+
 
         String weekDay = lecture.getLectureDate()
                 .getDayOfWeek()
