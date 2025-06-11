@@ -37,9 +37,9 @@ public class LectureController {
     }
 
     // Lecture 조회
-    @GetMapping("/{classId}/{lectureId}")
-    public ApiResponse<LectureResponseDTO> getLecture(@PathVariable("lectureId") UUID lectureId , @PathVariable UUID classId) {
-        LectureResponseDTO dto = lectureService.getLectureDetail(classId,lectureId);
+    @GetMapping("/{lectureId}")
+    public ApiResponse<LectureResponseDTO> getLecture(@PathVariable("lectureId") UUID lectureId) {
+        LectureResponseDTO dto = lectureService.getLectureDetail(lectureId);
         return ApiResponse.onSuccess(dto);
     }
 
