@@ -1,0 +1,59 @@
+.card {
+  background: white;
+  border-radius: $radius-md;
+  padding: $spacing-lg;
+  border: 1px solid $color-neutral-7;
+  height: 100%;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  display: block;
+  margin-bottom: $spacing-md;
+  font-size: $font-size-xl;
+}
+
+.addButton {
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+  color: $color-blue;
+  font-weight: $font-weight-medium;
+  cursor: pointer;
+  margin-bottom: $spacing-md;
+  margin-left: auto;
+  align-self: flex-end;
+}
+
+.materialList {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+}
+
+.materialItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: $spacing-xs;
+  border-bottom: 1px solid $color-neutral-7;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.size {
+  color: $color-neutral-6;
+  font-size: $font-size-sm;
+}
+
+.emptyState {
+  color: $color-neutral-6;
+  font-size: $font-size-md;
+  text-align: center;
+  padding: $spacing-3xl 0;
+  font-weight: $font-weight-medium;
+}

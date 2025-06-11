@@ -40,13 +40,15 @@
 
   .action {
     button {
-      padding: $spacing-sm;
-      font-weight: $font-weight-medium;
       @include common-input-button-style;
       border-radius: $radius-lg;
       border: none;
       cursor: pointer;
       transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      align-items: center;
+      gap: $spacing-xs;
+      font-weight: $font-weight-medium;
 
       &:hover {
         transform: scale(1.02);
@@ -56,12 +58,12 @@
         transform: scale(0.98);
       }
 
-      &.quizCreation {
+      &.makeQuiz {
         background-color: $color-blue;
         color: white;
       }
 
-      &.showDashboard {
+      &.checkDashboard {
         background-color: $color-skyblue;
         color: $color-blue;
         border: 1px solid $color-blue;

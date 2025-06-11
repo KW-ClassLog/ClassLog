@@ -54,8 +54,7 @@ export const ENDPOINTS = {
   LECTURES: {
     CREATE: `${BASE_API}/lectures/create`,
     UPDATE: (lectureId: string) => `${BASE_API}/lectures/${lectureId}`,
-    GET_DETAIL: (classId: string, lectureId: string) =>
-      `${BASE_API}/lectures/${classId}/${lectureId}`,
+    GET_DETAIL: (lectureId: string) => `${BASE_API}/lectures/${lectureId}`,
     DELETE: (lectureId: string) => `${BASE_API}/lectures/${lectureId}`,
     GET_LECTURES_BY_DATE: (date: string) =>
       `${BASE_API}/lectures/teacher/today?date=${date}`,
@@ -70,15 +69,15 @@ export const ENDPOINTS = {
     GET_NOTE_DETAIL: (lectureId: string, lectureNoteId: string) =>
       `${BASE_API}/lectures/${lectureId}/${lectureNoteId}`,
     GET_NOTE_LIST: (lectureId: string) =>
-      `${BASE_API}/lectures/${lectureId}/notes`,
+      `${BASE_API}/lectures/${lectureId}/lecture/notes`,
     GET_NOTE_LIST_BY_CLASS: (classId: string) =>
       `${BASE_API}/lectures/${classId}/class/notes`,
 
     // 녹음 관련
     SAVE_RECORDING: (lectureId: string) =>
       `${BASE_API}/lectures/${lectureId}/recordings`,
-    GET_RECORDING: (lectureId: string, mode: string) =>
-      `${BASE_API}/lectures/${lectureId}/recordings?mode=${mode}`,
+    GET_RECORDING: (lectureId: string) =>
+      `${BASE_API}/lectures/${lectureId}/recordings`,
 
     // 채팅 관련
     SAVE_CHAT: (lectureId: string) =>

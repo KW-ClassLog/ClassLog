@@ -1,0 +1,75 @@
+.card {
+  background: white;
+  border-radius: $radius-md;
+  padding: $spacing-lg;
+  border: 1px solid $color-neutral-7;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.title {
+  display: block;
+  margin-bottom: $spacing-md;
+  font-size: $font-size-xl;
+}
+
+.questionList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.questionItem {
+  padding: $spacing-sm 0;
+  border-bottom: 1px solid $color-neutral-7;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.questionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-xs;
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+}
+
+.profileImage {
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid $color-neutral-6;
+}
+
+.userName {
+  font-weight: $font-weight-medium;
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+}
+
+.timestamp {
+  font-size: $font-size-sm;
+  color: $color-neutral-5;
+}
+
+.message {
+  font-size: $font-size-md;
+  line-height: 1.4;
+  word-break: break-word;
+  margin-left: 38px;
+  font-weight: $font-weight-light;
+}
+
+.emptyState {
+  color: $color-neutral-6;
+  font-size: $font-size-md;
+  text-align: center;
+  padding: $spacing-3xl 0;
+  font-weight: $font-weight-medium;
+}
