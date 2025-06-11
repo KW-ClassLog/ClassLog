@@ -7,9 +7,25 @@ interface Props {
 }
 
 const LectureNoteRow: React.FC<Props> = ({ item }) => {
+  const renderSessionLabels = () => {
+    if (!Array.isArray(item.session) || item.session.length === 0) {
+      return null;
+    }
+
+    return (
+      <div className={styles.sessionLabelContainer}>
+        {item.session.map((sessionItem, index) => (
+          <span key={index} className={styles.sessionLabel}>
+            {sessionItem}차시
+          </span>
+        ))}
+      </div>
+    );
+  };
+
   return (
     <>
-      <td>{Array.isArray(item.session) ? item.session.join(", ") : ""}</td>
+      <td>{renderSessionLabels()}</td>
       <td>
         <a
           href={item.lectureNoteUrl}

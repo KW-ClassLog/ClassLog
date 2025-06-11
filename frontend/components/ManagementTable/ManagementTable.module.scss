@@ -204,6 +204,29 @@
       );
     }
 
+    .sessionLabel {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 8px;
+      background-color: $color-skyblue;
+      color: $color-blue;
+      border-radius: $radius-md;
+      font-size: $font-size-xs;
+      font-weight: $font-weight-medium;
+      border: 1px solid rgba($color-blue, 0.2);
+      white-space: nowrap;
+      max-width: 200px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .sessionLabelContainer {
+      display: flex;
+      flex-wrap: wrap;
+      gap: $spacing-xs;
+      max-width: 100%;
+    }
+
     .selectButton {
       border: 1px solid $color-neutral-7;
       width: 20px;
