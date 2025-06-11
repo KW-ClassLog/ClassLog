@@ -1,4 +1,5 @@
-// _components/QuizPreview.tsx
+"use client";
+
 import styles from "./QuizPreview.module.scss";
 import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
 import { useEffect, useState } from "react";
@@ -12,7 +13,7 @@ import { Quiz } from "@/types/quizzes/createQuizTypes";
 interface QuizPreviewProps {
   lectureId: string;
   useAudio: boolean;
-  onCustomize?: () => void;
+  onCustomize?: (selectedQuizzes: Quiz[]) => void;
   onSubmit?: (quizzes: Quiz[]) => void;
   onClose?: () => void;
 }
@@ -182,7 +183,7 @@ const QuizPreview = ({
         <div className={styles.buttonSection}>
           <button
             className={styles.customizing}
-            onClick={onCustomize}
+            onClick={() => onCustomize && onCustomize(selectedQuizzes)}
             disabled={selectedQuizzes.length === 0}
           >
             선택한 퀴즈를 기반으로 커스터마이징 하기
