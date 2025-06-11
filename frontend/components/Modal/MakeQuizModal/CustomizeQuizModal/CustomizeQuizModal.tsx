@@ -65,6 +65,9 @@ const CustomizeQuizModal = ({
     <ClosableModal onClose={onClose}>
       <div className={styles.wrapper}>
         <h2 className={styles.title}>퀴즈 커스터마이징</h2>
+        <p className={styles.description}>
+          퀴즈를 커스터마이징하여 수업에 적합한 퀴즈를 만들어보세요.
+        </p>
         <div className={styles.quizList}>
           {editedQuizzes.map((quiz, idx) => (
             <div key={idx} className={styles.quizBox}>
@@ -124,7 +127,8 @@ const CustomizeQuizModal = ({
             </div>
           ))}
         </div>
-        <div className={styles.buttonRow}>
+
+        <div className={styles.buttonSection}>
           <button onClick={onClose} className={styles.cancelButton}>
             취소
           </button>
