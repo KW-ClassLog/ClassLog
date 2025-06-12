@@ -178,14 +178,14 @@ public class LectureServiceImpl implements LectureService {
         if (s3Key == null) {
             throw new LectureException(LectureErrorCode.NO_AUDIO_FILE);
         }
-
+        String audioUrl = s3Service.getPresignedUrl(s3Key);
         String audioName = s3Key.substring(s3Key.lastIndexOf('/') + 1);
         String fileSize = s3Service.getFileSize(s3Key);
 
         return LectureRecordingResponseDTO.builder()
                 .lectureId(lectureId)
-                .audioName(s3Key)
-                .audioUrl(audioName)
+                .audioName(audioName)
+                .audioUrl(audioUrl)
                 .fileSize(fileSize)
                 .build();
     }
