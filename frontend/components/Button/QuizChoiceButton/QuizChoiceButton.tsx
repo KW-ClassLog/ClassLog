@@ -22,7 +22,7 @@ type TeacherModeProps = {
   mode: "teacher";
   label: string;
   correctAnswer: string; // 정답
-  count: number; // 선택한 사람 수
+  count?: number; // 선택한 사람 수
 };
 
 type QuizChoiceButtonProps = QuizModeProps | ResultModeProps | TeacherModeProps;

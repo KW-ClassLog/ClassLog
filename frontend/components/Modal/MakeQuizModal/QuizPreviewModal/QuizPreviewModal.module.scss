@@ -1,0 +1,160 @@
+// 미리보기 모달 스타일
+.previewWrapper {
+  display: flex;
+  flex-direction: column;
+  width: 800px;
+  max-height: 80vh;
+  transition: $transition-fast;
+  @include respond-to(md) {
+    max-width: 100%;
+  }
+  gap: $spacing-sm;
+  overflow: hidden;
+}
+
+.previewTitle {
+  font-size: $font-size-xl;
+  font-weight: bold;
+  color: $color-blue;
+}
+
+.previewDescription {
+  font-size: $font-size-md;
+  color: $color-neutral-5;
+  padding-bottom: $spacing-md;
+  border-bottom: 1px solid $color-neutral-6;
+}
+
+.previewQuizList {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+  overflow: auto;
+  max-height: 60vh;
+  padding-right: $spacing-sm;
+}
+
+// QuizToggleCard와 같은 카드 디자인
+.card {
+  background-color: $color-white;
+  border-radius: $radius-md;
+  padding: $spacing-lg;
+  transition: $transition-fast;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  border: 1px solid $color-neutral-7;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: $color-neutral-1;
+
+  .headerLeft {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+  }
+
+  .index {
+    font-size: $font-size-md;
+    font-weight: $font-weight-medium;
+  }
+
+  .checkIcon {
+    font-size: 18px;
+    color: $color-blue;
+  }
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+
+  .quizTitle {
+    margin-top: $spacing-md;
+    padding-top: $spacing-md;
+    border-top: 1px solid $color-neutral-7;
+    font-size: $font-size-md;
+    font-weight: $font-weight-regular;
+    word-wrap: break-word;
+    color: $color-neutral-1;
+  }
+
+  .quizContent {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
+  }
+
+  .choiceButtons {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-xs;
+  }
+}
+
+.previewButtonSection {
+  margin-top: auto;
+  border-top: 1px solid $color-neutral-6;
+  padding: $spacing-sm 0;
+  display: flex;
+  justify-content: center;
+  gap: $spacing-md;
+  background: white;
+
+  button {
+    padding: $spacing-sm $spacing-lg;
+    font-weight: $font-weight-medium;
+    @include common-input-button-style;
+    border-radius: $radius-lg;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+    &:disabled {
+      background-color: $color-neutral-7;
+      color: $color-neutral-5;
+      border-color: $color-neutral-6;
+      cursor: not-allowed;
+      transform: none;
+
+      &:hover {
+        transform: none;
+      }
+    }
+
+    &:not(:disabled) {
+      &:hover {
+        transform: scale(1.02);
+      }
+
+      &:active {
+        transform: scale(0.98);
+      }
+    }
+
+    &.previewSubmitButton {
+      background-color: $color-blue;
+      color: white;
+
+      &:disabled {
+        background-color: $color-neutral-7;
+        color: $color-neutral-5;
+      }
+    }
+
+    &.previewCancelButton {
+      background-color: $color-skyblue;
+      color: $color-blue;
+      border: 1px solid $color-blue;
+
+      &:disabled {
+        background-color: $color-neutral-8;
+        color: $color-neutral-5;
+        border-color: $color-neutral-6;
+      }
+    }
+  }
+}

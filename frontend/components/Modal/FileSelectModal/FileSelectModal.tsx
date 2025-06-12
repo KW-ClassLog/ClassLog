@@ -6,6 +6,7 @@ import ClosableModal from "../ClosableModal/ClosableModal";
 import FullWidthButton from "@/components/Button/FullWidthButton/FullWidthButton";
 import FileDisplay from "@/components/FileDisplay/FileDisplay";
 import SelectableButton from "@/components/Button/SelectableButton/SelectableButton";
+import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
 import { X } from "lucide-react";
 import { fetchLectureNotesByClass } from "@/api/lectures/fetchLectureNotesByClass";
 import { FetchLectureNotesByClassResult } from "@/types/lectures/fetchLectureNotesByClassTypes";
@@ -194,7 +195,7 @@ const FileSelectModal: React.FC<FileSelectModalProps> = ({
         {/* 파일 목록 */}
         <div className={styles.fileList}>
           {isLoading ? (
-            <div className={styles.loading}>파일 목록을 불러오는 중...</div>
+            <LoadingSpinner text="해당 클래스에 등록된 파일 목록을 불러오는 중..." />
           ) : fileList.length === 0 ? (
             <div className={styles.emptyState}>
               업로드된 강의자료가 없습니다.
