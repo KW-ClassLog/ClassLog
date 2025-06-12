@@ -151,14 +151,17 @@ const QuizPreview = ({
                   onClick={() => handleQuizSelection(index)}
                 >
                   <div className={styles.quizCardHeader}>
-                    <div className={styles.type}>
-                      {quiz.type === "multipleChoice"
-                        ? "객관식"
-                        : quiz.type === "shortAnswer"
-                        ? "단답형"
-                        : "O/X"}
+                    <div className={styles.quizCardHeaderContent}>
+                      <div className={styles.type}>
+                        {quiz.type === "multipleChoice"
+                          ? "객관식"
+                          : quiz.type === "shortAnswer"
+                          ? "단답형"
+                          : "O/X"}
+                      </div>
+                      <div className={styles.question}>{quiz.quizBody}</div>
                     </div>
-                    <div className={styles.question}>{quiz.quizBody}</div>
+
                     <div className={styles.selectButtonWrapper}>
                       <SelectableButton
                         selected={selectedQuizzes.includes(quiz)}

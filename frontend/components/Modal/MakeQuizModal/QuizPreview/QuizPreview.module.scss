@@ -124,6 +124,14 @@
     align-items: flex-start;
     gap: $spacing-sm;
     position: relative;
+    justify-content: space-between;
+  }
+
+  .quizCardHeaderContent {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    position: relative;
   }
 
   .selectButtonWrapper {
