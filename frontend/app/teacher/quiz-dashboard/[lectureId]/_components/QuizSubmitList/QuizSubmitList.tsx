@@ -5,16 +5,16 @@ import styles from "./QuizSubmitList.module.scss";
 const data = {
   submitNum: 10,
   studentList: [
-    { name: "김클로", submitDate: "2025-04-02T15:23:00" },
-    { name: "강백호", submitDate: "2025-04-02T15:23:50" },
-    { name: "로하스", submitDate: "2025-04-02T15:26:45" },
-    { name: "허경민", submitDate: "2025-04-02T15:29:23" },
-    { name: "김민혁", submitDate: "2025-04-02T16:23:05" },
-    { name: "장성우", submitDate: "2025-04-02T16:20:59" },
-    { name: "천성호", submitDate: "2025-04-02T16:33:05" },
-    { name: "배정대", submitDate: "2025-04-02T16:52:08" },
-    { name: "김상수", submitDate: "2025-04-02T17:23:00" },
-    { name: "윤준혁", submitDate: "2025-04-02T15:23:42" },
+    { name: "김클로", submitDate: "2025-06-03T15:23:00" },
+    { name: "강백호", submitDate: "2025-06-03T15:23:50" },
+    { name: "로하스", submitDate: "2025-06-03T15:26:45" },
+    { name: "허경민", submitDate: "2025-06-03T15:29:23" },
+    { name: "김민혁", submitDate: "2025-06-03T16:23:05" },
+    { name: "장성우", submitDate: "2025-06-03T16:20:59" },
+    { name: "천성호", submitDate: "2025-06-03T16:33:05" },
+    { name: "배정대", submitDate: "2025-06-03T16:52:08" },
+    { name: "김상수", submitDate: "2025-06-03T17:23:00" },
+    { name: "윤준혁", submitDate: "2025-06-03T15:23:42" },
   ],
 };
 
