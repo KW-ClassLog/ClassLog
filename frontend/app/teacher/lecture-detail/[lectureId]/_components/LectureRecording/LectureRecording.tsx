@@ -6,15 +6,11 @@ import { useEffect, useState } from "react";
 import { Download } from "lucide-react";
 import { fetchAudioFile } from "@/api/lectures/fetchAudioFile";
 import { useLectureDetail } from "../LectureDetailContext";
-
-interface Audio {
-  lectureId: string;
-  audioUrl: string;
-}
+import { FetchAudioFileResult } from "@/types/lectures/fetchAudioFileTypes";
 
 export default function LectureRecording() {
   const { lectureId } = useLectureDetail();
-  const [audio, setAudio] = useState<Audio | null>(null);
+  const [audio, setAudio] = useState<FetchAudioFileResult | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -28,7 +24,7 @@ export default function LectureRecording() {
         if (response.isSuccess && response.result) {
           setAudio({
             lectureId: response.result.lectureId,
-            audioUrl: response.result.audioUrl,
+            audioName: response.result.audioName,
           });
         } else {
           setAudio(null);
@@ -76,11 +72,11 @@ export default function LectureRecording() {
         {audio ? (
           <div className={styles.audioItem}>
             <span className={styles.audioName}>
-              <FileDisplay fileName={getFileNameFromUrl(audio.audioUrl)} />
+              <FileDisplay fileName={getFileNameFromUrl(audio.audioName)} />
               <Download />
             </span>
             <audio controls className={styles.audioPlayer}>
-              <source src={audio.audioUrl} type="audio/mpeg" />
+              <source src={audio.audioName} type="audio/mpeg" />
               브라우저가 오디오를 지원하지 않습니다.
             </audio>
           </div>
