@@ -9,7 +9,7 @@ import java.util.UUID;
 @Builder
 public class LectureRecordingResponseDTO {
     private UUID lectureId;
-    private String audioKey;
+    private String audioName;
     private String audioUrl;
     private String fileSize;
 }
