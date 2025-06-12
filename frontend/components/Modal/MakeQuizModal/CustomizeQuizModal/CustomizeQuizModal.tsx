@@ -12,6 +12,7 @@ import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
 import FitContentButton from "@/components/Button/FitContentButton/FitContentButton";
 import { X } from "lucide-react";
 import IconButton from "@/components/Button/IconButton/IconButton";
+import QuizPreviewModal from "../QuizPreviewModal/QuizPreviewModal";
 
 interface CustomizeQuizModalProps {
   quizzes: Quiz[];
@@ -44,6 +45,7 @@ const CustomizeQuizModal = ({
 
   const [editedQuizzes, setEditedQuizzes] = useState<Quiz[]>(processedQuizzes);
   const [userCreatedQuizzes, setUserCreatedQuizzes] = useState<Quiz[]>([]);
+  const [showPreviewModal, setShowPreviewModal] = useState(false);
   const {
     resetLectureQuizzes,
     isSaving,
@@ -150,6 +152,10 @@ const CustomizeQuizModal = ({
     onGoBack();
   };
 
+  const handlePreview = () => {
+    setShowPreviewModal(true);
+  };
+
   const handleSubmit = async () => {
     setIsSaving(true);
     setSaveSuccess(false);
@@ -178,6 +184,7 @@ const CustomizeQuizModal = ({
       const res = await saveQuiz(lectureId, processedQuizzes);
       if (res && res.isSuccess) {
         setSaveSuccess(true);
+        setShowPreviewModal(false);
       } else {
         setSaveError(res?.message || "퀴즈 저장에 실패했습니다.");
       }
@@ -273,164 +280,185 @@ const CustomizeQuizModal = ({
   );
 
   return (
-    <ClosableModal onClose={handleClose}>
-      <div className={styles.wrapper}>
-        <h2 className={styles.title}>퀴즈 커스터마이징</h2>
-        <p className={styles.description}>
-          선택한 퀴즈를 수정하거나, 새로운 퀴즈를 직접 작성해보세요. <br />
-          수업에 딱 맞는 퀴즈로 바꿀 수 있어요!
-        </p>
+    <>
+      <ClosableModal onClose={handleClose}>
+        <div className={styles.wrapper}>
+          <h2 className={styles.title}>퀴즈 커스터마이징</h2>
+          <p className={styles.description}>
+            선택한 퀴즈를 수정하거나, 새로운 퀴즈를 직접 작성해보세요. <br />
+            수업에 딱 맞는 퀴즈로 바꿀 수 있어요!
+          </p>
 
-        {/* 기존 퀴즈 목록 */}
-        <div className={styles.quizList}>
-          {editedQuizzes.map((quiz, idx) => (
-            <div key={`edited-${idx}`} className={styles.quizBox}>
-              <div className={styles.labelRow}>
-                <div className={styles.typeLabel}>
-                  {quiz.type === "multipleChoice"
-                    ? "객관식"
-                    : quiz.type === "shortAnswer"
-                    ? "단답형"
-                    : "O/X"}
-                </div>
-                <BasicInput
-                  value={quiz.quizBody}
-                  onChange={(e) =>
-                    handleQuizChange(idx, "quizBody", e.target.value)
-                  }
-                  placeholder="문제를 입력하세요"
-                />
-              </div>
-              {quiz.type === "multipleChoice" && quiz.options && (
-                <div className={styles.options}>
-                  {quiz.options.map((option, oIdx) => (
-                    <div key={oIdx} className={styles.optionRow}>
-                      <span className={styles.optionNumber}>{oIdx + 1}</span>
-                      <BasicInput
-                        value={option}
-                        onChange={(e) => {
-                          const newOptions = [...(quiz.options || [])];
-                          newOptions[oIdx] = e.target.value;
-                          setEditedQuizzes((prev) =>
-                            prev.map((q, i) =>
-                              i === idx ? { ...q, options: newOptions } : q
-                            )
-                          );
-                        }}
-                        placeholder={`선택지 ${oIdx + 1}`}
-                      />
-                    </div>
-                  ))}
-                </div>
-              )}
-              {quiz.type === "shortAnswer" && (
+          {/* 기존 퀴즈 목록 */}
+          <div className={styles.quizList}>
+            {editedQuizzes.map((quiz, idx) => (
+              <div key={`edited-${idx}`} className={styles.quizBox}>
                 <div className={styles.labelRow}>
-                  <span className={styles.label}>정답 :</span>
+                  <div className={styles.typeLabel}>
+                    {quiz.type === "multipleChoice"
+                      ? "객관식"
+                      : quiz.type === "shortAnswer"
+                      ? "단답형"
+                      : "O/X"}
+                  </div>
                   <BasicInput
-                    value={quiz.solution}
+                    value={quiz.quizBody}
                     onChange={(e) =>
-                      handleQuizChange(idx, "solution", e.target.value)
+                      handleQuizChange(idx, "quizBody", e.target.value)
                     }
-                    placeholder="정답을 입력하세요"
+                    placeholder="문제를 입력하세요"
                   />
                 </div>
-              )}
-              {quiz.type === "trueFalse" && renderOXAnswer(quiz, idx)}
-              {quiz.type === "multipleChoice" &&
-                renderMultipleChoiceAnswer(quiz, idx)}
-            </div>
-          ))}
-
-          {userCreatedQuizzes.length > 0 && (
-            <div className={styles.userCreatedSection}>
-              <h3 className={styles.sectionTitle}>직접 만든 퀴즈</h3>
-              <div className={styles.quizList}>
-                {userCreatedQuizzes.map((quiz, idx) => (
-                  <div key={`user-${idx}`} className={styles.makingQuizBox}>
-                    <div className={styles.quizHeader}>
-                      {renderQuizTypeSelector(quiz, idx)}
-                      <IconButton
-                        icon={<X />}
-                        onClick={() => handleRemoveUserQuiz(idx)}
-                        ariaLabel="퀴즈 삭제"
-                      />
-                    </div>
-                    <div className={styles.labelRow}>
-                      <BasicInput
-                        value={quiz.quizBody}
-                        onChange={(e) =>
-                          handleUserQuizChange(idx, "quizBody", e.target.value)
-                        }
-                        placeholder="문제를 입력하세요"
-                      />
-                    </div>
-                    {quiz.type === "multipleChoice" && quiz.options && (
-                      <div className={styles.options}>
-                        {quiz.options.map((option, oIdx) => (
-                          <div key={oIdx} className={styles.optionRow}>
-                            <span className={styles.optionNumber}>
-                              {oIdx + 1}
-                            </span>
-                            <BasicInput
-                              value={option}
-                              onChange={(e) =>
-                                handleUserQuizOptionChange(
-                                  idx,
-                                  oIdx,
-                                  e.target.value
-                                )
-                              }
-                              placeholder={`선택지 ${oIdx + 1}`}
-                            />
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                    {quiz.type === "shortAnswer" && (
-                      <div className={styles.labelRow}>
-                        <span className={styles.label}>정답 :</span>
+                {quiz.type === "multipleChoice" && quiz.options && (
+                  <div className={styles.options}>
+                    {quiz.options.map((option, oIdx) => (
+                      <div key={oIdx} className={styles.optionRow}>
+                        <span className={styles.optionNumber}>{oIdx + 1}</span>
                         <BasicInput
-                          value={quiz.solution}
+                          value={option}
+                          onChange={(e) => {
+                            const newOptions = [...(quiz.options || [])];
+                            newOptions[oIdx] = e.target.value;
+                            setEditedQuizzes((prev) =>
+                              prev.map((q, i) =>
+                                i === idx ? { ...q, options: newOptions } : q
+                              )
+                            );
+                          }}
+                          placeholder={`선택지 ${oIdx + 1}`}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                )}
+                {quiz.type === "shortAnswer" && (
+                  <div className={styles.labelRow}>
+                    <span className={styles.label}>정답 :</span>
+                    <BasicInput
+                      value={quiz.solution}
+                      onChange={(e) =>
+                        handleQuizChange(idx, "solution", e.target.value)
+                      }
+                      placeholder="정답을 입력하세요"
+                    />
+                  </div>
+                )}
+                {quiz.type === "trueFalse" && renderOXAnswer(quiz, idx)}
+                {quiz.type === "multipleChoice" &&
+                  renderMultipleChoiceAnswer(quiz, idx)}
+              </div>
+            ))}
+
+            {userCreatedQuizzes.length > 0 && (
+              <div className={styles.userCreatedSection}>
+                <h3 className={styles.sectionTitle}>직접 만든 퀴즈</h3>
+                <div className={styles.quizList}>
+                  {userCreatedQuizzes.map((quiz, idx) => (
+                    <div key={`user-${idx}`} className={styles.makingQuizBox}>
+                      <div className={styles.quizHeader}>
+                        {renderQuizTypeSelector(quiz, idx)}
+                        <IconButton
+                          icon={<X />}
+                          onClick={() => handleRemoveUserQuiz(idx)}
+                          ariaLabel="퀴즈 삭제"
+                        />
+                      </div>
+                      <div className={styles.labelRow}>
+                        <BasicInput
+                          value={quiz.quizBody}
                           onChange={(e) =>
                             handleUserQuizChange(
                               idx,
-                              "solution",
+                              "quizBody",
                               e.target.value
                             )
                           }
-                          placeholder="정답을 입력하세요"
+                          placeholder="문제를 입력하세요"
                         />
                       </div>
-                    )}
-                    {quiz.type === "trueFalse" &&
-                      renderOXAnswer(quiz, idx, true)}
-                    {quiz.type === "multipleChoice" &&
-                      renderMultipleChoiceAnswer(quiz, idx, true)}
-                  </div>
-                ))}
+                      {quiz.type === "multipleChoice" && quiz.options && (
+                        <div className={styles.options}>
+                          {quiz.options.map((option, oIdx) => (
+                            <div key={oIdx} className={styles.optionRow}>
+                              <span className={styles.optionNumber}>
+                                {oIdx + 1}
+                              </span>
+                              <BasicInput
+                                value={option}
+                                onChange={(e) =>
+                                  handleUserQuizOptionChange(
+                                    idx,
+                                    oIdx,
+                                    e.target.value
+                                  )
+                                }
+                                placeholder={`선택지 ${oIdx + 1}`}
+                              />
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                      {quiz.type === "shortAnswer" && (
+                        <div className={styles.labelRow}>
+                          <span className={styles.label}>정답 :</span>
+                          <BasicInput
+                            value={quiz.solution}
+                            onChange={(e) =>
+                              handleUserQuizChange(
+                                idx,
+                                "solution",
+                                e.target.value
+                              )
+                            }
+                            placeholder="정답을 입력하세요"
+                          />
+                        </div>
+                      )}
+                      {quiz.type === "trueFalse" &&
+                        renderOXAnswer(quiz, idx, true)}
+                      {quiz.type === "multipleChoice" &&
+                        renderMultipleChoiceAnswer(quiz, idx, true)}
+                    </div>
+                  ))}
+                </div>
               </div>
+            )}
+            <div className={styles.addQuizSection}>
+              <FitContentButton onClick={handleAddQuiz}>
+                + 새로운 퀴즈 작성
+              </FitContentButton>
             </div>
-          )}
-          <div className={styles.addQuizSection}>
-            <FitContentButton onClick={handleAddQuiz}>
-              + 새로운 퀴즈 작성
-            </FitContentButton>
+          </div>
+
+          <div className={styles.buttonSection}>
+            <button onClick={handleGoBack} className={styles.cancelButton}>
+              이전
+            </button>
+            <button
+              onClick={handlePreview}
+              className={styles.submitButton}
+              disabled={isSaving || !isAllQuizzesValid()}
+            >
+              제출 전 미리보기
+            </button>
           </div>
         </div>
+      </ClosableModal>
 
-        <div className={styles.buttonSection}>
-          <button onClick={handleGoBack} className={styles.cancelButton}>
-            이전
-          </button>
-          <button
-            onClick={handleSubmit}
-            className={styles.submitButton}
-            disabled={isSaving || !isAllQuizzesValid()}
-          >
-            제출 전 미리보기
-          </button>
-        </div>
-      </div>
+      {/* 제출 전 미리보기 모달 */}
+      {showPreviewModal && (
+        <QuizPreviewModal
+          quizzes={[...editedQuizzes, ...userCreatedQuizzes]}
+          onClose={() => setShowPreviewModal(false)}
+          onSubmit={handleSubmit}
+          isSubmitting={isSaving}
+          title="퀴즈 최종 확인"
+          description="아래 퀴즈들이 최종 제출됩니다. 확인 후 제출해주세요."
+          cancelButtonText="다시 수정하기"
+          submitButtonText="이대로 제출하기"
+        />
+      )}
+
       {isSaving && (
         <AlertModal hideButton onClose={() => {}}>
           <LoadingSpinner />
@@ -445,7 +473,7 @@ const CustomizeQuizModal = ({
       {saveError && (
         <AlertModal onClose={() => setSaveError(null)}>{saveError}</AlertModal>
       )}
-    </ClosableModal>
+    </>
   );
 };
 

@@ -10,6 +10,7 @@ import { createQuiz } from "@/api/quizzes/createQuiz";
 import { recreateQuiz } from "@/api/quizzes/recreateQuiz";
 import { Quiz } from "@/types/quizzes/createQuizTypes";
 import { useQuizStore } from "@/store/useQuizStore";
+import QuizPreviewModal from "../QuizPreviewModal/QuizPreviewModal";
 
 interface QuizPreviewProps {
   lectureId: string;
@@ -42,6 +43,7 @@ const QuizPreview = ({
   } = useQuizStore();
 
   const [showAlert, setShowAlert] = useState(false);
+  const [showPreviewModal, setShowPreviewModal] = useState(false);
 
   // 현재 lectureId의 퀴즈 가져오기
   const quizzes = getQuizzes(lectureId);
@@ -111,118 +113,140 @@ const QuizPreview = ({
       });
   };
 
-  return (
-    <div className={styles.wrapper}>
-      {error && (
-        <AlertModal
-          onClose={() => {
-            setError(null);
-            if (onClose) onClose();
-          }}
-        >
-          {error}
-        </AlertModal>
-      )}
-      {showAlert && (
-        <AlertModal onClose={() => setShowAlert(false)}>
-          최대 4개의 퀴즈만 선택할 수 있습니다.
-        </AlertModal>
-      )}
-      <div className={styles.content}>
-        {isLoading ? (
-          <div className={styles.loading}>
-            <LoadingSpinner
-              text={["AI가 퀴즈를 만들고 있어요", "잠시만 기다려주세요!"]}
-            />
-          </div>
-        ) : (
-          <div className={styles.quizContainer}>
-            <Masonry
-              breakpointCols={breakpointColumnsObj}
-              className={styles.masonryGrid}
-              columnClassName={styles.masonryColumn}
-            >
-              {quizzes?.map((quiz, index) => (
-                <div
-                  key={index}
-                  className={`${styles.quizCard} ${
-                    selectedQuizzes.includes(quiz) ? styles.selected : ""
-                  }`}
-                  onClick={() => handleQuizSelection(index)}
-                >
-                  <div className={styles.quizCardHeader}>
-                    <div className={styles.quizCardHeaderContent}>
-                      <div className={styles.type}>
-                        {quiz.type === "multipleChoice"
-                          ? "객관식"
-                          : quiz.type === "shortAnswer"
-                          ? "단답형"
-                          : "O/X"}
-                      </div>
-                      <div className={styles.question}>{quiz.quizBody}</div>
-                    </div>
+  const handlePreview = () => {
+    setShowPreviewModal(true);
+  };
 
-                    <div className={styles.selectButtonWrapper}>
-                      <SelectableButton
-                        selected={selectedQuizzes.includes(quiz)}
-                        onClick={(
-                          e?: React.MouseEvent<Element, MouseEvent>
-                        ) => {
-                          e?.stopPropagation();
-                          handleQuizSelection(index);
-                        }}
-                        disabled={false}
-                      />
-                    </div>
-                  </div>
-                  {quiz.type === "multipleChoice" &&
-                    quiz.options &&
-                    quiz.options.length > 0 && (
-                      <ul className={styles.choices}>
-                        {quiz.options.map((option, index) => (
-                          <li key={index}>
-                            {index + 1}. {option}
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  <div className={styles.answer}>정답: {quiz.solution}</div>
-                </div>
-              ))}
-            </Masonry>
-            <div className={styles.moreQuiz} onClick={handleMoreQuiz}>
-              <p>
-                {isLoadingMore
-                  ? "추가 퀴즈를 생성하고 있어요..."
-                  : "+ 다른 퀴즈도 보고싶어요"}
-              </p>
+  const handleSubmit = () => {
+    if (onSubmit && selectedQuizzes.length > 0) {
+      onSubmit(selectedQuizzes);
+    }
+    setShowPreviewModal(false);
+  };
+
+  return (
+    <>
+      <div className={styles.wrapper}>
+        {error && (
+          <AlertModal
+            onClose={() => {
+              setError(null);
+              if (onClose) onClose();
+            }}
+          >
+            {error}
+          </AlertModal>
+        )}
+        {showAlert && (
+          <AlertModal onClose={() => setShowAlert(false)}>
+            최대 4개의 퀴즈만 선택할 수 있습니다.
+          </AlertModal>
+        )}
+        <div className={styles.content}>
+          {isLoading ? (
+            <div className={styles.loading}>
+              <LoadingSpinner
+                text={["AI가 퀴즈를 만들고 있어요", "잠시만 기다려주세요!"]}
+              />
             </div>
+          ) : (
+            <div className={styles.quizContainer}>
+              <Masonry
+                breakpointCols={breakpointColumnsObj}
+                className={styles.masonryGrid}
+                columnClassName={styles.masonryColumn}
+              >
+                {quizzes?.map((quiz, index) => (
+                  <div
+                    key={index}
+                    className={`${styles.quizCard} ${
+                      selectedQuizzes.includes(quiz) ? styles.selected : ""
+                    }`}
+                    onClick={() => handleQuizSelection(index)}
+                  >
+                    <div className={styles.quizCardHeader}>
+                      <div className={styles.quizCardHeaderContent}>
+                        <div className={styles.type}>
+                          {quiz.type === "multipleChoice"
+                            ? "객관식"
+                            : quiz.type === "shortAnswer"
+                            ? "단답형"
+                            : "O/X"}
+                        </div>
+                        <div className={styles.question}>{quiz.quizBody}</div>
+                      </div>
+
+                      <div className={styles.selectButtonWrapper}>
+                        <SelectableButton
+                          selected={selectedQuizzes.includes(quiz)}
+                          onClick={(
+                            e?: React.MouseEvent<Element, MouseEvent>
+                          ) => {
+                            e?.stopPropagation();
+                            handleQuizSelection(index);
+                          }}
+                          disabled={false}
+                        />
+                      </div>
+                    </div>
+                    {quiz.type === "multipleChoice" &&
+                      quiz.options &&
+                      quiz.options.length > 0 && (
+                        <ul className={styles.choices}>
+                          {quiz.options.map((option, index) => (
+                            <li key={index}>
+                              {index + 1}. {option}
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    <div className={styles.answer}>정답: {quiz.solution}</div>
+                  </div>
+                ))}
+              </Masonry>
+              <div className={styles.moreQuiz} onClick={handleMoreQuiz}>
+                <p>
+                  {isLoadingMore
+                    ? "추가 퀴즈를 생성하고 있어요..."
+                    : "+ 다른 퀴즈도 보고싶어요"}
+                </p>
+              </div>
+            </div>
+          )}
+        </div>
+        {quizzes !== null && (
+          <div className={styles.buttonSection}>
+            <button
+              className={styles.customizing}
+              onClick={() => onCustomize && onCustomize(selectedQuizzes)}
+              disabled={selectedQuizzes.length === 0}
+            >
+              선택한 퀴즈를 기반으로 커스터마이징 하기
+            </button>
+            <button
+              className={styles.submit}
+              onClick={handlePreview}
+              disabled={selectedQuizzes.length === 0}
+            >
+              제출 전 미리보기
+            </button>
           </div>
         )}
       </div>
-      {quizzes !== null && (
-        <div className={styles.buttonSection}>
-          <button
-            className={styles.customizing}
-            onClick={() => onCustomize && onCustomize(selectedQuizzes)}
-            disabled={selectedQuizzes.length === 0}
-          >
-            선택한 퀴즈를 기반으로 커스터마이징 하기
-          </button>
-          <button
-            className={styles.submit}
-            onClick={() => {
-              if (onSubmit && selectedQuizzes.length > 0) {
-                onSubmit(selectedQuizzes);
-              }
-            }}
-            disabled={selectedQuizzes.length === 0}
-          >
-            제출 전 미리보기
-          </button>
-        </div>
+
+      {/* 제출 전 미리보기 모달 */}
+      {showPreviewModal && (
+        <QuizPreviewModal
+          quizzes={selectedQuizzes}
+          onClose={() => setShowPreviewModal(false)}
+          onSubmit={handleSubmit}
+          title="퀴즈 최종 확인"
+          description="아래 퀴즈들이 최종 제출됩니다. 확인 후 제출해주세요."
+          cancelButtonText="다시 선택하기"
+          submitButtonText="이대로 제출하기"
+        />
       )}
-    </div>
+    </>
   );
 };
 

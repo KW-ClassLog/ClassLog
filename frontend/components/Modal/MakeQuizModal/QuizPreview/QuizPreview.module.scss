@@ -197,3 +197,162 @@
     text-decoration: underline;
   }
 }
+
+// 미리보기 모달 스타일
+.previewWrapper {
+  display: flex;
+  flex-direction: column;
+  width: 800px;
+  max-height: 80vh;
+  transition: $transition-fast;
+  @include respond-to(md) {
+    max-width: 100%;
+  }
+  gap: $spacing-sm;
+  overflow: hidden;
+}
+
+.previewTitle {
+  font-size: $font-size-xl;
+  font-weight: bold;
+  color: $color-blue;
+}
+
+.previewDescription {
+  font-size: $font-size-md;
+  color: $color-neutral-5;
+  padding-bottom: $spacing-md;
+  border-bottom: 1px solid $color-neutral-6;
+}
+
+.previewQuizList {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+  overflow: auto;
+  max-height: 60vh;
+  padding-right: $spacing-sm;
+}
+
+.previewQuizBox {
+  background: $color-skyblue;
+  border-radius: $radius-md;
+  padding: $spacing-md;
+  border: 1px solid $color-neutral-6;
+}
+
+.previewQuizHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-md;
+}
+
+.previewTypeLabel {
+  color: $color-blue;
+  background: $color-white;
+  border-radius: $radius-full;
+  padding: $spacing-xs $spacing-sm;
+  font-weight: bold;
+  display: inline-block;
+  font-size: $font-size-md;
+  width: fit-content;
+  white-space: nowrap;
+  border: 1px solid $color-blue;
+}
+
+.previewQuestion {
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  color: $color-neutral-2;
+  margin-bottom: $spacing-md;
+  line-height: 1.5;
+}
+
+.previewOptions {
+  margin-bottom: $spacing-md;
+}
+
+.previewOption {
+  padding: $spacing-xs $spacing-sm;
+  margin-bottom: $spacing-xs;
+  background: $color-white;
+  border-radius: $radius-sm;
+  border: 1px solid $color-neutral-6;
+  font-size: $font-size-sm;
+  color: $color-neutral-3;
+}
+
+.previewAnswer {
+  font-size: $font-size-md;
+  font-weight: $font-weight-bold;
+  color: $color-blue;
+  padding: $spacing-sm;
+  background: $color-white;
+  border-radius: $radius-sm;
+  border: 1px solid $color-blue;
+}
+
+.previewButtonSection {
+  margin-top: auto;
+  border-top: 1px solid $color-neutral-6;
+  padding: $spacing-sm 0;
+  display: flex;
+  justify-content: center;
+  gap: $spacing-md;
+  background: white;
+
+  button {
+    padding: $spacing-sm $spacing-lg;
+    font-weight: $font-weight-medium;
+    @include common-input-button-style;
+    border-radius: $radius-lg;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+    &:disabled {
+      background-color: $color-neutral-7;
+      color: $color-neutral-5;
+      border-color: $color-neutral-6;
+      cursor: not-allowed;
+      transform: none;
+
+      &:hover {
+        transform: none;
+      }
+    }
+
+    &:not(:disabled) {
+      &:hover {
+        transform: scale(1.02);
+      }
+
+      &:active {
+        transform: scale(0.98);
+      }
+    }
+
+    &.previewSubmitButton {
+      background-color: $color-blue;
+      color: white;
+
+      &:disabled {
+        background-color: $color-neutral-7;
+        color: $color-neutral-5;
+      }
+    }
+
+    &.previewCancelButton {
+      background-color: $color-skyblue;
+      color: $color-blue;
+      border: 1px solid $color-blue;
+
+      &:disabled {
+        background-color: $color-neutral-8;
+        color: $color-neutral-5;
+        border-color: $color-neutral-6;
+      }
+    }
+  }
+}
