@@ -218,7 +218,7 @@ const QuizPreview = ({
             }}
             disabled={selectedQuizzes.length === 0}
           >
-            이대로 퀴즈 제출하기
+            제출 전 미리보기
           </button>
         </div>
       )}

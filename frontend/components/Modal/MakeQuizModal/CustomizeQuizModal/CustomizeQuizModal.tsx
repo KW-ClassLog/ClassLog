@@ -277,7 +277,8 @@ const CustomizeQuizModal = ({
       <div className={styles.wrapper}>
         <h2 className={styles.title}>퀴즈 커스터마이징</h2>
         <p className={styles.description}>
-          퀴즈를 커스터마이징하여 수업에 적합한 퀴즈를 만들어보세요.
+          선택한 퀴즈를 수정하거나, 새로운 퀴즈를 직접 작성해보세요. <br />
+          수업에 딱 맞는 퀴즈로 바꿀 수 있어요!
         </p>
 
         {/* 기존 퀴즈 목록 */}
@@ -412,7 +413,7 @@ const CustomizeQuizModal = ({
           )}
           <div className={styles.addQuizSection}>
             <FitContentButton onClick={handleAddQuiz}>
-              + 퀴즈 직접 입력
+              + 새로운 퀴즈 작성
             </FitContentButton>
           </div>
         </div>
@@ -426,7 +427,7 @@ const CustomizeQuizModal = ({
             className={styles.submitButton}
             disabled={isSaving || !isAllQuizzesValid()}
           >
-            퀴즈 제출하기
+            제출 전 미리보기
           </button>
         </div>
       </div>
