@@ -19,33 +19,7 @@ export default function QuestionList() {
 
   useEffect(() => {
     // TODO: API 호출로 변경
-    setQuestions([
-      {
-        sender: "user123",
-        message: "안녕하세요!",
-        timestamp: "2025-03-31T14:22:10",
-        profileUrl: "/images/default_profile.jpg",
-      },
-      {
-        sender: "user456",
-        message: "반갑습니다 :)",
-        timestamp: "2025-03-31T14:22:15",
-        profileUrl: "/images/default_profile.jpg",
-      },
-      {
-        sender: "student789",
-        message:
-          "강의 내용이 잘 이해되지 않아서 질문드립니다. 프로세스 스케줄링에 대해 더 자세히 설명해주실 수 있나요?",
-        timestamp: "2025-03-31T14:25:30",
-        profileUrl: "/images/default_profile.jpg",
-      },
-      {
-        sender: "user123",
-        message: "네, 좋은 질문이네요!",
-        timestamp: "2025-03-31T14:26:45",
-        profileUrl: "/images/default_profile.jpg",
-      },
-    ]);
+    setQuestions([]);
     setLoading(false);
   }, [lectureId]);
 

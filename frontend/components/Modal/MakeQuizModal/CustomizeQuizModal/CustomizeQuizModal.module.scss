@@ -37,6 +37,115 @@
   height: 100%;
 }
 
+.makingQuizBox {
+  background: $color-neutral-8;
+  border-radius: $radius-md;
+  padding: $spacing-md;
+  border: 1px solid $color-neutral-6;
+  height: 100%;
+}
+
+.userCreatedSection {
+  margin-top: $spacing-lg;
+  padding-top: $spacing-lg;
+  border-top: 1px solid $color-neutral-6;
+}
+
+.sectionTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  margin-bottom: $spacing-md;
+}
+
+.quizHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-md;
+}
+
+.typeSelector {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+}
+
+.typeBtn {
+  border: 1px solid $color-neutral-6;
+  background: $color-white;
+  border-radius: $radius-full;
+  padding: $spacing-xs $spacing-sm;
+  font-size: $font-size-sm;
+  cursor: pointer;
+  color: $color-neutral-5;
+  transition: all 0.2s;
+  font-weight: $font-weight-medium;
+  font-family: $font-default;
+
+  &:hover {
+    border-color: $color-blue;
+    color: $color-blue;
+  }
+
+  &.selected {
+    border: 2px solid $color-blue;
+    color: $color-blue;
+    font-weight: bold;
+    background: $color-skyblue;
+  }
+}
+
+.removeBtn {
+  background: $color-danger;
+  color: white;
+  border: none;
+  border-radius: $radius-sm;
+  padding: $spacing-xs $spacing-sm;
+  font-size: $font-size-sm;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-weight: $font-weight-medium;
+
+  &:hover {
+    background: darken($color-danger, 10%);
+    transform: scale(1.05);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+.addQuizSection {
+  display: flex;
+  justify-content: center;
+  margin: $spacing-lg 0;
+}
+
+.addQuizBtn {
+  background: $color-blue;
+  color: white;
+  border: none;
+  border-radius: $radius-lg;
+  padding: $spacing-sm $spacing-lg;
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+
+  &:hover {
+    background: $color-lightblue;
+    transform: scale(1.02);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
 .typeLabel {
   color: $color-blue;
   background: $color-white;

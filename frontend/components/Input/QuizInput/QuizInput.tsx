@@ -20,7 +20,7 @@ type ResultModeProps = {
 type TeacherModeProps = {
   mode: "teacher";
   correctAnswer: string; // 정답
-  count: number; // 선택한 사람 수
+  count?: number; // 선택한 사람 수
 };
 
 type QuizInputProps = QuizModeProps | ResultModeProps | TeacherModeProps;
@@ -60,7 +60,9 @@ const QuizInput: React.FC<QuizInputProps> = (props) => {
         return props.userAnswer;
       }
     } else if (isTeacherMode(props)) {
-      return `정답 : ${props.correctAnswer} (${props.count}명)`;
+      return `정답 : ${props.correctAnswer} ${
+        props.count ? `(${props.count}명)` : ""
+      }`;
     } else if (isQuizMode(props)) {
       return props.value;
     }
