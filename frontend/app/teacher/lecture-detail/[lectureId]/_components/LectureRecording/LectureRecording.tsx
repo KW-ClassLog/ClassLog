@@ -7,12 +7,37 @@ import { Download } from "lucide-react";
 import { fetchAudioFile } from "@/api/lectures/fetchAudioFile";
 import { useLectureDetail } from "../LectureDetailContext";
 import { FetchAudioFileResult } from "@/types/lectures/fetchAudioFileTypes";
+import IconButton from "@/components/Button/IconButton/IconButton";
 
 export default function LectureRecording() {
   const { lectureId } = useLectureDetail();
   const [audio, setAudio] = useState<FetchAudioFileResult | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const handleDownload = async () => {
+    if (!audio?.audioUrl) return;
+
+    try {
+      const response = await fetch(audio.audioUrl);
+      if (!response.ok) {
+        throw new Error("다운로드에 실패했습니다.");
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = audio.audioName || "강의녹음본.mp3";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error("다운로드 실패:", err);
+      alert("다운로드 중 오류가 발생했습니다.");
+    }
+  };
 
   useEffect(() => {
     const fetchAudio = async () => {
@@ -22,10 +47,7 @@ export default function LectureRecording() {
         const response = await fetchAudioFile(lectureId);
 
         if (response.isSuccess && response.result) {
-          setAudio({
-            lectureId: response.result.lectureId,
-            audioName: response.result.audioName,
-          });
+          setAudio(response.result);
         } else {
           setAudio(null);
         }
@@ -40,16 +62,6 @@ export default function LectureRecording() {
 
     fetchAudio();
   }, [lectureId]);
-
-  const getFileNameFromUrl = (url: string) => {
-    try {
-      const urlParts = url.split("/");
-      const fileName = urlParts[urlParts.length - 1];
-      return fileName || "녹음파일";
-    } catch {
-      return "녹음파일";
-    }
-  };
 
   if (loading) return <div>로딩 중...</div>;
 
@@ -72,11 +84,15 @@ export default function LectureRecording() {
         {audio ? (
           <div className={styles.audioItem}>
             <span className={styles.audioName}>
-              <FileDisplay fileName={getFileNameFromUrl(audio.audioName)} />
-              <Download />
+              <FileDisplay fileName={audio.audioName} />
+              <IconButton
+                icon={<Download />}
+                onClick={handleDownload}
+                ariaLabel={"강의 녹음본 다운로드"}
+              />
             </span>
             <audio controls className={styles.audioPlayer}>
-              <source src={audio.audioName} type="audio/mpeg" />
+              <source src={audio.audioUrl} type="audio/mpeg" />
               브라우저가 오디오를 지원하지 않습니다.
             </audio>
           </div>

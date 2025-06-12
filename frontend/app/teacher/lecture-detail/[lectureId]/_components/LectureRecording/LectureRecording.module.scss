@@ -32,6 +32,9 @@
 }
 
 .audioName {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   padding: $spacing-xs;
   border: 1px solid $color-neutral-7;
   border-radius: $radius-lg;
