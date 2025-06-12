@@ -3,9 +3,9 @@ import React from "react";
 import styles from "./QuizInfo.module.scss";
 
 const data = {
-  title: "강의제목입니다~~",
-  quizDate: "2025-04-14",
-  quizDay: "월",
+  title: "Ensemble 1",
+  quizDate: "2025-06-03",
+  quizDay: "화",
 };
 
 function formatDate(date: string, day: string) {
