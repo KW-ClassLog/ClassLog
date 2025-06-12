@@ -3,6 +3,9 @@
 import { Quiz } from "@/types/quizzes/createQuizTypes";
 import ClosableModal from "@/components/Modal/ClosableModal/ClosableModal";
 import styles from "./QuizPreviewModal.module.scss";
+import { CircleCheck } from "lucide-react";
+import QuizInput from "@/components/Input/QuizInput/QuizInput";
+import QuizChoiceButton from "@/components/Button/QuizChoiceButton/QuizChoiceButton";
 
 interface QuizPreviewModalProps {
   quizzes: Quiz[];
@@ -39,28 +42,48 @@ const QuizPreviewModal = ({
       }
     }
 
+    // OX 문제는 labels를 ["O", "X"]로 자동 설정
+    const getLabels = () => {
+      if (quiz.type === "trueFalse" && !quiz.options) {
+        return ["O", "X"];
+      }
+      return quiz.options;
+    };
+
     return (
-      <div key={idx} className={styles.previewQuizBox}>
-        <div className={styles.previewQuizHeader}>
-          <div className={styles.previewTypeLabel}>
-            {quiz.type === "multipleChoice"
-              ? "객관식"
-              : quiz.type === "shortAnswer"
-              ? "단답형"
-              : "O/X"}
+      <div key={idx} className={styles.card}>
+        <div className={styles.header}>
+          <div className={styles.headerLeft}>
+            <CircleCheck
+              className={styles.checkIcon}
+              size={24}
+              color="#4894FE"
+            />
+            <h1 className={styles.index}>퀴즈 {idx + 1}</h1>
           </div>
         </div>
-        <div className={styles.previewQuestion}>{quiz.quizBody}</div>
-        {quiz.type === "multipleChoice" && quiz.options && (
-          <div className={styles.previewOptions}>
-            {quiz.options.map((option, oIdx) => (
-              <div key={oIdx} className={styles.previewOption}>
-                {oIdx + 1}. {option}
+        <div className={styles.content}>
+          <h2 className={styles.quizTitle}>{quiz.quizBody}</h2>
+          <div className={styles.quizContent}>
+            {quiz.type === "multipleChoice" || quiz.type === "trueFalse" ? (
+              <div className={styles.choiceButtons}>
+                {getLabels()?.map((label) => (
+                  <QuizChoiceButton
+                    key={label}
+                    label={label}
+                    correctAnswer={displaySolution}
+                    mode="teacher"
+                  />
+                ))}
               </div>
-            ))}
+            ) : (
+              <QuizInput
+                mode="teacher"
+                correctAnswer={displaySolution}
+              />
+            )}
           </div>
-        )}
-        <div className={styles.previewAnswer}>정답: {displaySolution}</div>
+        </div>
       </div>
     );
   };

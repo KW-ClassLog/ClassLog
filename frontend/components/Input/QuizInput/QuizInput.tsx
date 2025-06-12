@@ -20,7 +20,7 @@ type ResultModeProps = {
 type TeacherModeProps = {
   mode: "teacher";
   correctAnswer: string; // 정답
-  count: number; // 선택한 사람 수
+  count?: number; // 선택한 사람 수
 };
 
 type QuizInputProps = QuizModeProps | ResultModeProps | TeacherModeProps;
