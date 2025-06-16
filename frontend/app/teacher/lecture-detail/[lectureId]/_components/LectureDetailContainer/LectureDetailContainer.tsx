@@ -1,17 +1,14 @@
 "use client";
-import { useParams } from "next/navigation";
 import LectureHeader from "../LectureHeader/LectureHeader";
 import LectureMainGrid from "../LectureMainGrid/LectureMainGrid";
 import { LectureDetailProvider } from "../LectureDetailContext";
 import style from "./LectureDetailContainer.module.scss";
 
-export default function LectureDetailContainer() {
-  const params = useParams();
-  // lectureId가 URL의 마지막 파라미터
-  const lectureId = Array.isArray(params.lectureId)
-    ? params.lectureId[params.lectureId.length - 1]
-    : params.lectureId;
-
+export default function LectureDetailContainer({
+  lectureId,
+}: {
+  lectureId: string;
+}) {
   return (
     <div className={style.lectureDetailContainer}>
       {lectureId && (
