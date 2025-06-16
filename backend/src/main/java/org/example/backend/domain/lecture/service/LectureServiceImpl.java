@@ -91,7 +91,7 @@ public class LectureServiceImpl implements LectureService {
 
         String weekDay = lecture.getLectureDate()
                 .getDayOfWeek()
-                .getDisplayName(TextStyle.FULL, Locale.KOREAN);
+                .getDisplayName(TextStyle.SHORT, Locale.KOREAN);
 
 
         return LectureResponseDTO.builder()
