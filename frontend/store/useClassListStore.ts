@@ -8,12 +8,17 @@ interface ClassListStore {
   error: string | null;
   fetchClassList: () => Promise<void>;
   refreshClassList: () => Promise<void>;
+  reset: () => void;
 }
 
-const useClassListStore = create<ClassListStore>((set) => ({
+const initialState = {
   classList: [],
   isLoading: false,
   error: null,
+};
+
+const useClassListStore = create<ClassListStore>((set) => ({
+  ...initialState,
   fetchClassList: async () => {
     try {
       set({ isLoading: true, error: null });
@@ -40,6 +45,7 @@ const useClassListStore = create<ClassListStore>((set) => ({
       set({ classList: response.result });
     }
   },
+  reset: () => set(initialState),
 }));
 
 export default useClassListStore;

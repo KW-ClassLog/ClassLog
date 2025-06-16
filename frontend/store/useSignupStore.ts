@@ -11,16 +11,22 @@ interface SignupState {
     field: keyof SignupState,
     value: string | "TEACHER" | "STUDENT" | null
   ) => void;
+  reset: () => void;
 }
 
-export const useSignupStore = create<SignupState>((set) => ({
+const initialState = {
   role: null,
   name: "",
   phoneNumber: "",
   organization: "",
   email: "",
   password: "",
+};
+
+export const useSignupStore = create<SignupState>((set) => ({
+  ...initialState,
   setField: (field, value) => {
     set({ [field]: value });
   },
+  reset: () => set(initialState),
 }));
