@@ -5,6 +5,7 @@ import { useState } from "react";
 import BackWithTitleHeader from "@/components/Header/Student/BackWithTitleHeader/BackWithTitleHeader";
 import Image from "next/image";
 import { ROUTES } from "@/constants/routes";
+import { IMAGES } from "@/constants/images";
 import Link from "next/link";
 import BasicInput from "@/components/Input/BasicInput/BasicInput";
 import FullWidthButton from "@/components/Button/FullWidthButton/FullWidthButton";
@@ -56,12 +57,7 @@ export default function RightSection({ isMobile }: RightSectionProps) {
     <div className={styles.rightSection}>
       {isMobile && <BackWithTitleHeader title="로그인" />}
       <div className={styles.loginForm}>
-        <Image
-          src="/images/logo3.png"
-          alt="ClassLog Logo"
-          width={150}
-          height={50}
-        />
+        <Image src={IMAGES.logo3} alt="ClassLog Logo" width={150} height={50} />
         <BasicInput
           value={email}
           onChange={(e) => setEmail(e.target.value)}
@@ -84,7 +80,7 @@ export default function RightSection({ isMobile }: RightSectionProps) {
         <div className={styles.or}>OR</div>
         <button className={styles.kakaoButton}>
           <Image
-            src="/images/kakao_logo.png"
+            src={IMAGES.kakaoLogo}
             alt="Kakao Logo"
             width={20}
             height={20}

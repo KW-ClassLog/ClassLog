@@ -3,6 +3,7 @@
 import styles from "./QuestionList.module.scss";
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { IMAGES } from "@/constants/images";
 import { useLectureDetail } from "../LectureDetailContext";
 
 interface Question {
@@ -48,7 +49,7 @@ export default function QuestionList() {
               <div className={styles.questionHeader}>
                 <div className={styles.userInfo}>
                   <Image
-                    src={q.profileUrl}
+                    src={q.profileUrl || IMAGES.defaultProfile}
                     alt="프로필"
                     width={30}
                     height={30}

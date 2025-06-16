@@ -12,6 +12,7 @@ import ConfirmModal from "@/components/Modal/ConfirmModal/ConfirmModal";
 import useSelectedClassStore from "@/store/useSelectedClassStore";
 import useClassListStore from "@/store/useClassListStore";
 import { GetProfileResult } from "@/types/users/getProfileTypes";
+import { IMAGES } from "@/constants/images";
 
 type TeacherHeaderProps = {
   mode: "classSelection" | "default";
@@ -169,7 +170,7 @@ const TeacherHeader: React.FC<TeacherHeaderProps> = ({ mode }) => {
           onClick={() => setIsDropdownOpen((prev) => !prev)}
         >
           <Image
-            src={userProfile?.profile || "/images/default_profile.jpg"}
+            src={userProfile?.profile || IMAGES.defaultProfile}
             alt="Profile"
             className={styles.profileImage}
             width={50}

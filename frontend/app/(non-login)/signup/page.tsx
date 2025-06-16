@@ -2,6 +2,7 @@
 
 import VerticalCenterContainer from "@/components/Container/VerticalCenterContainer/VerticalCenterContainer";
 import Image from "next/image";
+import { IMAGES } from "@/constants/images";
 import styles from "./page.module.scss";
 import { useState, useEffect } from "react";
 import BackWithTitleHeader from "@/components/Header/Student/BackWithTitleHeader/BackWithTitleHeader";
@@ -31,7 +32,7 @@ export default function SignupPage() {
       <VerticalCenterContainer>
         <div className={styles.signupContainer}>
           <Image
-            src="/images/logo3.png"
+            src={IMAGES.logo3}
             alt="ClassLog Logo"
             width={190}
             height={60}

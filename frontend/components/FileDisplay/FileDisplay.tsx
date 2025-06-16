@@ -2,21 +2,23 @@
 
 import React from "react";
 import Image from "next/image";
+import { StaticImageData } from "next/image";
+import { ICONS } from "@/constants/images";
 import styles from "./FileDisplay.module.scss";
 
 // 파일 확장자 그룹화 및 매핑
-const fileIcons: { [key: string]: string } = {
-  zip: "/icons/zip.svg",
-  word: "/icons/word.svg",
-  video: "/icons/video.svg",
-  text: "/icons/text.svg",
-  ppt: "/icons/ppt.svg",
-  pdf: "/icons/pdf.svg",
-  none: "/icons/none.svg",
-  music: "/icons/music.svg",
-  img: "/icons/img.svg",
-  excel: "/icons/excel.svg",
-  code: "/icons/code.svg",
+const fileIcons: { [key: string]: StaticImageData } = {
+  zip: ICONS.zip,
+  word: ICONS.word,
+  video: ICONS.video,
+  text: ICONS.text,
+  ppt: ICONS.ppt,
+  pdf: ICONS.pdf,
+  none: ICONS.none,
+  music: ICONS.music,
+  img: ICONS.img,
+  excel: ICONS.excel,
+  code: ICONS.code,
 };
 
 type FileDisplayProps = {
