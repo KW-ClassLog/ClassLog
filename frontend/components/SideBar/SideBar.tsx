@@ -2,8 +2,10 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { StaticImageData } from "next/image";
 import styles from "./SideBar.module.scss";
 import { ROUTES } from "@/constants/routes"; // 페이지 경로 상수 가져오기
+import { IMAGES } from "@/constants/images";
 
 import {
   House,
@@ -16,7 +18,7 @@ import Link from "next/link";
 
 const SideBar = () => {
   const [activeTab, setActiveTab] = useState<string>("home");
-  const [logoSrc, setLogoSrc] = useState<string>("/images/logo1.png");
+  const [logoSrc, setLogoSrc] = useState<StaticImageData>(IMAGES.logo1);
 
   // TODO : 스토어에 활성화된 탭 저장하기
 
@@ -40,9 +42,9 @@ const SideBar = () => {
     // 화면 크기 변화에 따라 로고 이미지 URL 변경
     const handleResize = () => {
       if (window.innerWidth < 1280) {
-        setLogoSrc("/images/logo2.png"); // 작은 화면에서는 다른 이미지
+        setLogoSrc(IMAGES.logo2); // 작은 화면에서는 다른 이미지
       } else {
-        setLogoSrc("/images/logo1.png"); // 큰 화면에서는 기본 이미지
+        setLogoSrc(IMAGES.logo1); // 큰 화면에서는 기본 이미지
       }
     };
 

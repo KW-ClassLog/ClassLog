@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import Image from "next/image";
+import { IMAGES } from "@/constants/images";
 import styles from "./ChatBox.module.scss";
 
 type ChatBoxProps = {
@@ -23,7 +24,7 @@ const ChatBox: React.FC<ChatBoxProps> = ({
       <div className={styles.messageContainer}>
         {!isAnonymous && (
           <Image
-            src={profilePicture}
+            src={profilePicture || IMAGES.defaultProfile}
             alt="Profile"
             className={styles.profilePicture}
             width={40}

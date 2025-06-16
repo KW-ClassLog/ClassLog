@@ -8,12 +8,17 @@ interface LectureListStore {
   error: string | null;
   fetchLectureList: (classId: string) => Promise<void>;
   refreshLectureList: (classId: string) => Promise<void>;
+  reset: () => void;
 }
 
-const useLectureListStore = create<LectureListStore>((set) => ({
+const initialState = {
   lectureList: [],
   isLoading: false,
   error: null,
+};
+
+const useLectureListStore = create<LectureListStore>((set) => ({
+  ...initialState,
   fetchLectureList: async (classId: string) => {
     try {
       set({ isLoading: true, error: null });
@@ -37,6 +42,7 @@ const useLectureListStore = create<LectureListStore>((set) => ({
       set({ lectureList: response.result });
     }
   },
+  reset: () => set(initialState),
 }));
 
 export default useLectureListStore;

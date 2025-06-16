@@ -8,13 +8,18 @@ interface SelectedClassStore {
   selectedClassName: string | null;
   setSelectedClass: (classId: string, className: string) => void;
   resetSelectedClass: () => void;
+  reset: () => void;
 }
+
+const initialState = {
+  selectedClassId: null,
+  selectedClassName: null,
+};
 
 const useSelectedClassStore = create<SelectedClassStore>()(
   persist(
     (set) => ({
-      selectedClassId: null,
-      selectedClassName: null,
+      ...initialState,
       setSelectedClass: (classId, className) =>
         set({
           selectedClassId: classId,
@@ -25,6 +30,7 @@ const useSelectedClassStore = create<SelectedClassStore>()(
           selectedClassId: null,
           selectedClassName: null,
         }),
+      reset: () => set(initialState),
     }),
     {
       name: "class-storage",

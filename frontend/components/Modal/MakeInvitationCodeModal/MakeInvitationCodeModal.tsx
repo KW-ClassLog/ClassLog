@@ -4,6 +4,7 @@ import { createPortal } from "react-dom";
 import styles from "./MakeInvitationCodeModal.module.scss";
 import ClosableModal from "../ClosableModal/ClosableModal";
 import Image from "next/image";
+import { IMAGES } from "@/constants/images";
 
 // Props 타입 정의
 type MakeInvitationCodeModalProps = { classId: string; onClose: () => void };
@@ -56,7 +57,7 @@ const MakeInvitationCodeModal: React.FC<MakeInvitationCodeModalProps> = ({
             <div className={styles.option} onClick={handleQRCodeClick}>
               <div className={styles.qrCode}>
                 <Image
-                  src="/images/QRcode.png"
+                  src={IMAGES.qrCode}
                   alt="QR Code"
                   width={100}
                   height={100}
@@ -88,12 +89,7 @@ const MakeInvitationCodeModal: React.FC<MakeInvitationCodeModalProps> = ({
             <span className={styles.number}>30</span>초 후 만료
           </div>
           <div className={styles.qrCodeDisplay}>
-            <Image
-              src="/images/QRcode.png"
-              alt="QR Code"
-              width={200}
-              height={200}
-            />
+            <Image src={IMAGES.qrCode} alt="QR Code" width={200} height={200} />
           </div>
           <p>QR코드를 스캔해 클래스에 입장하세요</p>
         </div>
