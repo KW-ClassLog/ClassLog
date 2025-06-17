@@ -3,6 +3,13 @@
   display: flex;
   align-items: center;
   height: 6vh;
+  justify-content: space-between;
+}
+
+.buttonContainer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .backBtn {
