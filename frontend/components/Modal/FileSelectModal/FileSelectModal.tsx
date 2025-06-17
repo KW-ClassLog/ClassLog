@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { createPortal } from "react-dom";
 import styles from "./FileSelectModal.module.scss";
 import ClosableModal from "../ClosableModal/ClosableModal";
@@ -10,8 +10,8 @@ import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
 import { X } from "lucide-react";
 import { fetchLectureNotesByClass } from "@/api/lectures/fetchLectureNotesByClass";
 import { FetchLectureNotesByClassResult } from "@/types/lectures/fetchLectureNotesByClassTypes";
-import { uploadLectureNote } from "@/api/lectures/uploadLectureNote";
 import { mappingLectureNote } from "@/api/lectures/mappingLectureNote";
+import { uploadLectureNote } from "@/api/lectures/uploadLectureNote";
 
 type FileSelectModalProps = {
   classId: string;
@@ -30,7 +30,7 @@ const FileSelectModal: React.FC<FileSelectModalProps> = ({
 }) => {
   const [fileList, setFileList] = useState<FetchLectureNotesByClassResult[]>(
     []
-  ); // 업로드된 파일 관리
+  );
   const [selectedFiles, setSelectedFiles] = useState<string[]>(
     registeredFiles || []
   ); // 선택된 파일 이름만 저장
@@ -60,7 +60,7 @@ const FileSelectModal: React.FC<FileSelectModalProps> = ({
   };
 
   // classId로 파일 목록 가져오기
-  const loadFiles = async () => {
+  const loadFiles = useCallback(async () => {
     try {
       setIsLoading(true);
       const response = await fetchLectureNotesByClass(classId);
@@ -73,11 +73,11 @@ const FileSelectModal: React.FC<FileSelectModalProps> = ({
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [classId]);
 
   useEffect(() => {
     loadFiles();
-  }, [classId]);
+  }, [classId, loadFiles]);
 
   // 파일 선택/해제
   const handleSelectFile = (fileName: string) => {
