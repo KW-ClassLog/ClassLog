@@ -6,8 +6,17 @@ import QuizDetailChart from "./QuizDetailChart/QuizDetailChart";
 import styles from "./StatisticsContainer.module.scss";
 import Masonry from "react-masonry-css";
 
+interface StatData {
+  averageCorrectRate: number;
+  totalQuizCount: number;
+  quizList: Array<{
+    quizOrder: number;
+    correctRate: number;
+  }>;
+}
+
 interface StatisticsContainerProps {
-  statData: any;
+  statData: StatData;
 }
 
 export default function StatisticsContainer({
