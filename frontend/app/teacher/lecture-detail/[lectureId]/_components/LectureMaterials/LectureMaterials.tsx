@@ -4,7 +4,7 @@ import styles from "./LectureMaterials.module.scss";
 import FileDisplay from "@/components/FileDisplay/FileDisplay";
 import FileSelectModal from "@/components/Modal/FileSelectModal/FileSelectModal";
 import { Plus } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { fetchLectureNoteByLectureId } from "@/api/lectures/fetchLectureNoteByLectureId";
 import { FetchLectureNoteByLectureIdResult } from "@/types/lectures/fetchLectureNoteByLectureIdTypes";
 import { useLectureDetail } from "../LectureDetailContext";
@@ -17,7 +17,7 @@ export default function LectureMaterials() {
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const fetchLectureNotes = async () => {
+  const fetchLectureNotes = useCallback(async () => {
     try {
       setLoading(true);
       const response = await fetchLectureNoteByLectureId(lectureId);
@@ -34,11 +34,11 @@ export default function LectureMaterials() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [lectureId]);
 
   useEffect(() => {
     fetchLectureNotes();
-  }, [lectureId]);
+  }, [lectureId, fetchLectureNotes]);
 
   const handleAddMaterials = () => {
     setIsModalOpen(true);
