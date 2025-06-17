@@ -2,7 +2,7 @@
 
 import styles from "./page.module.scss";
 import useSelectedClassStore from "@/store/useSelectedClassStore";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import LectureItem from "./_components/LectureItem/LectureItem";
 import NoDataView from "@/components/NoDataView/NoDataView";
 import { MessageCircleQuestion } from "lucide-react";
@@ -13,7 +13,7 @@ export default function TeacherQuizManagementPage() {
   const { selectedClassId, selectedClassName } = useSelectedClassStore();
   const [lectures, setLectures] = useState<FetchQuizzesByClassResult[]>([]);
 
-  const fetchLectures = async () => {
+  const fetchLectures = useCallback(async () => {
     if (selectedClassId) {
       const res = await fetchQuizzesByClass(selectedClassId);
       if (res.isSuccess && res.result) {
@@ -22,11 +22,11 @@ export default function TeacherQuizManagementPage() {
         setLectures([]);
       }
     }
-  };
+  }, [selectedClassId]);
 
   useEffect(() => {
     fetchLectures();
-  }, [selectedClassId]);
+  }, [selectedClassId, fetchLectures]);
 
   if (!selectedClassId || !selectedClassName) {
     return (
