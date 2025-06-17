@@ -28,7 +28,7 @@ export default function EmailVerification() {
     setCountdown(0);
     setField("email", "");
     setErrorMessage("");
-  }, [emailInput]);
+  }, [emailInput, setField]);
 
   // 이메일 인증 버튼 클릭시
   const handleVerifyEmail = async () => {
