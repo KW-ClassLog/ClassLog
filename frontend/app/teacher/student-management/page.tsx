@@ -78,12 +78,11 @@ export default function TeacherStudentManagementPage() {
   ];
 
   // 삭제 함수
-  const handleDelete = (selectedIds: string[]) => {
+  const handleDelete = () => {
     // 선택된 학생 ID를 통해 데이터를 필터링하여 삭제
-    const updatedStudents = students.filter(
-      (student) => !selectedIds.includes(student.userId)
-    );
-
+    // const updatedStudents = students.filter(
+    //   (student) => !selectedIds.includes(student.userId)
+    // );
     // 이제 삭제된 학생을 반영하는 로직을 추가할 수 있습니다.
   };
 

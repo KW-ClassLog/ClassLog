@@ -7,11 +7,10 @@ import Image from "next/image";
 import { IMAGES } from "@/constants/images";
 
 // Props 타입 정의
-type MakeInvitationCodeModalProps = { classId: string; onClose: () => void };
+type MakeInvitationCodeModalProps = { onClose: () => void };
 
 // MakeInvitationCodeModal 컴포넌트 정의
 const MakeInvitationCodeModal: React.FC<MakeInvitationCodeModalProps> = ({
-  classId,
   onClose,
 }) => {
   // TODO1) 초대 코드 API 호출:
@@ -31,11 +30,6 @@ const MakeInvitationCodeModal: React.FC<MakeInvitationCodeModalProps> = ({
   // QR 코드 선택 시
   const handleQRCodeClick = () => {
     setModalState(3);
-  };
-
-  // 뒤로 가기 (선택 화면으로 돌아가기)
-  const handleBackClick = () => {
-    setModalState(1);
   };
 
   // 모달 상태에 따른 렌더링

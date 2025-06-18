@@ -3,7 +3,7 @@
 import FitContentButton from "@/components/Button/FitContentButton/FitContentButton";
 import styles from "./LectureHeader.module.scss";
 import { Clock, Calendar } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useLectureStatusAction } from "@/hooks/useLectureStatusAction";
 import MakeQuizModal from "@/components/Modal/MakeQuizModal/MakeQuizModal";
 import { FetchLectureDetailResult } from "@/types/lectures/fetchLectureDetailTypes";
@@ -17,7 +17,7 @@ export default function LectureHeader() {
   const [showQuizModal, setShowQuizModal] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       setLoading(true);
       const response = await fetchLectureDetail(lectureId);
@@ -36,11 +36,11 @@ export default function LectureHeader() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [lectureId, setClassId]);
 
   useEffect(() => {
     fetchData();
-  }, [lectureId, setClassId]);
+  }, [lectureId, setClassId, fetchData]);
 
   const handleStartLecture = () => {
     // TODO: 강의 시작 로직 구현

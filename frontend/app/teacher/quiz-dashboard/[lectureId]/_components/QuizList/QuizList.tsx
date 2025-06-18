@@ -2,12 +2,43 @@
 import React from "react";
 import styles from "./QuizList.module.scss";
 
+interface QuizOption {
+  optionOrder: number | null;
+  option: string;
+  count: number;
+}
+
+interface BaseQuiz {
+  quizId: string;
+  quizOrder: number;
+  quizBody: string;
+  correctRate: number;
+  solution: string;
+}
+
+interface MultipleChoiceQuiz extends BaseQuiz {
+  type: "multipleChoice";
+  options: QuizOption[];
+}
+
+interface TrueFalseQuiz extends BaseQuiz {
+  type: "trueFalse";
+  options: QuizOption[];
+}
+
+interface ShortAnswerQuiz extends BaseQuiz {
+  type: "shortAnswer";
+  count: number;
+}
+
+type Quiz = MultipleChoiceQuiz | TrueFalseQuiz | ShortAnswerQuiz;
+
 interface QuizListProps {
-  quizList: any[];
+  quizList: Quiz[];
   totalQuizCount: number;
 }
 
-function QuizCard({ quiz }: { quiz: any }) {
+function QuizCard({ quiz }: { quiz: Quiz }) {
   return (
     <div className={styles.card}>
       <div className={styles.quizHeader}>
@@ -17,7 +48,7 @@ function QuizCard({ quiz }: { quiz: any }) {
       <div className={styles.quizTitle}>{quiz.quizBody}</div>
       {quiz.type === "multipleChoice" && (
         <div className={styles.options}>
-          {quiz.options.map((opt: any) => (
+          {quiz.options.map((opt) => (
             <div
               key={opt.optionOrder}
               className={
@@ -36,7 +67,7 @@ function QuizCard({ quiz }: { quiz: any }) {
       )}
       {quiz.type === "trueFalse" && (
         <div className={styles.oxRow}>
-          {quiz.options.map((opt: any) => (
+          {quiz.options.map((opt) => (
             <div
               key={opt.option}
               className={
