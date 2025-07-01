@@ -87,7 +87,10 @@ const MakeInvitationCodeModal: React.FC<MakeInvitationCodeModalProps> = ({
             <div className={styles.option} onClick={handleTextCodeClick}>
               <div className={styles.code}>12B3</div>
               <h2>문자 코드</h2>
-              <p>학생들이 생성된 문자 코드를 입력하여 입장할 수 있습니다</p>
+              <p>
+                학생들이 문자 코드를 입력하여 <br />
+                입장할 수 있습니다
+              </p>
             </div>
 
             {/* QR 코드 선택 */}
@@ -101,7 +104,10 @@ const MakeInvitationCodeModal: React.FC<MakeInvitationCodeModalProps> = ({
                 />
               </div>
               <h2>QR 코드</h2>
-              <p>학생들이 QR 코드를 스캔하여 입장할 수 있습니다</p>
+              <p>
+                학생들이 QR 코드를 스캔하여 <br />
+                입장할 수 있습니다
+              </p>
             </div>
           </div>
         </div>
