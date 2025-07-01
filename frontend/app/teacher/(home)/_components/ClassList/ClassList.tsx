@@ -1,7 +1,7 @@
 "use client";
 
 import styles from "./ClassList.module.scss";
-import { MoreVertical, Clock, Calendar } from "lucide-react";
+import { MoreVertical, Clock, Calendar, Key } from "lucide-react";
 import { useState, useEffect } from "react";
 import CreateClassModal from "./CreateClassModal/CreateClassModal";
 import ClosableModal from "@/components/Modal/ClosableModal/ClosableModal";
@@ -12,12 +12,16 @@ import { deleteClass } from "@/api/classes/deleteClass";
 import AlertModal from "@/components/Modal/AlertModal/AlertModal";
 import ConfirmModal from "@/components/Modal/ConfirmModal/ConfirmModal";
 import useClassListStore from "@/store/useClassListStore";
+import MakeInvitationCodeModal from "@/components/Modal/MakeInvitationCodeModal/MakeInvitationCodeModal";
 
 export default function ClassList() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [dropdownOpenId, setDropdownOpenId] = useState<string | null>(null);
   const [alert, setAlert] = useState<string | null>(null);
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
+  const [invitationModalClassId, setInvitationModalClassId] = useState<
+    string | null
+  >(null);
 
   const { classList, isLoading, error, fetchClassList } = useClassListStore();
 
@@ -51,6 +55,11 @@ export default function ClassList() {
       setAlert(res?.message || "클래스를 삭제하지 못했습니다.");
     }
     setConfirmDeleteId(null);
+  };
+
+  const handleEntryCode = (classId: string) => {
+    setDropdownOpenId(null);
+    setInvitationModalClassId(classId);
   };
 
   return (
@@ -90,6 +99,10 @@ export default function ClassList() {
                 </button>
                 {dropdownOpenId === classItem.classId && (
                   <div className={styles.dropdownMenu}>
+                    <button onClick={() => handleEntryCode(classItem.classId)}>
+                      <Key size={16} />
+                      <span>입장코드 생성하기</span>
+                    </button>
                     <button onClick={() => handleEdit(classItem.classId)}>
                       <PencilLine size={16} />
                       <span>수정하기</span>
@@ -122,6 +135,13 @@ export default function ClassList() {
         <ClosableModal onClose={handleCloseModal}>
           <CreateClassModal onClose={handleCloseModal} />
         </ClosableModal>
+      )}
+
+      {invitationModalClassId && (
+        <MakeInvitationCodeModal
+          onClose={() => setInvitationModalClassId(null)}
+          classId={invitationModalClassId}
+        />
       )}
 
       {confirmDeleteId && (
