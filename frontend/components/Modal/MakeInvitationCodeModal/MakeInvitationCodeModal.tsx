@@ -5,37 +5,80 @@ import styles from "./MakeInvitationCodeModal.module.scss";
 import ClosableModal from "../ClosableModal/ClosableModal";
 import Image from "next/image";
 import { IMAGES } from "@/constants/images";
+import { fetchEntryCode } from "@/api/classes/fetchEntryCode";
+import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
+import { QRCodeSVG } from "qrcode.react";
 
 // Props 타입 정의
-type MakeInvitationCodeModalProps = { onClose: () => void };
+type MakeInvitationCodeModalProps = { onClose: () => void; classId: string };
 
 // MakeInvitationCodeModal 컴포넌트 정의
 const MakeInvitationCodeModal: React.FC<MakeInvitationCodeModalProps> = ({
   onClose,
+  classId,
 }) => {
-  // TODO1) 초대 코드 API 호출:
-  // TODO2) 초대 코드 표시 및 카운트다운:
-  // TODO3) 30초 카운트다운:
+  // 모달 상태 관리: 'select'=선택 화면, 'text'=문자 코드 화면, 'qr'=QR 코드 화면
+  const [modalState, setModalState] = useState<"select" | "text" | "qr">(
+    "select"
+  );
+  // 초대 코드 상태 및 만료 시간
+  const [invitationCode, setInvitationCode] = useState<string>("");
+  const [countdown, setCountdown] = useState<number>(30);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
-  // 모달 상태 관리: 1=선택 화면, 2=문자 코드 화면, 3=QR 코드 화면
-  const [modalState, setModalState] = useState<1 | 2 | 3>(1);
-  // 초대 코드 (실제로는 API에서 가져와야 함)
-  const invitationCode = "13N4A0";
+  // 초대 코드 API 호출 함수
+  const fetchCode = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetchEntryCode(classId);
+      if (res && res.isSuccess && res.result) {
+        setInvitationCode(res.result.entryCode);
+        setCountdown(30);
+      } else {
+        setError(res?.message || "초대 코드 생성에 실패했습니다.");
+      }
+    } catch {
+      setError("네트워크 오류가 발생했습니다.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // 문자 코드 선택 시
-  const handleTextCodeClick = () => {
-    setModalState(2);
+  const handleTextCodeClick = async () => {
+    setModalState("text");
+    await fetchCode();
   };
 
   // QR 코드 선택 시
-  const handleQRCodeClick = () => {
-    setModalState(3);
+  const handleQRCodeClick = async () => {
+    setModalState("qr");
+    await fetchCode();
   };
+
+  // 카운트다운 타이머
+  React.useEffect(() => {
+    if (
+      (modalState === "text" || modalState === "qr") &&
+      countdown > 0 &&
+      invitationCode
+    ) {
+      const timer = setInterval(() => {
+        setCountdown((prev) => prev - 1);
+      }, 1000);
+      return () => clearInterval(timer);
+    }
+    if (countdown === 0) {
+      setInvitationCode("");
+    }
+  }, [modalState, countdown, invitationCode]);
 
   // 모달 상태에 따른 렌더링
   return createPortal(
     <ClosableModal onClose={onClose}>
-      {modalState === 1 && (
+      {modalState === "select" && (
         <div className={styles.modalContainer}>
           <h1>초대 코드 생성 방식 선택</h1>
 
@@ -64,28 +107,35 @@ const MakeInvitationCodeModal: React.FC<MakeInvitationCodeModalProps> = ({
         </div>
       )}
 
-      {modalState === 2 && (
+      {(modalState === "text" || modalState === "qr") && (
         <div className={styles.codeDisplayModal}>
-          <div className={styles.timeLimit}>
-            <span className={styles.number}>30</span>초 후 만료
-          </div>
-          <div className={styles.codeDisplay}>
-            <h2>{invitationCode}</h2>
-          </div>
-          <p>문자 코드를 입력해 클래스에 입장하세요</p>
-        </div>
-      )}
-
-      {modalState === 3 && (
-        <div className={styles.codeDisplayModal}>
-          <div className={styles.timeLimit}>
-            {" "}
-            <span className={styles.number}>30</span>초 후 만료
-          </div>
-          <div className={styles.qrCodeDisplay}>
-            <Image src={IMAGES.qrCode} alt="QR Code" width={200} height={200} />
-          </div>
-          <p>QR코드를 스캔해 클래스에 입장하세요</p>
+          {loading ? (
+            <LoadingSpinner text="초대 코드 생성 중..." />
+          ) : error ? (
+            <div style={{ color: "red" }}>{error}</div>
+          ) : invitationCode ? (
+            <>
+              <div className={styles.timeLimit}>
+                <span className={styles.number}>{countdown}</span>초 후 만료
+              </div>
+              {modalState === "text" ? (
+                <div className={styles.codeDisplay}>
+                  <h2>{invitationCode}</h2>
+                </div>
+              ) : (
+                <div className={styles.qrCodeDisplay}>
+                  <QRCodeSVG value={invitationCode} size={200} />
+                </div>
+              )}
+              <p>
+                {modalState === "text"
+                  ? "문자 코드를 입력해 클래스에 입장하세요"
+                  : "QR코드를 스캔해 클래스에 입장하세요"}
+              </p>
+            </>
+          ) : (
+            <div>코드가 만료되었습니다. 다시 시도해주세요.</div>
+          )}
         </div>
       )}
     </ClosableModal>,
