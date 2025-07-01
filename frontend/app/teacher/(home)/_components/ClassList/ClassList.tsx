@@ -1,7 +1,7 @@
 "use client";
 
 import styles from "./ClassList.module.scss";
-import { MoreVertical, Clock, Calendar, KeyRound } from "lucide-react";
+import { MoreVertical, Clock, Calendar, UserRound } from "lucide-react";
 import { useState, useEffect } from "react";
 import CreateClassModal from "./CreateClassModal/CreateClassModal";
 import ClosableModal from "@/components/Modal/ClosableModal/ClosableModal";
@@ -100,8 +100,8 @@ export default function ClassList() {
                 {dropdownOpenId === classItem.classId && (
                   <div className={styles.dropdownMenu}>
                     <button onClick={() => handleEntryCode(classItem.classId)}>
-                      <KeyRound size={16} />
-                      <span>입장코드 생성하기</span>
+                      <UserRound size={16} />
+                      <span>학생 초대하기</span>
                     </button>
                     <button onClick={() => handleEdit(classItem.classId)}>
                       <PencilLine size={16} />
