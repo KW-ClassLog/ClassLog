@@ -15,6 +15,7 @@ import QuizPreviewModal from "../QuizPreviewModal/QuizPreviewModal";
 interface QuizPreviewProps {
   lectureId: string;
   useAudio: boolean;
+  shouldGenerateQuiz?: boolean;
   onCustomize?: (selectedQuizzes: Quiz[]) => void;
   onSubmit?: (quizzes: Quiz[]) => void;
   onClose?: () => void;
@@ -23,6 +24,7 @@ interface QuizPreviewProps {
 const QuizPreview = ({
   lectureId,
   useAudio,
+  shouldGenerateQuiz = true,
   onCustomize,
   onSubmit,
   onClose,
@@ -49,8 +51,8 @@ const QuizPreview = ({
   const quizzes = getQuizzes(lectureId);
 
   useEffect(() => {
-    // 이미 퀴즈가 로드되어 있으면 다시 로드하지 않음
-    if (quizzes !== null) return;
+    // shouldGenerateQuiz가 false이거나 이미 퀴즈가 로드되어 있으면 다시 로드하지 않음
+    if (!shouldGenerateQuiz || quizzes !== null) return;
 
     setIsLoading(true);
     setError(null);
@@ -70,7 +72,14 @@ const QuizPreview = ({
       .finally(() => {
         setIsLoading(false);
       });
-  }, [lectureId, useAudio, quizzes, setQuizzes, setError, setIsLoading]);
+  }, [
+    lectureId,
+    shouldGenerateQuiz,
+    quizzes,
+    setQuizzes,
+    setError,
+    setIsLoading,
+  ]);
 
   const handleQuizSelection = (index: number) => {
     if (!quizzes) return;

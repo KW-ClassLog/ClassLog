@@ -76,3 +76,14 @@
     }
   }
 }
+
+.generateButtonSection {
+  display: flex;
+  justify-content: center;
+  padding: $spacing-3xl 0;
+}
+
+.description {
+  font-size: $font-size-md;
+  color: $color-blue;
+}

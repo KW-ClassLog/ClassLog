@@ -10,6 +10,7 @@ import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
 import { Quiz } from "@/types/quizzes/createQuizTypes";
 import CustomizeQuizModal from "./CustomizeQuizModal/CustomizeQuizModal";
 import { useQuizStore } from "@/store/useQuizStore";
+import FitContentButton from "@/components/Button/FitContentButton/FitContentButton";
 
 interface MakeQuizModalProps {
   onClose: () => void;
@@ -21,6 +22,7 @@ const MakeQuizModal = ({ onClose, lectureId }: MakeQuizModalProps) => {
   const [customizingQuizzes, setCustomizingQuizzes] = useState<Quiz[] | null>(
     null
   );
+  const [shouldGenerateQuiz, setShouldGenerateQuiz] = useState(false);
 
   // 퀴즈 스토어 사용
   const {
@@ -35,6 +37,13 @@ const MakeQuizModal = ({ onClose, lectureId }: MakeQuizModalProps) => {
 
   const handleCustomize = (selectedQuizzes: Quiz[]) => {
     setCustomizingQuizzes(selectedQuizzes);
+  };
+
+  const handleToggleAudio = () => {
+    setUseAudio((prev) => !prev);
+    // 토글 변경 시 기존 퀴즈 초기화 및 생성 상태 리셋
+    resetLectureQuizzes(lectureId);
+    setShouldGenerateQuiz(false);
   };
 
   const handleSubmit = async (quizzes: Quiz[]) => {
@@ -61,6 +70,10 @@ const MakeQuizModal = ({ onClose, lectureId }: MakeQuizModalProps) => {
     onClose();
   };
 
+  const handleGenerateQuiz = () => {
+    setShouldGenerateQuiz(true);
+  };
+
   return (
     <>
       {customizingQuizzes ? (
@@ -77,6 +90,10 @@ const MakeQuizModal = ({ onClose, lectureId }: MakeQuizModalProps) => {
               퀴즈에 활용할 자료를 선택하고, 아래에서 자동으로 생성된 퀴즈를
               확인해보세요!
             </h2>
+            <div className={styles.description}>
+              * 기본적으로 강의자료를 활용하여 퀴즈를 생성합니다. 녹음본을
+              활용하고 싶다면 녹음본 스위치를 활성화해주세요.
+            </div>
             <div className={styles.toggleSection}>
               <div className={styles.toggleSwitch}>
                 <span className={`${styles.switchLabel} ${styles.active}`}>
@@ -88,7 +105,7 @@ const MakeQuizModal = ({ onClose, lectureId }: MakeQuizModalProps) => {
               </div>
               <div
                 className={styles.toggleSwitch}
-                onClick={() => setUseAudio((prev) => !prev)}
+                onClick={handleToggleAudio}
                 style={{ cursor: "pointer" }}
               >
                 <input
@@ -111,12 +128,23 @@ const MakeQuizModal = ({ onClose, lectureId }: MakeQuizModalProps) => {
                 />
               </div>
             </div>
-            <QuizPreview
-              lectureId={lectureId}
-              useAudio={useAudio}
-              onCustomize={handleCustomize}
-              onSubmit={handleSubmit}
-            />
+
+            {!shouldGenerateQuiz ? (
+              <div className={styles.generateButtonSection}>
+                <FitContentButton onClick={handleGenerateQuiz}>
+                  퀴즈 생성하기
+                </FitContentButton>
+              </div>
+            ) : (
+              <QuizPreview
+                lectureId={lectureId}
+                useAudio={useAudio}
+                shouldGenerateQuiz={shouldGenerateQuiz}
+                onCustomize={handleCustomize}
+                onSubmit={handleSubmit}
+              />
+            )}
+
             {isSaving && (
               <AlertModal hideButton onClose={() => {}}>
                 <LoadingSpinner />
