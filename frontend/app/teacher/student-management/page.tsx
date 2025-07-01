@@ -1,8 +1,15 @@
 "use client";
 
 import ManagementTable from "@/components/ManagementTable/ManagementTable";
+import useSelectedClassStore from "@/store/useSelectedClassStore";
+import styles from "./page.module.scss";
+import MakeInvitationCodeModal from "@/components/Modal/MakeInvitationCodeModal/MakeInvitationCodeModal";
+import React from "react";
 
 export default function TeacherStudentManagementPage() {
+  const { selectedClassId, selectedClassName } = useSelectedClassStore();
+  const [isInviteModalOpen, setIsInviteModalOpen] = React.useState(false);
+
   const students = [
     {
       userId: "user1",
@@ -87,8 +94,29 @@ export default function TeacherStudentManagementPage() {
   };
 
   return (
-    <div style={{ padding: "20px" }}>
-      <ManagementTable type="student" data={students} onDelete={handleDelete} />
+    <div className={styles.container}>
+      <h1>[{selectedClassName}] 학생 관리</h1>
+      <div className={styles.inviteButtonContainer}>
+        <button
+          className={styles.inviteButton}
+          onClick={() => setIsInviteModalOpen(true)}
+        >
+          + 학생 초대하기
+        </button>
+      </div>
+      <div className={styles.lectureNoteListContainer}>
+        <ManagementTable
+          type="student"
+          data={students}
+          onDelete={handleDelete}
+        />
+      </div>
+      {isInviteModalOpen && selectedClassId && (
+        <MakeInvitationCodeModal
+          onClose={() => setIsInviteModalOpen(false)}
+          classId={selectedClassId}
+        />
+      )}
     </div>
   );
 }
