@@ -8,6 +8,9 @@ import { IMAGES } from "@/constants/images";
 import { fetchEntryCode } from "@/api/classes/fetchEntryCode";
 import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
 import { QRCodeSVG } from "qrcode.react";
+import NoDataView from "@/components/NoDataView/NoDataView";
+import { KeyRound, RotateCcw } from "lucide-react";
+import FitContentButton from "@/components/Button/FitContentButton/FitContentButton";
 
 // Props 타입 정의
 type MakeInvitationCodeModalProps = { onClose: () => void; classId: string };
@@ -60,19 +63,26 @@ const MakeInvitationCodeModal: React.FC<MakeInvitationCodeModalProps> = ({
 
   // 카운트다운 타이머
   React.useEffect(() => {
+    let timer: NodeJS.Timeout | null = null;
     if (
       (modalState === "text" || modalState === "qr") &&
       countdown > 0 &&
       invitationCode
     ) {
-      const timer = setInterval(() => {
+      timer = setInterval(() => {
         setCountdown((prev) => prev - 1);
       }, 1000);
-      return () => clearInterval(timer);
     }
-    if (countdown === 0) {
+    if (
+      (modalState === "text" || modalState === "qr") &&
+      countdown === 0 &&
+      invitationCode
+    ) {
       setInvitationCode("");
     }
+    return () => {
+      if (timer) clearInterval(timer);
+    };
   }, [modalState, countdown, invitationCode]);
 
   // 모달 상태에 따른 렌더링
@@ -133,14 +143,24 @@ const MakeInvitationCodeModal: React.FC<MakeInvitationCodeModalProps> = ({
                   <QRCodeSVG value={invitationCode} size={200} />
                 </div>
               )}
-              <p>
+              <p className={styles.description}>
                 {modalState === "text"
                   ? "문자 코드를 입력해 클래스에 입장하세요"
                   : "QR코드를 스캔해 클래스에 입장하세요"}
               </p>
             </>
           ) : (
-            <div>코드가 만료되었습니다. 다시 시도해주세요.</div>
+            <div className={styles.noDataContainer}>
+              <NoDataView
+                icon={KeyRound}
+                title="코드가 만료되었습니다."
+                description="다시 시도해 주세요."
+              />
+              <FitContentButton onClick={fetchCode}>
+                <RotateCcw size={16} />
+                재생성하기
+              </FitContentButton>
+            </div>
           )}
         </div>
       )}
