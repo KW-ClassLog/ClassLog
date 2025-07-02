@@ -24,7 +24,7 @@ UserConverter {
         return User.builder()
                 .name(registerRequestDTO.getName())
                 .role(registerRequestDTO.getRole())
-                .phoneNumber(registerRequestDTO.getPhone_number())
+                .phoneNumber(registerRequestDTO.getPhoneNumber())
                 .organization(registerRequestDTO.getOrganization())
                 .email(registerRequestDTO.getEmail())
                 .password(passwordEncoder.encode(registerRequestDTO.getPassword()))
