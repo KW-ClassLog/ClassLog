@@ -24,6 +24,6 @@ public class RegisterRequestDTO {
     private Role role;
 
     @NotEmpty(message = "phone number is required")
-    private String phone_number;
+    private String phoneNumber;
 
 }
