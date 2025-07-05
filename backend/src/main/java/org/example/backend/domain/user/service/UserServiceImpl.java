@@ -10,6 +10,7 @@ import org.example.backend.domain.user.converter.UserConverter;
 import org.example.backend.domain.user.dto.request.ProfileUpdateRequestDTO;
 import org.example.backend.domain.user.dto.request.WithdrawRequestDTO;
 import org.example.backend.domain.user.dto.response.*;
+import org.example.backend.domain.user.entity.Status;
 import org.example.backend.domain.user.exception.UserErrorCode;
 import org.example.backend.domain.user.dto.request.RegisterRequestDTO;
 import org.example.backend.domain.user.entity.User;
@@ -52,6 +53,11 @@ public class UserServiceImpl implements UserService {
         // 이메일 중복 인증
         Optional<User> existingAccount = userRepository.findByEmail(registerRequestDTO.getEmail());
         if (existingAccount.isPresent()) {
+            User user = existingAccount.get();
+
+            if (user.getDeletedAt() != null || user.getStatus() == Status.INACTIVE) {
+                throw new UserException(UserErrorCode._USER_DEACTIVATED_EXISTS);
+            }
             throw new UserException(UserErrorCode._EMAIL_ALREADY_EXISTS);
         }
 
