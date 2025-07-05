@@ -4,13 +4,12 @@ import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.example.backend.domain.user.converter.UserConverter;
 import org.example.backend.domain.user.dto.request.ProfileUpdateRequestDTO;
-import org.example.backend.domain.user.dto.response.HomeResponseDTO;
-import org.example.backend.domain.user.dto.response.ProfileUpdateResponseDTO;
-import org.example.backend.domain.user.dto.response.RefreshTokenResponseDTO;
-import org.example.backend.domain.user.dto.response.UserProfileResponseDTO;
+import org.example.backend.domain.user.dto.request.WithdrawRequestDTO;
+import org.example.backend.domain.user.dto.response.*;
 import org.example.backend.domain.user.exception.UserErrorCode;
 import org.example.backend.domain.user.dto.request.RegisterRequestDTO;
 import org.example.backend.domain.user.entity.User;
@@ -308,5 +307,19 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new UserException(UserErrorCode._USER_NOT_FOUND));
 
         return userConverter.toProfileDTO(user);
+    }
+
+    // 회원 탈퇴
+    @Transactional
+    @Override
+    public WithdrawResponseDTO withdrawUser(WithdrawRequestDTO dto) {
+        UUID userId = customSecurityUtil.getUserId();
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserException(UserErrorCode._USER_NOT_FOUND));
+        if(!passwordEncoder.matches(dto.getPasswordConfirm(), user.getPassword())){
+            throw new UserException(UserErrorCode._INVALID_PASSWORD);
+        }
+        user.softDelete();
+        return userConverter.toWithdrawResponseDTO(user);
     }
 }
