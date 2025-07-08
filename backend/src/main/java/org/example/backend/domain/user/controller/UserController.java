@@ -126,6 +126,6 @@ public class UserController {
     public ApiResponse<String> kakaoOnboarding(@Valid @RequestBody OnboardingRequestDTO dto, HttpServletResponse response){
         authService.kakaoOnboarding(dto,response);
 
-        return ApiResponse.onSuccess("Login successfully");
+        return ApiResponse.onSuccess("Register successfully");
     }
 }

@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.backend.domain.user.converter.UserConverter;
 import org.example.backend.domain.user.dto.request.OnboardingRequestDTO;
 import org.example.backend.domain.user.dto.response.LoginResponseDTO;
+import org.example.backend.domain.user.entity.Role;
 import org.example.backend.domain.user.entity.SocialType;
 import org.example.backend.domain.user.entity.Status;
 import org.example.backend.domain.user.entity.User;
@@ -150,43 +151,43 @@ public class AuthServiceImpl implements AuthService {
         String email = (String) userInfo.get("email");
         String profileImage = (String) userInfo.get("profile_image");
 
-        // 기존 가입자 화인
+        User user;
+        // 기존 가입자 확인
         Optional<User> existingAccount = userRepository.findByEmail(email);
         if (existingAccount.isPresent()) {
-            User user = existingAccount.get();
+            user = existingAccount.get();
 
             // 자체 가입자일 경우
             if(user.getSocialType() != SocialType.KAKAO){
-                throw new UserException(UserErrorCode._EMAIL_ALREADY_EXISTS);
+                throw new UserException(UserErrorCode._LOCAL_LOGIN_EXISTS);
             }
-
-            // 카카오 로그인 로직 수행
-            UUID userId = user.getId();
-            String role = user.getRole().toString();
-
-            String accessToken = jwtUtil.createAccessToken(userId,role);
-            String refreshToken = jwtUtil.createRefreshToken(userId,role);
-
-            // Redis에 refreshToken 저장
-            userRedisService.setRefreshToken(userId.toString(),refreshToken);
-
-            // access token 응답 Header
-            response.addHeader("Authorization","Bearer "+accessToken);
-
-            // refresh token 응답 Header
-            response.addHeader("Set-Cookie","refresh_token="+refreshToken+
-                    "; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=" + (14 * 24 * 60 * 60));
-
-            return LoginResponseDTO.KakaoLoginResponse.builder()
-                    .onboardingRequired(false)
-                    .build();
+        } else {
+            // 신규 회원 등록
+            user = userConverter.toKakaoPreOnboarding(email,nickname,profileImage,id.toString());
+            userRepository.save(user);
         }
 
-        // 카카오 회원가입 로직 수행
-        User user = userConverter.toKakaoPreOnboarding(email,nickname,profileImage,id.toString());
-        userRepository.save(user);
+        // 토큰 발급
+        UUID userId = user.getId();
+        String role = user.getRole().toString();
+
+        String accessToken = jwtUtil.createAccessToken(userId,role);
+        String refreshToken = jwtUtil.createRefreshToken(userId,role);
+
+        // Redis에 refreshToken 저장
+        userRedisService.setRefreshToken(userId.toString(),refreshToken);
+
+        // access token 응답 Header
+        response.addHeader("Authorization","Bearer "+accessToken);
+
+        // refresh token 응답 Header
+        response.addHeader("Set-Cookie","refresh_token="+refreshToken+
+                "; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=" + (14 * 24 * 60 * 60));
+
+        // role 기반으로 온보딩 여부 판단
+        boolean onboardingRequired = user.getRole() == Role.UNKNOWN;
         return LoginResponseDTO.KakaoLoginResponse.builder()
-                .onboardingRequired(true)
+                .onboardingRequired(onboardingRequired)
                 .build();
     }
 
