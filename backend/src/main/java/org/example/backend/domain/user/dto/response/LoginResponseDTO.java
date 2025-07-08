@@ -10,9 +10,6 @@ public class LoginResponseDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class KakaoLoginResponse {
-        private String email;
-        private String name;
-        private String profile;
         private boolean onboardingRequired;
     }
 

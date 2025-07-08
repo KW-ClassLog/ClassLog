@@ -140,7 +140,7 @@ public class AuthServiceImpl implements AuthService {
     // 카카오 ID로 회원가입 & 로그인
     private LoginResponseDTO.KakaoLoginResponse kakaoUserLogin(HashMap<String, Object> userInfo, HttpServletResponse response) {
 
-//        Long id = (Long) userInfo.get("id");
+        Long id = (Long) userInfo.get("id");
         String nickname = (String) userInfo.get("nickname");
         String email = (String) userInfo.get("email");
         String profileImage = (String) userInfo.get("profile_image");
@@ -172,10 +172,16 @@ public class AuthServiceImpl implements AuthService {
             response.addHeader("Set-Cookie","refresh_token="+refreshToken+
                     "; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=" + (14 * 24 * 60 * 60));
 
-            return userConverter.toKakaoLoginResponse();
+            return LoginResponseDTO.KakaoLoginResponse.builder()
+                    .onboardingRequired(false)
+                    .build();
         }
 
-        // 카카오 회원가입 로직 수행  -> 온보딩
-        return userConverter.toKakaoOnboardingResponse(email, nickname, profileImage);
+        // 카카오 회원가입 로직 수행
+        User user = userConverter.toKakaoPreOnboarding(email,nickname,profileImage,id.toString());
+        userRepository.save(user);
+        return LoginResponseDTO.KakaoLoginResponse.builder()
+                .onboardingRequired(true)
+                .build();
     }
 }

@@ -7,6 +7,7 @@ import org.example.backend.domain.user.dto.response.HomeResponseDTO;
 import org.example.backend.domain.user.dto.response.LoginResponseDTO;
 import org.example.backend.domain.user.dto.response.ProfileUpdateResponseDTO;
 import org.example.backend.domain.user.dto.response.UserProfileResponseDTO;
+import org.example.backend.domain.user.entity.Role;
 import org.example.backend.domain.user.entity.SocialType;
 import org.example.backend.domain.user.entity.Status;
 import org.example.backend.domain.user.entity.User;
@@ -49,6 +50,7 @@ UserConverter {
 
     // Entity -> responseDTO
     public UserProfileResponseDTO toUserProfileResponseDTO(User user){
+
         return UserProfileResponseDTO.builder()
                 .userId(user.getId())
                 .name(user.getName())
@@ -68,25 +70,17 @@ UserConverter {
                 .build();
     }
 
-    // 카카오 로그인 온보딩
-    public LoginResponseDTO.KakaoLoginResponse toKakaoOnboardingResponse(String email, String name, String profileImage){
+    // 카카오 회원가입 온보딩 이전
+    public User toKakaoPreOnboarding(String email, String name, String profileUrl, String socialId){
 
-        return LoginResponseDTO.KakaoLoginResponse.builder()
+        return User.builder()
                 .email(email)
                 .name(name)
-                .profile(profileImage)
-                .onboardingRequired(true)
-                .build();
-    }
-
-    // 카카오 로그인
-    public LoginResponseDTO.KakaoLoginResponse toKakaoLoginResponse(){
-
-        return LoginResponseDTO.KakaoLoginResponse.builder()
-                .email(null)
-                .name(null)
-                .profile(null)
-                .onboardingRequired(false)
+                .profileUrl(profileUrl)
+                .socialId(socialId)
+                .socialType(SocialType.KAKAO)
+                .status(Status.INACTIVE)
+                .role(Role.UNKNOWN)
                 .build();
     }
 }
