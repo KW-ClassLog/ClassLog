@@ -22,7 +22,8 @@ public enum UserErrorCode implements BaseErrorCode {
     _INVALID_PASSWORD(HttpStatus.BAD_REQUEST,"USER400_1","비밀번호가 일치하지 않습니다."),
     _INVALID_IMAGE_EXTENSION(HttpStatus.BAD_REQUEST,"USER400_2","지원하지 않는 이미지 형식입니다. (jpg, jpeg, png, gif 만 허용)"),
     _INVALID_FILE(HttpStatus.BAD_REQUEST,"USER400_3","파일명이 없거나 잘못된 형식입니다."),
-    _UPLOAD_FAILED(HttpStatus.INTERNAL_SERVER_ERROR,"USER500_1","S3 파일 업로드에 실패했습니다.");
+    _UPLOAD_FAILED(HttpStatus.INTERNAL_SERVER_ERROR,"USER500_1","S3 파일 업로드에 실패했습니다."),
+    _KAKAO_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"AUTH500_1", "카카오 서버와의 통신 중 오류가 발생했습니다.");
 
     private final HttpStatus httpStatus;
     private final String code;

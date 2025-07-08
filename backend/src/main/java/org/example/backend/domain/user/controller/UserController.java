@@ -8,17 +8,14 @@ import org.example.backend.domain.user.dto.request.EmailRequestDTO;
 import org.example.backend.domain.user.dto.request.ProfileUpdateRequestDTO;
 import org.example.backend.domain.user.dto.request.ResetPwdRequestDTO;
 import org.example.backend.domain.user.dto.request.RegisterRequestDTO;
-import org.example.backend.domain.user.dto.response.EmailResponseDTO;
-import org.example.backend.domain.user.dto.response.HomeResponseDTO;
-import org.example.backend.domain.user.dto.response.ProfileUpdateResponseDTO;
-import org.example.backend.domain.user.dto.response.UserProfileResponseDTO;
+import org.example.backend.domain.user.dto.response.*;
 import org.example.backend.domain.user.exception.UserErrorCode;
 import org.example.backend.domain.user.exception.UserException;
+import org.example.backend.domain.user.service.AuthService;
 import org.example.backend.domain.user.service.MailService;
 import org.example.backend.domain.user.service.UserRedisService;
 import org.example.backend.domain.user.service.UserService;
 import org.example.backend.global.ApiResponse;
-import org.example.backend.global.security.token.JWTUtil;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -30,8 +27,7 @@ public class UserController {
     private final UserService userService;
     private final MailService mailService;
     private final UserRedisService userRedisService;
-    private final JWTUtil jwtUtil;
-    private final HttpServletResponse httpServletResponse;
+    private final AuthService authService;
 
     // 회원가입
     @PostMapping
@@ -121,4 +117,10 @@ public class UserController {
         return ApiResponse.onSuccess(response);
     }
 
+    // 카카오 로그인
+    @GetMapping("/login/kakao")
+    public ApiResponse<LoginResponseDTO.KakaoLoginResponse> kakaoLogin(@RequestParam("code") String code, HttpServletResponse response){
+        LoginResponseDTO.KakaoLoginResponse loginDto = authService.kakaoLogin(code,response);
+        return ApiResponse.onSuccess(loginDto);
+    }
 }

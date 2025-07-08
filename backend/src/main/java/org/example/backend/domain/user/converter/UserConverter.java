@@ -4,6 +4,7 @@ package org.example.backend.domain.user.converter;
 import lombok.RequiredArgsConstructor;
 import org.example.backend.domain.user.dto.request.RegisterRequestDTO;
 import org.example.backend.domain.user.dto.response.HomeResponseDTO;
+import org.example.backend.domain.user.dto.response.LoginResponseDTO;
 import org.example.backend.domain.user.dto.response.ProfileUpdateResponseDTO;
 import org.example.backend.domain.user.dto.response.UserProfileResponseDTO;
 import org.example.backend.domain.user.entity.SocialType;
@@ -64,6 +65,28 @@ UserConverter {
                 .name(user.getName())
                 .organization(user.getOrganization())
                 .profile(s3Service.getPublicUrl(user.getProfileUrl()))
+                .build();
+    }
+
+    // 카카오 로그인 온보딩
+    public LoginResponseDTO.KakaoLoginResponse toKakaoOnboardingResponse(String email, String name, String profileImage){
+
+        return LoginResponseDTO.KakaoLoginResponse.builder()
+                .email(email)
+                .name(name)
+                .profile(profileImage)
+                .onboardingRequired(true)
+                .build();
+    }
+
+    // 카카오 로그인
+    public LoginResponseDTO.KakaoLoginResponse toKakaoLoginResponse(){
+
+        return LoginResponseDTO.KakaoLoginResponse.builder()
+                .email(null)
+                .name(null)
+                .profile(null)
+                .onboardingRequired(false)
                 .build();
     }
 }

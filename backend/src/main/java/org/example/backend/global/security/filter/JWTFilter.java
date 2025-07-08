@@ -35,7 +35,7 @@ public class JWTFilter extends OncePerRequestFilter {
         String uri = request.getRequestURI();
 
         // 로그인, 회원가입에 대해 필터링 제외
-        if (uri.equals("/api/users/login") ||
+        if (uri.startsWith("/api/users/login") ||
                 uri.equals("/api/users")||
                 uri.equals("/api/users/password/temp")||
                 uri.equals("/api/users/verify-email")||
