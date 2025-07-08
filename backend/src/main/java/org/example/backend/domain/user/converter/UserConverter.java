@@ -4,7 +4,6 @@ package org.example.backend.domain.user.converter;
 import lombok.RequiredArgsConstructor;
 import org.example.backend.domain.user.dto.request.RegisterRequestDTO;
 import org.example.backend.domain.user.dto.response.HomeResponseDTO;
-import org.example.backend.domain.user.dto.response.LoginResponseDTO;
 import org.example.backend.domain.user.dto.response.ProfileUpdateResponseDTO;
 import org.example.backend.domain.user.dto.response.UserProfileResponseDTO;
 import org.example.backend.domain.user.entity.Role;

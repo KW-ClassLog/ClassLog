@@ -4,10 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.example.backend.domain.user.dto.request.EmailRequestDTO;
-import org.example.backend.domain.user.dto.request.ProfileUpdateRequestDTO;
-import org.example.backend.domain.user.dto.request.ResetPwdRequestDTO;
-import org.example.backend.domain.user.dto.request.RegisterRequestDTO;
+import org.example.backend.domain.user.dto.request.*;
 import org.example.backend.domain.user.dto.response.*;
 import org.example.backend.domain.user.exception.UserErrorCode;
 import org.example.backend.domain.user.exception.UserException;
@@ -122,5 +119,13 @@ public class UserController {
     public ApiResponse<LoginResponseDTO.KakaoLoginResponse> kakaoLogin(@RequestParam("code") String code, HttpServletResponse response){
         LoginResponseDTO.KakaoLoginResponse loginDto = authService.kakaoLogin(code,response);
         return ApiResponse.onSuccess(loginDto);
+    }
+
+    // 카카오 회원가입 온보딩
+    @PostMapping("/login/kakao/onboarding")
+    public ApiResponse<String> kakaoOnboarding(@Valid @RequestBody OnboardingRequestDTO dto, HttpServletResponse response){
+        authService.kakaoOnboarding(dto,response);
+
+        return ApiResponse.onSuccess("Login successfully");
     }
 }

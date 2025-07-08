@@ -6,12 +6,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.example.backend.domain.user.converter.UserConverter;
+import org.example.backend.domain.user.dto.request.OnboardingRequestDTO;
 import org.example.backend.domain.user.dto.response.LoginResponseDTO;
 import org.example.backend.domain.user.entity.SocialType;
+import org.example.backend.domain.user.entity.Status;
 import org.example.backend.domain.user.entity.User;
 import org.example.backend.domain.user.exception.UserErrorCode;
 import org.example.backend.domain.user.exception.UserException;
 import org.example.backend.domain.user.repository.UserRepository;
+import org.example.backend.global.security.auth.CustomSecurityUtil;
 import org.example.backend.global.security.token.JWTUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -19,6 +22,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -36,6 +40,7 @@ public class AuthServiceImpl implements AuthService {
     private final UserConverter userConverter;
     private final JWTUtil jwtUtil;
     private final UserRedisService userRedisService;
+    private final CustomSecurityUtil customSecurityUtil;
 
     @Value("${kakao.key.client-id}")
     private String clientId;
@@ -183,5 +188,36 @@ public class AuthServiceImpl implements AuthService {
         return LoginResponseDTO.KakaoLoginResponse.builder()
                 .onboardingRequired(true)
                 .build();
+    }
+
+    // 카카오 회원가입 온보딩
+    @Transactional
+    @Override
+    public void kakaoOnboarding(OnboardingRequestDTO dto, HttpServletResponse response) {
+
+        UUID userId = customSecurityUtil.getUserId();
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserException(UserErrorCode._USER_NOT_FOUND));
+
+        // 필드 업데이트
+        user.setPhoneNumber(dto.getPhoneNumber());
+        user.setOrganization(dto.getOrganization());
+        user.setRole(dto.getRole());
+        user.setStatus(Status.ACTIVE);
+
+        // 토큰 재발급
+        String role = user.getRole().toString();
+        String accessToken = jwtUtil.createAccessToken(userId,role);
+        String refreshToken = jwtUtil.createRefreshToken(userId,role);
+
+        // Redis에 refreshToken 저장
+        userRedisService.setRefreshToken(userId.toString(),refreshToken);
+
+        // access token 응답 Header
+        response.addHeader("Authorization","Bearer "+accessToken);
+
+        // refresh token 응답 Header
+        response.addHeader("Set-Cookie","refresh_token="+refreshToken+
+                "; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=" + (14 * 24 * 60 * 60));
     }
 }
