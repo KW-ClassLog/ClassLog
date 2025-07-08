@@ -37,7 +37,6 @@ public class User {
     @Column(nullable = false)
     private Role role;
 
-    @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
 
     private String profileUrl;
