@@ -94,7 +94,7 @@ public class ClassroomController {
         UUID userId = ((CustomUserDetails) principal).getUser().getId();
         classroomService.checkAlreadyJoined(classId, userId);
 
-        boolean valid = classroomService.validateEntryCode(classId, request.getEntry_code());
+        boolean valid = classroomService.validateEntryCode(classId, request.getEntryCode());
 
         if (!valid) {
             return ApiResponse.onFailure(ClassroomErrorCode.INVALID_ENTRY_CODE);
