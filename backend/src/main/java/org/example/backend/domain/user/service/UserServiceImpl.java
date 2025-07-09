@@ -152,7 +152,7 @@ public class UserServiceImpl implements UserService {
         }
 
         // 토큰 만료 검증 & 토큰 생성
-        RefreshTokenResponseDTO dto = jwtUtil.reissueToken(refreshToken);
+        RefreshTokenResponseDTO dto = jwtUtil.reissueToken(refreshToken, response);
 
         response.setHeader("Authorization","Bearer "+dto.getAccessToken());
 
