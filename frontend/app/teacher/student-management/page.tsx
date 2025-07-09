@@ -5,6 +5,8 @@ import useSelectedClassStore from "@/store/useSelectedClassStore";
 import styles from "./page.module.scss";
 import MakeInvitationCodeModal from "@/components/Modal/MakeInvitationCodeModal/MakeInvitationCodeModal";
 import React from "react";
+import NoDataView from "@/components/NoDataView/NoDataView";
+import { UsersRound } from "lucide-react";
 
 export default function TeacherStudentManagementPage() {
   const { selectedClassId, selectedClassName } = useSelectedClassStore();
@@ -92,6 +94,19 @@ export default function TeacherStudentManagementPage() {
     // );
     // 이제 삭제된 학생을 반영하는 로직을 추가할 수 있습니다.
   };
+
+  if (!selectedClassId || !selectedClassName) {
+    return (
+      <div className={styles.container}>
+        <h1>학생 관리</h1>
+        <NoDataView
+          icon={UsersRound}
+          title="선택된 클래스가 없습니다"
+          description="좌상단의 클래스 선택 메뉴에서 클래스를 선택해주세요"
+        />
+      </div>
+    );
+  }
 
   return (
     <div className={styles.container}>
