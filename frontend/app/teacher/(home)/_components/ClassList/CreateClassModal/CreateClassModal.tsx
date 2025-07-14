@@ -15,7 +15,7 @@ interface FormData {
   classTime: string;
 }
 
-export default function CreateClassModal() {
+export default function CreateClassModal({ onClose }: { onClose: () => void }) {
   const [formData, setFormData] = useState<FormData>({
     className: "",
     classTime: "",
@@ -54,6 +54,7 @@ export default function CreateClassModal() {
       const res = await createClass(submissionData);
       if (res && res.isSuccess) {
         setAlert({ message: "클래스가 성공적으로 생성되었습니다." });
+        onClose();
       } else {
         setAlert({ message: res?.message || "클래스 생성에 실패했습니다." });
       }
