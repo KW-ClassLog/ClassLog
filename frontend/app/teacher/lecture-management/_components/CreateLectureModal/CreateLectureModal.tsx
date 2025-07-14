@@ -2,7 +2,6 @@ import BasicInput from "@/components/Input/BasicInput/BasicInput";
 import styles from "./CreateLectureModal.module.scss";
 import { useState } from "react";
 import { ChangeEvent } from "react";
-import FullWidthButton from "@/components/Button/FullWidthButton/FullWidthButton";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { ko } from "date-fns/locale";
@@ -10,7 +9,7 @@ import { formatInTimeZone } from "date-fns-tz";
 import useSelectedClassStore from "@/store/useSelectedClassStore";
 import { createLecture } from "@/api/lectures/createLecture";
 import useLectureListStore from "@/store/useLectureListStore";
-import AlertModal from "@/components/Modal/AlertModal/AlertModal";
+import FormModal from "@/components/Modal/FormModal/FormModal";
 
 interface CreateLectureModalProps {
   onClose: () => void;
@@ -93,50 +92,49 @@ export default function CreateLectureModal({
   };
 
   return (
-    <div className={styles.container}>
-      <div>
-        <h2>새로운 강의 생성</h2>
-        <div className={styles.form}>
-          <div className={styles.formGroup}>
-            <BasicInput
-              value={formData.lectureName}
-              onChange={handleChange("lectureName")}
-              placeholder="강의 제목을 입력하세요 (차시는 자동으로 입력됩니다)"
-            />
-          </div>
-          <div className={styles.formGroup}>
-            <div className={styles.datePickerWrapper}>
-              <DatePicker
-                selected={formData.lectureDate}
-                onChange={handleDateChange}
-                locale={ko}
-                dateFormat="yyyy-MM-dd"
-                placeholderText="강의 날짜를 선택하세요"
-                className={styles.datePicker}
-                isClearable
-              />
-            </div>
-          </div>
-          <div className={styles.formGroup}>
-            <BasicInput
-              type="time"
-              value={formData.startTime}
-              onChange={handleChange("startTime")}
-              placeholder="강의 시작시간을 선택하세요"
-            />
-          </div>
-          <div className={styles.formGroup}>
-            <BasicInput
-              type="time"
-              value={formData.endTime}
-              onChange={handleChange("endTime")}
-              placeholder="강의 종료시간을 선택하세요"
-            />
-          </div>
+    <FormModal
+      title="새로운 강의 생성"
+      onSubmit={handleSubmit}
+      alert={alert}
+      setAlert={setAlert}
+      submitText="생성하기"
+    >
+      <div className={styles.formGroup}>
+        <BasicInput
+          value={formData.lectureName}
+          onChange={handleChange("lectureName")}
+          placeholder="강의 제목을 입력하세요 (차시는 자동으로 입력됩니다)"
+        />
+      </div>
+      <div className={styles.formGroup}>
+        <div className={styles.datePickerWrapper}>
+          <DatePicker
+            selected={formData.lectureDate}
+            onChange={handleDateChange}
+            locale={ko}
+            dateFormat="yyyy-MM-dd"
+            placeholderText="강의 날짜를 선택하세요"
+            className={styles.datePicker}
+            isClearable
+          />
         </div>
       </div>
-      <FullWidthButton onClick={handleSubmit}>생성하기</FullWidthButton>
-      {alert && <AlertModal onClose={() => setAlert(null)}>{alert}</AlertModal>}
-    </div>
+      <div className={styles.formGroup}>
+        <BasicInput
+          type="time"
+          value={formData.startTime}
+          onChange={handleChange("startTime")}
+          placeholder="강의 시작시간을 선택하세요"
+        />
+      </div>
+      <div className={styles.formGroup}>
+        <BasicInput
+          type="time"
+          value={formData.endTime}
+          onChange={handleChange("endTime")}
+          placeholder="강의 종료시간을 선택하세요"
+        />
+      </div>
+    </FormModal>
   );
 }
