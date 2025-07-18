@@ -9,12 +9,13 @@ import { FetchLectureNotesByClassResult } from "@/types/lectures/fetchLectureNot
 import NoDataView from "../NoDataView/NoDataView";
 import { FileText } from "lucide-react";
 import LectureNoteRow from "./_components/LectureNoteRow";
-import StudentRow, { StudentData } from "./_components/StudentRow";
+import StudentRow from "./_components/StudentRow";
 import { deleteLectureNote } from "@/api/lectures/deleteLectureNote";
+import { FetchStudentsByClassResult } from "@/types/student-classes/fetchStudentsByClassTypes";
 
 type ManagementTableProps = {
   type: "lectureNote" | "student"; // 데이터 유형
-  data: (FetchLectureNotesByClassResult | StudentData)[]; // lectureNote와 student에 맞는 데이터
+  data: FetchLectureNotesByClassResult[] | FetchStudentsByClassResult[]; // lectureNote와 student에 맞는 데이터
   onDelete: (index: string[]) => void; // 삭제 이벤트 처리 함수
 };
 
@@ -39,7 +40,7 @@ const ManagementTable: React.FC<ManagementTableProps> = ({
         data.map((item) =>
           type === "lectureNote"
             ? (item as FetchLectureNotesByClassResult).lectureNoteId
-            : (item as StudentData).userId
+            : (item as FetchStudentsByClassResult).userId
         )
       );
       setSelectedItems(allSelectedItems); // 전체 선택
@@ -163,13 +164,13 @@ const ManagementTable: React.FC<ManagementTableProps> = ({
                 key={
                   type === "lectureNote"
                     ? (item as FetchLectureNotesByClassResult).lectureNoteId
-                    : (item as StudentData).userId
+                    : (item as FetchStudentsByClassResult).userId
                 }
                 className={
                   selectedItems.has(
                     type === "lectureNote"
                       ? (item as FetchLectureNotesByClassResult).lectureNoteId
-                      : (item as StudentData).userId
+                      : (item as FetchStudentsByClassResult).userId
                   )
                     ? styles.selectedRow
                     : ""
@@ -183,7 +184,7 @@ const ManagementTable: React.FC<ManagementTableProps> = ({
                           type === "lectureNote"
                             ? (item as FetchLectureNotesByClassResult)
                                 .lectureNoteId
-                            : (item as StudentData).userId
+                            : (item as FetchStudentsByClassResult).userId
                         )
                           ? styles.selected
                           : ""
@@ -193,7 +194,7 @@ const ManagementTable: React.FC<ManagementTableProps> = ({
                           type === "lectureNote"
                             ? (item as FetchLectureNotesByClassResult)
                                 .lectureNoteId
-                            : (item as StudentData).userId
+                            : (item as FetchStudentsByClassResult).userId
                         )
                       }
                     >
@@ -207,7 +208,7 @@ const ManagementTable: React.FC<ManagementTableProps> = ({
                   />
                 ) : (
                   <StudentRow
-                    item={item as StudentData}
+                    item={item as FetchStudentsByClassResult}
                     isEditMode={isEditMode}
                     handleCopyPhoneNumber={handleCopyPhoneNumber}
                   />

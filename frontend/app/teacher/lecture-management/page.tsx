@@ -37,7 +37,7 @@ export default function TeacherLectureManagementPage() {
   if (!selectedClassId || !selectedClassName) {
     return (
       <div className={styles.container}>
-        <h1>퀴즈 관리</h1>
+        <h1>강의 관리</h1>
         <NoDataView
           icon={BookOpenText}
           title="선택된 클래스가 없습니다"

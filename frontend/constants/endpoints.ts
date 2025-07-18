@@ -41,13 +41,17 @@ export const ENDPOINTS = {
 
     GET_LECTURES: (classId: string) =>
       `${BASE_API}/classes/${classId}/lectures`,
-    GET_STUDENTS: (classId: string) =>
-      `${BASE_API}/classes/${classId}/students`,
     GET_ENTRY_CODE: (classId: string) => `${BASE_API}/classes/${classId}/code`,
     ENTER: (classId: string) => `${BASE_API}/classes/${classId}/enter`,
     GET_ALL_NOTES: (classId: string) => `${BASE_API}/classes/${classId}/notes`,
     GET_MY_CLASSES: `${BASE_API}/classes/teacher/myclass`,
     GET_QUIZZES: (classId: string) => `${BASE_API}/classes/${classId}/quiz`,
+  },
+
+  // 학생 클래스 관련
+  STUDENT_CLASSES: {
+    GET_STUDENTS: (classId: string) =>
+      `${BASE_API}/student-classes/${classId}/students`,
   },
 
   // 강의 관련

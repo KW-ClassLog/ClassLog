@@ -1,13 +1,12 @@
 .container {
   padding: $spacing-xl;
-  height: calc(100vh - 6vh);
+  height: calc(100vh - 80px);
   display: flex;
   flex-direction: column;
 
   h1 {
     font-size: $font-size-xl;
     font-weight: $font-weight-bold;
-    margin-bottom: $spacing-lg;
   }
 
   // NoDataView가 있을 때는 중앙 정렬
