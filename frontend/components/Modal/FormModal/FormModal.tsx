@@ -12,6 +12,7 @@ interface FormModalProps {
   loading?: boolean;
   children: React.ReactNode;
   submitDisabled?: boolean;
+  onAlertClose?: () => void;
 }
 
 export default function FormModal({
@@ -23,6 +24,7 @@ export default function FormModal({
   loading = false,
   children,
   submitDisabled = false,
+  onAlertClose,
 }: FormModalProps) {
   return (
     <div className={styles.container}>
@@ -37,7 +39,11 @@ export default function FormModal({
         </FullWidthButton>
       </div>
       {alert && setAlert && (
-        <AlertModal onClose={() => setAlert(null)}>{alert}</AlertModal>
+        <AlertModal
+          onClose={onAlertClose ? onAlertClose : () => setAlert(null)}
+        >
+          {alert}
+        </AlertModal>
       )}
     </div>
   );

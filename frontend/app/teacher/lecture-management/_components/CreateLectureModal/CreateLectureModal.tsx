@@ -89,6 +89,12 @@ export default function CreateLectureModal({
     setFormData((prev) => ({ ...prev, lectureDate: date }));
   };
 
+  // AlertModal 닫힐 때 모달도 닫히도록 핸들러 추가
+  const handleAlertClose = () => {
+    setAlert(null);
+    onClose();
+  };
+
   const handleSubmit = async () => {
     const classId =
       mode === "edit" && initialData ? initialData.classId : selectedClassId;
@@ -129,7 +135,8 @@ export default function CreateLectureModal({
         });
         if (response.isSuccess) {
           await refreshLectureList(initialData.classId);
-          onClose();
+          setAlert("강의가 성공적으로 수정되었습니다.");
+          // onClose(); 제거
         } else {
           setAlert(response.message || "강의 수정에 실패했습니다.");
         }
@@ -144,7 +151,8 @@ export default function CreateLectureModal({
         });
         if (response.isSuccess) {
           await refreshLectureList(classId);
-          onClose();
+          setAlert("강의가 성공적으로 생성되었습니다.");
+          // onClose(); 제거
         } else {
           setAlert(response.message || "강의 생성에 실패했습니다.");
         }
@@ -165,6 +173,7 @@ export default function CreateLectureModal({
       onSubmit={handleSubmit}
       alert={alert}
       setAlert={setAlert}
+      onAlertClose={handleAlertClose}
       submitText={mode === "edit" ? "완료" : "생성하기"}
       submitDisabled={mode === "edit" ? !isChanged : false}
     >

@@ -117,7 +117,6 @@ export default function CreateClassModal({
         });
         if (res && res.isSuccess) {
           setAlert({ message: "클래스가 성공적으로 수정되었습니다." });
-          onClose();
         } else {
           setAlert({ message: res?.message || "클래스 수정에 실패했습니다." });
         }
@@ -126,7 +125,6 @@ export default function CreateClassModal({
         const res = await createClass(submissionData);
         if (res && res.isSuccess) {
           setAlert({ message: "클래스가 성공적으로 생성되었습니다." });
-          onClose();
         } else {
           setAlert({ message: res?.message || "클래스 생성에 실패했습니다." });
         }
@@ -139,12 +137,19 @@ export default function CreateClassModal({
     }
   };
 
+  // AlertModal 닫힐 때 모달도 닫히도록 핸들러 추가
+  const handleAlertClose = () => {
+    setAlert(null);
+    onClose();
+  };
+
   return (
     <FormModal
       title={mode === "edit" ? "클래스 수정" : "새로운 클래스 생성"}
       onSubmit={handleSubmit}
       alert={alert?.message || null}
       setAlert={(msg) => setAlert(msg ? { message: msg } : null)}
+      onAlertClose={handleAlertClose}
       submitText={
         loading
           ? mode === "edit"
