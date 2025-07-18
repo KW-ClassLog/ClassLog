@@ -11,7 +11,7 @@ import { fetchLectureDetail } from "@/api/lectures/fetchLectureDetail";
 import { useLectureDetail } from "../LectureDetailContext";
 
 export default function LectureHeader() {
-  const { lectureId, setClassId } = useLectureDetail();
+  const { lectureId, setClassId, refreshKey } = useLectureDetail();
   const [lectureData, setLectureData] =
     useState<FetchLectureDetailResult | null>(null);
   const [showQuizModal, setShowQuizModal] = useState(false);
@@ -40,7 +40,7 @@ export default function LectureHeader() {
 
   useEffect(() => {
     fetchData();
-  }, [lectureId, setClassId, fetchData]);
+  }, [lectureId, setClassId, fetchData, refreshKey]);
 
   const handleStartLecture = () => {
     // TODO: 강의 시작 로직 구현

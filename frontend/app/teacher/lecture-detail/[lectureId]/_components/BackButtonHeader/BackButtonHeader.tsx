@@ -11,6 +11,7 @@ import { deleteLecture } from "@/api/lectures/deleteLecture";
 import ClosableModal from "@/components/Modal/ClosableModal/ClosableModal";
 import CreateLectureModal from "@/app/teacher/lecture-management/_components/CreateLectureModal/CreateLectureModal";
 import { fetchLectureDetail } from "@/api/lectures/fetchLectureDetail";
+import { useLectureDetail } from "../LectureDetailContext";
 
 export default function BackButtonHeader({
   lectureId,
@@ -20,6 +21,7 @@ export default function BackButtonHeader({
   onEditComplete?: () => void;
 }) {
   const router = useRouter();
+  const { refresh } = useLectureDetail();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showAlertModal, setShowAlertModal] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
@@ -94,6 +96,7 @@ export default function BackButtonHeader({
     setEditModalOpen(false);
     setEditModalData(null);
     if (onEditComplete) onEditComplete();
+    refresh();
     router.refresh?.();
   };
 
