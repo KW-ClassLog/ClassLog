@@ -11,6 +11,7 @@ interface FormModalProps {
   submitText?: string;
   loading?: boolean;
   children: React.ReactNode;
+  submitDisabled?: boolean;
 }
 
 export default function FormModal({
@@ -21,13 +22,17 @@ export default function FormModal({
   submitText = "확인",
   loading = false,
   children,
+  submitDisabled = false,
 }: FormModalProps) {
   return (
     <div className={styles.container}>
       <h2 className={styles.title}>{title}</h2>
       <div className={styles.form}>{children}</div>
       <div className={styles.buttonWrapper}>
-        <FullWidthButton onClick={onSubmit} disabled={loading}>
+        <FullWidthButton
+          onClick={onSubmit}
+          disabled={loading || submitDisabled}
+        >
           {loading ? "처리 중..." : submitText}
         </FullWidthButton>
       </div>

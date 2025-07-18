@@ -16,7 +16,7 @@ export async function updateClassInfo({
   try {
     const response = await axiosInstance.patch<
       ApiResponse<UpdateClassInfoResult>
-    >(ENDPOINTS.CLASSES.UPDATE(classId), { data });
+    >(ENDPOINTS.CLASSES.UPDATE(classId), data);
 
     // 클래스 생성 성공 시 클래스 목록 갱신
     if (response.data.isSuccess) {
