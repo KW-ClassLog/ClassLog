@@ -169,7 +169,7 @@ export default function CreateLectureModal({
 
   return (
     <FormModal
-      title={mode === "edit" ? "강의 수정" : "새로운 강의 생성"}
+      title={mode === "edit" ? "강의 정보 수정" : "새로운 강의 생성"}
       onSubmit={handleSubmit}
       alert={alert}
       setAlert={setAlert}

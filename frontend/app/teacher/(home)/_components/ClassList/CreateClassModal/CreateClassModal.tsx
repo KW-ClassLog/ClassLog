@@ -145,7 +145,7 @@ export default function CreateClassModal({
 
   return (
     <FormModal
-      title={mode === "edit" ? "클래스 수정" : "새로운 클래스 생성"}
+      title={mode === "edit" ? "클래스 정보 수정" : "새로운 클래스 생성"}
       onSubmit={handleSubmit}
       alert={alert?.message || null}
       setAlert={(msg) => setAlert(msg ? { message: msg } : null)}
