@@ -8,10 +8,3 @@ export interface UpdateLectureInfoRequest {
     endTime: string;
   };
 }
-
-export interface UpdateLectureInfoResult {
-  lectureId: string;
-  classId: string;
-  lectureName: string;
-  lectureDate: string;
-}

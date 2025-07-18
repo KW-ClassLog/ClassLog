@@ -1,6 +1,6 @@
 import BasicInput from "@/components/Input/BasicInput/BasicInput";
 import styles from "./CreateLectureModal.module.scss";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ChangeEvent } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -10,9 +10,19 @@ import useSelectedClassStore from "@/store/useSelectedClassStore";
 import { createLecture } from "@/api/lectures/createLecture";
 import useLectureListStore from "@/store/useLectureListStore";
 import FormModal from "@/components/Modal/FormModal/FormModal";
+import { updateLectureInfo } from "@/api/lectures/updateLectureInfo";
 
 interface CreateLectureModalProps {
   onClose: () => void;
+  initialData?: {
+    lectureId: string;
+    classId: string;
+    lectureName: string;
+    lectureDate: string;
+    startTime: string;
+    endTime: string;
+  };
+  mode?: "create" | "edit";
 }
 
 interface FormData {
@@ -24,6 +34,8 @@ interface FormData {
 
 export default function CreateLectureModal({
   onClose,
+  initialData,
+  mode = "create",
 }: CreateLectureModalProps) {
   const { selectedClassId } = useSelectedClassStore();
   const { refreshLectureList } = useLectureListStore();
@@ -34,6 +46,36 @@ export default function CreateLectureModal({
     startTime: "",
     endTime: "",
   });
+  const [isChanged, setIsChanged] = useState(false);
+
+  // edit 모드일 때 initialData로 초기화
+  useEffect(() => {
+    if (mode === "edit" && initialData) {
+      setFormData({
+        lectureName: initialData.lectureName,
+        lectureDate: initialData.lectureDate
+          ? new Date(initialData.lectureDate)
+          : null,
+        startTime: initialData.startTime,
+        endTime: initialData.endTime,
+      });
+    }
+  }, [initialData, mode]);
+
+  // 변경 감지
+  useEffect(() => {
+    if (mode === "edit" && initialData) {
+      const changed =
+        formData.lectureName !== initialData.lectureName ||
+        (formData.lectureDate &&
+          initialData.lectureDate &&
+          formData.lectureDate.toISOString().slice(0, 10) !==
+            initialData.lectureDate) ||
+        formData.startTime !== initialData.startTime ||
+        formData.endTime !== initialData.endTime;
+      setIsChanged(changed);
+    }
+  }, [formData, initialData, mode]);
 
   const handleChange =
     (field: keyof typeof formData) => (e: ChangeEvent<HTMLInputElement>) => {
@@ -48,7 +90,9 @@ export default function CreateLectureModal({
   };
 
   const handleSubmit = async () => {
-    if (!selectedClassId) {
+    const classId =
+      mode === "edit" && initialData ? initialData.classId : selectedClassId;
+    if (!classId) {
       setAlert("클래스를 선택해주세요.");
       return;
     }
@@ -71,33 +115,58 @@ export default function CreateLectureModal({
     );
 
     try {
-      const response = await createLecture({
-        lectureName: formData.lectureName,
-        lectureDate,
-        classId: selectedClassId,
-        startTime: formData.startTime,
-        endTime: formData.endTime,
-      });
-
-      if (response.isSuccess) {
-        await refreshLectureList(selectedClassId);
-        onClose();
+      if (mode === "edit" && initialData) {
+        // 수정 API 호출
+        const response = await updateLectureInfo({
+          lectureId: initialData.lectureId,
+          data: {
+            lectureName: formData.lectureName,
+            lectureDate,
+            classId: initialData.classId,
+            startTime: formData.startTime,
+            endTime: formData.endTime,
+          },
+        });
+        if (response.isSuccess) {
+          await refreshLectureList(initialData.classId);
+          onClose();
+        } else {
+          setAlert(response.message || "강의 수정에 실패했습니다.");
+        }
       } else {
-        setAlert(response.message || "강의 생성에 실패했습니다.");
+        // 기존 생성 로직
+        const response = await createLecture({
+          lectureName: formData.lectureName,
+          lectureDate,
+          classId,
+          startTime: formData.startTime,
+          endTime: formData.endTime,
+        });
+        if (response.isSuccess) {
+          await refreshLectureList(classId);
+          onClose();
+        } else {
+          setAlert(response.message || "강의 생성에 실패했습니다.");
+        }
       }
     } catch (error) {
-      console.error("Failed to create lecture:", error);
-      setAlert("강의 생성 중 오류가 발생했습니다.");
+      console.error("Failed to create/update lecture:", error);
+      setAlert(
+        mode === "edit"
+          ? "강의 수정 중 오류가 발생했습니다."
+          : "강의 생성 중 오류가 발생했습니다."
+      );
     }
   };
 
   return (
     <FormModal
-      title="새로운 강의 생성"
+      title={mode === "edit" ? "강의 수정" : "새로운 강의 생성"}
       onSubmit={handleSubmit}
       alert={alert}
       setAlert={setAlert}
-      submitText="생성하기"
+      submitText={mode === "edit" ? "완료" : "생성하기"}
+      submitDisabled={mode === "edit" ? !isChanged : false}
     >
       <div className={styles.formGroup}>
         <BasicInput
