@@ -2,6 +2,7 @@ package org.example.backend.global.security.config;
 
 import lombok.RequiredArgsConstructor;
 import org.example.backend.domain.user.service.UserRedisService;
+import org.example.backend.domain.user.repository.UserRepository;
 import org.example.backend.global.security.token.JWTUtil;
 import org.example.backend.global.security.filter.FilterExceptionHandler;
 import org.example.backend.global.security.filter.JWTFilter;
@@ -32,6 +33,7 @@ public class SecurityConfig {
     private final AuthenticationConfiguration authenticationConfiguration;
     private final JWTUtil jwtUtil;
     private final UserRedisService userRedisService;
+    private final UserRepository userRepository;
 
     //AuthenticationManger Bean 등록
     @Bean
@@ -47,7 +49,7 @@ public class SecurityConfig {
 
     @Bean
     public JWTFilter jwtFilter(){
-        return new JWTFilter(jwtUtil, userRedisService);
+        return new JWTFilter(jwtUtil, userRedisService, userRepository);
     }
 
     @Bean
