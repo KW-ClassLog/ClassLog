@@ -16,6 +16,7 @@ public enum QuizErrorCode implements BaseErrorCode {
     INVALID_QUIZ_TYPE(HttpStatus.BAD_REQUEST, "QUIZ400_1", "잘못된 퀴즈 유형입니다."),
     UNSUPPORTED_NOTE_FORMAT(HttpStatus.BAD_REQUEST, "QUIZ400_2", "강의자료는 존재하나, 퀴즈 생성은 PDF, PPTX, DOCX, HWP 형식의 자료에서만 가능합니다."),
     AUDIO_NOT_FOUND(HttpStatus.NOT_FOUND, "QUIZ404_2", "녹음본 기반 퀴즈는 서비스 내에서 강의 시작 후 녹음이 완료된 경우에만 생성할 수 있습니다."),
+    QUIZ_NOT_GENERATED_YET(HttpStatus.NOT_FOUND, "QUIZ404_3", "퀴즈가 아직 업로드되지 않았어요!"),
     AI_CALL_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "AI_500", "AI 호출 중 오류가 발생했습니다.");
 
     private final HttpStatus httpStatus;

@@ -185,6 +185,10 @@ public class QuizServiceImpl implements QuizService {
 
         List<Quiz> quizList = quizRepository.findByLectureId(lectureId);
 
+        if (quizList.isEmpty()) {
+            throw new QuizException(QuizErrorCode.QUIZ_NOT_GENERATED_YET);
+        }
+
         List<QuizListResponseDTO.QuizDTO> quizDTOs = quizList.stream().map(quiz -> {
             List<OptionResponseDTO> options = new ArrayList<>();
             if (quiz.getType() == QuizType.MULTIPLE_CHOICE) {
