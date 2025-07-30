@@ -31,6 +31,7 @@ public class LectureStudentServiceImpl implements LectureStudentService {
     private final ClassroomRepository classroomRepository;
     private final LectureStudentConverter lectureStudentConverter;
 
+    // 오늘의 강의 목록
     @Override
     public StudentTodayLectureResponseDTO getClassListByStudent(LocalDate date) {
         UUID studentId = ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
