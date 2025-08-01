@@ -6,6 +6,7 @@ import org.example.backend.domain.user.dto.request.RegisterRequestDTO;
 import org.example.backend.domain.user.dto.response.HomeResponseDTO;
 import org.example.backend.domain.user.dto.response.ProfileUpdateResponseDTO;
 import org.example.backend.domain.user.dto.response.UserProfileResponseDTO;
+import org.example.backend.domain.user.dto.response.WithdrawResponseDTO;
 import org.example.backend.domain.user.entity.Role;
 import org.example.backend.domain.user.entity.SocialType;
 import org.example.backend.domain.user.entity.Status;
@@ -66,6 +67,13 @@ UserConverter {
                 .name(user.getName())
                 .organization(user.getOrganization())
                 .profile(s3Service.getPublicUrl(user.getProfileUrl()))
+                .build();
+    }
+
+    public WithdrawResponseDTO toWithdrawResponseDTO(User user){
+        return WithdrawResponseDTO.builder()
+                .id(user.getId())
+                .deletedAt(user.getDeletedAt())
                 .build();
     }
 

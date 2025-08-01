@@ -79,12 +79,14 @@ public class QuizServiceImpl implements QuizService {
             audioUrl = s3Service.getPresignedUrl(lecture.getAudioUrl());
         }
 
-        List<String> allowedExtensions = Arrays.asList(".pdf", ".pptx", ".docx", ".hwp");
+        List<String> allowedExtensions = Arrays.asList(".pdf", ".pptx", ".docx", ".hwp", ".hwpx");
 
         List<LectureNote> filteredNotes = notes.stream()
                 .filter(note -> {
-                    String url = note.getNoteUrl().toLowerCase();
-                    return allowedExtensions.stream().anyMatch(url::endsWith);
+                    String url = note.getNoteUrl();
+                    if (url == null) return false;
+                    String lowerUrl = url.toLowerCase();
+                    return allowedExtensions.stream().anyMatch(lowerUrl::endsWith);
                 })
                 .toList();
 

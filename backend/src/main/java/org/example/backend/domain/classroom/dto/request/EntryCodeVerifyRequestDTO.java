@@ -4,5 +4,5 @@ import lombok.Getter;
 
 @Getter
 public class EntryCodeVerifyRequestDTO {
-    private String entry_code;
+    private String entryCode;
 }

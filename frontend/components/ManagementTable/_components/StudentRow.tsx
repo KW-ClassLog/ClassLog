@@ -1,18 +1,10 @@
 import Image from "next/image";
 import styles from "../ManagementTable.module.scss";
 import { Copy } from "lucide-react";
-
-export type StudentData = {
-  userId: string;
-  name: string;
-  nickname: string;
-  phoneNumber: string;
-  organization?: string;
-  profile?: string;
-};
+import { FetchStudentsByClassResult } from "@/types/student-classes/fetchStudentsByClassTypes";
 
 interface Props {
-  item: StudentData;
+  item: FetchStudentsByClassResult;
   isEditMode: boolean;
   handleCopyPhoneNumber: (phone: string) => void;
 }
@@ -25,13 +17,14 @@ const StudentRow: React.FC<Props> = ({
   <>
     <td className={styles.profileContainer}>
       <Image
-        src={item.profile || "/images/default_profile.jpg"}
+        src={item.profileUrl || "/images/default_profile.jpg"}
         alt={item.name}
         width={40}
         height={40}
         className={styles.profileImage}
       />
-      {item.nickname}
+      {item.name}
+      {item.nickname && ` (${item.nickname})`}
     </td>
     <td>{item.organization}</td>
     <td>
@@ -40,7 +33,9 @@ const StudentRow: React.FC<Props> = ({
         <button
           className={styles.copyButton}
           onClick={() =>
-            handleCopyPhoneNumber((item as StudentData).phoneNumber)
+            handleCopyPhoneNumber(
+              (item as FetchStudentsByClassResult).phoneNumber
+            )
           }
         >
           <Copy className={styles.pasteIcon} />

@@ -2,7 +2,9 @@ package org.example.backend.global.security.token;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.example.backend.domain.user.dto.response.RefreshTokenResponseDTO;
 import org.example.backend.domain.user.exception.UserErrorCode;
 import org.example.backend.domain.user.exception.UserException;
@@ -108,27 +110,38 @@ public class JWTUtil {
     }
 
     // 새 accessToken & refreshToken 발급
-    public RefreshTokenResponseDTO reissueToken(String refreshToken){
-        // refresh token 유효성 검사
-        validateRefreshToken(refreshToken);
+    public RefreshTokenResponseDTO reissueToken(String refreshToken, HttpServletResponse response){
+        try {
+            // refresh token 유효성 검사
+            validateRefreshToken(refreshToken);
 
-        // 새로운 토큰 발급
-        UUID userId = getUserId(refreshToken);
+            // 새로운 토큰 발급
+            UUID userId = getUserId(refreshToken);
+            CustomUserDetails customUserDetails = (CustomUserDetails) customUserDetailService.loadUserByUserId(userId);
 
-        CustomUserDetails customUserDetails = (CustomUserDetails) customUserDetailService.loadUserByUserId(userId);
+            String role = customUserDetails.getAuthorities().iterator().next().getAuthority();
 
-        String role = customUserDetails.getAuthorities().iterator().next().getAuthority();
+            String newAccessToken = createAccessToken(userId, role);
+            String newRefreshToken = createRefreshToken(userId, role);
 
-        String newAccessToken = createAccessToken(userId, role);
-        String newRefreshToken = createRefreshToken(userId, role);
+            // redis 갱신
+            userRedisService.setRefreshToken(userId.toString(), newRefreshToken);
 
-        // redis 갱신
-        userRedisService.setRefreshToken(userId.toString(),newRefreshToken);
+            // 응답 반환
+            return new RefreshTokenResponseDTO(newAccessToken, newRefreshToken);
+        } catch (UserException e){
+            if(e.getBaseErrorCode().equals(UserErrorCode._REFRESH_TOKEN_EXPIRED)){
+                // 쿠키 삭제
+                Cookie cookie = new Cookie("refresh_token", null);
+                cookie.setMaxAge(0);
+                cookie.setPath("/");
+                cookie.setHttpOnly(true);
+                cookie.setSecure(true);
+                response.addCookie(cookie);
 
-
-        // 응답 반환
-        return new RefreshTokenResponseDTO(newAccessToken,newRefreshToken);
-
+            }
+            throw e;
+        }
     }
 
     // access token 추출

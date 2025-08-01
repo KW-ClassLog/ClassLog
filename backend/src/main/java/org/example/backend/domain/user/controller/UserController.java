@@ -114,6 +114,14 @@ public class UserController {
         return ApiResponse.onSuccess(response);
     }
 
+    // 회원 탈퇴
+    @DeleteMapping("/me")
+    public ApiResponse<WithdrawResponseDTO> withdraw(@RequestBody @Valid WithdrawRequestDTO dto){
+        WithdrawResponseDTO response = userService.withdrawUser(dto);
+        return ApiResponse.onSuccess(response);
+    }
+
+
     // 카카오 로그인
     @GetMapping("/login/kakao")
     public ApiResponse<LoginResponseDTO.KakaoLoginResponse> kakaoLogin(@RequestParam("code") String code, HttpServletResponse response){

@@ -59,4 +59,10 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Notification> notifications;
+
+    // 회원 탈퇴
+    public void softDelete() {
+        this.status = Status.INACTIVE;
+        this.deletedAt = LocalDateTime.now();
+    }
 }
