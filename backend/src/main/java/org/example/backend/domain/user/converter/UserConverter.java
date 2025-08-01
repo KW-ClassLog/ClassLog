@@ -38,25 +38,29 @@ UserConverter {
 
     // Entity -> responseDTO
     public ProfileUpdateResponseDTO toProfileUpdateResponseDTO(User user){
+        String profileUrl = user.getSocialType() == SocialType.LOCAL?
+                s3Service.getPublicUrl(user.getProfileUrl()) : user.getProfileUrl();
 
         return ProfileUpdateResponseDTO.builder()
                 .userId(user.getId())
                 .name(user.getName())
                 .organization(user.getOrganization())
                 .phoneNumber(user.getPhoneNumber())
-                .profile(s3Service.getPublicUrl(user.getProfileUrl()))
+                .profile(profileUrl)
                 .build();
     }
 
     // Entity -> responseDTO
     public UserProfileResponseDTO toUserProfileResponseDTO(User user){
+        String profileUrl = user.getSocialType() == SocialType.LOCAL?
+                s3Service.getPublicUrl(user.getProfileUrl()) : user.getProfileUrl();
 
         return UserProfileResponseDTO.builder()
                 .userId(user.getId())
                 .name(user.getName())
                 .organization(user.getOrganization())
                 .phoneNumber(user.getPhoneNumber())
-                .profile(s3Service.getPublicUrl(user.getProfileUrl()))
+                .profile(profileUrl)
                 .role(user.getRole().toString())
                 .build();
     }
