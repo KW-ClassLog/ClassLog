@@ -2,6 +2,7 @@ package org.example.backend.domain.quiz.service;
 
 import org.example.backend.domain.quiz.dto.request.QuizRequestDTO;
 import org.example.backend.domain.quiz.dto.request.QuizSaveRequestDTO;
+import org.example.backend.domain.quiz.dto.response.QuizListResponseDTO;
 import org.example.backend.domain.quiz.dto.response.QuizResponseDTO;
 import org.example.backend.domain.quiz.dto.response.QuizSaveResponseDTO;
 
@@ -12,4 +13,6 @@ public interface QuizService {
     QuizResponseDTO generateQuiz(UUID lectureId, QuizRequestDTO request, boolean isReGenerate);
     // 퀴즈 저장
     QuizSaveResponseDTO saveQuiz(UUID lectureId, QuizSaveRequestDTO request);
+    //퀴즈 문제 조회
+    QuizListResponseDTO getQuizzes(UUID lectureId);
 }

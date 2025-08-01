@@ -5,6 +5,7 @@ import org.example.backend.domain.quiz.dto.request.QuizEditRequestDTO;
 import org.example.backend.domain.quiz.dto.request.QuizRequestDTO;
 import org.example.backend.domain.quiz.dto.request.QuizSaveRequestDTO;
 import org.example.backend.domain.quiz.dto.response.QuizEditResponseDTO;
+import org.example.backend.domain.quiz.dto.response.QuizListResponseDTO;
 import org.example.backend.domain.quiz.dto.response.QuizResponseDTO;
 import org.example.backend.domain.quiz.dto.response.QuizSaveResponseDTO;
 import org.example.backend.domain.quiz.exception.QuizException;
@@ -98,6 +99,21 @@ public class QuizController {
         }
     }
 
-
+    // 퀴즈 문제 조회
+    @GetMapping("/{lectureId}")
+    public ResponseEntity<ApiResponse<QuizListResponseDTO>> getQuizList(@PathVariable("lectureId") UUID lectureId) {
+        try {
+            QuizListResponseDTO response = quizService.getQuizzes(lectureId);
+            return ResponseEntity.ok(ApiResponse.onSuccess(response));
+        } catch (QuizException e) {
+            return ResponseEntity
+                    .status(e.getErrorCode().getReasonHttpStatus().getHttpStatus())
+                    .body(ApiResponse.onFailure(e.getErrorCode()));
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(FailureCode._INTERNAL_SERVER_ERROR.getReasonHttpStatus().getHttpStatus())
+                    .body(ApiResponse.onFailure(FailureCode._INTERNAL_SERVER_ERROR));
+        }
+    }
 
 }

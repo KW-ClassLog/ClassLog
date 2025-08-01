@@ -11,8 +11,10 @@ import org.example.backend.domain.option.entity.Option;
 import org.example.backend.domain.option.repository.OptionRepository;
 import org.example.backend.domain.quiz.dto.request.QuizRequestDTO;
 import org.example.backend.domain.quiz.dto.request.QuizSaveRequestDTO;
+import org.example.backend.domain.quiz.dto.response.QuizListResponseDTO;
 import org.example.backend.domain.quiz.dto.response.QuizResponseDTO;
 import org.example.backend.domain.quiz.dto.response.QuizSaveResponseDTO;
+import org.example.backend.domain.option.dto.response.OptionResponseDTO;
 import org.example.backend.domain.quiz.entity.Quiz;
 import org.example.backend.domain.quiz.entity.QuizType;
 import org.example.backend.domain.quiz.exception.QuizErrorCode;
@@ -23,6 +25,7 @@ import org.example.backend.global.security.auth.CustomSecurityUtil;
 import org.example.backend.infra.langchain.LangChainClient;
 import org.example.backend.global.S3.service.S3Service;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -172,4 +175,41 @@ public class QuizServiceImpl implements QuizService {
                 .quizIds(savedQuizIds)
                 .build();
     }
+
+    // 퀴즈 문제 조회
+    @Override
+    @Transactional(readOnly = true)
+    public QuizListResponseDTO getQuizzes(UUID lectureId) {
+        Lecture lecture = lectureRepository.findById(lectureId)
+                .orElseThrow(() -> new QuizException(QuizErrorCode.LECTURE_NOT_FOUND));
+
+        List<Quiz> quizList = quizRepository.findByLectureId(lectureId);
+
+        if (quizList.isEmpty()) {
+            throw new QuizException(QuizErrorCode.QUIZ_NOT_GENERATED_YET);
+        }
+
+        List<QuizListResponseDTO.QuizDTO> quizDTOs = quizList.stream().map(quiz -> {
+            List<OptionResponseDTO> options = new ArrayList<>();
+            if (quiz.getType() == QuizType.MULTIPLE_CHOICE) {
+                options = optionRepository.findByQuizId(quiz.getId())
+                        .stream()
+                        .map(option -> new OptionResponseDTO(
+                                option.getId(),
+                                option.getOptionOrder(),
+                                option.getText()
+                        ))
+                        .toList();
+            }
+            return new QuizListResponseDTO.QuizDTO(
+                    quiz.getId(),
+                    quiz.getQuizOrder(),
+                    quiz.getQuiz(),
+                    quiz.getSolution(),
+                    quiz.getType().name(),
+                    options
+            );
+        }).toList();
+
+        return new QuizListResponseDTO(lectureId, quizDTOs);    }
 }
