@@ -88,7 +88,7 @@ public class JWTFilter extends OncePerRequestFilter {
             User user = userRepository.findById(userId)
                     .orElseThrow(() -> new UserException(UserErrorCode._USER_NOT_FOUND));
 
-            if (user.getStatus() == Status.INACTIVE) {
+            if (user.getStatus() == Status.INACTIVE && !uri.startsWith("/api/users/login/kakao/onboarding")) {
                 setErrorResponse(response, FailureCode._FORBIDDEN);
                 return;
             }
