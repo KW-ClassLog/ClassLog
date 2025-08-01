@@ -2,6 +2,7 @@ package org.example.backend.domain.studentClass.service;
 
 import org.example.backend.domain.classroom.dto.response.ClassroomResponseStudentDTO;
 import org.example.backend.domain.studentClass.dto.request.StudentClassRequestDTO;
+import org.example.backend.domain.studentClass.dto.request.StudentDeleteRequestDTO;
 import org.example.backend.domain.studentClass.dto.response.StudentEnrolledResponseDTO;
 import org.example.backend.domain.studentClass.dto.response.StudentClassResponseDTO;
 import org.example.backend.domain.studentClass.dto.response.TodayLectureResponseDTO;
@@ -32,4 +33,7 @@ public interface StudentClassService {
 
     // 오늘의 강의목록 조회
     List<TodayLectureResponseDTO> getLectureByStudentIdAndDate(LocalDate date);
+
+    //클래스에서 학생 삭제
+    void deleteStudent(UUID classId, StudentDeleteRequestDTO studentDeleteRequestDTO);
 }
