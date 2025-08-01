@@ -4,9 +4,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.example.backend.domain.user.dto.request.ProfileUpdateRequestDTO;
 import org.example.backend.domain.user.dto.request.RegisterRequestDTO;
+import org.example.backend.domain.user.dto.request.WithdrawRequestDTO;
 import org.example.backend.domain.user.dto.response.HomeResponseDTO;
 import org.example.backend.domain.user.dto.response.ProfileUpdateResponseDTO;
 import org.example.backend.domain.user.dto.response.UserProfileResponseDTO;
+import org.example.backend.domain.user.dto.response.WithdrawResponseDTO;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.UUID;
@@ -48,4 +50,7 @@ public interface UserService {
 
     // 홈 프로필 조회
     HomeResponseDTO.ProfileDTO getHomeProfileByUser();
+
+    // 회원 탈퇴
+    WithdrawResponseDTO withdrawUser(WithdrawRequestDTO dto);
 }

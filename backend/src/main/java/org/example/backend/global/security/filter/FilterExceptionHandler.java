@@ -13,6 +13,7 @@ import org.example.backend.global.exception.FailureException;
 import org.springframework.data.redis.RedisConnectionFailureException;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.web.filter.GenericFilterBean;
 
 import java.io.IOException;
@@ -24,7 +25,14 @@ public class FilterExceptionHandler extends GenericFilterBean {
 
         try {
             chain.doFilter(request, response);
-        } catch (AuthenticationServiceException | BadCredentialsException e) {
+        } catch (InternalAuthenticationServiceException e) {
+            Throwable cause = e.getCause();
+            if (cause instanceof FailureException fe) {
+                sendError(httpResponse, fe.getBaseErrorCode());
+            } else {
+                sendError(httpResponse, FailureCode._UNAUTHORIZED);
+            }
+        } catch (AuthenticationServiceException| BadCredentialsException e) {
             sendError(httpResponse, FailureCode._UNAUTHORIZED);
         } catch (RedisConnectionFailureException | RedisConnectionException e) {
             sendError(httpResponse, FailureCode._REDIS_SERVER_ERROR);
