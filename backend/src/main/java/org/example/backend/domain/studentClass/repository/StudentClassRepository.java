@@ -23,4 +23,14 @@ public interface StudentClassRepository extends JpaRepository<StudentClass, Stud
     @Query("DELETE FROM StudentClass cs WHERE cs.classroom.id = :classId AND cs.userId IN :studentIds")
     void deleteByClassroomIdAndStudentIds(@Param("classId") UUID classId, @Param("studentIds") List<UUID> studentIds);
 
+
+    @Query("""
+    SELECT CASE WHEN COUNT(sc) > 0 THEN TRUE ELSE FALSE END
+    FROM StudentClass sc
+    WHERE sc.userId = :userId
+      AND sc.classId = (
+          SELECT l.classroom.id FROM Lecture l WHERE l.id = :lectureId
+      )
+""")
+    boolean existsByUserIdAndLectureId(@Param("userId") UUID userId, @Param("lectureId") UUID lectureId);
 }
