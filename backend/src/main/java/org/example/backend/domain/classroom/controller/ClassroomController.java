@@ -86,7 +86,7 @@ public class ClassroomController {
 
     //입장코드 확인
     @PostMapping("/{classId}/code/verify")
-    public ApiResponse<Boolean> verifyCode(@PathVariable("classId") UUID classId,
+    public ApiResponse<EntryCodeVerifyResponseDTO> verifyCode(@PathVariable("classId") UUID classId,
                                            @RequestBody EntryCodeVerifyRequestDTO request, @RequestHeader("Authorization") String token) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Object principal = authentication.getPrincipal();
@@ -100,7 +100,8 @@ public class ClassroomController {
             return ApiResponse.onFailure(ClassroomErrorCode.INVALID_ENTRY_CODE);
         }
 
-        return ApiResponse.onSuccess(true);
+        EntryCodeVerifyResponseDTO response = new EntryCodeVerifyResponseDTO(classId);
+        return ApiResponse.onSuccess(response);
     }
 
     // 퀴즈 조회
