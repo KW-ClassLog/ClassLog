@@ -122,6 +122,12 @@ public class LectureServiceImpl implements LectureService {
         if (dto.getLectureDate() != null) {
             lecture.setLectureDate(dto.getLectureDate());
         }
+        if(dto.getStartTime() != null){
+            lecture.setStartTime(dto.getStartTime());
+        }
+        if(dto.getEndTime() != null){
+            lecture.setEndTime(dto.getEndTime());
+        }
 
         if (dto.getClassId() != null && !dto.getClassId().equals(lecture.getClassroom().getId())) {
             Classroom classroom = classroomRepository.findById(dto.getClassId())
