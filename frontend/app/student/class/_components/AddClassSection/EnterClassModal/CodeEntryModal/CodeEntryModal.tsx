@@ -5,6 +5,7 @@ import BasicInput from "@/components/Input/BasicInput/BasicInput";
 import FullWidthButton from "@/components/Button/FullWidthButton/FullWidthButton";
 import { inputEntryCode } from "@/api/classes/inputEntryCode";
 import AlertModal from "@/components/Modal/AlertModal/AlertModal";
+import SetClassNicknameModal from "../../SetClassNicknameModal/SetClassNicknameModal";
 
 type CodeEntryModalProps = {
   onClose: () => void;
@@ -13,11 +14,15 @@ type CodeEntryModalProps = {
 export default function CodeEntryModal({ onClose }: CodeEntryModalProps) {
   const [entryCode, setEntryCode] = useState("");
   const [isAlertModalOpen, setIsAlertModalOpen] = useState(false);
+  const [isSetClassNicknameModalOpen, setIsSetClassNicknameModalOpen] =
+    useState(false);
+  const [classId, setClassId] = useState("");
 
   const handleSubmit = async () => {
     const response = await inputEntryCode({ entryCode });
     if (response.isSuccess) {
-      onClose();
+      setClassId(response.result?.classId || "");
+      setIsSetClassNicknameModalOpen(true);
     } else {
       setIsAlertModalOpen(true);
     }
@@ -46,6 +51,12 @@ export default function CodeEntryModal({ onClose }: CodeEntryModalProps) {
         <AlertModal onClose={() => setIsAlertModalOpen(false)}>
           <p>입장코드가 일치하지 않습니다.</p>
         </AlertModal>
+      )}
+      {isSetClassNicknameModalOpen && (
+        <SetClassNicknameModal
+          onClose={() => setIsSetClassNicknameModalOpen(false)}
+          classId={classId}
+        />
       )}
     </ClosableModal>
   );

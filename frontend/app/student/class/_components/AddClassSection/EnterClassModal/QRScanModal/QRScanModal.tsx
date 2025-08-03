@@ -3,6 +3,10 @@ import styles from "./QRScanModal.module.scss";
 import { IMAGES } from "@/constants/images";
 import Image from "next/image";
 import { Camera, X } from "lucide-react";
+import { inputEntryCode } from "@/api/classes/inputEntryCode";
+import AlertModal from "@/components/Modal/AlertModal/AlertModal";
+import SetClassNicknameModal from "../../SetClassNicknameModal/SetClassNicknameModal";
+import jsQR from "jsqr";
 
 type QRScanModalProps = {
   onClose: () => void;
@@ -10,8 +14,14 @@ type QRScanModalProps = {
 
 export default function QRScanModal({ onClose }: QRScanModalProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isScanning, setIsScanning] = useState(false);
   const [cameraError, setCameraError] = useState<string | null>(null);
+  const [isAlertModalOpen, setIsAlertModalOpen] = useState(false);
+  const [isSetClassNicknameModalOpen, setIsSetClassNicknameModalOpen] =
+    useState(false);
+  const [classId, setClassId] = useState("");
+  const scanIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   // 데스크탑과 모바일 환경 감지
   const isMobile = () => {
@@ -26,6 +36,28 @@ export default function QRScanModal({ onClose }: QRScanModalProps) {
       stream.getTracks().forEach((track) => {
         track.stop();
       });
+    }
+    if (scanIntervalRef.current) {
+      clearInterval(scanIntervalRef.current);
+      scanIntervalRef.current = null;
+    }
+  };
+
+  // QR 코드 감지 처리
+  const handleQRCodeDetected = async (entryCode: string) => {
+    try {
+      const response = await inputEntryCode({ entryCode });
+
+      if (response.isSuccess) {
+        setClassId(response.result?.classId || "");
+        setIsSetClassNicknameModalOpen(true);
+        stopCamera();
+      } else {
+        setIsAlertModalOpen(true);
+      }
+    } catch (error) {
+      console.error("QR 코드 처리 오류:", error);
+      setIsAlertModalOpen(true);
     }
   };
 
@@ -71,6 +103,9 @@ export default function QRScanModal({ onClose }: QRScanModalProps) {
           }
 
           setIsScanning(true);
+
+          // QR 코드 스캔 시작 (100ms마다)
+          scanIntervalRef.current = setInterval(scanQRCode, 100);
         } else {
           throw new Error("video 요소를 찾을 수 없습니다");
         }
@@ -83,6 +118,34 @@ export default function QRScanModal({ onClose }: QRScanModalProps) {
       }
     };
 
+    // QR 코드 스캔 함수
+    const scanQRCode = () => {
+      if (!videoRef.current || !canvasRef.current) return;
+
+      const video = videoRef.current;
+      const canvas = canvasRef.current;
+      const ctx = canvas.getContext("2d");
+
+      if (!ctx) return;
+
+      // 비디오 크기에 맞춰 캔버스 크기 설정
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+
+      // 비디오 프레임을 캔버스에 그리기
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+      // 캔버스에서 이미지 데이터 추출
+      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+      // jsQR로 QR 코드 감지
+      const code = jsQR(imageData.data, imageData.width, imageData.height);
+
+      if (code) {
+        handleQRCodeDetected(code.data);
+      }
+    };
+
     startCamera();
 
     return () => {
@@ -92,7 +155,13 @@ export default function QRScanModal({ onClose }: QRScanModalProps) {
 
   return (
     <div className={styles.container}>
-      <div className={styles.backButton} onClick={onClose}>
+      <div
+        className={styles.backButton}
+        onClick={() => {
+          stopCamera();
+          onClose();
+        }}
+      >
         <X />
       </div>
       <div className={styles.scannerContainer}>
@@ -105,6 +174,9 @@ export default function QRScanModal({ onClose }: QRScanModalProps) {
           className={styles.video}
           style={{ display: isScanning && !cameraError ? "block" : "none" }}
         />
+
+        {/* 숨겨진 캔버스 (QR 코드 스캔용) */}
+        <canvas ref={canvasRef} style={{ display: "none" }} />
 
         {/* 카메라가 작동하지 않을 때만 placeholder 표시 */}
         {(!isScanning || cameraError) && (
@@ -140,6 +212,21 @@ export default function QRScanModal({ onClose }: QRScanModalProps) {
           </div>
         )}
       </div>
+
+      {/* 알림 모달 */}
+      {isAlertModalOpen && (
+        <AlertModal onClose={() => setIsAlertModalOpen(false)}>
+          <p>입장코드가 일치하지 않습니다.</p>
+        </AlertModal>
+      )}
+
+      {/* 클래스 닉네임 설정 모달 */}
+      {isSetClassNicknameModalOpen && (
+        <SetClassNicknameModal
+          onClose={() => setIsSetClassNicknameModalOpen(false)}
+          classId={classId}
+        />
+      )}
     </div>
   );
 }
