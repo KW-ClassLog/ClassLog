@@ -28,8 +28,20 @@ public class QuizSubmitServiceImpl implements QuizSubmitService {
 
 
     // 정답 확인 함수
-    private boolean isCorrect(String submitted, String solution) {
-        return normalize(submitted).equals(normalize(solution));
+    private boolean isCorrect(String submitted, String solution, Quiz quiz) {
+        String normalizedSubmitted = normalize(submitted);
+
+        if (quiz.getType().name().equals("SHORT_ANSWER")) {
+            String[] solutionParts = solution.split(",");
+            for (String part : solutionParts) {
+                if (normalizedSubmitted.equals(normalize(part))) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        return normalizedSubmitted.equals(normalize(solution));
     }
 
     // 정답 텍스트 정규화
@@ -54,7 +66,7 @@ public class QuizSubmitServiceImpl implements QuizSubmitService {
                     .orElseThrow(() -> new QuizException(QuizErrorCode.QUIZ_NOT_FOUND));
 
 
-            boolean correct = isCorrect(dto.getAnswer(), quiz.getSolution());
+            boolean correct = isCorrect(dto.getAnswer(), quiz.getSolution(), quiz);
 
             QuizAnswer quizAnswer = QuizAnswerConverter.toEntity(
                     userId,
