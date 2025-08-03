@@ -1,22 +1,43 @@
 import ClosableModal from "@/components/Modal/ClosableModal/ClosableModal";
-import React from "react";
+import React, { useState } from "react";
 import styles from "./EnterClassModal.module.scss";
 import { IMAGES } from "@/constants/images";
 import Image from "next/image";
+import CodeEntryModal from "./CodeEntryModal/CodeEntryModal";
+import QRScanModal from "./QRScanModal/QRScanModal";
 
 type EnterClassModalProps = {
   onClose: () => void;
 };
 
+type ModalState = "selection" | "codeEntry" | "qrScan";
+
 export default function EnterClassModal({ onClose }: EnterClassModalProps) {
+  const [modalState, setModalState] = useState<ModalState>("selection");
+
   const handleCodeEntry = () => {
-    // 문자코드 입력 로직
+    setModalState("codeEntry");
   };
 
   const handleQRScan = () => {
-    // QR 스캔 로직
+    setModalState("qrScan");
   };
 
+  const handleBack = () => {
+    setModalState("selection");
+  };
+
+  // QR 스캔 모달이 활성화된 경우
+  if (modalState === "qrScan") {
+    return <QRScanModal onBack={handleBack} />;
+  }
+
+  // 문자코드 입력 모달이 활성화된 경우
+  if (modalState === "codeEntry") {
+    return <CodeEntryModal onClose={onClose} onBack={handleBack} />;
+  }
+
+  // 기본 선택 화면
   return (
     <ClosableModal onClose={onClose}>
       <div className={styles.container}>

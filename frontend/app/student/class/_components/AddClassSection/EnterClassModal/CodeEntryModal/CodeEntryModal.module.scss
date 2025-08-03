@@ -1,0 +1,32 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: $spacing-md 0px;
+  background-color: white;
+  min-width: 300px;
+}
+
+.title {
+  font-size: $font-size-xl;
+  font-weight: 600;
+  margin-bottom: $spacing-2xl;
+  text-align: center;
+}
+
+.inputContainer {
+  width: 100%;
+  margin-bottom: $spacing-xl;
+}
+
+.input {
+  width: 100%;
+}
+
+.buttonContainer {
+  width: 100%;
+}
+
+.confirmButton {
+  width: 100%;
+}
