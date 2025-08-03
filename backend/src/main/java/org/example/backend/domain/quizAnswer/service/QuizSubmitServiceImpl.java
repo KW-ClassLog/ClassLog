@@ -65,6 +65,9 @@ public class QuizSubmitServiceImpl implements QuizSubmitService {
             Quiz quiz = quizRepository.findById(dto.getQuizId())
                     .orElseThrow(() -> new QuizException(QuizErrorCode.QUIZ_NOT_FOUND));
 
+            if (quizAnswerRepository.existsByUserIdAndQuizId(userId, quiz.getId())) {
+                throw new QuizException(QuizErrorCode.DUPLICATE_SUBMISSION);
+            }
 
             boolean correct = isCorrect(dto.getAnswer(), quiz.getSolution(), quiz);
 
