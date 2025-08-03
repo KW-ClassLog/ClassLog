@@ -1,0 +1,27 @@
+.container {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.iconContainer {
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+  transition: all 0.2s ease-in-out;
+  * {
+    color: $color-blue;
+  }
+  &:hover {
+    transform: scale(1.02);
+    cursor: pointer;
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+  p {
+    font-size: $font-size-md;
+    font-weight: $font-weight-medium;
+  }
+}
