@@ -7,6 +7,7 @@ import org.example.backend.domain.user.dto.response.HomeResponseDTO;
 import org.example.backend.domain.user.dto.response.ProfileUpdateResponseDTO;
 import org.example.backend.domain.user.dto.response.UserProfileResponseDTO;
 import org.example.backend.domain.user.dto.response.WithdrawResponseDTO;
+import org.example.backend.domain.user.entity.Role;
 import org.example.backend.domain.user.entity.SocialType;
 import org.example.backend.domain.user.entity.Status;
 import org.example.backend.domain.user.entity.User;
@@ -37,24 +38,29 @@ UserConverter {
 
     // Entity -> responseDTO
     public ProfileUpdateResponseDTO toProfileUpdateResponseDTO(User user){
+        String profileUrl = user.getSocialType() == SocialType.LOCAL?
+                s3Service.getPublicUrl(user.getProfileUrl()) : user.getProfileUrl();
 
         return ProfileUpdateResponseDTO.builder()
                 .userId(user.getId())
                 .name(user.getName())
                 .organization(user.getOrganization())
                 .phoneNumber(user.getPhoneNumber())
-                .profile(s3Service.getPublicUrl(user.getProfileUrl()))
+                .profile(profileUrl)
                 .build();
     }
 
     // Entity -> responseDTO
     public UserProfileResponseDTO toUserProfileResponseDTO(User user){
+        String profileUrl = user.getSocialType() == SocialType.LOCAL?
+                s3Service.getPublicUrl(user.getProfileUrl()) : user.getProfileUrl();
+
         return UserProfileResponseDTO.builder()
                 .userId(user.getId())
                 .name(user.getName())
                 .organization(user.getOrganization())
                 .phoneNumber(user.getPhoneNumber())
-                .profile(s3Service.getPublicUrl(user.getProfileUrl()))
+                .profile(profileUrl)
                 .role(user.getRole().toString())
                 .build();
     }
@@ -72,6 +78,20 @@ UserConverter {
         return WithdrawResponseDTO.builder()
                 .id(user.getId())
                 .deletedAt(user.getDeletedAt())
+                .build();
+    }
+
+    // 카카오 회원가입 온보딩 이전
+    public User toKakaoPreOnboarding(String email, String name, String profileUrl, String socialId){
+
+        return User.builder()
+                .email(email)
+                .name(name)
+                .profileUrl(profileUrl)
+                .socialId(socialId)
+                .socialType(SocialType.KAKAO)
+                .status(Status.INACTIVE)
+                .role(Role.UNKNOWN)
                 .build();
     }
 }

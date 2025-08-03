@@ -1,6 +1,7 @@
 package org.example.backend.global.security.auth;
 
 import org.antlr.v4.runtime.misc.Array2DHashSet;
+import org.example.backend.domain.user.entity.Status;
 import org.example.backend.domain.user.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -42,6 +43,10 @@ public class CustomUserDetails implements UserDetails {
 
     public User getUser() {
         return this.user;
+    }
+
+    public Status getStatus() {
+        return user.getStatus();
     }
 
     @Override

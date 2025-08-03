@@ -2,12 +2,14 @@ package org.example.backend.domain.lecture.controller;
 
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.example.backend.domain.lecture.converter.LectureConverter;
 import org.example.backend.domain.lecture.dto.request.LectureNoteMappingRequestDTO;
 import org.example.backend.domain.lecture.dto.request.LectureRequestDTO;
 import org.example.backend.domain.lecture.dto.response.*;
 import org.example.backend.domain.lecture.entity.Lecture;
 import org.example.backend.domain.lecture.service.LectureService;
+import org.example.backend.domain.lecture.service.LectureStudentService;
 import org.example.backend.global.ApiResponse;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
@@ -19,14 +21,13 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/lectures")
 public class LectureController {
     private final LectureService lectureService;
     private final LectureConverter lectureConverter;
+    private final LectureStudentService lectureStudentService;
 
-    public LectureController(LectureService lectureService, LectureConverter lectureConverter) {this.lectureService=lectureService;
-        this.lectureConverter = lectureConverter;
-    }
 
     // Lecture 생성
     @PostMapping("/create")
@@ -91,8 +92,13 @@ public class LectureController {
     public ApiResponse<List<TodayLectureResponseDTO>> getTeacherLecture(@RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         List<TodayLectureResponseDTO> responseDTOs = lectureService.getClassListByProfessor(date);
         return ApiResponse.onSuccess(responseDTOs);
-
     }
 
+    //학생의 오늘의 강의 조회
+    @GetMapping("/student/today")
+    public ApiResponse<StudentTodayLectureResponseDTO> getStudentLectures(@RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+        StudentTodayLectureResponseDTO result = lectureStudentService.getClassListByStudent(date);
+        return ApiResponse.onSuccess(result);
+    }
 
 }
