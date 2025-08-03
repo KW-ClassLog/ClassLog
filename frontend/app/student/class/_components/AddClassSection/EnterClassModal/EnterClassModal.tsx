@@ -23,18 +23,14 @@ export default function EnterClassModal({ onClose }: EnterClassModalProps) {
     setModalState("qrScan");
   };
 
-  const handleBack = () => {
-    setModalState("selection");
-  };
-
   // QR 스캔 모달이 활성화된 경우
   if (modalState === "qrScan") {
-    return <QRScanModal onBack={handleBack} />;
+    return <QRScanModal onClose={onClose} />;
   }
 
   // 문자코드 입력 모달이 활성화된 경우
   if (modalState === "codeEntry") {
-    return <CodeEntryModal onClose={onClose} onBack={handleBack} />;
+    return <CodeEntryModal onClose={onClose} />;
   }
 
   // 기본 선택 화면

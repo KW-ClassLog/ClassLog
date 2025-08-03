@@ -6,13 +6,9 @@ import FullWidthButton from "@/components/Button/FullWidthButton/FullWidthButton
 
 type CodeEntryModalProps = {
   onClose: () => void;
-  onBack: () => void;
 };
 
-export default function CodeEntryModal({
-  onClose,
-  onBack,
-}: CodeEntryModalProps) {
+export default function CodeEntryModal({ onClose }: CodeEntryModalProps) {
   const [entryCode, setEntryCode] = useState("");
 
   const handleSubmit = () => {

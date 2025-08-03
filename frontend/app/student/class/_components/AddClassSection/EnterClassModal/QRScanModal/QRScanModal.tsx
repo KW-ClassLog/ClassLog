@@ -2,13 +2,13 @@ import React, { useEffect, useRef, useState } from "react";
 import styles from "./QRScanModal.module.scss";
 import { IMAGES } from "@/constants/images";
 import Image from "next/image";
-import { ArrowLeft, Camera } from "lucide-react";
+import { Camera, X } from "lucide-react";
 
 type QRScanModalProps = {
-  onBack: () => void;
+  onClose: () => void;
 };
 
-export default function QRScanModal({ onBack }: QRScanModalProps) {
+export default function QRScanModal({ onClose }: QRScanModalProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isScanning, setIsScanning] = useState(false);
   const [cameraError, setCameraError] = useState<string | null>(null);
@@ -92,9 +92,8 @@ export default function QRScanModal({ onBack }: QRScanModalProps) {
 
   return (
     <div className={styles.container}>
-      <div className={styles.backButton} onClick={onBack}>
-        <ArrowLeft />
-        <p>뒤로가기</p>
+      <div className={styles.backButton} onClick={onClose}>
+        <X />
       </div>
       <div className={styles.scannerContainer}>
         {/* video 요소를 항상 렌더링 */}
