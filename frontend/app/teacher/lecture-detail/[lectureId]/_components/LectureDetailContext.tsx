@@ -6,6 +6,8 @@ interface LectureDetailContextType {
   lectureId: string;
   classId: string | null;
   setClassId: (classId: string) => void;
+  refreshKey: number;
+  refresh: () => void;
 }
 
 const LectureDetailContext = createContext<
@@ -22,9 +24,14 @@ export function LectureDetailProvider({
   lectureId,
 }: LectureDetailProviderProps) {
   const [classId, setClassId] = useState<string | null>(null);
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  const refresh = () => setRefreshKey((prev) => prev + 1);
 
   return (
-    <LectureDetailContext.Provider value={{ lectureId, classId, setClassId }}>
+    <LectureDetailContext.Provider
+      value={{ lectureId, classId, setClassId, refreshKey, refresh }}
+    >
       {children}
     </LectureDetailContext.Provider>
   );

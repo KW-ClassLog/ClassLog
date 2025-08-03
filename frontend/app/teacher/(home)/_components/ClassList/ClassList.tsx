@@ -13,6 +13,7 @@ import AlertModal from "@/components/Modal/AlertModal/AlertModal";
 import ConfirmModal from "@/components/Modal/ConfirmModal/ConfirmModal";
 import useClassListStore from "@/store/useClassListStore";
 import MakeInvitationCodeModal from "@/components/Modal/MakeInvitationCodeModal/MakeInvitationCodeModal";
+import { fetchClassInfoByClassId } from "@/api/classes/fetchClassInfoByClassId";
 
 export default function ClassList() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -22,6 +23,14 @@ export default function ClassList() {
   const [invitationModalClassId, setInvitationModalClassId] = useState<
     string | null
   >(null);
+  const [editModalData, setEditModalData] = useState<{
+    classId: string;
+    className: string;
+    classTime: string;
+    startDate: string;
+    endDate: string;
+  } | null>(null);
+  const [editModalOpen, setEditModalOpen] = useState(false);
 
   const { classList, isLoading, error, fetchClassList } = useClassListStore();
 
@@ -30,15 +39,31 @@ export default function ClassList() {
   }, [fetchClassList]);
 
   const handleOpenModal = () => setIsModalOpen(true);
-  const handleCloseModal = () => setIsModalOpen(false);
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setEditModalOpen(false);
+    setEditModalData(null);
+  };
 
   const handleMoreClick = (classId: string) => {
     setDropdownOpenId((prev) => (prev === classId ? null : classId));
   };
 
-  const handleEdit = (classId: string) => {
+  const handleEdit = async (classId: string) => {
     setDropdownOpenId(null);
-    setAlert(`수정: ${classId}`);
+    const res = await fetchClassInfoByClassId(classId);
+    if (res.isSuccess && res.result) {
+      setEditModalData({
+        classId: res.result.classId,
+        className: res.result.className,
+        classTime: res.result.classDate,
+        startDate: res.result.startDate,
+        endDate: res.result.endDate,
+      });
+      setEditModalOpen(true);
+    } else {
+      setAlert(res.message || "클래스 정보를 불러오지 못했습니다.");
+    }
   };
 
   const handleDelete = async (classId: string) => {
@@ -133,7 +158,16 @@ export default function ClassList() {
 
       {isModalOpen && (
         <ClosableModal onClose={handleCloseModal}>
-          <CreateClassModal onClose={handleCloseModal} />
+          <CreateClassModal onClose={handleCloseModal} mode="create" />
+        </ClosableModal>
+      )}
+      {editModalOpen && editModalData && (
+        <ClosableModal onClose={handleCloseModal}>
+          <CreateClassModal
+            onClose={handleCloseModal}
+            mode="edit"
+            initialData={editModalData}
+          />
         </ClosableModal>
       )}
 

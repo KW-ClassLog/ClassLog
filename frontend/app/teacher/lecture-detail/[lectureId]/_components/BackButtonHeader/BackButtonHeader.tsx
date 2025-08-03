@@ -8,16 +8,54 @@ import { ROUTES } from "@/constants/routes";
 import ConfirmModal from "@/components/Modal/ConfirmModal/ConfirmModal";
 import AlertModal from "@/components/Modal/AlertModal/AlertModal";
 import { deleteLecture } from "@/api/lectures/deleteLecture";
+import ClosableModal from "@/components/Modal/ClosableModal/ClosableModal";
+import CreateLectureModal from "@/app/teacher/lecture-management/_components/CreateLectureModal/CreateLectureModal";
+import { fetchLectureDetail } from "@/api/lectures/fetchLectureDetail";
+import { useLectureDetail } from "../LectureDetailContext";
 
-export default function BackButtonHeader({ lectureId }: { lectureId: string }) {
+export default function BackButtonHeader({
+  lectureId,
+  onEditComplete,
+}: {
+  lectureId: string;
+  onEditComplete?: () => void;
+}) {
   const router = useRouter();
+  const { refresh } = useLectureDetail();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showAlertModal, setShowAlertModal] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [editModalData, setEditModalData] = useState<null | {
+    lectureId: string;
+    classId: string;
+    lectureName: string;
+    lectureDate: string;
+    startTime: string;
+    endTime: string;
+  }>(null);
 
   const handleDeleteClick = () => {
     setShowDeleteModal(true);
+  };
+
+  const handleEditClick = async () => {
+    const res = await fetchLectureDetail(lectureId);
+    if (res.isSuccess && res.result) {
+      setEditModalData({
+        lectureId: res.result.lectureId,
+        classId: res.result.classId,
+        lectureName: res.result.lectureName,
+        lectureDate: res.result.lectureDate,
+        startTime: res.result.startTime,
+        endTime: res.result.endTime,
+      });
+      setEditModalOpen(true);
+    } else {
+      setAlertMessage(res.message || "강의 정보를 불러오지 못했습니다.");
+      setShowAlertModal(true);
+    }
   };
 
   const handleDeleteConfirm = async () => {
@@ -54,6 +92,14 @@ export default function BackButtonHeader({ lectureId }: { lectureId: string }) {
     }
   };
 
+  const handleEditModalClose = () => {
+    setEditModalOpen(false);
+    setEditModalData(null);
+    if (onEditComplete) onEditComplete();
+    refresh();
+    router.refresh?.();
+  };
+
   return (
     <>
       <header className={styles.quizHeader}>
@@ -65,7 +111,7 @@ export default function BackButtonHeader({ lectureId }: { lectureId: string }) {
         <div className={styles.buttonContainer}>
           <IconButton
             icon={<PencilLine />}
-            onClick={() => {}}
+            onClick={handleEditClick}
             ariaLabel={"수정"}
           ></IconButton>
           <IconButton
@@ -83,6 +129,16 @@ export default function BackButtonHeader({ lectureId }: { lectureId: string }) {
         >
           정말 이 강의를 삭제하시겠습니까?
         </ConfirmModal>
+      )}
+
+      {editModalOpen && editModalData && (
+        <ClosableModal onClose={handleEditModalClose}>
+          <CreateLectureModal
+            onClose={handleEditModalClose}
+            mode="edit"
+            initialData={editModalData}
+          />
+        </ClosableModal>
       )}
 
       {showAlertModal && (

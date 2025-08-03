@@ -1,0 +1,32 @@
+.container {
+  background: $color-white;
+  padding: 0 $spacing-lg;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+  height: 100%;
+  justify-content: space-between;
+}
+
+.title {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  margin-bottom: $spacing-md;
+  flex-shrink: 0;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+  width: 100%;
+  flex: 1 1 auto;
+  overflow-y: auto;
+  min-height: 0;
+}
+
+.buttonWrapper {
+  margin-top: $spacing-3xl;
+  flex-shrink: 0;
+}
