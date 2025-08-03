@@ -20,59 +20,6 @@ export default function QRScanModal({ onClose }: QRScanModalProps) {
     );
   };
 
-  const startCamera = async () => {
-    try {
-      setCameraError(null);
-
-      // 데스크탑에서는 전면 카메라, 모바일에서는 후면 카메라 사용
-      const facingMode = isMobile() ? "environment" : "user";
-
-      // getUserMedia로 카메라 스트림 획득
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: {
-          facingMode: facingMode,
-          width: { ideal: 1280 },
-          height: { ideal: 720 },
-        },
-      });
-
-      // video 요소에 스트림 할당
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-
-        // 비디오 로드 완료 후 재생
-        await new Promise((resolve, reject) => {
-          if (videoRef.current) {
-            videoRef.current.onloadedmetadata = () => {
-              resolve(true);
-            };
-            videoRef.current.onerror = () => {
-              reject(new Error("비디오 로드 실패"));
-            };
-          }
-        });
-
-        // 안전한 재생 시도
-        try {
-          await videoRef.current.play();
-        } catch (playError) {
-          console.warn("자동 재생 실패, 사용자 상호작용 필요:", playError);
-          // 자동 재생이 실패해도 스트림은 할당되어 있으므로 계속 진행
-        }
-
-        setIsScanning(true);
-      } else {
-        throw new Error("video 요소를 찾을 수 없습니다");
-      }
-    } catch (error) {
-      console.error("카메라 접근 오류:", error);
-      setCameraError(
-        "카메라에 접근할 수 없습니다. 브라우저 설정을 확인해주세요."
-      );
-      setIsScanning(false);
-    }
-  };
-
   const stopCamera = () => {
     if (videoRef.current && videoRef.current.srcObject) {
       const stream = videoRef.current.srcObject as MediaStream;
@@ -83,6 +30,59 @@ export default function QRScanModal({ onClose }: QRScanModalProps) {
   };
 
   useEffect(() => {
+    const startCamera = async () => {
+      try {
+        setCameraError(null);
+
+        // 데스크탑에서는 전면 카메라, 모바일에서는 후면 카메라 사용
+        const facingMode = isMobile() ? "environment" : "user";
+
+        // getUserMedia로 카메라 스트림 획득
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: {
+            facingMode: facingMode,
+            width: { ideal: 1280 },
+            height: { ideal: 720 },
+          },
+        });
+
+        // video 요소에 스트림 할당
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+
+          // 비디오 로드 완료 후 재생
+          await new Promise((resolve, reject) => {
+            if (videoRef.current) {
+              videoRef.current.onloadedmetadata = () => {
+                resolve(true);
+              };
+              videoRef.current.onerror = () => {
+                reject(new Error("비디오 로드 실패"));
+              };
+            }
+          });
+
+          // 안전한 재생 시도
+          try {
+            await videoRef.current.play();
+          } catch (playError) {
+            console.warn("자동 재생 실패, 사용자 상호작용 필요:", playError);
+            // 자동 재생이 실패해도 스트림은 할당되어 있으므로 계속 진행
+          }
+
+          setIsScanning(true);
+        } else {
+          throw new Error("video 요소를 찾을 수 없습니다");
+        }
+      } catch (error) {
+        console.error("카메라 접근 오류:", error);
+        setCameraError(
+          "카메라에 접근할 수 없습니다. 브라우저 설정을 확인해주세요."
+        );
+        setIsScanning(false);
+      }
+    };
+
     startCamera();
 
     return () => {
@@ -118,11 +118,6 @@ export default function QRScanModal({ onClose }: QRScanModalProps) {
             <p className={styles.placeholderText}>
               {cameraError || "QR 코드를 프레임 안에 맞춰주세요"}
             </p>
-            {cameraError && (
-              <button className={styles.retryButton} onClick={startCamera}>
-                다시 시도
-              </button>
-            )}
           </div>
         )}
 

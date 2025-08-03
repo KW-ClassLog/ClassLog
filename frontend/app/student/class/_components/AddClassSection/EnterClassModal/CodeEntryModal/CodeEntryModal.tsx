@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import styles from "./CodeEntryModal.module.scss";
 import BasicInput from "@/components/Input/BasicInput/BasicInput";
 import FullWidthButton from "@/components/Button/FullWidthButton/FullWidthButton";
+import { inputEntryCode } from "@/api/classes/inputEntryCode";
+import AlertModal from "@/components/Modal/AlertModal/AlertModal";
 
 type CodeEntryModalProps = {
   onClose: () => void;
@@ -10,10 +12,15 @@ type CodeEntryModalProps = {
 
 export default function CodeEntryModal({ onClose }: CodeEntryModalProps) {
   const [entryCode, setEntryCode] = useState("");
+  const [isAlertModalOpen, setIsAlertModalOpen] = useState(false);
 
-  const handleSubmit = () => {
-    // 입장코드 제출 로직
-    console.log("입장코드 제출:", entryCode);
+  const handleSubmit = async () => {
+    const response = await inputEntryCode({ entryCode });
+    if (response.isSuccess) {
+      onClose();
+    } else {
+      setIsAlertModalOpen(true);
+    }
   };
 
   return (
@@ -35,6 +42,11 @@ export default function CodeEntryModal({ onClose }: CodeEntryModalProps) {
           </FullWidthButton>
         </div>
       </div>
+      {isAlertModalOpen && (
+        <AlertModal onClose={() => setIsAlertModalOpen(false)}>
+          <p>입장코드가 일치하지 않습니다.</p>
+        </AlertModal>
+      )}
     </ClosableModal>
   );
 }
