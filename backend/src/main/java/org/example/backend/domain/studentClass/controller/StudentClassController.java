@@ -3,6 +3,7 @@ package org.example.backend.domain.studentClass.controller;
 import lombok.RequiredArgsConstructor;
 import org.example.backend.domain.classroom.dto.response.ClassroomResponseStudentDTO;
 import org.example.backend.domain.studentClass.dto.request.StudentClassRequestDTO;
+import org.example.backend.domain.studentClass.dto.request.StudentDeleteRequestDTO;
 import org.example.backend.domain.studentClass.dto.response.StudentEnrolledResponseDTO;
 import org.example.backend.domain.studentClass.dto.response.StudentClassResponseDTO;
 import org.example.backend.domain.studentClass.dto.response.TodayLectureResponseDTO;
@@ -68,4 +69,10 @@ public class StudentClassController {
         return ApiResponse.onSuccess(response);
     }
 
+    // 학생 내보내기
+    @DeleteMapping("/{classId}/students")
+    public ApiResponse<Void> deleteStudent(@PathVariable("classId") UUID classId ,@RequestBody StudentDeleteRequestDTO studentDeleteRequestDTO){
+        studentClassService.deleteStudent(classId,studentDeleteRequestDTO);
+        return ApiResponse.onSuccess(null);
+    }
 }
