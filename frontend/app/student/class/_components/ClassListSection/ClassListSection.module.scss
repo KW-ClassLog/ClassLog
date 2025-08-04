@@ -1,0 +1,114 @@
+.container {
+  width: 100%;
+}
+
+.loading {
+  text-align: center;
+  padding: $spacing-2xl;
+
+  p {
+    color: $color-neutral-6;
+    font-size: $font-size-md;
+  }
+}
+
+.error {
+  text-align: center;
+  padding: $spacing-2xl;
+
+  p {
+    color: $color-neutral-6;
+    font-size: $font-size-md;
+  }
+}
+
+.empty {
+  text-align: center;
+  padding: $spacing-2xl;
+
+  p {
+    color: $color-neutral-6;
+    font-size: $font-size-md;
+    margin-bottom: $spacing-sm;
+
+    &:last-child {
+      margin-bottom: 0;
+      font-size: $font-size-sm;
+      color: $color-neutral-6;
+    }
+  }
+}
+
+.classList {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.classCard {
+  background-color: white;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid $color-neutral-8;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.08);
+
+  &:hover {
+    background-color: $color-skyblue;
+  }
+}
+
+.classHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: $spacing-md;
+  margin-bottom: $spacing-md;
+  border-bottom: 0.5px solid $color-neutral-7;
+}
+
+.classTitle {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+}
+
+.className {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-medium;
+  color: $color-neutral-3;
+}
+
+.teacherName {
+  font-size: $font-size-md;
+  color: $color-neutral-6;
+}
+
+.arrowIcon {
+  color: $color-blue;
+  flex-shrink: 0;
+}
+
+.classDetails {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+}
+
+.detailItem {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  color: $color-neutral-6;
+  font-size: $font-size-sm;
+
+  svg {
+    color: $color-neutral-6;
+    flex-shrink: 0;
+  }
+
+  span {
+    line-height: 1.4;
+  }
+}
