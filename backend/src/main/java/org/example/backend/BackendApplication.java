@@ -29,6 +29,8 @@ public class BackendApplication {
 		System.setProperty("AWS_ACCESS_KEY", dotenv.get("AWS_ACCESS_KEY"));
 		System.setProperty("AWS_SECRET_KEY", dotenv.get("AWS_SECRET_KEY"));
 		System.setProperty("AWS_S3_BUCKET_NAME", dotenv.get("AWS_S3_BUCKET_NAME"));
+		System.setProperty("KAKAO_API_KEY", dotenv.get("KAKAO_API_KEY"));
+		System.setProperty("KAKAO_REDIRECT_URI", dotenv.get("KAKAO_REDIRECT_URI"));
 
 		SpringApplication.run(BackendApplication.class, args);
 	}

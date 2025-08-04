@@ -25,6 +25,6 @@ public interface ClassroomService {
     String calculateLectureStatus(LocalDate lectureDate, LocalTime startTime, LocalTime endTime);
 
     EntryCodeResponseDTO generateCode(UUID classId);
-    boolean validateEntryCode(UUID classId, String inputCode);
+    UUID validateEntryCode(String inputCode);
     void checkAlreadyJoined(UUID classId, UUID studentId);
 }

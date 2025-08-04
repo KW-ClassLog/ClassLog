@@ -11,6 +11,7 @@ import org.example.backend.domain.lecture.entity.Lecture;
 import org.example.backend.domain.lecture.repository.LectureRepository;
 import org.example.backend.domain.studentClass.converter.StudentClassConverter;
 import org.example.backend.domain.studentClass.dto.request.StudentClassRequestDTO;
+import org.example.backend.domain.studentClass.dto.request.StudentDeleteRequestDTO;
 import org.example.backend.domain.studentClass.dto.response.StudentEnrolledResponseDTO;
 import org.example.backend.domain.studentClass.dto.response.StudentClassResponseDTO;
 import org.example.backend.domain.studentClass.dto.response.TodayLectureResponseDTO;
@@ -27,10 +28,10 @@ import org.example.backend.global.code.base.FailureCode;
 import org.example.backend.global.exception.FailureException;
 import org.example.backend.global.security.auth.CustomSecurityUtil;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -175,5 +176,36 @@ public class StudentClassServiceImpl implements StudentClassService{
         return lectures.stream()
                 .map(lecture -> studentClassConverter.toTodayLectureResponseDTO(lecture.getClassroom(), lecture))
                 .collect(Collectors.toList());
+    }
+
+    //클래스에서 학생 삭제
+    @Override
+    @Transactional
+    public void deleteStudent(UUID classId, StudentDeleteRequestDTO dto) {
+
+        Role role = customSecurityUtil.getUserRole();
+
+        if (role != Role.TEACHER) {
+            throw new StudentClassException(StudentClassErrorCode._FORBIDDEN);
+        }
+        Classroom classroom = classroomRepository.findById(classId)
+                .orElseThrow(() -> new ClassroomException(ClassroomErrorCode.CLASS_NOT_FOUND));
+
+        List<StudentClass> currentStudents = studentClassRepository.findAllByClassId(classId);
+        Set<UUID> currentStudentIds = currentStudents.stream()
+                .map(StudentClass::getUserId)
+                .collect(Collectors.toSet());
+
+        List<UUID> invalidStudents = dto.getStudentIds().stream()
+                .filter(id -> !currentStudentIds.contains(id))
+                .toList();
+
+        if (!invalidStudents.isEmpty()) {
+            throw new StudentClassException(StudentClassErrorCode._STUDENT_NOT_IN_CLASS);
+
+        }
+
+        studentClassRepository.deleteByClassroomIdAndStudentIds(classId, dto.getStudentIds());
+
     }
 }

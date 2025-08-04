@@ -5,9 +5,12 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.example.backend.domain.user.entity.Role;
+import lombok.RequiredArgsConstructor;
+import org.example.backend.domain.user.entity.Status;
 import org.example.backend.domain.user.entity.User;
 import org.example.backend.domain.user.exception.UserErrorCode;
+import org.example.backend.domain.user.exception.UserException;
+import org.example.backend.domain.user.repository.UserRepository;
 import org.example.backend.domain.user.service.UserRedisService;
 import org.example.backend.global.ApiResponse;
 import org.example.backend.global.code.base.FailureCode;
@@ -21,14 +24,12 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.UUID;
 
+@RequiredArgsConstructor
 public class JWTFilter extends OncePerRequestFilter {
     private final JWTUtil jwtUtil;
     private final UserRedisService userRedisService;
+    private final UserRepository userRepository;
 
-    public JWTFilter(JWTUtil jwtUtil, UserRedisService userRedisService){
-        this.jwtUtil = jwtUtil;
-        this.userRedisService = userRedisService;
-    }
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
@@ -36,6 +37,7 @@ public class JWTFilter extends OncePerRequestFilter {
 
         // 로그인, 회원가입에 대해 필터링 제외
         if (uri.equals("/api/users/login") ||
+                uri.equals("/api/users/login/kakao") ||
                 uri.equals("/api/users")||
                 uri.equals("/api/users/password/temp")||
                 uri.equals("/api/users/verify-email")||
@@ -75,7 +77,7 @@ public class JWTFilter extends OncePerRequestFilter {
         }
 
 
-        // 토큰 소멸 시간 검증
+        // 토큰 소멸 시간 검증 & STATUS 검즞
         try {
 
             // 토큰에서 userId, role 획득
@@ -83,11 +85,13 @@ public class JWTFilter extends OncePerRequestFilter {
             String roleString = jwtUtil.getRole(token);
 
             // entity를 생성해서 값 세팅
-            User user = new User();
+            User user = userRepository.findById(userId)
+                    .orElseThrow(() -> new UserException(UserErrorCode._USER_NOT_FOUND));
 
-            user.setId(userId);
-            Role role = Role.valueOf(roleString); // Role enum으로 변환
-            user.setRole(role);
+            if (user.getStatus() == Status.INACTIVE && !uri.startsWith("/api/users/login/kakao/onboarding")) {
+                setErrorResponse(response, FailureCode._FORBIDDEN);
+                return;
+            }
 
             // UserDetail에 회원정보 객체 담기
             CustomUserDetails customUserDetails = new CustomUserDetails(user);

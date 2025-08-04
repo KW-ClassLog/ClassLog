@@ -7,6 +7,7 @@ import org.example.backend.domain.classroom.dto.response.*;
 import org.example.backend.domain.classroom.dto.request.EntryCodeVerifyRequestDTO;
 import org.example.backend.domain.classroom.entity.Classroom;
 import org.example.backend.domain.classroom.exception.ClassroomErrorCode;
+import org.example.backend.domain.classroom.exception.ClassroomException;
 import org.example.backend.domain.classroom.service.ClassQuizService;
 import org.example.backend.domain.classroom.service.ClassroomService;
 import org.example.backend.global.ApiResponse;
@@ -85,22 +86,26 @@ public class ClassroomController {
     }
 
     //입장코드 확인
-    @PostMapping("/{classId}/code/verify")
-    public ApiResponse<Boolean> verifyCode(@PathVariable("classId") UUID classId,
-                                           @RequestBody EntryCodeVerifyRequestDTO request, @RequestHeader("Authorization") String token) {
+    @PostMapping("/code/verify")
+    public ApiResponse<EntryCodeVerifyResponseDTO> verifyCode(
+            @RequestBody EntryCodeVerifyRequestDTO request,
+            @RequestHeader("Authorization") String token) {
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Object principal = authentication.getPrincipal();
-
         UUID userId = ((CustomUserDetails) principal).getUser().getId();
-        classroomService.checkAlreadyJoined(classId, userId);
 
-        boolean valid = classroomService.validateEntryCode(classId, request.getEntryCode());
-
-        if (!valid) {
+        UUID classId;
+        try {
+            classId = classroomService.validateEntryCode(request.getEntryCode());
+        } catch (ClassroomException e) {
             return ApiResponse.onFailure(ClassroomErrorCode.INVALID_ENTRY_CODE);
         }
 
-        return ApiResponse.onSuccess(true);
+        // 이미 참여한 강의인지 확인
+        classroomService.checkAlreadyJoined(classId, userId);
+        EntryCodeVerifyResponseDTO response = new EntryCodeVerifyResponseDTO(classId);
+        return ApiResponse.onSuccess(response);
     }
 
     // 퀴즈 조회
