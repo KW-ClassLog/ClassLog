@@ -14,6 +14,7 @@ type CodeEntryModalProps = {
 export default function CodeEntryModal({ onClose }: CodeEntryModalProps) {
   const [entryCode, setEntryCode] = useState("");
   const [isAlertModalOpen, setIsAlertModalOpen] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
   const [isSetClassNicknameModalOpen, setIsSetClassNicknameModalOpen] =
     useState(false);
   const [classId, setClassId] = useState("");
@@ -24,6 +25,7 @@ export default function CodeEntryModal({ onClose }: CodeEntryModalProps) {
       setClassId(response.result?.classId || "");
       setIsSetClassNicknameModalOpen(true);
     } else {
+      setAlertMessage(response.message || "입장코드가 일치하지 않습니다.");
       setIsAlertModalOpen(true);
     }
   };
@@ -49,7 +51,7 @@ export default function CodeEntryModal({ onClose }: CodeEntryModalProps) {
       </div>
       {isAlertModalOpen && (
         <AlertModal onClose={() => setIsAlertModalOpen(false)}>
-          <p>입장코드가 일치하지 않습니다.</p>
+          <p>{alertMessage}</p>
         </AlertModal>
       )}
       {isSetClassNicknameModalOpen && (

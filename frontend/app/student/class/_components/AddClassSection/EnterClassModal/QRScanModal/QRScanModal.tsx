@@ -21,7 +21,9 @@ export default function QRScanModal({ onClose }: QRScanModalProps) {
   const [isSetClassNicknameModalOpen, setIsSetClassNicknameModalOpen] =
     useState(false);
   const [classId, setClassId] = useState("");
+  const [alertMessage, setAlertMessage] = useState("");
   const scanIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const isProcessingRef = useRef(false);
 
   // 데스크탑과 모바일 환경 감지
   const isMobile = () => {
@@ -40,24 +42,6 @@ export default function QRScanModal({ onClose }: QRScanModalProps) {
     if (scanIntervalRef.current) {
       clearInterval(scanIntervalRef.current);
       scanIntervalRef.current = null;
-    }
-  };
-
-  // QR 코드 감지 처리
-  const handleQRCodeDetected = async (entryCode: string) => {
-    try {
-      const response = await inputEntryCode({ entryCode });
-
-      if (response.isSuccess) {
-        setClassId(response.result?.classId || "");
-        setIsSetClassNicknameModalOpen(true);
-        stopCamera();
-      } else {
-        setIsAlertModalOpen(true);
-      }
-    } catch (error) {
-      console.error("QR 코드 처리 오류:", error);
-      setIsAlertModalOpen(true);
     }
   };
 
@@ -115,6 +99,33 @@ export default function QRScanModal({ onClose }: QRScanModalProps) {
           "카메라에 접근할 수 없습니다. 브라우저 설정을 확인해주세요."
         );
         setIsScanning(false);
+      }
+    };
+
+    // QR 코드 감지 처리
+    const handleQRCodeDetected = async (entryCode: string) => {
+      if (isProcessingRef.current) return; // 중복 처리 방지
+
+      try {
+        isProcessingRef.current = true;
+        const response = await inputEntryCode({ entryCode });
+
+        if (response.isSuccess) {
+          setClassId(response.result?.classId || "");
+          setIsSetClassNicknameModalOpen(true);
+          stopCamera();
+        } else {
+          setAlertMessage(
+            response.message || "입장 코드가 올바르지 않거나 만료되었습니다."
+          );
+          setIsAlertModalOpen(true);
+        }
+      } catch (error) {
+        console.error("QR 코드 처리 오류:", error);
+        setAlertMessage("입장 코드가 올바르지 않거나 만료되었습니다.");
+        setIsAlertModalOpen(true);
+      } finally {
+        isProcessingRef.current = false;
       }
     };
 
@@ -216,7 +227,7 @@ export default function QRScanModal({ onClose }: QRScanModalProps) {
       {/* 알림 모달 */}
       {isAlertModalOpen && (
         <AlertModal onClose={() => setIsAlertModalOpen(false)}>
-          <p>입장코드가 일치하지 않습니다.</p>
+          <p>{alertMessage}</p>
         </AlertModal>
       )}
 

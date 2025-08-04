@@ -12,7 +12,7 @@ export async function fetchMyClassList() {
     return response.data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error) && error.response) {
-      return error.response.data as ApiResponse<FetchMyClassListResult[]>;
+      return error.response.data;
     }
     throw error;
   }
