@@ -53,6 +53,7 @@ export const ENDPOINTS = {
   STUDENT_CLASSES: {
     GET_STUDENTS: (classId: string) =>
       `${BASE_API}/student-classes/${classId}/students`,
+    SET_CLASS_NICKNAME: `${BASE_API}/student-classes/create`,
   },
 
   // 강의 관련

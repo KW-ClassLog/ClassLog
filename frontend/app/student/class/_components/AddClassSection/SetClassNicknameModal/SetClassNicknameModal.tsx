@@ -1,3 +1,4 @@
+"use client";
 import FullWidthButton from "@/components/Button/FullWidthButton/FullWidthButton";
 import ClosableModal from "@/components/Modal/ClosableModal/ClosableModal";
 import { ROUTES } from "@/constants/routes";
@@ -9,23 +10,11 @@ import AlertModal from "@/components/Modal/AlertModal/AlertModal";
 import { fetchClassInfoByClassId } from "@/api/classes/fetchClassInfoByClassId";
 import { Clock, Calendar } from "lucide-react";
 import { FetchClassInfoByClassIdResult } from "@/types/classes/fetchClassInfoByClassIdTypes";
+import { setClassNickname } from "@/api/student-classes/setClassNickname";
 
 type SetClassNicknameModalProps = {
   onClose: () => void;
   classId: string;
-};
-
-// 임시 API 함수 (실제 API가 구현되면 교체)
-const setClassNickname = async ({
-  classId,
-  nickname,
-}: {
-  classId: string;
-  nickname: string;
-}) => {
-  // 실제 API 호출로 교체 필요
-  console.log("닉네임 설정:", { classId, nickname });
-  return { isSuccess: true, message: "닉네임이 설정되었습니다." };
 };
 
 export default function SetClassNicknameModal({
@@ -79,7 +68,6 @@ export default function SetClassNicknameModal({
       const response = await setClassNickname({ classId, nickname });
 
       if (response.isSuccess) {
-        // 성공 시 클래스 상세 페이지로 이동
         router.push(ROUTES.studentClassDetail(classId));
       } else {
         setAlertMessage(response.message || "닉네임 설정에 실패했습니다.");
