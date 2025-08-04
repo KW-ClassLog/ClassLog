@@ -18,15 +18,6 @@ public interface StudentClassRepository extends JpaRepository<StudentClass, Stud
     @Query("SELECT sc.classId FROM StudentClass sc WHERE sc.userId = :userId")
     List<UUID> findClassIdsByUserId(@Param("userId") UUID userId);
 
-    @Query("""
-    SELECT CASE WHEN COUNT(sc) > 0 THEN TRUE ELSE FALSE END
-    FROM StudentClass sc
-    WHERE sc.userId = :userId
-      AND sc.classId = (
-          SELECT l.classroom.id FROM Lecture l WHERE l.id = :lectureId
-      )
-""")
-    boolean existsByUserIdAndLectureId(@Param("userId") UUID userId, @Param("lectureId") UUID lectureId);
 
     //클래스에서 학생 아이디 찾아서 삭제
     @Modifying

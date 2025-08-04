@@ -132,10 +132,10 @@ public class ClassroomServiceImpl implements ClassroomService {
         ZonedDateTime seoulTime = expiresAt.atZone(ZoneId.of("Asia/Seoul"));
 
 
-        String key = "class:entrycode:" + classId;
+        String key = "entrycode:" + code;
 
-        // Redis에 저장 (10분 TTL)
-        redisTemplate.opsForValue().set(key, code, Duration.ofMinutes(1));
+        // Redis에 저장: key = entrycode:코드, value = classId
+        redisTemplate.opsForValue().set(key, classId.toString(), Duration.ofMinutes(1));
 
         return new EntryCodeResponseDTO(classId, code, seoulTime.toString());
     }
@@ -146,10 +146,14 @@ public class ClassroomServiceImpl implements ClassroomService {
     }
 
     //입장코드 확인
-    public boolean validateEntryCode(UUID classId, String inputCode) {
-        String key = "class:entrycode:" + classId;
-        String storedCode = redisTemplate.opsForValue().get(key);
-        return inputCode.equals(storedCode);
+    public UUID validateEntryCode(String inputCode) {
+        String key = "entrycode:" + inputCode;
+        String classIdStr = redisTemplate.opsForValue().get(key);
+
+        if (classIdStr == null) {
+            throw new ClassroomException(ClassroomErrorCode.INVALID_ENTRY_CODE);
+        }
+        return UUID.fromString(classIdStr);
     }
 
     //강의 목록 조회
