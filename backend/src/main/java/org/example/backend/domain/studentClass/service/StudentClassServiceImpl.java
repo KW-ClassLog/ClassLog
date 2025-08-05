@@ -113,6 +113,11 @@ public class StudentClassServiceImpl implements StudentClassService{
     @Override
     public List<ClassroomResponseStudentDTO> getClassroomByStudentId() {
         UUID studentId = customSecurityUtil.getUserId();
+        Role role  = customSecurityUtil.getUserRole();
+
+        if(role == Role.TEACHER){
+            throw new StudentClassException(StudentClassErrorCode._TEACHER_FORBIDDEN);
+        }
 
         List<StudentClass> studentClasses = studentClassRepository.findByUserId(studentId);
 
