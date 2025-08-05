@@ -29,6 +29,7 @@ jobs:
           redis-version: 7
 
       - name: Grant execute permission for gradlew
+        working-directory: ./backend
         run: chmod +x gradlew
 
       - name: Build with Gradle
