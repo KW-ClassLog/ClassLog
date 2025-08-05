@@ -32,4 +32,5 @@ export async function createClass({
     }
     throw error;
   }
+  // CI 테스트 주석
 }
