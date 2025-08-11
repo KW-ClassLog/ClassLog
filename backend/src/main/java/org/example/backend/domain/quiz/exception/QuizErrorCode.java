@@ -18,6 +18,7 @@ public enum QuizErrorCode implements BaseErrorCode {
     DUPLICATE_SUBMISSION(HttpStatus.BAD_REQUEST,"QUIZ400_3", "이미 해당 퀴즈에 대한 답안을 제출하였습니다."),
     AUDIO_NOT_FOUND(HttpStatus.NOT_FOUND, "QUIZ404_2", "녹음본 기반 퀴즈는 서비스 내에서 강의 시작 후 녹음이 완료된 경우에만 생성할 수 있습니다."),
     QUIZ_NOT_GENERATED_YET(HttpStatus.NOT_FOUND, "QUIZ404_3", "퀴즈가 아직 업로드되지 않았어요!"),
+    QUIZ_ANSWER_NOT_FOUND(HttpStatus.NOT_FOUND, "QUIZ404_4", "퀴즈를 제출하지 않았습니다."),
     AI_CALL_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "AI_500", "AI 호출 중 오류가 발생했습니다.");
 
     private final HttpStatus httpStatus;

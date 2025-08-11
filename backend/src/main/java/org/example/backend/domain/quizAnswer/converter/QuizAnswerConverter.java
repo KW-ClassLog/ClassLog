@@ -1,12 +1,18 @@
 package org.example.backend.domain.quizAnswer.converter;
 
+import org.example.backend.domain.option.entity.Option;
 import org.example.backend.domain.quiz.entity.Quiz;
+import org.example.backend.domain.quizAnswer.dto.response.QuizResultStudentResponseDTO;
 import org.example.backend.domain.quizAnswer.dto.response.QuizSubmitResponseDTO;
 import org.example.backend.domain.quizAnswer.entity.QuizAnswer;
 import org.example.backend.domain.user.repository.UserRepository;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Component
 public class QuizAnswerConverter {
@@ -26,6 +32,4 @@ public class QuizAnswerConverter {
                 .savedCount(savedCount)
                 .build();
     }
-
-
 }
