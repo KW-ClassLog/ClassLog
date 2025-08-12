@@ -1,0 +1,145 @@
+.container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #1a1a1a;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  padding: $spacing-lg;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.title {
+  color: white;
+  font-size: $font-size-lg;
+  font-weight: 600;
+  margin: 0;
+}
+
+.scannerContainer {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.placeholderText {
+  margin-top: $spacing-lg;
+  font-size: $font-size-lg;
+  text-align: center;
+}
+
+.overlayText {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 10;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: $radius-md;
+  padding: $spacing-sm $spacing-md;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-sm;
+
+  p {
+    color: white;
+    font-size: $font-size-lg;
+    line-height: 1.5;
+    margin: 0;
+    border-radius: $radius-md;
+  }
+}
+
+.retryButton {
+  margin-top: $spacing-md;
+  padding: $spacing-sm $spacing-lg;
+  background-color: $color-blue;
+  color: white;
+  border: none;
+  border-radius: $radius-md;
+  font-size: $font-size-sm;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: darken($color-blue, 10%);
+  }
+}
+
+.scannerFrame {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px;
+  height: 300px;
+  border: 2px solid transparent;
+  z-index: 5;
+}
+
+.corner {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  border: 3px solid white;
+}
+
+.corner:nth-child(1) {
+  border-right: none;
+  border-bottom: none;
+}
+
+.corner:nth-child(2) {
+  border-left: none;
+  border-bottom: none;
+}
+
+.corner:nth-child(3) {
+  border-right: none;
+  border-top: none;
+}
+
+.corner:nth-child(4) {
+  border-left: none;
+  border-top: none;
+}
+
+.backButton {
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  padding: $spacing-sm $spacing-lg;
+  cursor: pointer;
+  font-size: $font-size-sm;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+  }
+}

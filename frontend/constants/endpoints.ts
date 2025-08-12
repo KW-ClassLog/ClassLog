@@ -38,6 +38,7 @@ export const ENDPOINTS = {
     UPDATE: (classId: string) => `${BASE_API}/classes/${classId}`,
     GET_DETAIL: (classId: string) => `${BASE_API}/classes/${classId}`,
     DELETE: (classId: string) => `${BASE_API}/classes/${classId}`,
+    INPUT_ENTRY_CODE: `${BASE_API}/classes/code/verify`,
 
     GET_LECTURES: (classId: string) =>
       `${BASE_API}/classes/${classId}/lectures`,
@@ -52,6 +53,8 @@ export const ENDPOINTS = {
   STUDENT_CLASSES: {
     GET_STUDENTS: (classId: string) =>
       `${BASE_API}/student-classes/${classId}/students`,
+    SET_CLASS_NICKNAME: `${BASE_API}/student-classes/create`,
+    GET_MY_CLASSES: `${BASE_API}/student-classes`,
   },
 
   // 강의 관련
