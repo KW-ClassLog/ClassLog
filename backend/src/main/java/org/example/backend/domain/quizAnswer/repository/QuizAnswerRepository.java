@@ -5,10 +5,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 
 public interface QuizAnswerRepository extends JpaRepository<QuizAnswer, UUID> {
     List<QuizAnswer> findAllByQuizId(UUID quizId);
     boolean existsByUserIdAndQuizId(UUID userId, UUID quizId);
+    Optional<QuizAnswer> findByQuizIdAndUserId(UUID quizId, UUID userId);
 }
