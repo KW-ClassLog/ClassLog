@@ -2,7 +2,7 @@
 import FullWidthButton from "@/components/Button/FullWidthButton/FullWidthButton";
 import ClosableModal from "@/components/Modal/ClosableModal/ClosableModal";
 import { ROUTES } from "@/constants/routes";
-import router from "next/router";
+import { useRouter } from "next/navigation";
 import styles from "./SetClassNicknameModal.module.scss";
 import BasicInput from "@/components/Input/BasicInput/BasicInput";
 import { useState, useEffect } from "react";
@@ -21,6 +21,7 @@ export default function SetClassNicknameModal({
   onClose,
   classId,
 }: SetClassNicknameModalProps) {
+  const router = useRouter();
   const [nickname, setNickname] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isAlertModalOpen, setIsAlertModalOpen] = useState(false);
