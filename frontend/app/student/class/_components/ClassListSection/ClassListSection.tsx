@@ -1,17 +1,18 @@
 "use client";
-
 import React, { useEffect, useState } from "react";
 import styles from "./ClassListSection.module.scss";
 import { fetchMyClassList } from "@/api/student-classes/fetchMyClassList";
 import { FetchMyClassListResult } from "@/types/classes/fetchMyClassListTypes";
 import { Calendar, Clock, ChevronRight } from "lucide-react";
 import { ROUTES } from "@/constants/routes";
-import router from "next/router";
+import { useRouter } from "next/navigation";
 
 export default function ClassListSection() {
   const [classList, setClassList] = useState<FetchMyClassListResult[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const router = useRouter();
 
   useEffect(() => {
     const loadClassList = async () => {
