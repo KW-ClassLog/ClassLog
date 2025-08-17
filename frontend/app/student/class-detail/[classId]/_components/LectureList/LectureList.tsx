@@ -6,6 +6,7 @@ import { FetchLecturesByClassResult } from "@/types/classes/fetchLecturesByClass
 import { Calendar, ChevronRight, Clock } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { ROUTES } from "@/constants/routes";
+import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
 
 export default function LectureList() {
   const { classId } = useParams();
@@ -44,7 +45,11 @@ export default function LectureList() {
   };
 
   if (loading) {
-    return <div className={styles.container}>로딩 중...</div>;
+    return (
+      <div className={styles.container}>
+        <LoadingSpinner text="강의 목록 불러오는 중..." />
+      </div>
+    );
   }
 
   if (lectures.length === 0) {
