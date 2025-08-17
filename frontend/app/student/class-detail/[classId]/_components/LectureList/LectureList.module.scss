@@ -1,0 +1,88 @@
+.container {
+  width: 100%;
+  padding: $spacing-lg;
+}
+
+.lectureList {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.lectureCard {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: $color-white;
+  border-radius: $radius-md;
+  padding: $spacing-xl;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+  }
+}
+
+.lectureInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+}
+
+.lectureTitle {
+  font-size: $font-size-xl;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: $color-black;
+  line-height: 1.4;
+  border-bottom: 1px solid $color-neutral-7;
+  padding-bottom: $spacing-sm;
+}
+
+.lectureDetails {
+  display: flex;
+  gap: $spacing-md;
+  color: $color-mutedblue;
+  font-size: $font-size-sm;
+}
+
+.status {
+  margin-left: $spacing-sm;
+  color: $color-mutedblue;
+  font-size: $font-size-sm;
+}
+
+.dateInfo,
+.timeInfo {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+
+  svg {
+    color: $color-mutedblue;
+  }
+}
+
+.viewButton {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: $color-skyblue;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  svg {
+    color: $color-blue;
+    width: 16px;
+    height: 16px;
+  }
+}
