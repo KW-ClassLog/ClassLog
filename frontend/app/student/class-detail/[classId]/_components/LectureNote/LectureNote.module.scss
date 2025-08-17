@@ -1,0 +1,55 @@
+.container {
+  width: 100%;
+  padding: $spacing-lg;
+}
+
+.title {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  margin-bottom: $spacing-lg;
+  color: $color-black;
+}
+
+.fileList {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.fileItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $spacing-md;
+  border: 1px solid $color-neutral-7;
+  border-radius: $radius-md;
+  background-color: $color-white;
+}
+
+.fileItem > :first-child {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.fileItem > :first-child > span {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.fileInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: $spacing-xs;
+  flex-shrink: 0;
+  margin-left: $spacing-md;
+}
+
+.fileSize {
+  font-size: $font-size-sm;
+  color: $color-mutedblue;
+}
