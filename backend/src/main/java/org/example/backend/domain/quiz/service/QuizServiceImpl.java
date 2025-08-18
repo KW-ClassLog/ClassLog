@@ -9,6 +9,7 @@ import org.example.backend.domain.lectureNoteMapping.entity.LectureNoteMapping;
 import org.example.backend.domain.lectureNoteMapping.repository.LectureNoteMappingRepository;
 import org.example.backend.domain.option.entity.Option;
 import org.example.backend.domain.option.repository.OptionRepository;
+import org.example.backend.domain.quiz.converter.QuizConverter;
 import org.example.backend.domain.quiz.dto.request.QuizRequestDTO;
 import org.example.backend.domain.quiz.dto.request.QuizSaveRequestDTO;
 import org.example.backend.domain.quiz.dto.response.QuizListResponseDTO;
@@ -20,6 +21,7 @@ import org.example.backend.domain.quiz.entity.QuizType;
 import org.example.backend.domain.quiz.exception.QuizErrorCode;
 import org.example.backend.domain.quiz.exception.QuizException;
 import org.example.backend.domain.quiz.repository.QuizRepository;
+import org.example.backend.domain.quizAnswer.repository.QuizAnswerRepository;
 import org.example.backend.domain.user.entity.Role;
 import org.example.backend.global.security.auth.CustomSecurityUtil;
 import org.example.backend.infra.langchain.LangChainClient;
@@ -44,7 +46,9 @@ public class QuizServiceImpl implements QuizService {
     private final S3Service s3Service;
     private final QuizRepository quizRepository;
     private final OptionRepository optionRepository;
+    private final QuizAnswerRepository quizAnswerRepository;
     private final CustomSecurityUtil customSecurityUtil;
+    private final QuizConverter quizConverter;
 
 
     // 퀴즈 생성 및 재생성
@@ -180,6 +184,8 @@ public class QuizServiceImpl implements QuizService {
     @Override
     @Transactional(readOnly = true)
     public QuizListResponseDTO getQuizzes(UUID lectureId) {
+        UUID userId = customSecurityUtil.getUserId();
+
         Lecture lecture = lectureRepository.findById(lectureId)
                 .orElseThrow(() -> new QuizException(QuizErrorCode.LECTURE_NOT_FOUND));
 
@@ -189,27 +195,12 @@ public class QuizServiceImpl implements QuizService {
             throw new QuizException(QuizErrorCode.QUIZ_NOT_GENERATED_YET);
         }
 
-        List<QuizListResponseDTO.QuizDTO> quizDTOs = quizList.stream().map(quiz -> {
-            List<OptionResponseDTO> options = new ArrayList<>();
-            if (quiz.getType() == QuizType.MULTIPLE_CHOICE) {
-                options = optionRepository.findByQuizId(quiz.getId())
-                        .stream()
-                        .map(option -> new OptionResponseDTO(
-                                option.getId(),
-                                option.getOptionOrder(),
-                                option.getText()
-                        ))
-                        .toList();
+        for (Quiz quiz : quizList) {
+            if (quizAnswerRepository.existsByUserIdAndQuizId(userId, quiz.getId())) {
+                throw new QuizException(QuizErrorCode.QUIZ_ALREADY_SUBMITTED);
             }
-            return new QuizListResponseDTO.QuizDTO(
-                    quiz.getId(),
-                    quiz.getQuizOrder(),
-                    quiz.getQuiz(),
-                    quiz.getSolution(),
-                    quiz.getType().name(),
-                    options
-            );
-        }).toList();
+        }
 
-        return new QuizListResponseDTO(lectureId, quizDTOs);    }
+        return quizConverter.toQuizListResponseDTO(lectureId, quizList);
+    }
 }
