@@ -7,6 +7,7 @@ import org.example.backend.global.security.token.JWTUtil;
 import org.example.backend.global.security.filter.FilterExceptionHandler;
 import org.example.backend.global.security.filter.JWTFilter;
 import org.example.backend.global.security.filter.LoginFilter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -34,6 +35,9 @@ public class SecurityConfig {
     private final JWTUtil jwtUtil;
     private final UserRedisService userRedisService;
     private final UserRepository userRepository;
+
+    @Value("${frontend.origin}")
+    private String frontendOrigin;
 
     //AuthenticationManger Bean 등록
     @Bean
@@ -81,7 +85,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", frontendOrigin));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true);
