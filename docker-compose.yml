@@ -1,5 +1,6 @@
 services:
   backend:
+    image: ${DOCKERHUB_USERNAME}/classlog-backend:${IMAGE_TAG}
     build:
       context: backend
       dockerfile: Dockerfile
@@ -60,6 +61,7 @@ services:
       - backend/.env
 
   frontend:
+    image: ${DOCKERHUB_USERNAME}/classlog-frontend:${IMAGE_TAG}
     build:
       context: frontend
       dockerfile: Dockerfile
