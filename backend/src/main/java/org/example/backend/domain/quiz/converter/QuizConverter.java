@@ -6,6 +6,7 @@ import org.example.backend.domain.option.repository.OptionRepository;
 import org.example.backend.domain.quiz.dto.response.QuizListResponseDTO;
 import org.example.backend.domain.quiz.entity.Quiz;
 import org.example.backend.domain.quiz.entity.QuizType;
+import org.example.backend.domain.quizAnswer.converter.QuizResultStudentConverter;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -36,7 +37,7 @@ public class QuizConverter {
                     quiz.getQuizOrder(),
                     quiz.getQuiz(),
                     quiz.getSolution(),
-                    quiz.getType().name(),
+                    QuizResultStudentConverter.toCamelCase(quiz.getType()),
                     options
             );
         }).toList();

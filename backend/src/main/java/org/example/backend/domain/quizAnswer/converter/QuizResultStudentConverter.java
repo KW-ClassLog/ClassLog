@@ -56,7 +56,7 @@ public class QuizResultStudentConverter {
     }
 
     // MULTIPLE_CHOICE -> multipleChoice 변환
-    private static String toCamelCase(Enum<?> e) {
+    public static String toCamelCase(Enum<?> e) {
         String[] parts = e.name().toLowerCase().split("_");
         StringBuilder sb = new StringBuilder(parts[0]);
         for (int i = 1; i < parts.length; i++) {
