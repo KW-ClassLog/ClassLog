@@ -31,6 +31,7 @@ public class BackendApplication {
 		System.setProperty("AWS_S3_BUCKET_NAME", dotenv.get("AWS_S3_BUCKET_NAME"));
 		System.setProperty("KAKAO_API_KEY", dotenv.get("KAKAO_API_KEY"));
 		System.setProperty("KAKAO_REDIRECT_URI", dotenv.get("KAKAO_REDIRECT_URI"));
+		System.setProperty("FRONTEND_ORIGIN",dotenv.get("FRONTEND_ORIGIN"));
 
 		SpringApplication.run(BackendApplication.class, args);
 	}
