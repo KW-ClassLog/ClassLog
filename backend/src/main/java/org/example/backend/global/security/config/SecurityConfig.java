@@ -22,6 +22,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
@@ -36,8 +37,8 @@ public class SecurityConfig {
     private final UserRedisService userRedisService;
     private final UserRepository userRepository;
 
-    @Value("${frontend.origin}")
-    private String frontendOrigin;
+    @Value("${cors.origin}")
+    private String[] corsOrigins;
 
     //AuthenticationManger Bean 등록
     @Bean
@@ -65,16 +66,18 @@ public class SecurityConfig {
 
         http
                 .csrf((auth)->auth.disable()) // csrf disable
-                .cors((cors) -> cors.configurationSource(corsConfigurationSource())) //cors 설정
+                .cors(cors -> cors.configurationSource(corsConfigurationSource())) //cors 설정
                 .formLogin((auth)->auth.disable()) //Form 로그인 방식 disable
                 .logout((auth)-> auth.disable())
                 .httpBasic((auth)-> auth.disable()) // http basic 인증방식 disable
                 .authorizeHttpRequests((auth)->auth // 경로별 인가 작업
-                        .anyRequest().permitAll())
-//                        .requestMatchers("/api/users","/api/users/verify-email","/api/users/login","/api/users/password/temp").permitAll()
-//                        .anyRequest().authenticated())
+//                        .anyRequest().permitAll()
+                        .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
+                        .requestMatchers("/actuator/health").permitAll()
+                        .requestMatchers("/api/users","/api/users/verify-email","/api/users/login","/api/users/password/temp").permitAll()
+                        .anyRequest().authenticated())
                 .addFilterBefore(new FilterExceptionHandler(), LogoutFilter.class) // 예외처리 필터
-                .addFilterBefore(jwtFilter(),LoginFilter.class) // 미들웨어
+                .addFilterBefore(jwtFilter(),UsernamePasswordAuthenticationFilter.class) // 미들웨어
                 .addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class) // custom한 login필터 추가
                 .sessionManagement((session)->session // 세션설정
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
@@ -85,7 +88,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", frontendOrigin));
+        configuration.setAllowedOrigins(Arrays.asList(corsOrigins));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true);

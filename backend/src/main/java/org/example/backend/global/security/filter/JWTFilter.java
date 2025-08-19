@@ -56,14 +56,14 @@ public class JWTFilter extends OncePerRequestFilter {
         // request에서 Authorization 헤더를 찾음
         String authorization = request.getHeader("Authorization");
 
-        // Authorization 헤더 검증
-        if(authorization == null || !authorization.startsWith("Bearer ")){
-            System.out.println("token null or invalid");
-            setErrorResponse(response, UserErrorCode._TOKEN_MISSING);
-
-            // 조건이 해당되면 메소드 종료
-            return;
-        }
+//        // Authorization 헤더 검증
+//        if(authorization == null || !authorization.startsWith("Bearer ")){
+//            System.out.println("token null or invalid");
+//            setErrorResponse(response, UserErrorCode._TOKEN_MISSING);
+//
+//            // 조건이 해당되면 메소드 종료
+//            return;
+//        }
 
         // Bearer 제외하고 토큰만 획득
         String token = authorization.substring(7);
