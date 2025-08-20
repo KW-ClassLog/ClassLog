@@ -97,7 +97,7 @@ jobs:
           script: |
             mkdir -p /home/ubuntu/classlog/frontend
             cat > /home/ubuntu/classlog/frontend/.env <<EOF
-            NEXT_PUBLIC_API_BASE_URL=${{secret.NEXT_PUBLIC_API_BASE_URL}}
+            NEXT_PUBLIC_API_BASE_URL=${{secrets.NEXT_PUBLIC_API_BASE_URL}}
             EOF
 
       - name: Deploy containers
