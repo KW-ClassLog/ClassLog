@@ -14,10 +14,10 @@ services:
       - classlog-network
 
   backend:
-    image: classlog/classlog-backend:latest
-    build:
-      context: backend
-      dockerfile: Dockerfile
+    image: ${{ secrets.DOCKER_USERNAME }}/classlog-backend:${IMAGE_TAG}
+#    build:
+#      context: backend
+#      dockerfile: Dockerfile
     container_name: classlog-backend
     ports:
       - 8081:8081
@@ -76,10 +76,10 @@ services:
     restart: unless-stopped
 
   frontend:
-    image: classlog/classlog-frontend:latest
-    build:
-      context: frontend
-      dockerfile: Dockerfile
+    image: ${{ secrets.DOCKER_USERNAME }}/classlog-frontend:${IMAGE_TAG}
+#    build:
+#      context: frontend
+#      dockerfile: Dockerfile
     container_name: classlog-frontend
     ports:
       - "3000:3000"

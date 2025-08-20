@@ -85,6 +85,7 @@ jobs:
             OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
             KAKAO_API_KEY=${{ secrets.KAKAO_API_KEY }}
             KAKAO_REDIRECT_URI=${{ secrets.KAKAO_REDIRECT_URI }}
+            CORS_ORIGIN=${{ secrets.CORS_CORIGIN}}
             EOF
 
       - name: Create frontend/.env on server
@@ -106,10 +107,11 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           script: |
+            cd /home/ubuntu/classlog
             export DOCKERHUB_USERNAME="${{ secrets.DOCKER_USERNAME }}"
             export IMAGE_TAG="${{ github.sha }}"
-            cd /home/ubuntu/classlog
+            
             echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${DOCKERHUB_USERNAME}" --password-stdin
             docker compose pull
-            docker compose up -d --remove-orphans
+            docker compose up -d
             docker image prune -f
