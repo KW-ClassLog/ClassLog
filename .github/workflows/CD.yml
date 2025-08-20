@@ -1,0 +1,117 @@
+name: ClassLog CD
+
+on:
+  push:
+    branches: ["dev"]
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  IMAGE_TAG: ${{ github.sha }}
+  BACKEND_IMAGE: ${{ secrets.DOCKER_USERNAME }}/classlog-backend
+  FRONTEND_IMAGE: ${{ secrets.DOCKER_USERNAME }}/classlog-frontend
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name : Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Grant execute permission for gradlew
+        working-directory: ./backend
+        run: chmod +x gradlew
+
+      - name: Build with Gradle
+        working-directory: ./backend
+        run: ./gradlew clean bootJar
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build & Push Backend Image
+        run: |
+          docker build -t ${BACKEND_IMAGE}:latest -t ${BACKEND_IMAGE}:${IMAGE_TAG} ./backend
+          docker push ${BACKEND_IMAGE}:latest
+          docker push ${BACKEND_IMAGE}:${IMAGE_TAG}
+
+      - name: Build & Push Frontend Image
+        run: |
+          docker build -t ${FRONTEND_IMAGE}:latest -t ${FRONTEND_IMAGE}:${IMAGE_TAG} ./frontend
+          docker push ${FRONTEND_IMAGE}:latest
+          docker push ${FRONTEND_IMAGE}:${IMAGE_TAG}
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Create backend/.env on server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            mkdir -p /home/ubuntu/classlog/backend
+            cat > /home/ubuntu/classlog/backend/.env <<EOF
+            DB_USERNAME=${{ secrets.DB_USERNAME }}
+            DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+            DB_NAME=${{ secrets.DB_NAME }}
+            DB_HOST=${{ secrets.DB_HOST }}
+            DB_PORT=${{ secrets.DB_PORT }}
+            REDIS_HOST=${{ secrets.REDIS_HOST }}
+            REDIS_PORT=${{ secrets.REDIS_PORT }}
+            JWT_SECRET=${{ secrets.JWT_SECRET }}
+            MAIL_HOST=${{ secrets.MAIL_HOST }}
+            MAIL_PORT=${{ secrets.MAIL_PORT }}
+            MAIL_USERNAME=${{ secrets.MAIL_USERNAME }}
+            MAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }}
+            AWS_REGION=${{ secrets.AWS_REGION }}
+            AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY }}
+            AWS_SECRET_KEY=${{ secrets.AWS_SECRET_KEY }}
+            AWS_S3_BUCKET_NAME=${{ secrets.AWS_S3_BUCKET_NAME }}
+            AI_SERVER_URL=${{ secrets.AI_SERVER_URL }}
+            OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
+            KAKAO_API_KEY=${{ secrets.KAKAO_API_KEY }}
+            KAKAO_REDIRECT_URI=${{ secrets.KAKAO_REDIRECT_URI }}
+            CORS_ORIGIN=${{ secrets.CORS_ORIGIN}}
+            EOF
+
+      - name: Create frontend/.env on server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            mkdir -p /home/ubuntu/classlog/frontend
+            cat > /home/ubuntu/classlog/frontend/.env <<EOF
+            NEXT_PUBLIC_API_BASE_URL=${{secrets.NEXT_PUBLIC_API_BASE_URL}}
+            EOF
+      - name: Deploy containers
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd /home/ubuntu/classlog
+            export DOCKERHUB_USERNAME="${{ secrets.DOCKER_USERNAME }}"
+            export IMAGE_TAG="${{ github.sha }}"
+            
+            echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${DOCKERHUB_USERNAME}" --password-stdin
+            docker compose down
+            docker compose pull
+            docker compose up -d
+            docker image prune -f

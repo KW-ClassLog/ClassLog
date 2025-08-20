@@ -41,8 +41,7 @@ public class JWTFilter extends OncePerRequestFilter {
                 uri.equals("/api/users")||
                 uri.equals("/api/users/password/temp")||
                 uri.equals("/api/users/verify-email")||
-                uri.equals("/api/users/refresh")||
-                uri.equals("/api/users/logout")) {
+                uri.equals("/api/users/refresh")) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -56,14 +55,14 @@ public class JWTFilter extends OncePerRequestFilter {
         // request에서 Authorization 헤더를 찾음
         String authorization = request.getHeader("Authorization");
 
-        // Authorization 헤더 검증
-        if(authorization == null || !authorization.startsWith("Bearer ")){
-            System.out.println("token null or invalid");
-            setErrorResponse(response, UserErrorCode._TOKEN_MISSING);
-
-            // 조건이 해당되면 메소드 종료
-            return;
-        }
+//        // Authorization 헤더 검증
+//        if(authorization == null || !authorization.startsWith("Bearer ")){
+//            System.out.println("token null or invalid");
+//            setErrorResponse(response, UserErrorCode._TOKEN_MISSING);
+//
+//            // 조건이 해당되면 메소드 종료
+//            return;
+//        }
 
         // Bearer 제외하고 토큰만 획득
         String token = authorization.substring(7);
@@ -77,7 +76,7 @@ public class JWTFilter extends OncePerRequestFilter {
         }
 
 
-        // 토큰 소멸 시간 검증 & STATUS 검즞
+        // 토큰 소멸 시간 검증 & STATUS 검증
         try {
 
             // 토큰에서 userId, role 획득

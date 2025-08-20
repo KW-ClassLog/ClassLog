@@ -10,7 +10,6 @@ export const axiosInstance = axios.create({
 // 토큰이 필요하지 않은 API들 (로그인, 로그아웃, 회원가입, 이메일 인증)
 const noTokenRequired = [
   "/users/login",
-  "/users/logout",
   "/users/signup",
   "/users/verify-email",
 ];

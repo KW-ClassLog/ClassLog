@@ -33,7 +33,7 @@ public class UserController {
         return ApiResponse.onSuccess("Register successfully");
     }
 
-    // 개인정보조회
+    // 개인 정보 조회
     @GetMapping("/me")
     public ApiResponse<UserProfileResponseDTO> profile(){
         UserProfileResponseDTO response = userService.getProfile();

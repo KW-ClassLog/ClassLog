@@ -1,0 +1,41 @@
+name: ClassLog CI - Frontend
+on:
+  pull_request:
+    paths:
+      - 'frontend/**'
+    branches: ["dev"]
+
+permissions:
+  contents: read
+  checks: write
+  pull-requests: write
+
+jobs:
+  frontend-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        working-directory: ./frontend
+        run: npm install
+
+      - name: Build with npm
+        working-directory: ./frontend
+        env:
+          NEXT_PUBLIC_API_BASE_URL : ${{ secrets.NEXT_PUBLIC_API_BASE_URL }}
+        run: npm run build
+
+      - name: ✅Passed
+        if: success()
+        run: echo "Frontend Tests passed"
+
+      - name: ❌Failed
+        if: failure()
+        run: echo "Frontend Tests failed"
