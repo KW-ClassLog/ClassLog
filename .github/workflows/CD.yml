@@ -2,7 +2,7 @@ name: ClassLog CD
 
 on:
   push:
-    branches: ["test-deploy"]
+    branches: ["dev"]
 
 permissions:
   contents: read
@@ -85,7 +85,7 @@ jobs:
             OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
             KAKAO_API_KEY=${{ secrets.KAKAO_API_KEY }}
             KAKAO_REDIRECT_URI=${{ secrets.KAKAO_REDIRECT_URI }}
-            CORS_ORIGIN=${{ secrets.CORS_ORIGIN}} 
+            CORS_ORIGIN=${{ secrets.CORS_ORIGIN}}
             EOF
 
       - name: Create frontend/.env on server
