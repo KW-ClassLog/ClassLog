@@ -85,7 +85,7 @@ jobs:
             OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
             KAKAO_API_KEY=${{ secrets.KAKAO_API_KEY }}
             KAKAO_REDIRECT_URI=${{ secrets.KAKAO_REDIRECT_URI }}
-            CORS_ORIGIN=${{ secrets.CORS_CORIGIN1}},${{ secrets.CORS_CORIGIN2}}
+            CORS_ORIGIN="${{ secrets.CORS_CORIGIN1}},${{ secrets.CORS_CORIGIN2}}"
             EOF
 
       - name: Create frontend/.env on server
