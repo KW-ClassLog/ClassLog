@@ -73,6 +73,7 @@ services:
       - classlog-network
     env_file:
       - backend/.env
+    restart: unless-stopped
 
   frontend:
     image: classlog/classlog-frontend:latest
