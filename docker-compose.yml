@@ -1,6 +1,20 @@
 services:
+  proxy-manager: # nginx
+    image: 'jc21/nginx-proxy-manager:latest'
+    container_name: nginx-proxy-manager
+    restart: unless-stopped
+    ports:
+      - '80:80'
+      - '443:443'
+      - '81:81'
+    volumes:
+      - ./data:/data
+      - ./letsencrypt:/etc/letsencrypt
+    networks:
+      - classlog-network
+
   backend:
-    image: ${DOCKERHUB_USERNAME}/classlog-backend:${IMAGE_TAG}
+    image: classlog/classlog-backend:latest
     build:
       context: backend
       dockerfile: Dockerfile
@@ -10,8 +24,8 @@ services:
     env_file:
       - backend/.env
     depends_on:
-        mysql:
-          condition: service_healthy
+#        mysql:
+#          condition: service_healthy
         redis:
           condition: service_healthy
         ai:
@@ -20,23 +34,23 @@ services:
       - classlog-network
     restart: unless-stopped
 
-  mysql:
-    image: mysql
-    container_name: classlog-mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-      MYSQL_DATABASE: ${DB_NAME}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
-    volumes:
-      - ./mysql_data:/var/lib/mysql
-    ports:
-      - 3306:3306
-    healthcheck:
-      test: [ "CMD", "mysqladmin", "ping" ]
-      interval: 5s
-      retries: 10
-    networks:
-      - classlog-network
+#  mysql:
+#    image: mysql
+#    container_name: classlog-mysql
+#    environment:
+#      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+#      MYSQL_DATABASE: ${DB_NAME}
+#      MYSQL_PASSWORD: ${DB_PASSWORD}
+#    volumes:
+#      - ./mysql_data:/var/lib/mysql
+#    ports:
+#      - 3306:3306
+#    healthcheck:
+#      test: [ "CMD", "mysqladmin", "ping" ]
+#      interval: 5s
+#      retries: 10
+#    networks:
+#      - classlog-network
 
   redis:
     image: redis
@@ -61,7 +75,7 @@ services:
       - backend/.env
 
   frontend:
-    image: ${DOCKERHUB_USERNAME}/classlog-frontend:${IMAGE_TAG}
+    image: classlog/classlog-frontend:latest
     build:
       context: frontend
       dockerfile: Dockerfile
