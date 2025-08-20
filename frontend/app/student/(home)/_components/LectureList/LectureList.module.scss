@@ -1,0 +1,103 @@
+.lectureList {
+  margin-bottom: $spacing-2xl;
+}
+
+.listTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-medium;
+  color: $color-black;
+  margin-bottom: $spacing-lg;
+}
+
+.lectureItems {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.lectureItem {
+  background: white;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+}
+
+.lectureItem:hover {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
+}
+
+.lectureContent {
+  flex: 1;
+}
+
+.lectureTitle {
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+  margin-bottom: $spacing-sm;
+}
+
+.lectureNumber {
+  font-size: $font-size-lg;
+  color: $color-black;
+  min-width: $spacing-2xl;
+}
+
+.lectureName {
+  font-size: $font-size-lg;
+  color: $color-black;
+}
+
+.className {
+  font-size: 14px;
+  color: $color-mutedblue;
+  margin-left: 8px;
+}
+
+.lectureDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.detailItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.icon {
+  font-size: 14px;
+  width: 16px;
+  color: $color-mutedblue;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.detailText {
+  font-size: $font-size-sm;
+  color: $color-mutedblue;
+}
+
+.navigationArrow {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: $color-skyblue;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: $spacing-2xl;
+}
+
+.arrow {
+  color: $color-blue;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+}

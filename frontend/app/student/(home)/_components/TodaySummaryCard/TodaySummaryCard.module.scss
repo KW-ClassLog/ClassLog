@@ -1,0 +1,50 @@
+.summaryCard {
+  background: $color-blue;
+  border-radius: $radius-lg;
+  padding: $spacing-2xl;
+  color: white;
+  margin-bottom: $spacing-2xl;
+}
+
+.date {
+  font-size: $font-size-2xl;
+  font-weight: $font-weight-bold;
+  margin-bottom: $spacing-sm;
+}
+
+.totalLectures {
+  font-size: $font-size-lg;
+  opacity: 0.9;
+}
+
+.divider {
+  height: 1px;
+  background-color: $color-neutral-7;
+  margin: $spacing-lg 0;
+}
+
+.statusSection {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.statusItem {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+}
+
+.statusIcon {
+  width: $spacing-2xl;
+  height: $spacing-2xl;
+  border-radius: 50%;
+  border: 1px solid $color-white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.statusText {
+  white-space: nowrap;
+}

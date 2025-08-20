@@ -1,0 +1,47 @@
+.headerSection {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0;
+}
+
+.greeting {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.hello {
+  font-size: $font-size-lg;
+  color: $color-mutedblue;
+}
+
+.name {
+  font-size: $font-size-2xl;
+  font-weight: $font-weight-bold;
+  color: $color-black;
+}
+
+.profileIcon {
+  display: flex;
+  align-items: center;
+}
+
+.profileCircle {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 1px solid $color-neutral-7;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profileImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
