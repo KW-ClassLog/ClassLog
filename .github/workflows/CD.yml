@@ -85,7 +85,7 @@ jobs:
             OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
             KAKAO_API_KEY=${{ secrets.KAKAO_API_KEY }}
             KAKAO_REDIRECT_URI=${{ secrets.KAKAO_REDIRECT_URI }}
-            CORS_ORIGIN=${{ secrets.CORS_CORIGIN}}
+            CORS_ORIGIN=${{ secrets.CORS_CORIGIN1}},${{ secrets.CORS_CORIGIN2}}
             EOF
 
       - name: Create frontend/.env on server
@@ -99,7 +99,6 @@ jobs:
             cat > /home/ubuntu/classlog/frontend/.env <<EOF
             NEXT_PUBLIC_API_BASE_URL=${{secrets.NEXT_PUBLIC_API_BASE_URL}}
             EOF
-
       - name: Deploy containers
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -112,6 +111,7 @@ jobs:
             export IMAGE_TAG="${{ github.sha }}"
             
             echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${DOCKERHUB_USERNAME}" --password-stdin
+            docker compose down
             docker compose pull
             docker compose up -d
             docker image prune -f
