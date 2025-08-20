@@ -17,7 +17,6 @@ export default function StudentHomePage() {
   const [todayData, setTodayData] =
     useState<fetchStudentTodayLecturesResult | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -40,11 +39,8 @@ export default function StudentHomePage() {
         if (todayResponse.isSuccess && todayResponse.result) {
           setTodayData(todayResponse.result);
         }
-
-        setError(null);
       } catch (err) {
         console.error("데이터를 가져오는 중 오류가 발생했습니다:", err);
-        setError("데이터를 불러오는 중 오류가 발생했습니다.");
       } finally {
         setLoading(false);
       }
@@ -57,20 +53,6 @@ export default function StudentHomePage() {
     return (
       <div className={styles.loadingContainer}>
         <LoadingSpinner text="로딩 중..." />
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className={styles.errorContainer}>
-        <p className={styles.errorMessage}>{error}</p>
-        <button
-          className={styles.retryButton}
-          onClick={() => window.location.reload()}
-        >
-          다시 시도
-        </button>
       </div>
     );
   }

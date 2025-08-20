@@ -1,5 +1,7 @@
 import { fetchStudentTodayLecturesResult } from "@/types/lectures/fetchStudentTodayLecturesTypes";
 import styles from "./LectureList.module.scss";
+import NoDataView from "@/components/NoDataView/NoDataView";
+import { CalendarX } from "lucide-react";
 import { CalendarIcon, ClockIcon } from "lucide-react";
 import { ROUTES } from "@/constants/routes";
 import { useRouter } from "next/navigation";
@@ -32,6 +34,19 @@ export default function LectureList({ todayData }: LectureListProps) {
     const day = String(date.getDate()).padStart(2, "0");
     return `${year}.${month}.${day}`;
   };
+
+  if (!todayData.todayLectures || todayData.todayLectures.length === 0) {
+    return (
+      <div className={styles.lectureList}>
+        <h2 className={styles.listTitle}>오늘의 강의 목록</h2>
+        <NoDataView
+          icon={CalendarX}
+          title="오늘의 강의가 없어요"
+          description="등록된 강의가 없거나 아직 일정이 없습니다."
+        />
+      </div>
+    );
+  }
 
   return (
     <div className={styles.lectureList}>
