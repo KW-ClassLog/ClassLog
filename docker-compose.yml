@@ -14,7 +14,7 @@ services:
       - classlog-network
 
   backend:
-    image: ${{ secrets.DOCKER_USERNAME }}/classlog-backend:${IMAGE_TAG}
+    image: ${DOCKERHUB_USERNAME}/classlog-backend:${IMAGE_TAG}
 #    build:
 #      context: backend
 #      dockerfile: Dockerfile
@@ -76,7 +76,7 @@ services:
     restart: unless-stopped
 
   frontend:
-    image: ${{ secrets.DOCKER_USERNAME }}/classlog-frontend:${IMAGE_TAG}
+    image: ${DOCKERHUB_USERNAME}/classlog-frontend:${IMAGE_TAG}
 #    build:
 #      context: frontend
 #      dockerfile: Dockerfile
