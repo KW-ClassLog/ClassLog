@@ -41,8 +41,7 @@ public class JWTFilter extends OncePerRequestFilter {
                 uri.equals("/api/users")||
                 uri.equals("/api/users/password/temp")||
                 uri.equals("/api/users/verify-email")||
-                uri.equals("/api/users/refresh")||
-                uri.equals("/api/users/logout")) {
+                uri.equals("/api/users/refresh")) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -77,7 +76,7 @@ public class JWTFilter extends OncePerRequestFilter {
         }
 
 
-        // 토큰 소멸 시간 검증 & STATUS 검즞
+        // 토큰 소멸 시간 검증 & STATUS 검증
         try {
 
             // 토큰에서 userId, role 획득
