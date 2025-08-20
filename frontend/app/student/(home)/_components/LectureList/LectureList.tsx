@@ -1,12 +1,15 @@
 import { fetchStudentTodayLecturesResult } from "@/types/lectures/fetchStudentTodayLecturesTypes";
 import styles from "./LectureList.module.scss";
 import { CalendarIcon, ClockIcon } from "lucide-react";
+import { ROUTES } from "@/constants/routes";
+import { useRouter } from "next/navigation";
 
 interface LectureListProps {
   todayData: fetchStudentTodayLecturesResult;
 }
 
 export default function LectureList({ todayData }: LectureListProps) {
+  const router = useRouter();
   const formatTime = (startTime: string, endTime: string) => {
     const start = new Date(`2000-01-01T${startTime}`);
     const end = new Date(`2000-01-01T${endTime}`);
@@ -35,7 +38,13 @@ export default function LectureList({ todayData }: LectureListProps) {
       <h2 className={styles.listTitle}>오늘의 강의 목록</h2>
       <div className={styles.lectureItems}>
         {todayData.todayLectures.map((lecture, index) => (
-          <div key={lecture.lectureId} className={styles.lectureItem}>
+          <div
+            key={lecture.lectureId}
+            className={styles.lectureItem}
+            onClick={() => {
+              router.push(ROUTES.studentLectureDetail(lecture.lectureId));
+            }}
+          >
             <div className={styles.lectureContent}>
               <div className={styles.lectureTitle}>
                 <span className={styles.lectureNumber}>
