@@ -15,6 +15,7 @@ export const ENDPOINTS = {
     DELETE_ACCOUNT: `${BASE_API}/users/me`,
     UPDATE_PROFILE: `${BASE_API}/users/me`,
     GET_MY_INFO: `${BASE_API}/users/me`,
+    GET_PROFILE: `${BASE_API}/users/profile`,
 
     SET_NICKNAME: `${BASE_API}/users/nickname`,
     GET_NICKNAME: `${BASE_API}/users/nickname`,
