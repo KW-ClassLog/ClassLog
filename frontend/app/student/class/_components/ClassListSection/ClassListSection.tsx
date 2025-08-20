@@ -6,6 +6,7 @@ import { FetchMyClassListResult } from "@/types/classes/fetchMyClassListTypes";
 import { Calendar, Clock, ChevronRight } from "lucide-react";
 import { ROUTES } from "@/constants/routes";
 import { useRouter } from "next/navigation";
+import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
 
 export default function ClassListSection() {
   const [classList, setClassList] = useState<FetchMyClassListResult[]>([]);
@@ -47,9 +48,7 @@ export default function ClassListSection() {
   if (isLoading) {
     return (
       <div className={styles.container}>
-        <div className={styles.loading}>
-          <p>클래스 목록을 불러오는 중...</p>
-        </div>
+        <LoadingSpinner text="클래스 목록을 불러오는 중..." />
       </div>
     );
   }
