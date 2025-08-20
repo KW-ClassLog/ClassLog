@@ -2,7 +2,7 @@ name: ClassLog CD
 
 on:
   push:
-    branches: ["dev"]
+    branches: ["test-deploy"]
 
 permissions:
   contents: read
