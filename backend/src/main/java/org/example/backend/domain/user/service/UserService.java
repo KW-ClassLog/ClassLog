@@ -11,6 +11,8 @@ import org.example.backend.domain.user.dto.response.UserProfileResponseDTO;
 import org.example.backend.domain.user.dto.response.WithdrawResponseDTO;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.UUID;
 
 public interface UserService {
@@ -40,16 +42,16 @@ public interface UserService {
     void logout(HttpServletRequest request, HttpServletResponse response);
 
     // 개인정보 수정
-    ProfileUpdateResponseDTO updateProfile(ProfileUpdateRequestDTO request);
+    ProfileUpdateResponseDTO updateProfile(ProfileUpdateRequestDTO request) throws IOException,InvalidKeySpecException;
 
     // 이미지 업로드
     String uploadProfile(MultipartFile profile, UUID userId);
 
     // 개인정보 조회
-    UserProfileResponseDTO getProfile();
+    UserProfileResponseDTO getProfile() throws IOException, InvalidKeySpecException;
 
     // 홈 프로필 조회
-    HomeResponseDTO.ProfileDTO getHomeProfileByUser();
+    HomeResponseDTO.ProfileDTO getHomeProfileByUser() throws IOException, InvalidKeySpecException;
 
     // 회원 탈퇴
     WithdrawResponseDTO withdrawUser(WithdrawRequestDTO dto);

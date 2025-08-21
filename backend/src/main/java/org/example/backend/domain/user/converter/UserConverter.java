@@ -37,9 +37,7 @@ UserConverter {
     }
 
     // Entity -> responseDTO
-    public ProfileUpdateResponseDTO toProfileUpdateResponseDTO(User user){
-        String profileUrl = user.getSocialType() == SocialType.LOCAL?
-                s3Service.getPublicUrl(user.getProfileUrl()) : user.getProfileUrl();
+    public ProfileUpdateResponseDTO toProfileUpdateResponseDTO(User user, String profileUrl){
 
         return ProfileUpdateResponseDTO.builder()
                 .userId(user.getId())
@@ -51,9 +49,7 @@ UserConverter {
     }
 
     // Entity -> responseDTO
-    public UserProfileResponseDTO toUserProfileResponseDTO(User user){
-        String profileUrl = user.getSocialType() == SocialType.LOCAL?
-                s3Service.getPublicUrl(user.getProfileUrl()) : user.getProfileUrl();
+    public UserProfileResponseDTO toUserProfileResponseDTO(User user, String profileUrl){
 
         return UserProfileResponseDTO.builder()
                 .userId(user.getId())
@@ -65,12 +61,12 @@ UserConverter {
                 .build();
     }
 
-    public HomeResponseDTO.ProfileDTO toProfileDTO(User user){
+    public HomeResponseDTO.ProfileDTO toProfileDTO(User user, String profileUrl){
 
         return HomeResponseDTO.ProfileDTO.builder()
                 .name(user.getName())
                 .organization(user.getOrganization())
-                .profile(s3Service.getPublicUrl(user.getProfileUrl()))
+                .profile(profileUrl)
                 .build();
     }
 

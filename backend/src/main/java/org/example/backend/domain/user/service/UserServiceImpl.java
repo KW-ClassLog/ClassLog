@@ -10,6 +10,7 @@ import org.example.backend.domain.user.converter.UserConverter;
 import org.example.backend.domain.user.dto.request.ProfileUpdateRequestDTO;
 import org.example.backend.domain.user.dto.request.WithdrawRequestDTO;
 import org.example.backend.domain.user.dto.response.*;
+import org.example.backend.domain.user.entity.SocialType;
 import org.example.backend.domain.user.entity.Status;
 import org.example.backend.domain.user.exception.UserErrorCode;
 import org.example.backend.domain.user.dto.request.RegisterRequestDTO;
@@ -28,6 +29,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -210,7 +212,7 @@ public class UserServiceImpl implements UserService {
 
     // 개인정보 수정
     @Override
-    public ProfileUpdateResponseDTO updateProfile(ProfileUpdateRequestDTO request) {
+    public ProfileUpdateResponseDTO updateProfile(ProfileUpdateRequestDTO request) throws IOException, InvalidKeySpecException {
         UUID userId = customSecurityUtil.getUserId();
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserException(UserErrorCode._USER_NOT_FOUND));
@@ -248,7 +250,10 @@ public class UserServiceImpl implements UserService {
 
         userRepository.save(user);
 
-        return userConverter.toProfileUpdateResponseDTO(user);
+        String profileUrl = user.getProfileUrl() != null && user.getSocialType() == SocialType.LOCAL?
+                s3Service.getSignedUrl(user.getProfileUrl()) : user.getProfileUrl();
+
+        return userConverter.toProfileUpdateResponseDTO(user,profileUrl);
     }
 
     // s3 이미지 업로드
@@ -297,22 +302,28 @@ public class UserServiceImpl implements UserService {
 
     // 개인정보 조회
     @Override
-    public UserProfileResponseDTO getProfile() {
+    public UserProfileResponseDTO getProfile() throws IOException, InvalidKeySpecException {
         UUID userId = customSecurityUtil.getUserId();
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserException(UserErrorCode._USER_NOT_FOUND));
 
-        return userConverter.toUserProfileResponseDTO(user);
+        String profileUrl = user.getProfileUrl() != null && user.getSocialType() == SocialType.LOCAL?
+                s3Service.getSignedUrl(user.getProfileUrl()) : user.getProfileUrl();
+
+        return userConverter.toUserProfileResponseDTO(user,profileUrl);
     }
 
     // 홈 프로필 조회
     @Override
-    public HomeResponseDTO.ProfileDTO getHomeProfileByUser() {
+    public HomeResponseDTO.ProfileDTO getHomeProfileByUser() throws IOException, InvalidKeySpecException {
         UUID userId = customSecurityUtil.getUserId();
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserException(UserErrorCode._USER_NOT_FOUND));
 
-        return userConverter.toProfileDTO(user);
+        String profileUrl = user.getProfileUrl() != null && user.getSocialType() == SocialType.LOCAL?
+                s3Service.getSignedUrl(user.getProfileUrl()) : user.getProfileUrl();
+
+        return userConverter.toProfileDTO(user,profileUrl);
     }
 
     // 회원 탈퇴

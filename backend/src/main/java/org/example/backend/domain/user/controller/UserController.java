@@ -15,6 +15,9 @@ import org.example.backend.domain.user.service.UserService;
 import org.example.backend.global.ApiResponse;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.security.spec.InvalidKeySpecException;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -35,7 +38,7 @@ public class UserController {
 
     // 개인 정보 조회
     @GetMapping("/me")
-    public ApiResponse<UserProfileResponseDTO> profile(){
+    public ApiResponse<UserProfileResponseDTO> profile() throws IOException, InvalidKeySpecException{
         UserProfileResponseDTO response = userService.getProfile();
         return ApiResponse.onSuccess(response);
     }
@@ -100,7 +103,7 @@ public class UserController {
 
     // 개인정보 수정
     @PatchMapping("/me")
-    public ApiResponse<ProfileUpdateResponseDTO> updateProfile(@ModelAttribute ProfileUpdateRequestDTO dto){
+    public ApiResponse<ProfileUpdateResponseDTO> updateProfile(@ModelAttribute ProfileUpdateRequestDTO dto) throws IOException,InvalidKeySpecException{
         ProfileUpdateResponseDTO response = userService.updateProfile(dto);
 
         return ApiResponse.onSuccess(response);
@@ -108,7 +111,7 @@ public class UserController {
 
     // 홈 프로필 조회
     @GetMapping("profile")
-    public ApiResponse<HomeResponseDTO.ProfileDTO> getHomeProfile(){
+    public ApiResponse<HomeResponseDTO.ProfileDTO> getHomeProfile() throws IOException, InvalidKeySpecException {
         HomeResponseDTO.ProfileDTO response = userService.getHomeProfileByUser();
 
         return ApiResponse.onSuccess(response);
