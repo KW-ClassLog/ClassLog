@@ -1,16 +1,21 @@
 package org.example.backend.global.S3.service;
 
 import com.amazonaws.HttpMethod;
+import com.amazonaws.services.cloudfront.CloudFrontUrlSigner;
+import com.amazonaws.services.cloudfront.util.SignerUtils;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.security.spec.InvalidKeySpecException;
 import java.util.Date;
 
 @Service
@@ -22,6 +27,23 @@ public class S3Service {
 
     @Value("${AWS_S3_BUCKET_NAME}")
     private String bucket;
+
+    @Value("${CLOUDFRONT_DOMAIN_NAME}")
+    private String cloudFrontDomain;
+
+    @Value("${CLOUDFRONT_KEY_PAIR_ID}")
+    private String cloudFrontKeyPairId;
+
+    @Value("${CLOUDFRONT_PRIVATE_KEY_PATH}")
+    private String cloudFrontPrivateKeyPath;
+
+
+    /**
+     * cloud front url 반환
+     */
+    public String getCloudFrontUrl(String key){
+        return cloudFrontDomain + "/" + key;
+    }
 
     /**
      * 파일 업로드
@@ -64,6 +86,29 @@ public class S3Service {
     }
 
     /**
+     * Signed URL 발급
+     */
+    public String getSignedUrl(String objectKey) throws IOException, InvalidKeySpecException {
+        // private key 파일 경로
+        File privateKey = new ClassPathResource(cloudFrontPrivateKeyPath).getFile();
+
+        // 만료시간 1시간
+        Date expiration = new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 12);
+        System.out.println("privateKey = " + privateKey);
+        // Signed URL 생성
+        String signedUrl = CloudFrontUrlSigner.getSignedURLWithCannedPolicy(
+                SignerUtils.Protocol.https,
+                cloudFrontDomain,
+                privateKey,
+                objectKey,
+                cloudFrontKeyPairId,
+                expiration
+        );
+
+        return signedUrl;
+    }
+
+    /**
      * 객체 존재 확인
      */
     private boolean doesObjectExist(String key) {
@@ -80,7 +125,8 @@ public class S3Service {
 
         amazonS3Client.putObject(new PutObjectRequest(bucket, key, file.getInputStream(), metadata));
 
-        return amazonS3Client.getUrl(bucket, key).toString();
+//        return amazonS3Client.getUrl(bucket, key).toString();
+        return getCloudFrontUrl(key);
     }
 
     /**
@@ -88,7 +134,8 @@ public class S3Service {
      */
     public String getPublicUrl(String key) {
         if (key == null) return null;
-        return amazonS3Client.getUrl(bucket, key).toString();
+//        return amazonS3Client.getUrl(bucket, key).toString();
+        return getCloudFrontUrl(key);
     }
 
     /**
