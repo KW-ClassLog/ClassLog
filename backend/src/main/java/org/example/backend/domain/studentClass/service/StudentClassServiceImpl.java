@@ -20,15 +20,21 @@ import org.example.backend.domain.studentClass.exception.StudentClassErrorCode;
 import org.example.backend.domain.studentClass.exception.StudentClassException;
 import org.example.backend.domain.studentClass.repository.StudentClassRepository;
 import org.example.backend.domain.user.entity.Role;
+import org.example.backend.domain.user.entity.SocialType;
 import org.example.backend.domain.user.entity.User;
 import org.example.backend.domain.user.exception.UserErrorCode;
 import org.example.backend.domain.user.exception.UserException;
 import org.example.backend.domain.user.repository.UserRepository;
+import org.example.backend.global.S3.service.S3Service;
 import org.example.backend.global.code.base.FailureCode;
 import org.example.backend.global.exception.FailureException;
+import org.example.backend.global.exception.GeneralException;
 import org.example.backend.global.security.auth.CustomSecurityUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.io.IOException;
+import java.security.spec.InvalidKeySpecException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
@@ -46,6 +52,7 @@ public class StudentClassServiceImpl implements StudentClassService{
     private final StudentClassConverter studentClassConverter;
     private final CustomSecurityUtil customSecurityUtil;
     private final ClassroomConverter classroomConverter;
+    private final S3Service s3Service;
 
     // 클래스 입장  & 닉네임 설정
     @Override
@@ -154,7 +161,19 @@ public class StudentClassServiceImpl implements StudentClassService{
                 .map(sc -> {
                     User user = userRepository.findById(sc.getUserId())
                             .orElseThrow(() -> new UserException(UserErrorCode._USER_NOT_FOUND));
-                    return studentClassConverter.toStudentEnrolledResponseDTO(sc, user);
+
+                    String profileUrl;
+                    if(user.getProfileUrl() != null && user.getSocialType() == SocialType.LOCAL){
+                        try{
+                            profileUrl = s3Service.getSignedUrl(user.getProfileUrl());
+                        }catch (IOException | InvalidKeySpecException e){
+                            throw new GeneralException(FailureCode._INTERNAL_SERVER_ERROR);
+                        }
+                    } else {
+                        profileUrl = user.getProfileUrl();
+                    }
+
+                    return studentClassConverter.toStudentEnrolledResponseDTO(sc, user, profileUrl);
                 })
                 .collect(Collectors.toList());
     }

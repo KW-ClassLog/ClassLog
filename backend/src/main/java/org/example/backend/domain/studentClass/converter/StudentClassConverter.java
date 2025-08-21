@@ -51,11 +51,7 @@ public class StudentClassConverter {
     }
 
     // Entity → ResponseDTO
-    public StudentEnrolledResponseDTO toStudentEnrolledResponseDTO(StudentClass studentClass, User user){
-        String profileKey = user.getProfileUrl();
-        String profileUrl = s3Service.getPublicUrl(
-                (profileKey == null || profileKey.isBlank()) ? "profile/default.jpg" : profileKey
-        );
+    public StudentEnrolledResponseDTO toStudentEnrolledResponseDTO(StudentClass studentClass, User user, String profileUrl) {
 
         return StudentEnrolledResponseDTO.builder()
                 .userId(user.getId())
