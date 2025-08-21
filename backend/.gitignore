@@ -38,3 +38,5 @@ out/
 .env
 
 /mysql_data/
+
+src/main/resources/aws/

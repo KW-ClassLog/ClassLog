@@ -32,6 +32,9 @@ public class BackendApplication {
 		System.setProperty("KAKAO_API_KEY", dotenv.get("KAKAO_API_KEY"));
 		System.setProperty("KAKAO_REDIRECT_URI", dotenv.get("KAKAO_REDIRECT_URI"));
 		System.setProperty("CORS_ORIGIN",dotenv.get("CORS_ORIGIN"));
+		System.setProperty("CLOUDFRONT_DOMAIN_NAME", dotenv.get("CLOUDFRONT_DOMAIN_NAME"));
+		System.setProperty("CLOUDFRONT_KEY_PAIR_ID", dotenv.get("CLOUDFRONT_KEY_PAIR_ID"));
+		System.setProperty("CLOUDFRONT_PRIVATE_KEY_PATH", dotenv.get("CLOUDFRONT_PRIVATE_KEY_PATH"));
 
 		SpringApplication.run(BackendApplication.class, args);
 	}
