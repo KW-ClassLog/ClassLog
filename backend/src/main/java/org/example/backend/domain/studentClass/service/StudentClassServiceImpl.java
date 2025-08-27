@@ -132,6 +132,7 @@ public class StudentClassServiceImpl implements StudentClassService{
         List<Classroom> classrooms = classroomRepository.findAllById(classIds);
 
         return classrooms.stream()
+                .filter(classroom -> classroom.getEndDate().isAfter(LocalDate.now()))
                 .map(classroomConverter::toResponseStudentDTO)
                 .collect(Collectors.toList());
     }
