@@ -1,0 +1,11 @@
+.container {
+  padding: $spacing-2xl;
+  margin: 0 auto;
+}
+
+.loadingContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}

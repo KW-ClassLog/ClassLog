@@ -15,6 +15,7 @@ export const ENDPOINTS = {
     DELETE_ACCOUNT: `${BASE_API}/users/me`,
     UPDATE_PROFILE: `${BASE_API}/users/me`,
     GET_MY_INFO: `${BASE_API}/users/me`,
+    GET_PROFILE: `${BASE_API}/users/profile`,
 
     SET_NICKNAME: `${BASE_API}/users/nickname`,
     GET_NICKNAME: `${BASE_API}/users/nickname`,
@@ -65,6 +66,8 @@ export const ENDPOINTS = {
     DELETE: (lectureId: string) => `${BASE_API}/lectures/${lectureId}`,
     GET_LECTURES_BY_DATE: (date: string) =>
       `${BASE_API}/lectures/teacher/today?date=${date}`,
+    GET_STUDENT_LECTURES_BY_DATE: (date: string) =>
+      `${BASE_API}/lectures/student/today?date=${date}`,
 
     // 노트 관련
     UPLOAD_NOTE: (classId: string) =>
