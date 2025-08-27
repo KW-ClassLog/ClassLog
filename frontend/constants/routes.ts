@@ -24,6 +24,8 @@ export const ROUTES = {
     `/teacher/quiz-dashboard/${lectureId}`, // 강사 퀴즈 대시보드
   teacherLectureDetail: (lectureId: string) =>
     `/teacher/lecture-detail/${lectureId}`, // 강사 강의 상세
+  teacherLectureLive: (lectureId: string) => 
+    `/teacher/lecture-live/${lectureId}`, // 강사 실시간 강의
   teacherSetting: "/teacher/setting", // 강사 설정
   teacherStudentManagement: "/teacher/student-management", // 강사 학생 관리
 };
