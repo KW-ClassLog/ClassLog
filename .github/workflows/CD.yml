@@ -115,3 +115,56 @@ jobs:
             docker compose pull
             docker compose up -d
             docker image prune -f
+
+      - name: Notify on Discord (Success)
+        if: success()
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK }}
+        run: |
+          payload=$(cat <<'JSON'
+          {
+            "username": "CD Bot",
+            "embeds": [{
+              "title": "✅ 배포 성공",
+              "description": "프로덕션 배포가 완료되었습니다.",
+              "color": 3066993,
+              "fields": [
+                { "name": "Repo", "value": "${{ github.repository }}", "inline": true },
+                { "name": "Branch", "value": "${{ github.ref_name }}", "inline": true },
+                { "name": "Commit", "value": "[${{ github.sha }}](https://github.com/${{ github.repository }}/commit/${{ github.sha }})" },
+                { "name": "Actor", "value": "${{ github.actor }}", "inline": true },
+                { "name": "Workflow", "value": "${{ github.workflow }}", "inline": true }
+              ]
+            }]
+          }
+          JSON
+          )
+          curl -sS -X POST -H "Content-Type: application/json" \
+            -d "$payload" "$DISCORD_WEBHOOK_URL"
+      
+
+      - name: Notify on Discord (Fail)
+        if: failure()
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK }}
+        run: |
+          payload=$(cat <<'JSON'
+          {
+            "username": "CD Bot",
+            "embeds": [{
+              "title": "❌ 배포 실패",
+              "description": "워크플로우 중 오류가 발생했습니다.\nActions 로그를 확인해주세요.",
+              "color": 15158332,
+              "fields": [
+                { "name": "Repo", "value": "${{ github.repository }}", "inline": true },
+                { "name": "Branch", "value": "${{ github.ref_name }}", "inline": true },
+                { "name": "Commit", "value": "[${{ github.sha }}](https://github.com/${{ github.repository }}/commit/${{ github.sha }})" },
+                { "name": "Actor", "value": "${{ github.actor }}", "inline": true },
+                { "name": "Run", "value": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" }
+              ]
+            }]
+          }
+          JSON
+          )
+          curl -sS -X POST -H "Content-Type: application/json" \
+            -d "$payload" "$DISCORD_WEBHOOK_URL"
