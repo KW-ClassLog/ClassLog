@@ -46,6 +46,7 @@ dependencies {
 	implementation 'com.amazonaws:aws-java-sdk-s3:1.12.600'
 	implementation 'com.amazonaws:aws-java-sdk-core:1.12.681'
 	implementation 'org.apache.commons:commons-lang3:3.12.0'
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
 }
 
 tasks.named('test') {
