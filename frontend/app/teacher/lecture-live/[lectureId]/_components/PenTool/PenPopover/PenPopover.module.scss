@@ -1,0 +1,62 @@
+@import "@/styles/variables";
+
+.wrap {
+    display: grid;
+    gap: $spacing-md;
+    justify-items: center;
+    min-width: 200px;
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-sm;
+}
+
+
+.swatch {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 1px solid $color-neutral-7;
+    cursor: pointer;
+    transition: transform $transition-fast, box-shadow $transition-fast;
+    outline: none;
+
+    &:hover { transform: translateY(-1px); box-shadow: 0 3px 8px rgba(0,0,0,.10); }
+}
+
+
+.active {
+    box-shadow:
+        0 0 0 3px #fff,
+        0 0 0 6px var(--ring-color, $color-blue);
+}
+
+.sizeBtn {
+    width: 40px;
+    height: 32px;
+    border-radius: 10px;
+    border: 1px solid $color-neutral-7;
+    background: $color-white;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform $transition-fast, box-shadow $transition-fast;
+}
+
+.sizeBtn.active {
+    border: 2px solid $color-blue;
+    background: $color-white;
+    box-shadow: none;
+    outline: none;
+  }
+
+.sizePreview {
+    width: 20px;
+    border-radius: 999px;
+    background: $color-neutral-6;
+    display: inline-block;
+}
