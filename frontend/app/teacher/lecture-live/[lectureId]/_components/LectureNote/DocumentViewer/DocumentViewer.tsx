@@ -32,7 +32,7 @@ export default function DocumentViewer({
   const [naturalH, setNaturalH] = useState(1);
 
   useEffect(() => {
-    if (type !== "pdf" || !stageRef.current) return;
+    if (!stageRef.current) return;
     const el = stageRef.current;
     const measure = () => {
       const cs = getComputedStyle(el);
@@ -45,7 +45,7 @@ export default function DocumentViewer({
     const ro = new ResizeObserver(measure);
     ro.observe(el);
     return () => ro.disconnect();
-  }, [type]);
+  }, []);
 
   const SAFE_PAD = 2;
   const scale =
@@ -59,6 +59,7 @@ export default function DocumentViewer({
     onLoad?.(numPages);
     if (currentPage > numPages - 1) onChangePage(numPages - 1);
   };
+
   const handlePageLoad = (page: any) => {
     if (type !== "pdf") return;
     const vp = page.getViewport({ scale: 1 });
@@ -66,30 +67,40 @@ export default function DocumentViewer({
     setNaturalH(vp.height);
   };
 
+  const docBoxStyle: React.CSSProperties =
+    type === "pdf"
+      ? {
+          width: Math.max(1, naturalW * scale),
+          height: Math.max(1, naturalH * scale),
+        }
+      : { width: "100%", height: "100%" };
+
   return (
     <div className={styles.viewer}>
       <div ref={stageRef} className={styles.stage}>
-        {type === "pdf" && (
-          <Document file={fileUrl} onLoadSuccess={handleDocLoad} loading="로딩 중…">
-            <Page
-              pageNumber={currentPage + 1}
-              scale={scale}
-              renderTextLayer={false}
-              renderAnnotationLayer={false}
-              onLoadSuccess={handlePageLoad}
-            />
-          </Document>
-        )}
+        <div className={styles.docBox} data-doc-box style={docBoxStyle}>
+          {type === "pdf" && (
+            <Document file={fileUrl} onLoadSuccess={handleDocLoad} loading="로딩 중…">
+              <Page
+                pageNumber={currentPage + 1}
+                scale={scale}
+                renderTextLayer={false}
+                renderAnnotationLayer={false}
+                onLoadSuccess={handlePageLoad}
+              />
+            </Document>
+          )}
 
-        {type === "pptx" && (
-          <iframe
-            title="PPTX Viewer"
-            className={styles.pptxFrame}
-            src={`https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(
-              toAbsoluteUrl(fileUrl)
-            )}`}
-          />
-        )}
+          {type === "pptx" && (
+            <iframe
+              title="PPTX Viewer"
+              className={styles.pptxFrame}
+              src={`https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(
+                toAbsoluteUrl(fileUrl)
+              )}`}
+            />
+          )}
+        </div>
       </div>
     </div>
   );
