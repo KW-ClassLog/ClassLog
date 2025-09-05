@@ -1,0 +1,55 @@
+@import "@/styles/variables";
+
+.wrap {
+  display: grid;
+  gap: $spacing-sm;
+  justify-items: center;
+  min-width: 200px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-sm;
+}
+
+.circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid $color-neutral-7;
+  background: $color-white;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: transform $transition-fast, box-shadow $transition-fast;
+
+  &:hover { transform: translateY(-1px); box-shadow: 0 4px 10px rgba(0,0,0,.08); }
+}
+
+.circle.active {
+  outline: 2px solid $color-blue;
+  outline-offset: 0;
+  border-color: transparent;
+  background: $color-white;
+}
+
+.dot {
+  background: $color-neutral-6;
+  border-radius: 999px;
+  display: block;
+}
+
+.clearBtn {
+  padding: 8px 12px;
+  border: 1px solid #ffd3d6;
+  background: #fff5f5;
+  color: #d92c2c;
+  border-radius: 8px;
+  font-size: $font-size-sm;
+  cursor: pointer;
+  transition: background-color $transition-fast;
+
+  &:hover { background: #ffe8e9; }
+}
