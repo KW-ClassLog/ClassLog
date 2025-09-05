@@ -1,3 +1,11 @@
+import ClassInfoSection from "./_components/ClassInfoSection/ClassInfoSection";
+import LectureListAndNote from "./_components/LectureListAndNote/LectureListAndNote";
+
 export default function StudentClassDetailPage() {
-  return <div>클래스 상세</div>;
+  return (
+    <div>
+      <ClassInfoSection />
+      <LectureListAndNote />
+    </div>
+  );
 }

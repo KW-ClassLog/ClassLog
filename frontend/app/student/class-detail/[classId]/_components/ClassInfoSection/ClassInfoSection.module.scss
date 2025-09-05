@@ -1,0 +1,37 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background-color: $color-blue;
+  padding: $spacing-3xl $spacing-xl;
+  color: $color-white;
+}
+
+.classInfo {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+}
+
+.classInfoTitleContainer {
+  display: flex;
+  flex-direction: row;
+  gap: $spacing-sm;
+  align-items: center;
+
+  .classInfoTitle {
+    font-size: $font-size-2xl;
+  }
+
+  .classInfoProfessor {
+    font-size: $font-size-lg;
+  }
+}
+
+.classInfoDate {
+  display: flex;
+  flex-direction: row;
+  gap: $spacing-sm;
+  align-items: center;
+  font-size: $font-size-lg;
+}
