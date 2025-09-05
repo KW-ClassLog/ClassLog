@@ -44,12 +44,20 @@ export default function LectureNote() {
     );
   }
 
+  const handleNoteClick = (lectureNoteUrl: string) => {
+    window.open(lectureNoteUrl, "_blank");
+  };
+
   return (
     <div className={styles.container}>
       {lectureNotes.length > 0 ? (
         <div className={styles.fileList}>
           {lectureNotes.map((note) => (
-            <div key={note.lectureNoteId} className={styles.fileItem}>
+            <div
+              key={note.lectureNoteId}
+              className={styles.fileItem}
+              onClick={() => handleNoteClick(note.lectureNoteUrl)}
+            >
               <FileDisplay fileName={note.lectureNoteName} />
               <div className={styles.fileInfo}>
                 <span className={styles.fileSize}>{note.fileSize}</span>
