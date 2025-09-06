@@ -24,7 +24,9 @@ export default function PenPopover({
             key={c}
             type="button"
             className={`${styles.swatch} ${color === c ? styles.active : ""}`}
-            style={{ backgroundColor: c }}
+            style={{ backgroundColor: c, ["--ring-color" as any]: "#3B82F6",
+            } as React.CSSProperties
+           }
             onClick={() => onChangeColor(c)}
             aria-label={`색상 ${c}`}
           />

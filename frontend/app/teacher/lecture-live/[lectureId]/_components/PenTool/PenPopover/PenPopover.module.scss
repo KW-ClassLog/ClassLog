@@ -23,16 +23,19 @@
     cursor: pointer;
     transition: transform $transition-fast, box-shadow $transition-fast;
     outline: none;
+    will-change: box-shadow, transform;
 
     &:hover { transform: translateY(-1px); box-shadow: 0 3px 8px rgba(0,0,0,.10); }
-}
 
-
-.active {
-    box-shadow:
+    &.active,
+    &.active:hover {
+        box-shadow:
         0 0 0 3px #fff,
         0 0 0 6px var(--ring-color, $color-blue);
+        transform: none;
+     }
 }
+
 
 .sizeBtn {
     width: 40px;
@@ -49,7 +52,7 @@
 
 .sizeBtn.active {
     border: 2px solid $color-blue;
-    background: $color-white;
+    // background: $color-white;
     box-shadow: none;
     outline: none;
   }
