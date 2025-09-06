@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { ChevronDown, ChevronRight, ChevronLeft } from 'lucide-react';
 import { ChangeEvent } from "react";
 import { fetchNotificationSetting } from '@/api/notifications/fetchNotificationSetting';
-
+import { updateNotificationSetting } from '@/api/notifications/updateNotificationSetting';
 
 interface NotiSetting {
     quizUpload: boolean;
@@ -33,12 +33,32 @@ export default function TeacherSettingPage() {
         recordUpload: false,
     });
 
-    const handleToggleChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const { name, checked } = e.target;
-        setNotiSetting(prev => ({
-            ...prev,
-            [name]: checked,
-        }));
+
+    const handleToggleChange = async (e: ChangeEvent<HTMLInputElement>) => {
+        const { name, checked } = e.target as HTMLInputElement;
+
+        // 타입 안전을 위해 key 좁히기
+        type NotiSettingKey = keyof NotiSetting;
+        const key = name as NotiSettingKey;
+
+        // 1) 옵티미스틱 UI 반영
+        setNotiSetting(prev => ({ ...prev, [key]: checked }));
+
+        try {
+            // 2) 서버 반영
+            const res = await updateNotificationSetting(key, checked);
+            if (!res.isSuccess) {
+                // 3) 서버에서 실패 응답이면 롤백
+                setNotiSetting(prev => ({ ...prev, [key]: !checked }));
+                console.error('알림 설정 저장 실패:', res.message);
+                alert(res.message ?? '알림 설정 저장에 실패했습니다.');
+            }
+        } catch (err) {
+            // 4) 네트워크/예외 발생 시 롤백
+            setNotiSetting(prev => ({ ...prev, [key]: !checked }));
+            console.error('알림 설정 저장 에러:', err);
+            alert('네트워크 오류로 알림 설정 저장에 실패했습니다.');
+        }
     };
 
     useEffect(() => {
