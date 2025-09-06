@@ -9,7 +9,7 @@ import BackWithTitleHeader from "@/components/Header/Student/BackWithTitleHeader
 import TitleHeader from "@/components/Header/Student/TitleHeader/TitleHeader";
 
 import Navigation from "@/components/Navigation/Navigation";
-import { useLectureTitleStore } from "@/store/useLectureTitleStore";
+import { useClassTitleStore } from "@/store/useClassTitleStore";
 
 export default function StudentLayout({
   children,
@@ -17,7 +17,7 @@ export default function StudentLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const { lectureTitle } = useLectureTitleStore();
+  const { classTitle } = useClassTitleStore();
 
   // 현재 경로에 해당하는 라우트 설정 찾기
   const currentRoute = Object.values(STUDENT_ROUTE_CONFIG).find((config) => {
@@ -41,9 +41,7 @@ export default function StudentLayout({
         return <TitleHeader title={currentRoute.title || ""} />;
       case StudentHeaderType.BACK_WITH_TITLE:
         return (
-          <BackWithTitleHeader
-            title={currentRoute.title || lectureTitle || ""}
-          />
+          <BackWithTitleHeader title={currentRoute.title || classTitle || ""} />
         );
       case StudentHeaderType.BACK_WITH_PROFILE:
         return <BackWithProfileHeader />;
