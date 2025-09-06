@@ -44,7 +44,7 @@ export default function StudentLectureDetailPage() {
     <div className={style.lectureDetailPage}>
       <LectureInfoSection lectureId={lectureId} />
       <Tab tabs={tabs} onSelectTab={handleTabSelect} />
-      {renderSection()}
+      <div className={style.content}>{renderSection()}</div>
     </div>
   );
 }

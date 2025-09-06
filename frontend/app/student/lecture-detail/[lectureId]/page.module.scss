@@ -1,3 +1,10 @@
 .lectureDetailPage {
   padding: $spacing-lg;
 }
+
+.content {
+  margin: $spacing-lg 0;
+  height: 100%;
+  background-color: white;
+  overflow-y: scroll;
+}
