@@ -6,6 +6,7 @@ import { fetchLectureDetail } from "@/api/lectures/fetchLectureDetail";
 import { FetchLectureDetailResult } from "@/types/lectures/fetchLectureDetailTypes";
 import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
 import NoDataView from "@/components/NoDataView/NoDataView";
+import { useLectureTitleStore } from "@/store/useLectureTitleStore";
 
 interface LectureInfoSectionProps {
   lectureId: string;
@@ -18,6 +19,7 @@ export default function LectureInfoSection({
     useState<FetchLectureDetailResult | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { setLectureTitle } = useLectureTitleStore();
 
   useEffect(() => {
     const loadLectureData = async () => {
@@ -26,6 +28,7 @@ export default function LectureInfoSection({
         const response = await fetchLectureDetail(lectureId);
         if (response.isSuccess && response.result) {
           setLectureData(response.result);
+          setLectureTitle(response.result.lectureName);
         } else {
           setError("강의 정보를 불러올 수 없습니다.");
         }
