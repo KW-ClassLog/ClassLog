@@ -99,7 +99,7 @@ export default function LecrureRecordSection({
   }
 
   return (
-    <div>
+    <div className={styles.recordSection}>
       {getStatusText(lectureStatus) !== null ? (
         <div>{getStatusText(lectureStatus)}</div>
       ) : audio ? (
