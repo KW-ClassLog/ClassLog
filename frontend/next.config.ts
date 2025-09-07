@@ -17,6 +17,9 @@ const nextConfig: NextConfig = {
     @use "@/styles/_variables.scss" as *;
     @use "@/styles/_mixins.scss" as *;`,
   },
+  images: {
+    domains: ["kwclasslog.s3.ap-southeast-2.amazonaws.com"],
+  },
 };
 
 export default nextPWA(nextConfig);
