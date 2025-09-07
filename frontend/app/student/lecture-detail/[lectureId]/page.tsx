@@ -28,15 +28,15 @@ export default function StudentLectureDetailPage() {
   const renderSection = () => {
     switch (selectedTab) {
       case 0:
-        return <LectureNoteListSection />;
+        return <LectureNoteListSection lectureId={lectureId} />;
       case 1:
         return <QuestionListSection lectureId={lectureId} />;
       case 2:
         return <LecrureRecordSection lectureId={lectureId} />;
       case 3:
-        return <QuizSection />;
+        return <QuizSection lectureId={lectureId} />;
       default:
-        return <LectureNoteListSection />;
+        return <LectureNoteListSection lectureId={lectureId} />;
     }
   };
 
