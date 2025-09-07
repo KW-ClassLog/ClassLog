@@ -8,6 +8,7 @@ import IconButton from "@/components/Button/IconButton/IconButton";
 import styles from "./LecrureRecordSection.module.scss";
 import NoDataView from "@/components/NoDataView/NoDataView";
 import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
+import { downloadFileWithErrorHandling } from "@/utils/downloadUtils";
 
 interface LecrureRecordSectionProps {
   lectureId: string;
@@ -37,25 +38,10 @@ export default function LecrureRecordSection({
   const handleDownload = async () => {
     if (!audio?.audioUrl) return;
 
-    try {
-      const response = await fetch(audio.audioUrl);
-      if (!response.ok) {
-        throw new Error("다운로드에 실패했습니다.");
-      }
-
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = audio.audioName || "강의녹음본.mp3";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(url);
-    } catch (err) {
-      console.error("다운로드 실패:", err);
-      alert("다운로드 중 오류가 발생했습니다.");
-    }
+    await downloadFileWithErrorHandling(
+      audio.audioUrl,
+      audio.audioName || "강의녹음본.mp3"
+    );
   };
 
   useEffect(() => {
