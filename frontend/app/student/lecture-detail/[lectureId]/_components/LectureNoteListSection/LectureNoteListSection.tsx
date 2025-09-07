@@ -7,6 +7,7 @@ import styles from "./LectureNoteListSection.module.scss";
 import NoDataView from "@/components/NoDataView/NoDataView";
 import { Download, FileText } from "lucide-react";
 import IconButton from "@/components/Button/IconButton/IconButton";
+import { downloadFileWithErrorHandling } from "@/utils/downloadUtils";
 
 interface LectureNoteListSectionProps {
   lectureId: string;
@@ -40,27 +41,10 @@ export default function LectureNoteListSection({
   }, [lectureId]);
 
   const handleDownload = async (note: FetchLectureNoteByLectureIdResult) => {
-    if (!note.lectureNoteUrl) return;
-
-    try {
-      const response = await fetch(note.lectureNoteUrl);
-      if (!response.ok) {
-        throw new Error("다운로드에 실패했습니다.");
-      }
-
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = note.lectureNoteName || "강의자료";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(url);
-    } catch (err) {
-      console.error("다운로드 실패:", err);
-      alert("다운로드 중 오류가 발생했습니다.");
-    }
+    await downloadFileWithErrorHandling(
+      note.lectureNoteUrl,
+      note.lectureNoteName || "강의자료"
+    );
   };
 
   useEffect(() => {
