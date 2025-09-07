@@ -4,6 +4,7 @@ import useLectureListStore from "./useLectureListStore";
 import useSelectedClassStore from "./useSelectedClassStore";
 import useClassListStore from "./useClassListStore";
 import { useSignupStore } from "./useSignupStore";
+import { useLectureStatusStore } from "./useLectureStatusStore";
 
 /**
  * 모든 스토어를 초기 상태로 리셋하는 함수
@@ -26,6 +27,7 @@ export const resetAllStores = () => {
   useSelectedClassStore.getState().reset();
   useClassListStore.getState().reset();
   useSignupStore.getState().reset();
+  useLectureStatusStore.getState().clearLectureStatus();
 
   console.log("모든 스토어가 초기화되었습니다.");
 };

@@ -6,6 +6,10 @@ import { fetchLectureDetail } from "@/api/lectures/fetchLectureDetail";
 import { FetchLectureDetailResult } from "@/types/lectures/fetchLectureDetailTypes";
 import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
 import NoDataView from "@/components/NoDataView/NoDataView";
+import {
+  useLectureStatusStore,
+  LectureStatus,
+} from "@/store/useLectureStatusStore";
 
 interface LectureInfoSectionProps {
   lectureId: string;
@@ -14,6 +18,7 @@ interface LectureInfoSectionProps {
 export default function LectureInfoSection({
   lectureId,
 }: LectureInfoSectionProps) {
+  const { setLectureStatus } = useLectureStatusStore();
   const [lectureData, setLectureData] =
     useState<FetchLectureDetailResult | null>(null);
   const [loading, setLoading] = useState(true);
@@ -26,6 +31,7 @@ export default function LectureInfoSection({
         const response = await fetchLectureDetail(lectureId);
         if (response.isSuccess && response.result) {
           setLectureData(response.result);
+          setLectureStatus(response.result.status as LectureStatus);
         } else {
           setError("강의 정보를 불러올 수 없습니다.");
         }
@@ -37,7 +43,7 @@ export default function LectureInfoSection({
     };
 
     loadLectureData();
-  }, [lectureId]);
+  }, [lectureId, setLectureStatus]);
   const getStatusText = (status: string) => {
     switch (status) {
       case "beforeLecture":
