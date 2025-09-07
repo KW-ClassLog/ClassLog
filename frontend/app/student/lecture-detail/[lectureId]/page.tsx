@@ -32,7 +32,7 @@ export default function StudentLectureDetailPage() {
       case 1:
         return <QuestionListSection />;
       case 2:
-        return <LecrureRecordSection />;
+        return <LecrureRecordSection lectureId={lectureId} />;
       case 3:
         return <QuizSection />;
       default:
