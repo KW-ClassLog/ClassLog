@@ -21,7 +21,7 @@ export default function DrawingCanvasOverlay({
   selector?: string;
   currentPage: number;
 }) {
-  const { tool, pen, highlighter, eraser, getPageCanvas, getPageCanvasOrNull, clearPage } = useLive();
+  const { tool, pen, highlighter, eraser, getPageCanvas, getPageCanvasOrNull } = useLive();
 
   const [host, setHost] = useState<HTMLElement | null>(null);
   const viewRef = useRef<HTMLCanvasElement>(null);
@@ -47,6 +47,8 @@ export default function DrawingCanvasOverlay({
     const view = viewRef.current;
     const rect = host.getBoundingClientRect();
     const dpr = Math.max(1, window.devicePixelRatio || 1);
+    getPageCanvas(pageRef.current, rect.width, rect.height, dpr);
+
 
     view.width = Math.max(1, Math.round(rect.width * dpr));
     view.height = Math.max(1, Math.round(rect.height * dpr));
@@ -67,7 +69,6 @@ export default function DrawingCanvasOverlay({
     if (!host) return;
     const resize = () => syncFromBacking();
     resize();
-
     const ro = new ResizeObserver(resize);
     ro.observe(host);
     window.addEventListener("resize", resize);
@@ -79,32 +80,37 @@ export default function DrawingCanvasOverlay({
     };
   }, [host]);
 
-  
   useEffect(() => { syncFromBacking(); }, [currentPage, host]);
 
   useEffect(() => {
     if (!cursorRef.current) return;
-    if (tool === "eraser") cursorRef.current.style.display = "block";
-    else cursorRef.current.style.display = "none";
+    cursorRef.current.style.display = tool === "eraser" ? "block" : "none";
   }, [tool]);
 
-  useEffect(() => {
-    if (!host) return;
-    const onClear = () => {
-
-      const rect = host.getBoundingClientRect();
-      const dpr = Math.max(1, window.devicePixelRatio || 1);
-      const back = getPageCanvas(pageRef.current, rect.width, rect.height, dpr);
+useEffect(() => {
+  const onClear = () => {
+    const back = getPageCanvasOrNull(pageRef.current);
+    if (back) {
       const bctx = back.getContext("2d")!;
+  
       bctx.setTransform(1, 0, 0, 1, 0, 0);
       bctx.clearRect(0, 0, back.width, back.height);
+    }
 
-      syncFromBacking();
-      requestAnimationFrame(syncFromBacking);
-    };
-    window.addEventListener("live:clear-page", onClear);
-    return () => window.removeEventListener("live:clear-page", onClear);
-  }, [host, getPageCanvas]);
+    if (viewRef.current) {
+      const v = viewRef.current;
+      const vctx = v.getContext("2d")!;
+      vctx.setTransform(1, 0, 0, 1, 0, 0);
+      vctx.clearRect(0, 0, v.width, v.height);
+    }
+
+    syncFromBacking();
+    requestAnimationFrame(syncFromBacking);
+  };
+
+  window.addEventListener("live:clear-page", onClear);
+  return () => window.removeEventListener("live:clear-page", onClear);
+}, [getPageCanvasOrNull]);
 
   useEffect(() => {
     if (!host || !viewRef.current || !cursorRef.current) return;
@@ -117,7 +123,6 @@ export default function DrawingCanvasOverlay({
       const r = view.getBoundingClientRect();
       return { x: e.clientX - r.left, y: e.clientY - r.top, w: r.width, h: r.height };
     };
-
     const getScale = () => {
       const back = getPageCanvasOrNull(pageRef.current);
       const vw = view.getBoundingClientRect().width || 1;
@@ -126,14 +131,13 @@ export default function DrawingCanvasOverlay({
 
     const showCursor = (x: number, y: number) => {
       if (tool !== "eraser") { cursor.style.display = "none"; return; }
-      const d = Math.max(2, eraser.size);
+      const d = Math.max(2, eraser.size); // 화면 픽셀 단위 (뷰에서 보여지는 굵기와 동일)
       cursor.style.width = `${d}px`;
       cursor.style.height = `${d}px`;
       cursor.style.left = `${x}px`;
       cursor.style.top  = `${y}px`;
       cursor.style.display = "block";
     };
-
     const hideCursor = () => { cursor.style.display = "none"; };
 
     const down = (e: PointerEvent) => {
@@ -141,53 +145,64 @@ export default function DrawingCanvasOverlay({
       e.preventDefault();
       drawing = true;
       view.setPointerCapture?.(e.pointerId);
-
+    
       const rect = host.getBoundingClientRect();
       const dpr = Math.max(1, window.devicePixelRatio || 1);
       const back = getPageCanvas(pageRef.current, rect.width, rect.height, dpr);
       const bctx = back.getContext("2d")!;
-
+    
       const { x, y, w, h } = getLocal(e);
       const bx = (x / w) * back.width;
       const by = (y / h) * back.height;
-
-      const basePx =
-        tool === "highlighter" ? (pen.size * 2) :
-        tool === "eraser"      ? eraser.size :
-                                 pen.size;
-
+    
+      const isHL = tool === "highlighter";
+      const basePx = isHL ? highlighter.size : (tool === "eraser" ? eraser.size : pen.size);
+    
       bctx.lineCap = "round";
       bctx.lineJoin = "round";
-      bctx.globalCompositeOperation = tool === "eraser" ? "destination-out" : "source-over";
-      bctx.lineWidth = Math.max(1, basePx * getScale()); // 선택값(px) × dpr
-      bctx.strokeStyle =
-        tool === "highlighter" ? toRgba(pen.color, highlighter.alpha ?? 0.35) : pen.color;
-
+      bctx.globalCompositeOperation =
+        tool === "eraser" ? "destination-out" :
+        isHL ? "multiply" : "source-over";
+    
+      bctx.globalAlpha = isHL ? (highlighter.alpha ?? 0.02) : 1;
+    
+      bctx.strokeStyle = isHL ? highlighter.color : pen.color;
+    
+      bctx.lineWidth = Math.max(1, basePx * getScale());
+    
       bctx.beginPath();
       bctx.moveTo(bx, by);
-
+    
       showCursor(x, y);
     };
-
+    
     const move = (e: PointerEvent) => {
       const { x, y, w, h } = getLocal(e);
       showCursor(x, y);
       if (!drawing) return;
-
+    
       const back = getPageCanvasOrNull(pageRef.current)!;
       const bctx = back.getContext("2d")!;
       const bx = (x / w) * back.width;
       const by = (y / h) * back.height;
-
-      const basePx =
-        tool === "highlighter" ? (pen.size * 2) :
-        tool === "eraser"      ? eraser.size :
-                                 pen.size;
-
+    
+      const isHL = tool === "highlighter";
+      const basePx = isHL ? highlighter.size : (tool === "eraser" ? eraser.size : pen.size);
+    
+      bctx.lineCap = "round";
+      bctx.lineJoin = "round";
+      bctx.globalCompositeOperation =
+        tool === "eraser" ? "destination-out" :
+        isHL ? "multiply" : "source-over";
+    
+      bctx.globalAlpha = isHL ? (highlighter.alpha ?? 0.02) : 1;
+      bctx.strokeStyle = isHL ? highlighter.color : pen.color;
+    
       bctx.lineWidth = Math.max(1, basePx * getScale());
+    
       bctx.lineTo(bx, by);
       bctx.stroke();
-
+    
       syncFromBacking();
     };
 
@@ -201,10 +216,7 @@ export default function DrawingCanvasOverlay({
       hideCursor();
     };
 
-    const enter = (e: PointerEvent) => {
-      const { x, y } = getLocal(e);
-      showCursor(x, y);
-    };
+    const enter = (e: PointerEvent) => { const { x, y } = getLocal(e); showCursor(x, y); };
     const leave = () => hideCursor();
 
     view.addEventListener("pointerdown", down);
@@ -222,7 +234,14 @@ export default function DrawingCanvasOverlay({
       view.removeEventListener("pointercancel", end);
       view.removeEventListener("pointerenter", enter);
     };
-  }, [host, tool, pen.color, pen.size, highlighter.alpha, eraser.size, getPageCanvas, getPageCanvasOrNull]);
+  }, [
+    host,
+    tool,
+    pen.color, pen.size,
+    highlighter.color, highlighter.size, highlighter.alpha,
+    eraser.size,
+    getPageCanvas, getPageCanvasOrNull
+  ]);
 
   if (!host) return null;
 
@@ -240,7 +259,6 @@ export default function DrawingCanvasOverlay({
         }}
         onContextMenu={(e) => e.preventDefault()}
       />
-  
       <div ref={cursorRef} className={styles.eraserCursor} />
     </>,
     host
