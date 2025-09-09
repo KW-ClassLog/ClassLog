@@ -34,13 +34,11 @@ const ChatBox: React.FC<ChatBoxProps> = ({
 
         <div className={styles.textContainer}>
           <div className={styles.header}>
-            {!isAnonymous ? (
-              <span className={styles.nickname}>{nickname}</span>
-            ) : (
+            {!isAnonymous && 
               <span className={styles.nickname}>
-                익명{Math.floor(Math.random() * 100)}
+                {nickname}
               </span>
-            )}
+            }
             <span className={styles.timestamp}>{timestamp}</span>
           </div>
           <div className={styles.message}>{message}</div>
