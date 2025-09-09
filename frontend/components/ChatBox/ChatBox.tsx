@@ -10,6 +10,7 @@ type ChatBoxProps = {
   profilePicture: string; // 프로필 사진
   message: string; // 채팅 내용
   timestamp: string; // 날짜
+  variant?: "student" | "teacher"; // 강사, 학생 채팅 css
 };
 
 const ChatBox: React.FC<ChatBoxProps> = ({
@@ -18,9 +19,10 @@ const ChatBox: React.FC<ChatBoxProps> = ({
   profilePicture,
   message,
   timestamp,
+  variant="student",
 }) => {
   return (
-    <div className={styles.chatBox}>
+<div className={`${styles.chatBox} ${styles[variant]}`}>
       <div className={styles.messageContainer}>
         {!isAnonymous && (
           <Image
