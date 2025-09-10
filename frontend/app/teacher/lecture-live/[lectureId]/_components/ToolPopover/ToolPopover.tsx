@@ -39,7 +39,7 @@ export default function ToolPopover({
   side = "bottom",
   align = "start",
   capAlign = "center",
-  offset = -1,
+  offset = -3,
   capOffsetX = 0,
   cap = true,
   capPad = 12,
@@ -73,9 +73,11 @@ export default function ToolPopover({
       onClose?.();
     };
     const onEsc = (e: KeyboardEvent) => { if (e.key === "Escape") onClose?.(); };
+    window.addEventListener("pointerdown", onDown as any, true);
     window.addEventListener("mousedown", onDown);
     window.addEventListener("keydown", onEsc);
     return () => {
+      window.addEventListener("pointerdown", onDown as any, true);
       window.removeEventListener("mousedown", onDown);
       window.removeEventListener("keydown", onEsc);
     };

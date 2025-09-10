@@ -3,12 +3,12 @@
 .container {
   position: fixed;
   z-index: 1500;
-  filter: drop-shadow(0 8px 24px rgba(0,0,0,.12));
+  filter: drop-shadow($shadow-md);
 }
 
 .panel {
   position: relative;
-  background: #edf5ff;
+  background: $color-skyblue;
   z-index: 2; 
   border-radius: 16px;
   overflow: visible;
@@ -26,7 +26,7 @@
   left: var(--cap-left);
   top: calc(-1 * var(--cap-h) + var(--seam-overlap));
   z-index: 1; 
-  background: #edf5ff;
+  background: $color-skyblue;
   border-bottom: none;
   border-top-left-radius: 18px;
   border-top-right-radius: 18px;
