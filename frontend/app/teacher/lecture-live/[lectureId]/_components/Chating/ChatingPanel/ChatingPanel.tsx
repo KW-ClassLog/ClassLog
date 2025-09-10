@@ -12,13 +12,14 @@ type Msg = {
   id: string;
   text: string;
   role: "teacher" | "student";
-  ts: number;
+  ts?: number;
 };
 
 export default function ChatPanel() {
   const { togglePanel } = useLive();
+
   const [msgs, setMsgs] = useState<Msg[]>([
-    { id: "seed1", text: "질문이요~", role: "student", ts: Date.now() },
+    { id: "seed1", text: "질문이요~", role: "student", ts: Date.now()},
   ]);
   const [text, setText] = useState("");
 
@@ -29,7 +30,10 @@ export default function ChatPanel() {
   const send = () => {
     const t = text.trim();
     if (!t) return;
-    setMsgs((m) => [...m, { id: String(Date.now()), text: t, role: "teacher", ts: Date.now() }]);
+    setMsgs((m) => [
+      ...m,
+      { id: String(Date.now()), text: t, role: "teacher", ts: Date.now() },
+    ]);
     setText("");
   };
 
@@ -66,21 +70,26 @@ export default function ChatPanel() {
       </div>
 
       <div ref={bodyRef} className={styles.body}>
-        {msgs.map((m) => (
-          <div
-            key={m.id}
-            className={`${styles.row} ${m.role === "teacher" ? styles.teacher : styles.student}`}
-          >
-            <ChatBox
-              isAnonymous={true}
-              nickname=""
-              profilePicture=""
-              message={m.text}
-              timestamp={fmt(m.ts)}
-              variant={m.role === "teacher" ? "teacher" : "student"}
-            />
-          </div>
-        ))}
+        {msgs.map((m) => {
+          const tsText = m.ts ? fmt(m.ts) : "";
+          return (
+            <div
+              key={m.id}
+              className={`${styles.row} ${
+                m.role === "teacher" ? styles.teacher : styles.student
+              }`}
+            >
+              <ChatBox
+                isAnonymous={true}
+                nickname=""
+                profilePicture=""
+                message={m.text}
+                timestamp={tsText}
+                variant={m.role === "teacher" ? "teacher" : "student"}
+              />
+            </div>
+          );
+        })}
       </div>
 
       <form className={styles.inputRow} onSubmit={onSubmit}>
