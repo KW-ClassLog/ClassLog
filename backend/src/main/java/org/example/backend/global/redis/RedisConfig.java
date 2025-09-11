@@ -6,6 +6,7 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.listener.PatternTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
@@ -33,10 +34,15 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisMessageListenerContainer redisMessageListenerContainer() {
+    public RedisMessageListenerContainer redisMessageListenerContainer(
+            RedisConnectionFactory redisConnectionFactory,
+            RedisMessageSubscriber redisMessageSubscriber
+    ) {
         // redis pub/sub 메시지 처리 listener
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(redisConnectionFactory());
+
+        container.addMessageListener(redisMessageSubscriber, new PatternTopic("lecture:*"));
         return container;
     }
 }
