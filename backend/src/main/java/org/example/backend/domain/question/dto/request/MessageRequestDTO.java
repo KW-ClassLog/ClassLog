@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public class MessageRequestDTO {
     @Getter
-    @Setter
+    @Builder
     public static class MessageDTO {
         private UUID senderId;
         private String senderName;
