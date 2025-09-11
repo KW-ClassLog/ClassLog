@@ -2,6 +2,9 @@
 
 import React, { createContext, useContext, useMemo, useState, useRef, useCallback } from "react";
 
+export type DocType = "pdf" | "pptx" | "unknown";
+type DocState = { url: string; type: DocType; name: string };
+
 export type Tool = "pencilOff" | "pen" | "eraser" | "highlighter";
 export type Panel = "files" | "chat";
 
@@ -20,8 +23,9 @@ interface LiveState {
   pen: PenOptions;
   highlighter: HighlighterOptions;
   eraser: EraserOptions;
+  doc: DocState;
 
-
+  setDoc: (d: DocState) => void;
   setTool: (t: Tool) => void;
   togglePanel: (p: Panel) => void;
 
@@ -32,6 +36,8 @@ interface LiveState {
   getPageCanvas: (page: number, w: number, h: number, dpr: number) => HTMLCanvasElement;
   getPageCanvasOrNull: (page: number) => HTMLCanvasElement | null;
   clearPage: (page: number) => void;
+
+  resetDrawings: () => void;
 }
 
 const LiveCtx = createContext<LiveState | null>(null);
@@ -50,14 +56,28 @@ export function LectureLiveProvider({ children }: { children: React.ReactNode })
   });
 
   const [highlighter, setHighlighterState] = useState<HighlighterOptions>({
-    color: "#F59E0B",
-    size: 10,
-    alpha: 0.35,
+    color: "#fcf1b7",
+    size: 12,
+    alpha: 0.02,
   });
+
+  const [doc, setDocState] = useState<DocState>({
+    url: "/file/기말보고서_졸업을하자.pdf",
+    type: "pdf",
+    name: "기말보고서_졸업을하자.pdf",
+  });
+
+  const drawStoreRef = useRef<Map<number, HTMLCanvasElement>>(new Map());
+  const resetDrawings = useCallback(() => drawStoreRef.current.clear(), []);
 
   const [eraser, setEraserState] = useState<EraserOptions>({ size: 12 });
 
-  const drawStoreRef = useRef<DrawStore>(new Map());
+  const setDoc = (d: DocState) => {
+    setDocState(d);
+    resetDrawings();
+    window.dispatchEvent(new CustomEvent("live:doc-changed"));
+  };
+  
 
   const getPageCanvas = useCallback((page: number, w: number, h: number, dpr: number) => {
     let c = drawStoreRef.current.get(page);
@@ -104,6 +124,9 @@ export function LectureLiveProvider({ children }: { children: React.ReactNode })
       pen,
       highlighter,
       eraser,
+      doc,
+      setDoc,
+      resetDrawings,
       getPageCanvas,
       getPageCanvasOrNull,
       clearPage,
@@ -113,7 +136,7 @@ export function LectureLiveProvider({ children }: { children: React.ReactNode })
       setHighlighter,
       setEraser,
     }),
-    [tool, isDrawing, panels, pen, highlighter, eraser, getPageCanvas, getPageCanvasOrNull, clearPage]
+    [tool, isDrawing, panels, pen, highlighter, eraser, doc, resetDrawings, getPageCanvas, getPageCanvasOrNull, clearPage]
   );
 
   return <LiveCtx.Provider value={value}>{children}</LiveCtx.Provider>;

@@ -131,7 +131,7 @@ useEffect(() => {
 
     const showCursor = (x: number, y: number) => {
       if (tool !== "eraser") { cursor.style.display = "none"; return; }
-      const d = Math.max(2, eraser.size); // 화면 픽셀 단위 (뷰에서 보여지는 굵기와 동일)
+      const d = Math.max(2, eraser.size);
       cursor.style.width = `${d}px`;
       cursor.style.height = `${d}px`;
       cursor.style.left = `${x}px`;

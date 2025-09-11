@@ -2,26 +2,51 @@
 
 import styles from "./DocumentViewer.module.scss";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Document, Page, pdfjs } from "react-pdf";
-import { getDocType, toAbsoluteUrl } from "@/types/lectures/documentUtilTypes";
+import dynamic from "next/dynamic";
+import { DocType } from "../../LectureLiveProvider";
+
+
+const PDFDocument = dynamic(() => import("react-pdf").then(m => m.Document), { ssr: false });
+const PDFPage     = dynamic(() => import("react-pdf").then(m => m.Page),     { ssr: false });
+
+export function getDocType(url: string): DocType {
+  const m = url.split("?")[0].toLowerCase();
+  if (m.endsWith(".pdf")) return "pdf";
+  if (m.endsWith(".pptx")) return "pptx";
+  return "unknown";
+}
+
+export function toAbsoluteUrl(pathOrUrl: string) {
+  if (/^https?:\/\//i.test(pathOrUrl)) return pathOrUrl;
+  if (typeof window === "undefined") return pathOrUrl;
+  return new URL(pathOrUrl, window.location.origin).toString();
+}
 
 export default function DocumentViewer({
   fileUrl,
   currentPage,
   onChangePage,
   onLoad,
+  typeOverride,
 }: {
   fileUrl: string;
   currentPage: number;
   onChangePage: (i: number) => void;
   onLoad?: (numPages: number) => void;
+  typeOverride?: DocType;
 }) {
-  const type = useMemo(() => getDocType(fileUrl), [fileUrl]);
+  const type = useMemo(
+    () => (typeOverride && typeOverride !== "unknown" ? typeOverride : getDocType(fileUrl)),
+    [fileUrl, typeOverride]
+  );
 
   useEffect(() => {
     if (type !== "pdf") return;
-    pdfjs.GlobalWorkerOptions.workerSrc =
-      `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
+    (async () => {
+      const m = await import("react-pdf");
+      m.pdfjs.GlobalWorkerOptions.workerSrc =
+        `https://unpkg.com/pdfjs-dist@${m.pdfjs.version}/build/pdf.worker.min.mjs`;
+    })();
   }, [type]);
 
   const stageRef = useRef<HTMLDivElement>(null);
@@ -69,10 +94,7 @@ export default function DocumentViewer({
 
   const docBoxStyle: React.CSSProperties =
     type === "pdf"
-      ? {
-          width: Math.max(1, naturalW * scale),
-          height: Math.max(1, naturalH * scale),
-        }
+      ? { width: Math.max(1, naturalW * scale), height: Math.max(1, naturalH * scale) }
       : { width: "100%", height: "100%" };
 
   return (
@@ -80,15 +102,15 @@ export default function DocumentViewer({
       <div ref={stageRef} className={styles.stage}>
         <div className={styles.docBox} data-doc-box style={docBoxStyle}>
           {type === "pdf" && (
-            <Document file={fileUrl} onLoadSuccess={handleDocLoad} loading="로딩 중…">
-              <Page
+            <PDFDocument file={fileUrl} onLoadSuccess={handleDocLoad} loading="로딩 중…">
+              <PDFPage
                 pageNumber={currentPage + 1}
                 scale={scale}
                 renderTextLayer={false}
                 renderAnnotationLayer={false}
                 onLoadSuccess={handlePageLoad}
               />
-            </Document>
+            </PDFDocument>
           )}
 
           {type === "pptx" && (

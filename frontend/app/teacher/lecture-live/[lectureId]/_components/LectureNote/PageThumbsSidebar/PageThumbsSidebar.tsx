@@ -4,7 +4,7 @@ import styles from "./PageThumbsSidebar.module.scss";
 import { Document, Page, pdfjs } from "react-pdf";
 import JSZip from "jszip";
 import { useEffect, useMemo, useState } from "react";
-import { getDocType, toAbsoluteUrl } from "@/types/lectures/documentUtilTypes";
+import { getDocType, toAbsoluteUrl } from "../DocumentViewer/DocumentViewer";
 
 pdfjs.GlobalWorkerOptions.workerSrc =
   `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
@@ -15,14 +15,16 @@ export default function PageThumbsSidebar({
   onSelect,
   thumbWidth = 160,
   onCountChange,
+  typeOverride,
 }: {
   fileUrl: string;
   currentPage: number;
   onSelect: (index: number) => void;
   thumbWidth?: number;
   onCountChange?: (count: number) => void;
+  typeOverride?: "pdf" | "pptx";
 }) {
-  const type = getDocType(fileUrl);
+  const type = typeOverride ?? getDocType(fileUrl);
   const [pptxCount, setPptxCount] = useState<number>(0);
 
   useEffect(() => {
