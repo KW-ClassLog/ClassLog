@@ -4,11 +4,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.backend.domain.question.dto.request.MessageRequestDTO;
 import org.example.backend.domain.question.service.ChatService;
+import org.example.backend.global.websocket.StompPrincipal;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Controller;
 
-import java.time.LocalDateTime;
+import java.security.Principal;
 import java.util.UUID;
 
 /**
@@ -27,11 +29,16 @@ public class ChatController {
      * @param messageDTO
      */
     @MessageMapping("/lecture/{lectureId}")
-    public void sendMessage(@DestinationVariable UUID lectureId, MessageRequestDTO.MessageDTO messageDTO) {
+    public void sendMessage(@DestinationVariable UUID lectureId,
+                            @Payload MessageRequestDTO.MessageDTO messageDTO,
+                            Principal principal) {
         log.info("메시지 수신: {}", messageDTO);
+        log.info("principal = {}", principal);
 
-        messageDTO.setLectureId(lectureId);
+        StompPrincipal stompPrincipal = (StompPrincipal) principal;
+        UUID userId = stompPrincipal.userId();
+        String role = stompPrincipal.role();
 
-        chatService.sendMessage(messageDTO);
+        chatService.sendMessage(lectureId,messageDTO,userId,role);
     }
 }
