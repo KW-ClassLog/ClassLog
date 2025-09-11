@@ -32,10 +32,6 @@ public class ChatController {
 
         messageDTO.setLectureId(lectureId);
 
-        if (messageDTO.getTimestamp() == null) {
-            messageDTO.setTimestamp(LocalDateTime.now());
-        }
-
         chatService.sendMessage(messageDTO);
     }
 }

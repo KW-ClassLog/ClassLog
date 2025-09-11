@@ -12,6 +12,6 @@ public class MessageRequestDTO {
         private UUID senderId;
         private UUID lectureId;
         private String content;
-        private LocalDateTime timestamp;
     }
 }
+
