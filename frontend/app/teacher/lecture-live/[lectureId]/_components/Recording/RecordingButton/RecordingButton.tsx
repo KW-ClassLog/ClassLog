@@ -72,9 +72,12 @@ export default function RecordingButton() {
           onConfirm={confirmStopAndSave}
           onClose={cancelConfirm}
         >
-          종료 버튼을 누르면 이 강의의 녹음은 이대로 저장됩니다.
+          확인 버튼을 누르면
           <br />
-          그래도 종료하시겠습니까?
+          이 강의의 녹음은 저장됩니다.
+          <br />
+          <br />
+          종료하시겠습니까?
         </ConfirmModal>
       )}
     </span>
