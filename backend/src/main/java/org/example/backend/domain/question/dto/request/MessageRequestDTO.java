@@ -10,8 +10,9 @@ public class MessageRequestDTO {
     @Setter
     public static class MessageDTO {
         private UUID senderId;
-        private UUID lectureId;
+        private String senderName;
         private String content;
+        private UUID lectureId;
     }
 }
 
