@@ -51,8 +51,8 @@ export function LectureLiveProvider({ children }: { children: React.ReactNode })
   });
 
   const [pen, setPenState] = useState<PenOptions>({
-    color: "#111827",
-    size: 4,
+    color: "#111111",
+    size: 3,
   });
 
   const [highlighter, setHighlighterState] = useState<HighlighterOptions>({
