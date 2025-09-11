@@ -11,7 +11,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: $spacing-sm;
+    gap: $spacing-md;
 }
 
 
@@ -51,8 +51,7 @@
 }
 
 .sizeBtn.active {
-    border: 2px solid $color-blue;
-    // background: $color-white;
+    border: 3px solid #3B82F6;
     box-shadow: none;
     outline: none;
   }

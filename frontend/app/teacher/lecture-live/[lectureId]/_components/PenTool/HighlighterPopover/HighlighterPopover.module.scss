@@ -2,7 +2,7 @@
 
 .wrap {
   display: grid;
-  gap: $spacing-sm;
+  gap: $spacing-md;
   justify-items: center;
   min-width: 200px;
 }
@@ -11,7 +11,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: $spacing-sm;
+  gap: $spacing-md;
 }
 
 
@@ -59,7 +59,7 @@
 }
 
 .sizeActive {
-  outline: 2px solid $color-blue;
+  outline: 3px solid #3B82F6;
   outline-offset: 0;
   border-color: transparent;
 }
