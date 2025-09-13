@@ -1,6 +1,7 @@
 package org.example.backend.domain.lecture.service;
 
 import org.example.backend.domain.lecture.dto.request.LectureRequestDTO;
+import org.example.backend.domain.lecture.dto.response.ClassNameResponseDTO;
 import org.example.backend.domain.lecture.dto.response.LectureRecordingResponseDTO;
 import org.example.backend.domain.lecture.dto.response.LectureResponseDTO;
 import org.example.backend.domain.lecture.dto.response.TodayLectureResponseDTO;
@@ -27,4 +28,6 @@ public interface LectureService {
     List<UUID> mapNotes(UUID lectureId, List<UUID> lectureNoteIds);
 
     List<TodayLectureResponseDTO> getClassListByProfessor(LocalDate date);
+
+    ClassNameResponseDTO getClassId(UUID lectureId);
 }
