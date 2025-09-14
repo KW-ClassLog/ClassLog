@@ -15,6 +15,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class NotificationResponseDTO {
     private UUID notificationId;
+    private String className;
     private AlarmType alarmType;
     private boolean isRead;
     private LocalDateTime createdAt;
