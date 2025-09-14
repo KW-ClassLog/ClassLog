@@ -1,5 +1,6 @@
 package org.example.backend.domain.notification.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,6 +18,7 @@ public class NotificationResponseDTO {
     private UUID notificationId;
     private String className;
     private AlarmType alarmType;
+    @JsonProperty("isRead")
     private boolean isRead;
     private LocalDateTime createdAt;
 }
