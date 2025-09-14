@@ -12,9 +12,8 @@ export async function updateNotificationSetting(
     key: NotiSettingKey,
     value: boolean
 ) {
-    // 서버가 PATCH + partial body를 받도록 구현했다고 가정
     const res = await axiosInstance.patch<ApiResponse<null>>(
-        "/api/notifications/settings",
+        "/api/notifications/setting",
         { [key]: value }
     );
     return res.data;
