@@ -2,11 +2,12 @@ package org.example.backend.domain.notificationSetting.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.backend.domain.notificationSetting.converter.NotificationSettingConverter;
+import org.example.backend.domain.notificationSetting.dto.request.NotificationSettingPatchRequest;
 import org.example.backend.domain.notificationSetting.dto.response.NotificationSettingResponseDTO;
 import org.example.backend.domain.notificationSetting.entity.NotificationSetting;
 import org.example.backend.domain.notificationSetting.repository.NotificationSettingRepository;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 import java.util.UUID;
 
 @Service
@@ -27,5 +28,17 @@ public class NotificationSettingService implements NotificationSettingServiceImp
                         .build());
 
         return NotificationSettingConverter.toDTO(setting);
+    }
+
+    @Transactional
+    public void patchSettings(UUID userId, NotificationSettingPatchRequest req) {
+        NotificationSetting entity = notificationSettingRepository.findById(userId.toString())
+                .orElseThrow(() -> new IllegalArgumentException("알림 설정이 존재하지 않습니다."));
+
+        if (req.quizUpload() != null) entity.setQuizUpload(req.quizUpload());
+        if (req.quizAnswerUpload() != null) entity.setQuizAnswerUpload(req.quizAnswerUpload());
+        if (req.lectureNoteUpload() != null) entity.setLectureNoteUpload(req.lectureNoteUpload());
+        if (req.lectureUpload() != null) entity.setLectureUpload(req.lectureUpload());
+        if (req.recordUpload() != null) entity.setRecordUpload(req.recordUpload());
     }
 }
