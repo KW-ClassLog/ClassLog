@@ -41,14 +41,11 @@ export default function TeacherSettingPage() {
         type NotiSettingKey = keyof NotiSetting;
         const key = name as NotiSettingKey;
 
-        // 1) 옵티미스틱 UI 반영
         setNotiSetting(prev => ({ ...prev, [key]: checked }));
 
         try {
-            // 2) 서버 반영
             const res = await updateNotificationSetting(key, checked);
             if (!res.isSuccess) {
-                // 3) 서버에서 실패 응답이면 롤백
                 setNotiSetting(prev => ({ ...prev, [key]: !checked }));
                 console.error('알림 설정 저장 실패:', res.message);
                 alert(res.message ?? '알림 설정 저장에 실패했습니다.');
