@@ -1,77 +1,68 @@
 "use client";
 
-import React from 'react';
-import styles from './page.module.scss';
-import { useRouter } from 'next/navigation';
-import { ChevronLeft } from 'lucide-react'; 
-
-interface Notification {
-  id: number;
-  title: string;
-  date: string;
-  time: string;
-  isNew?: boolean;
-}
-
-const notifications: Notification[] = [
-  {
-    id: 1,
-    title: "[자료구조] 1차시 강의를 시작합니다",
-    date: "2025.03.25",
-    time: "16:20:00",
-    isNew: true,
-  },
-  {
-    id: 2,
-    title: "[자료구조] 새 강의자료가 올라왔습니다",
-    date: "2025.03.25",
-    time: "16:20:00",
-  },
-  {
-    id: 3,
-    title: "[자료구조] 새 강의자료가 올라왔습니다",
-    date: "2025.03.25",
-    time: "16:20:00",
-  },
-  {
-    id: 4,
-    title: "[자료구조] 새 강의자료가 올라왔습니다",
-    date: "2025.03.25",
-    time: "16:20:00",
-  },
-  {
-    id: 5,
-    title: "[자료구조] 1차시 강의를 시작합니다",
-    date: "2025.03.25",
-    time: "16:20:00",
-    isNew: true,
-  },
-];
+import React, { useEffect, useState } from "react";
+import styles from "./page.module.scss";
+import { useRouter } from "next/navigation";
+import { ChevronLeft } from "lucide-react";
+import { fetchNotifications , NotificationResponse, getAlarmMessage } from "@/api/notifications/fetchNotification";
 
 export default function TeacherNotificationPage() {
   const router = useRouter();
+  const [notifications, setNotifications] = useState<NotificationResponse[]>([]);
+
+  useEffect(() => {
+    const loadNotifications = async () => {
+      const res = await fetchNotifications();
+      if (res.isSuccess && res.result) {
+        setNotifications(res.result);
+      } else {
+        console.error("알림 조회 실패:", res.message);
+      }
+    };
+    loadNotifications();
+  }, []);
 
   return (
-    <div className={styles.container}>
-      <header className={styles.header}>
-        <button className={styles.backButton} onClick={() => router.back()}>
-          <ChevronLeft size={24} />
-        </button>
-        알림</header>
-      <ul className={styles.notificationList}>
-        {notifications.map((notification) => (
-          <li key={notification.id} className={styles.notificationItem}>
-            <div className={styles.title}>
-              <span>{notification.title}</span>
+      <div className={styles.container}>
+        <header className={styles.header}>
+          <button className={styles.backButton} onClick={() => router.back()}>
+            <ChevronLeft size={24} />
+          </button>
+          알림
+        </header>
 
-              <span className={styles.dateTime}>
-                {notification.date} {notification.time}
-              </span>
-            </div>
-            {notification.isNew && <div className={styles.newIndicator} />}
-          </li>
-        ))}
-      </ul>
-    </div>
+        <ul className={styles.notificationList}>
+          {notifications.map((notification) => {
+            const date = new Date(notification.createdAt);
+            const formattedDate = date.toLocaleDateString("ko-KR", {
+              year: "numeric",
+              month: "2-digit",
+              day: "2-digit",
+            });
+            const formattedTime = date.toLocaleTimeString("ko-KR", {
+              hour: "2-digit",
+              minute: "2-digit",
+              second: "2-digit",
+            });
+
+            return (
+                <li key={notification.notificationId} className={styles.notificationItem}>
+                  <div className={styles.title}>
+                <span>
+                  [{notification.className ?? "알 수 없음"}] {getAlarmMessage(notification.alarmType)}
+                </span>
+                    <span className={styles.dateTime}>
+                  {formattedDate} {formattedTime}
+                </span>
+                  </div>
+                    <div
+                        className={styles.newIndicator}
+                        style={{ visibility: notification.isRead ? "hidden" : "visible" }}
+                    />
+                </li>
+            );
+          })}
+        </ul>
+      </div>
   );
 }
