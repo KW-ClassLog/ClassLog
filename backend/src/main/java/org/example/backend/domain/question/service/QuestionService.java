@@ -11,4 +11,6 @@ public interface QuestionService {
     List<QuestionResponseDTO.teacher> getTeacherQuestions(UUID lectureId, User user);
     //학생용 질문 조회
     List<QuestionResponseDTO.student> getStudentQuestions(UUID lectureId, User user);
+    // 이전 채팅 내용 불러오개
+    List<QuestionResponseDTO.beforeChatting> getBeforeChatting(UUID lectureId);
 }
