@@ -1,6 +1,7 @@
 package org.example.backend.domain.question.dto.request;
 
 import lombok.*;
+import org.example.backend.domain.user.entity.Role;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -12,7 +13,8 @@ public class MessageRequestDTO {
         private UUID senderId;
         private String senderName;
         private String content;
-        private UUID lectureId;
+        private Role role;
+        private LocalDateTime timestamp;
     }
 }
 
