@@ -3,12 +3,12 @@
 import styles from "./PageThumbsSidebar.module.scss";
 import { Document, Page, pdfjs } from "react-pdf";
 import JSZip from "jszip";
-import { useEffect, useMemo, useState } from "react";
-import { getDocType, toAbsoluteUrl } from "../DocumentViewer/DocumentViewer";
+import { useEffect, useState } from "react";
+import { getDocType } from "../DocumentViewer/DocumentViewer";
 
 pdfjs.GlobalWorkerOptions.workerSrc =
   `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
-  
+
 export default function PageThumbsSidebar({
   fileUrl,
   currentPage,
@@ -25,6 +25,8 @@ export default function PageThumbsSidebar({
   typeOverride?: "pdf" | "pptx";
 }) {
   const type = typeOverride ?? getDocType(fileUrl);
+
+  const [pdfCount, setPdfCount] = useState<number>(0);
   const [pptxCount, setPptxCount] = useState<number>(0);
 
   useEffect(() => {
@@ -42,17 +44,19 @@ export default function PageThumbsSidebar({
   }, [fileUrl, type, onCountChange]);
 
   if (type === "pdf") {
-    const [pdfCount, setPdfCount] = useState<number>(0);
     return (
       <div className={styles.wrap}>
         <div className={styles.list}>
-          <Document 
-            file={fileUrl} 
-            onLoadSuccess={({ numPages }) => setPdfCount(numPages)} 
+          <Document
+            file={fileUrl}
+            onLoadSuccess={({ numPages }) => {
+              setPdfCount(numPages);
+              onCountChange?.(numPages);
+            }}
             loading={null}
             className={styles.docAsContents}
           >
-            {Array.from({ length: pdfCount || 0 }, (_, i) => (
+            {Array.from({ length: pdfCount }, (_, i) => (
               <button
                 key={i}
                 className={`${styles.thumb} ${i === currentPage ? styles.active : ""}`}

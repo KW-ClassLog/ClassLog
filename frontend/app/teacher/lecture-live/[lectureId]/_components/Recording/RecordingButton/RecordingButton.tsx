@@ -15,7 +15,7 @@ export default function RecordingButton() {
 
   const [open, setOpen] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
-  const [saving, setSaving] = useState(false);
+
 
   const [isRecording, setIsRecording] = useState(
     engine.getSnapshot().state === "recording"
@@ -32,14 +32,9 @@ export default function RecordingButton() {
   };
 
   const confirmStopAndSave = async () => {
-    try {
-      setSaving(true);
-      await engine.stop();
-      setConfirmOpen(false);
-      setOpen(true);
-    } finally {
-      setSaving(false);
-    }
+    await engine.stop();
+    setConfirmOpen(false);
+    setOpen(true);
   };
 
   const cancelConfirm = () => {

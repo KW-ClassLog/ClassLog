@@ -3,16 +3,23 @@ import MicRecorder from "mic-recorder-to-mp3";
 
 export type RecState = "idle" | "recording" | "stopped";
 type Unsub = () => void;
-type Listeners = {
-  state:   ((s: RecState) => void)[];
-  level:   ((v: number) => void)[];
-  elapsed: ((ms: number) => void)[];
-  done:    ((blob: Blob, url: string) => void)[];
+
+type ListenerMap = {
+  state:   (s: RecState) => void;
+  level:   (v: number) => void;
+  elapsed: (ms: number) => void;
+  done:    (blob: Blob, url: string) => void;
+};
+
+type Mp3Result = { getMp3: () => Promise<[ArrayBuffer, Blob]> };
+type RecorderLike = {
+  start: () => Promise<void> | void;
+  stop: () => Mp3Result;
 };
 
 class RecordingEngine {
   private state: RecState = "idle";
-  private recorder: any = null;
+  private recorder: RecorderLike | null = null;
   private stream: MediaStream | null = null;
 
   private timerId: number | null = null;
@@ -21,21 +28,32 @@ class RecordingEngine {
 
   private url: string | null = null;
 
-  private listeners: Listeners = { state: [], level: [], elapsed: [], done: [] };
+  private listeners: { [K in keyof ListenerMap]: Array<ListenerMap[K]> } = {
+    state: [],
+    level: [],
+    elapsed: [],
+    done: [],
+  };
 
-  subscribe<K extends keyof Listeners>(kind: K, fn: Listeners[K][number]): Unsub {
-    this.listeners[kind].push(fn as any);
+  subscribe<K extends keyof ListenerMap>(kind: K, fn: ListenerMap[K]): Unsub {
+    this.listeners[kind].push(fn);
     return () => {
-      this.listeners[kind] = this.listeners[kind].filter((f) => f !== fn) as any;
+      const arr = this.listeners[kind];
+      const idx = arr.indexOf(fn);
+      if (idx >= 0) arr.splice(idx, 1);
     };
   }
-  private emit<K extends keyof Listeners>(kind: K, ...args: Parameters<Listeners[K][number]>) {
-    for (const fn of this.listeners[kind]) (fn as any)(...args);
+
+  private emit<K extends keyof ListenerMap>(kind: K, ...args: Parameters<ListenerMap[K]>) {
+    const cbs = this.listeners[kind] as Array<(...a: Parameters<ListenerMap[K]>) => void>;
+    for (const cb of cbs) cb(...args);
   }
+
   private setState(s: RecState) {
     this.state = s;
     this.emit("state", s);
   }
+
   getSnapshot() {
     return { state: this.state, elapsedMs: this.elapsedMs, url: this.url };
   }
@@ -49,7 +67,8 @@ class RecordingEngine {
   async start() {
     if (this.state === "recording") return;
     await this.ensureMic();
-    this.recorder = new MicRecorder({ bitRate: 128 });
+
+    this.recorder = new MicRecorder({ bitRate: 128 }) as unknown as RecorderLike;
     await this.recorder.start();
 
     this.startedAt = Date.now();
@@ -65,7 +84,7 @@ class RecordingEngine {
   }
 
   async stop() {
-    if (this.state !== "recording") return;
+    if (this.state !== "recording" || !this.recorder) return;
 
     const result = await this.recorder.stop();
     const [, blob] = await result.getMp3();

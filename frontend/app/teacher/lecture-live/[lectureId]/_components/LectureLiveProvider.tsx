@@ -11,7 +11,6 @@ export type Panel = "files" | "chat";
 type PenOptions = { color: string; size: number };
 type HighlighterOptions = { color: string; size: number; alpha: number };
 type EraserOptions = { size: number };
-type DrawStore = Map<number, HTMLCanvasElement>;
 
 
 interface LiveState {

@@ -25,7 +25,7 @@ export default function HighlighterPopover({
             key={c}
             type="button"
             className={`${styles.swatch} ${color === c ? styles.active : ""}`}
-            style={{ backgroundColor: c, ["--ring-color" as any]: "#3B82F6",
+            style={{ backgroundColor: c, ["--ring-color"]: "#3B82F6",
             } as React.CSSProperties
           }
             onClick={() => onChangeColor(c)}

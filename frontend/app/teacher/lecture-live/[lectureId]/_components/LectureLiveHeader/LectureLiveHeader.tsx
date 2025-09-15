@@ -16,6 +16,7 @@ import RecordingButton from "../Recording/RecordingButton/RecordingButton";
 import ConfirmModal from "@/components/Modal/ConfirmModal/ConfirmModal";
 import { getRecordingEngine, type RecState } from "../Recording/recordingEngine";
 import { ROUTES } from "@/constants/routes";
+import { Tool } from "../LectureLiveProvider";
 
 export default function LectureLiveHeader({
   onToggleChat,
@@ -41,7 +42,7 @@ export default function LectureLiveHeader({
     return () => off();
   }, [engine]);
 
-  const selectTool = (t: any) => setTool(t);
+  const selectTool = (t: Tool) => setTool(t);
   const closePen = () => setTool("pencilOff");
 
   const handleEndLectureClick = () => {

@@ -5,15 +5,6 @@ import { createPortal } from "react-dom";
 import { useLive } from "../../LectureLiveProvider";
 import styles from "./DrawingCanvasOverlay.module.scss";
 
-function toRgba(hex: string, a: number) {
-  let h = hex.replace("#", "");
-  if (h.length === 3) h = h.split("").map(c => c + c).join("");
-  const r = parseInt(h.slice(0, 2), 16);
-  const g = parseInt(h.slice(2, 4), 16);
-  const b = parseInt(h.slice(4, 6), 16);
-  return `rgba(${r},${g},${b},${a})`;
-}
-
 export default function DrawingCanvasOverlay({
   selector = "[data-doc-box]",
   currentPage,
@@ -217,8 +208,7 @@ useEffect(() => {
     };
 
     const enter = (e: PointerEvent) => { const { x, y } = getLocal(e); showCursor(x, y); };
-    const leave = () => hideCursor();
-
+    
     view.addEventListener("pointerdown", down);
     view.addEventListener("pointermove", move);
     view.addEventListener("pointerup", end);

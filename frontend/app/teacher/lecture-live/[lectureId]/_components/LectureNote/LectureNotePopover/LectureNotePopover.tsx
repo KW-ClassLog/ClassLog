@@ -53,7 +53,7 @@ export default function LectureNotePopover({
   return (
     <div className={styles.pop}>
       <div className={styles.list}>
-        {items.map((it, i) => (
+        {items.map((it) => (
           <div key={it.url}>
             <button
               type="button"

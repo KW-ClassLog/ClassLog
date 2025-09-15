@@ -4,10 +4,11 @@ import styles from "./DocumentViewer.module.scss";
 import { useEffect, useMemo, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { DocType } from "../../LectureLiveProvider";
+import type { PageProps } from "react-pdf";
 
 
 const PDFDocument = dynamic(() => import("react-pdf").then(m => m.Document), { ssr: false });
-const PDFPage     = dynamic(() => import("react-pdf").then(m => m.Page),     { ssr: false });
+const PDFPage = dynamic(() => import("react-pdf").then(m => m.Page),     { ssr: false });
 
 export function getDocType(url: string): DocType {
   const m = url.split("?")[0].toLowerCase();
@@ -50,7 +51,6 @@ export default function DocumentViewer({
   }, [type]);
 
   const stageRef = useRef<HTMLDivElement>(null);
-  const [numPages, setNumPages] = useState(1);
   const [stageW, setStageW] = useState(0);
   const [stageH, setStageH] = useState(0);
   const [naturalW, setNaturalW] = useState(1);
@@ -80,12 +80,11 @@ export default function DocumentViewer({
 
   const handleDocLoad = ({ numPages }: { numPages: number }) => {
     if (type !== "pdf") return;
-    setNumPages(numPages);
     onLoad?.(numPages);
     if (currentPage > numPages - 1) onChangePage(numPages - 1);
   };
 
-  const handlePageLoad = (page: any) => {
+const handlePageLoad: NonNullable<PageProps["onLoadSuccess"]> = (page) => {
     if (type !== "pdf") return;
     const vp = page.getViewport({ scale: 1 });
     setNaturalW(vp.width);

@@ -8,7 +8,6 @@ type Side = "top" | "bottom" | "left" | "right";
 type Align = "start" | "center" | "end";
 type CapAlign = "center" | "flush-left";
 
-
 interface ToolPopoverProps {
   open: boolean;
   anchorRef: React.RefObject<Element | null>;
@@ -31,7 +30,6 @@ interface ToolPopoverProps {
   className?: string;
   children: React.ReactNode;
 }
-
 
 export default function ToolPopover({
   open,
@@ -66,19 +64,27 @@ export default function ToolPopover({
 
   useEffect(() => {
     if (!open) return;
-    const onDown = (e: MouseEvent) => {
-      const t = e.target as Node;
-      if (boxRef.current?.contains(t)) return;
-      if (anchorRef?.current && anchorRef.current.contains(t)) return;
+
+    const handleDown = (target: EventTarget | null) => {
+      if (!target || !(target instanceof Node)) return;
+      if (boxRef.current?.contains(target)) return;
+      if (anchorRef?.current && anchorRef.current.contains(target)) return;
       onClose?.();
     };
-    const onEsc = (e: KeyboardEvent) => { if (e.key === "Escape") onClose?.(); };
-    window.addEventListener("pointerdown", onDown as any, true);
-    window.addEventListener("mousedown", onDown);
+
+    const onPointerDown = (e: PointerEvent) => handleDown(e.target);
+    const onMouseDown = (e: MouseEvent) => handleDown(e.target);
+    const onEsc = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose?.();
+    };
+
+    window.addEventListener("pointerdown", onPointerDown, true);
+    window.addEventListener("mousedown", onMouseDown);
     window.addEventListener("keydown", onEsc);
+
     return () => {
-      window.addEventListener("pointerdown", onDown as any, true);
-      window.removeEventListener("mousedown", onDown);
+      window.removeEventListener("pointerdown", onPointerDown, true);
+      window.removeEventListener("mousedown", onMouseDown);
       window.removeEventListener("keydown", onEsc);
     };
   }, [open, onClose, anchorRef]);
@@ -122,7 +128,7 @@ export default function ToolPopover({
       const anchorLocalLeft = a.left - left;
       const centerBased = anchorLocalLeft + a.width / 2 - w / 2;
 
-      let capLeft = centerBased + capOffsetX; 
+      let capLeft = centerBased + capOffsetX;
       if (capAlign === "flush-left") capLeft = anchorLocalLeft - capPad + capOffsetX;
 
       setCapVars({ w, h, left: capLeft });
@@ -147,30 +153,28 @@ export default function ToolPopover({
     anchorRef.current,
   ]);
 
-    const node = (
-        <div
-        ref={boxRef}
-        className={`${styles.container} ${className ?? ""}`}
-        style={{
-            top: pos.top,
-            left: pos.left,
-            "--cap-w": `${capVars.w}px`,
-            "--cap-h": `${capVars.h}px`,
-            "--cap-left": `${capVars.left}px`,
-            "--seam-overlap": `${seamOverlap}px`,
-        } as React.CSSProperties}
-        data-side={side}
-        data-align={align}
-        data-cap={cap ? "1" : "0"}
-        >
-
-        {cap && side === "bottom" && <div className={styles.cap} />}
-    
-        <div className={styles.panel}>
-            <div className={styles.content}>{children}</div>
-        </div>
-        </div>
-    );
+  const node = (
+    <div
+      ref={boxRef}
+      className={`${styles.container} ${className ?? ""}`}
+      style={{
+        top: pos.top,
+        left: pos.left,
+        "--cap-w": `${capVars.w}px`,
+        "--cap-h": `${capVars.h}px`,
+        "--cap-left": `${capVars.left}px`,
+        "--seam-overlap": `${seamOverlap}px`,
+      } as React.CSSProperties}
+      data-side={side}
+      data-align={align}
+      data-cap={cap ? "1" : "0"}
+    >
+      {cap && side === "bottom" && <div className={styles.cap} />}
+      <div className={styles.panel}>
+        <div className={styles.content}>{children}</div>
+      </div>
+    </div>
+  );
 
   if (!mounted) return null;
   return open ? createPortal(node, document.body) : null;
