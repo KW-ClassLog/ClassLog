@@ -35,17 +35,14 @@ public class RedisMessageSubscriber implements MessageListener {
             System.out.println(channel);
             String[] parts = channel.split(":");
             String lectureId = parts[1];
-            String role = parts[2];
 
-            System.out.println("lectureId = " + lectureId);
-            System.out.println("role = " + role);
             String body = new String(message.getBody());
 
             // JSON -> DTO 역직렬화
             MessageRequestDTO.MessageDTO chatMessage = objectMapper.readValue(body, MessageRequestDTO.MessageDTO.class);
 
             // subscriber에게 STOMP 메시지 전송
-            simpMessageSendingOperations.convertAndSend("/sub/lecture/"+ lectureId+"/"+role, chatMessage);
+            simpMessageSendingOperations.convertAndSend("/sub/lecture/"+ lectureId, chatMessage);
         } catch (Exception e) {
             log.error("Redis 메시지 수신 실패", e);
         }
