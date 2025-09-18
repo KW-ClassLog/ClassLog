@@ -122,6 +122,10 @@ public class QuestionServiceImpl implements QuestionService {
                 // JSON -> DTO
                 QuestionResponseDTO.afterChatting dto = objectMapper.readValue(raw, QuestionResponseDTO.afterChatting.class);
 
+                // 강사 메시지 저장 X
+                if(dto.getRole() == Role.TEACHER){
+                    continue;
+                }
                 // DTO -> Entity
                 User user = userRepository.findById(dto.getSenderId())
                         .orElseThrow(() -> new UserException(UserErrorCode._USER_NOT_FOUND));
@@ -129,7 +133,7 @@ public class QuestionServiceImpl implements QuestionService {
                 Question question = questionConverter.toQuestion(dto,lecture,user);
 
                 // Entity -> list에 넣기
-                if(question != null) questionEntities.add(question);
+                questionEntities.add(question);
             }
             catch (JsonProcessingException e){
                 throw new QuestionException(QuestionErrorCode._INVALID_JSON_FORMAT);

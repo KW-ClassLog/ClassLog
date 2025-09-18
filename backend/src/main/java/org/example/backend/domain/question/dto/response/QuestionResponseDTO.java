@@ -52,7 +52,7 @@ public class QuestionResponseDTO {
         private String content;
         private LocalDateTime timestamp;
         private UUID senderId;
-        private Role senderRole;
+        private Role role;
     }
 
 }

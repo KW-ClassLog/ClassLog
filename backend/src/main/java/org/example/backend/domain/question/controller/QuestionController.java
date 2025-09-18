@@ -45,8 +45,8 @@ public class QuestionController {
 
     // 채팅 내용 저장하기
     @PostMapping("/chatting/after/{lectureId}")
-    public ApiResponse<Void> afterChatting(@PathVariable("lectureId") UUID lectureId) {
+    public ApiResponse<String> afterChatting(@PathVariable("lectureId") UUID lectureId) {
         questionService.saveChatting(lectureId);
-        return null;
+        return ApiResponse.onSuccess(null);
     }
 }

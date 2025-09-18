@@ -37,10 +37,6 @@ public class QuestionConverter {
     }
 
     public Question toQuestion(QuestionResponseDTO.afterChatting dto, Lecture lecture, User user) {
-        if(dto.getSenderRole() == Role.TEACHER){
-            return null;
-        }
-
         return Question.builder()
                 .lecture(lecture)
                 .timestamp(dto.getTimestamp())
