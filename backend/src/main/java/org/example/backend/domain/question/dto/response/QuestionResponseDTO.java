@@ -44,4 +44,15 @@ public class QuestionResponseDTO {
         private Role role;
     }
 
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class afterChatting {
+        private String content;
+        private LocalDateTime timestamp;
+        private UUID senderId;
+        private Role senderRole;
+    }
+
 }

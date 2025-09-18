@@ -1,9 +1,12 @@
 package org.example.backend.domain.question.converter;
 
 import lombok.RequiredArgsConstructor;
+import org.example.backend.domain.lecture.entity.Lecture;
 import org.example.backend.domain.question.dto.response.QuestionResponseDTO;
 import org.example.backend.domain.question.entity.Question;
+import org.example.backend.domain.user.entity.Role;
 import org.example.backend.domain.user.entity.SocialType;
+import org.example.backend.domain.user.entity.User;
 import org.example.backend.global.S3.service.S3Service;
 import org.springframework.stereotype.Component;
 
@@ -30,6 +33,19 @@ public class QuestionConverter {
         return QuestionResponseDTO.student.builder()
                 .content(question.getContent())
                 .timestamp(question.getTimestamp())
+                .build();
+    }
+
+    public Question toQuestion(QuestionResponseDTO.afterChatting dto, Lecture lecture, User user) {
+        if(dto.getSenderRole() == Role.TEACHER){
+            return null;
+        }
+
+        return Question.builder()
+                .lecture(lecture)
+                .timestamp(dto.getTimestamp())
+                .content(dto.getContent())
+                .user(user)
                 .build();
     }
 }
