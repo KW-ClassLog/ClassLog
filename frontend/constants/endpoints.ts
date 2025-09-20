@@ -68,6 +68,8 @@ export const ENDPOINTS = {
       `${BASE_API}/lectures/teacher/today?date=${date}`,
     GET_STUDENT_LECTURES_BY_DATE: (date: string) =>
       `${BASE_API}/lectures/student/today?date=${date}`,
+    GET_STUDENT_LECTURE_DETAIL: (lectureId: string) =>
+      `${BASE_API}/lectures/student/${lectureId}`,
 
     // 노트 관련
     UPLOAD_NOTE: (classId: string) =>
