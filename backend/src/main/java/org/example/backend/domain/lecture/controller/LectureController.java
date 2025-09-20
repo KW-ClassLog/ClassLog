@@ -101,4 +101,17 @@ public class LectureController {
         return ApiResponse.onSuccess(result);
     }
 
+    // lecture id로 class id 조회
+    @GetMapping("/classes/{lectureId}")
+    public ApiResponse<ClassNameResponseDTO> getClassId(@PathVariable("lectureId") UUID lectureId) {
+        ClassNameResponseDTO result = lectureService.getClassId(lectureId);
+        return ApiResponse.onSuccess(result);
+    }
+
+    // 학생용 강의 조회
+    @GetMapping("/student/{lectureId}")
+    public ApiResponse<LectureResponseDTO> getStudnetLecture(@PathVariable("lectureId") UUID lectureId) {
+        LectureResponseDTO result = lectureStudentService.getLecture(lectureId);
+        return ApiResponse.onSuccess(result);
+    }
 }
