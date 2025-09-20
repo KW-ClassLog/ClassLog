@@ -2,8 +2,8 @@
 import React, { useEffect, useState } from "react";
 import styles from "./LectureInfoSection.module.scss";
 import { BookOpenText, Calendar, Clock } from "lucide-react";
-import { fetchLectureDetail } from "@/api/lectures/fetchLectureDetail";
-import { FetchLectureDetailResult } from "@/types/lectures/fetchLectureDetailTypes";
+import { fetchStudentLectureDetail } from "@/api/lectures/fetchStudentLectureDetail";
+import { FetchStudentLectureDetailResult } from "@/types/lectures/fetchStudentLectureDetailTypes";
 import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
 import NoDataView from "@/components/NoDataView/NoDataView";
 import {
@@ -20,7 +20,7 @@ export default function LectureInfoSection({
 }: LectureInfoSectionProps) {
   const { setLectureStatus } = useLectureStatusStore();
   const [lectureData, setLectureData] =
-    useState<FetchLectureDetailResult | null>(null);
+    useState<FetchStudentLectureDetailResult | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -28,7 +28,7 @@ export default function LectureInfoSection({
     const loadLectureData = async () => {
       try {
         setLoading(true);
-        const response = await fetchLectureDetail(lectureId);
+        const response = await fetchStudentLectureDetail(lectureId);
         if (response.isSuccess && response.result) {
           setLectureData(response.result);
           setLectureStatus(response.result.status as LectureStatus);
@@ -50,8 +50,9 @@ export default function LectureInfoSection({
         return "강의 전";
       case "onLecture":
         return "강의 중";
-      case "makeQuiz":
-      case "checkDashboard":
+      case "afterLectureBeforeQuiz":
+      case "quizReadyForSubmission":
+      case "viewMyQuizResult":
         return "강의 종료";
       default:
         return "강의 중";
