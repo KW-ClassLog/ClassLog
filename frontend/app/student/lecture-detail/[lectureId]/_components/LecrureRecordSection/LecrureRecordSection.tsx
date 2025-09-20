@@ -27,11 +27,12 @@ export default function LecrureRecordSection({
       case "beforeLecture":
       case "onLecture":
         return "강의가 종료된 후 강의 녹음을 확인할 수 있습니다. ";
-      case "makeQuiz":
-      case "checkDashboard":
+      case "afterLectureBeforeQuiz":
+      case "quizReadyForSubmission":
+      case "viewMyQuizResult":
         return null;
       default:
-        return "강의 중";
+        return "강의가 종료된 후 강의 녹음을 확인할 수 있습니다. ";
     }
   };
 
