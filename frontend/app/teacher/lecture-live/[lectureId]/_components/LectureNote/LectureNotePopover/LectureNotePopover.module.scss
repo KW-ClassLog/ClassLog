@@ -1,0 +1,85 @@
+@import "@/styles/variables";
+
+.wrap {
+  min-width: 260px;
+  padding: 8px 10px;
+}
+
+.list {
+  display: grid;
+  gap: 6px;
+  padding: 8px 10px;
+  background: transparent;
+  border-radius: $radius-xl;
+}
+
+.row {
+  appearance: none;
+  -webkit-appearance: none;
+  border: none;
+  outline: none;
+
+  font: inherit;
+  color: inherit;
+
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 2px;
+  padding: 8px 10px;
+
+  background: transparent;
+  border-radius: 12px;
+  cursor: pointer;
+
+  &:hover { background: #f7fafc; }
+  & + & { border-top: none; }
+}
+
+.active {
+  outline: none;
+  box-shadow: 0 0 0 2px $color-blue inset;
+  background: #f7fafc;
+}
+
+.footer {
+  margin-top: 8px;
+  display: flex;
+  justify-content: center;
+}
+
+.divider {
+    height: 1px;
+    background: rgba(0,0,0,0.06);
+    margin: 5px;
+  }
+
+.uploadBtn {
+  width: 100%;
+  height: 40px;
+
+  appearance: none;
+  -webkit-appearance: none;
+  border: none;
+  outline: none;
+
+  background: transparent;
+  color: $color-neutral-4;
+  font-weight: $font-weight-medium;
+  cursor: pointer;
+  font: inherit;
+}
+
+.row :global(.fileDisplayContainer) { gap: 8px; }
+.row :global(.fileIconContainer) {
+  width: 28px;
+  height: 28px;
+  background: transparent !important;
+  border: none !important;
+}
+.row :global(.fileIconContainer) .icon { width: 18px; height: 18px; }
+.row :global(.fileName) {
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+}

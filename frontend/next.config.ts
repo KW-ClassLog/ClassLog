@@ -17,6 +17,15 @@ const nextConfig: NextConfig = {
     @use "@/styles/_variables.scss" as *;
     @use "@/styles/_mixins.scss" as *;`,
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'kwclasslog.s3.ap-southeast-2.amazonaws.com',
+        pathname: '/**',
+      },
+    ],
+  },
 };
 
 export default nextPWA(nextConfig);

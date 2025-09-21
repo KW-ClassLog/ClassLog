@@ -9,6 +9,8 @@ import MakeQuizModal from "@/components/Modal/MakeQuizModal/MakeQuizModal";
 import { FetchLectureDetailResult } from "@/types/lectures/fetchLectureDetailTypes";
 import { fetchLectureDetail } from "@/api/lectures/fetchLectureDetail";
 import { useLectureDetail } from "../LectureDetailContext";
+import { useRouter } from "next/navigation";
+import { ROUTES } from "@/constants/routes";
 
 export default function LectureHeader() {
   const { lectureId, setClassId, refreshKey } = useLectureDetail();
@@ -16,6 +18,8 @@ export default function LectureHeader() {
     useState<FetchLectureDetailResult | null>(null);
   const [showQuizModal, setShowQuizModal] = useState(false);
   const [loading, setLoading] = useState(true);
+
+  const router = useRouter();
 
   const fetchData = useCallback(async () => {
     try {
@@ -43,8 +47,7 @@ export default function LectureHeader() {
   }, [lectureId, setClassId, fetchData, refreshKey]);
 
   const handleStartLecture = () => {
-    // TODO: 강의 시작 로직 구현
-    console.log("강의 시작");
+    router.push(ROUTES.teacherLectureLive(lectureId));
   };
 
   const handleQuizModalClose = () => {

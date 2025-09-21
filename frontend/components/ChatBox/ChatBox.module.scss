@@ -43,4 +43,16 @@
       }
     }
   }
+  
+  &.teacher {
+    .messageContainer {
+      background: $color-skyblue;
+    }
+  }
+
+  &.student {
+    .messageContainer {
+      background: $color-white;
+    }
+  }
 }
