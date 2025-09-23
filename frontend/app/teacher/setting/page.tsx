@@ -2,11 +2,15 @@
 
 import React, { useState, useEffect } from 'react';
 import styles from './page.module.scss';
+import Image from "next/image";
 import { useRouter } from 'next/navigation';
 import { ChevronDown, ChevronRight, ChevronLeft } from 'lucide-react';
 import { ChangeEvent } from "react";
 import { fetchNotificationSetting } from '@/api/notifications/fetchNotificationSetting';
 import { updateNotificationSetting } from '@/api/notifications/updateNotificationSetting';
+import { getProfile } from '@/api/users/getProfile';
+import { GetProfileResult } from '@/types/users/getProfileTypes';
+import { IMAGES } from '@/constants/images';
 
 interface NotiSetting {
     quizUpload: boolean;
@@ -33,6 +37,26 @@ export default function TeacherSettingPage() {
         recordUpload: false,
     });
 
+    const [userProfile, setUserProfile] = useState<GetProfileResult | null>(null);
+    const [isLoadingProfile, setIsLoadingProfile] = useState(true);
+
+    useEffect(() => {
+        const fetchUserProfile = async () => {
+            try {
+                setIsLoadingProfile(true);
+                const response = await getProfile();
+                if (response.isSuccess && response.result) {
+                    setUserProfile(response.result);
+                }
+            } catch (error) {
+                console.error("Failed to fetch user profile:", error);
+            } finally {
+                setIsLoadingProfile(false);
+            }
+        };
+
+        fetchUserProfile();
+    }, []);
 
     const handleToggleChange = async (e: ChangeEvent<HTMLInputElement>) => {
         const { name, checked } = e.target as HTMLInputElement;
@@ -80,27 +104,33 @@ export default function TeacherSettingPage() {
         <div className={styles.container}>
             <header className={styles.header}>
                 <button className={styles.backButton} onClick={() => router.back()}>
-                    <ChevronLeft size={24} />
+                    <ChevronLeft size={24}/>
                 </button>
                 프로필
             </header>
             <div className={styles.profileCard}>
-                <img
-                    src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
+                <Image
+                    src={userProfile?.profile || IMAGES.defaultProfile}
                     alt="프로필 사진"
                     className={styles.avatar}
+                    width={50}
+                    height={50}
                 />
                 <div className={styles.profileInfo}>
-                    <p className={styles.name}>손아현</p>
-                    <p className={styles.role}>학생</p>
+                    <p className={styles.name}>
+                        {isLoadingProfile ? "로딩 중..." : userProfile?.name ?? "사용자"}
+                    </p>
+                    <p className={styles.role}>
+                        {isLoadingProfile ? "" : userProfile?.organization ?? "기관"}
+                    </p>
                 </div>
-                <ChevronRight color="white" />
+                <ChevronRight color="white"/>
             </div>
 
             <div className={styles.menuList}>
                 <div className={styles.menuItemWithArrow} onClick={toggleNotification}>
                     <span>알림 설정</span>
-                    <ChevronDown className={`${styles.arrow} ${isNotificationOpen ? styles.open : ''}`} />
+                    <ChevronDown className={`${styles.arrow} ${isNotificationOpen ? styles.open : ''}`}/>
                 </div>
 
                 {isNotificationOpen && (
