@@ -29,6 +29,14 @@ export default function PageThumbsSidebar({
   const [pdfCount, setPdfCount] = useState<number>(0);
   const [pptxCount, setPptxCount] = useState<number>(0);
 
+  if (!fileUrl) {
+    return (
+      <div className={styles.wrap}>
+        <div className={styles.placeholder}>썸네일을 표시할 문서가 없습니다.</div>
+      </div>
+    );
+  }
+
   useEffect(() => {
     if (type !== "pptx") return;
     (async () => {

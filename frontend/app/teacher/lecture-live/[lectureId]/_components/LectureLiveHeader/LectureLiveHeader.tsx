@@ -1,22 +1,19 @@
 "use client";
 
-import { useState, useRef, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import styles from "./LectureLiveHeader.module.scss";
 import FitContentButton from "@/components/Button/FitContentButton/FitContentButton";
-import IconButton from "@/components/Button/IconButton/IconButton";
 import { DocumentSideButtonConnected } from "../DocumentSideButton/DocumentSideButton";
 import PenToolButtons from "../PenTool/PenToolButtons/PenToolButtons";
 import { useLive } from "../LectureLiveProvider";
-import { FileText } from "lucide-react";
-import ToolPopover from "../ToolPopover/ToolPopover";
-import LectureNotePopover from "../LectureNote/LectureNotePopover/LectureNotePopover";
 import ChatingButton from "../Chating/ChatingButton/ChatingButton";
 import RecordingButton from "../Recording/RecordingButton/RecordingButton";
 import ConfirmModal from "@/components/Modal/ConfirmModal/ConfirmModal";
 import { getRecordingEngine, type RecState } from "../Recording/recordingEngine";
 import { ROUTES } from "@/constants/routes";
 import { Tool } from "../LectureLiveProvider";
+import LectureNoteButton from "../LectureNote/LectureNoteButton/LectureNoteButton";
 
 export default function LectureLiveHeader({
   onToggleChat,
@@ -28,8 +25,6 @@ export default function LectureLiveHeader({
   onEndLecture?: () => void;
 }) {
   const { tool, setTool } = useLive();
-  const docBtnRef = useRef<HTMLSpanElement>(null);
-  const [openDoc, setOpenDoc] = useState(false);
 
   const [endOpen, setEndOpen] = useState(false);
 
@@ -75,23 +70,7 @@ export default function LectureLiveHeader({
         <div className={styles.left}>
           <DocumentSideButtonConnected />
 
-          <span ref={docBtnRef} className={styles.docBtnZ}>
-            <IconButton
-              ariaLabel="문서 불러오기"
-              onClick={() => setOpenDoc((v) => !v)}
-              icon={<FileText />}
-            />
-          </span>
-
-          <ToolPopover
-            open={openDoc}
-            anchorRef={docBtnRef}
-            onClose={() => setOpenDoc(false)}
-            align="start"
-            side="bottom"
-          >
-            <LectureNotePopover onPicked={() => setOpenDoc(false)} />
-          </ToolPopover>
+          <LectureNoteButton />
 
           <span className={styles.divider} />
           <PenToolButtons value={tool} onChange={selectTool} />

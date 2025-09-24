@@ -61,9 +61,9 @@ export function LectureLiveProvider({ children }: { children: React.ReactNode })
   });
 
   const [doc, setDocState] = useState<DocState>({
-    url: "/file/기말보고서_졸업을하자.pdf",
-    type: "pdf",
-    name: "기말보고서_졸업을하자.pdf",
+    url: "",
+    type: "unknown",
+    name: "",
   });
 
   const drawStoreRef = useRef<Map<number, HTMLCanvasElement>>(new Map());

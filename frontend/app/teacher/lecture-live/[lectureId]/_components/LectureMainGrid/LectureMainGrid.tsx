@@ -5,6 +5,7 @@ import styles from "./LectureMainGrid.module.scss";
 import { useLive } from "../LectureLiveProvider";
 import ChatPanel from "../Chating/ChatingPanel/ChatingPanel";
 import dynamic from "next/dynamic";
+import { FileText } from "lucide-react";
 
 const PageThumbsSidebar = dynamic(
   () => import("../LectureNote/PageThumbsSidebar/PageThumbsSidebar"),
@@ -27,7 +28,7 @@ export default function LectureMainGrid() {
   const [currentPage, setCurrentPage] = useState(0);
 
   const resolvedType: "pdf" | "pptx" | undefined =
-  doc.type === "pdf" || doc.type === "pptx" ? doc.type : undefined;
+    doc.type === "pdf" || doc.type === "pptx" ? doc.type : undefined;
 
   useEffect(() => {
     const resetOnDocChange = () => setCurrentPage(0);
@@ -44,6 +45,7 @@ export default function LectureMainGrid() {
 
     const onKey = (e: KeyboardEvent) => {
       if (isTypingTarget(e.target)) return;
+      if (!doc.url) return;
 
       if (e.key === " " || e.key === "Enter" || e.key === "ArrowRight" || e.key === "ArrowDown") {
         e.preventDefault();
@@ -58,6 +60,21 @@ export default function LectureMainGrid() {
     return () => window.removeEventListener("keydown", onKey);
   }, [count, doc.url]);
 
+  const EmptyState = (
+    <div className={styles.empty}>
+      <div className={styles.emptyCard} role="note" aria-live="polite">
+        <div className={styles.emptyTitle}>강의자료가 선택되지 않았어요</div>
+        <div className={styles.emptyDesc}>
+          상단의 {" "}
+          <span className={styles.inlineIconWrap} aria-label=" 강의자료 버튼 아이콘">
+            <FileText aria-hidden="true" className={styles.inlineIcon} />
+          </span>
+          버튼을 눌러 자료를 선택해 주세요.
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <main
       className={styles.grid}
@@ -69,24 +86,36 @@ export default function LectureMainGrid() {
       }
     >
       <aside className={styles.left}>
-        <PageThumbsSidebar
-          fileUrl={doc.url}
-          typeOverride={resolvedType}
-          currentPage={currentPage}
-          onSelect={setCurrentPage}
-          onCountChange={setCount}
-        />
+        {doc.url ? (
+          <PageThumbsSidebar
+            fileUrl={doc.url}
+            typeOverride={resolvedType}
+            currentPage={currentPage}
+            onSelect={setCurrentPage}
+            onCountChange={setCount}
+          />
+        ) : (
+          <div className={styles.leftEmpty}>
+            <span>강의자료 선택 후 썸네일이 표시됩니다.</span>
+          </div>
+        )}
       </aside>
 
       <section className={styles.center} data-live-center>
-        <DocumentViewer
-          fileUrl={doc.url}
-          typeOverride={resolvedType}
-          currentPage={currentPage}
-          onChangePage={setCurrentPage}
-          onLoad={setCount}
-        />
-        <DrawingCanvasOverlay currentPage={currentPage} />
+        {doc.url ? (
+          <>
+            <DocumentViewer
+              fileUrl={doc.url}
+              typeOverride={resolvedType}
+              currentPage={currentPage}
+              onChangePage={setCurrentPage}
+              onLoad={setCount}
+            />
+            <DrawingCanvasOverlay currentPage={currentPage} />
+          </>
+        ) : (
+          EmptyState
+        )}
       </section>
 
       <aside className={styles.right}>
