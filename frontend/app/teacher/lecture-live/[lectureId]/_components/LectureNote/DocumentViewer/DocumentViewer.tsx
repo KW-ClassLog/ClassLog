@@ -6,21 +6,13 @@ import dynamic from "next/dynamic";
 import { DocType } from "../../LectureLiveProvider";
 import type { PageProps } from "react-pdf";
 
-
 const PDFDocument = dynamic(() => import("react-pdf").then(m => m.Document), { ssr: false });
-const PDFPage = dynamic(() => import("react-pdf").then(m => m.Page),     { ssr: false });
+const PDFPage = dynamic(() => import("react-pdf").then(m => m.Page), { ssr: false });
 
 export function getDocType(url: string): DocType {
   const m = url.split("?")[0].toLowerCase();
   if (m.endsWith(".pdf")) return "pdf";
-  if (m.endsWith(".pptx")) return "pptx";
   return "unknown";
-}
-
-export function toAbsoluteUrl(pathOrUrl: string) {
-  if (/^https?:\/\//i.test(pathOrUrl)) return pathOrUrl;
-  if (typeof window === "undefined") return pathOrUrl;
-  return new URL(pathOrUrl, window.location.origin).toString();
 }
 
 export default function DocumentViewer({
@@ -66,6 +58,7 @@ export default function DocumentViewer({
       setStageW(el.clientWidth - padX);
       setStageH(el.clientHeight - padY);
     };
+    
     measure();
     const ro = new ResizeObserver(measure);
     ro.observe(el);
@@ -84,7 +77,7 @@ export default function DocumentViewer({
     if (currentPage > numPages - 1) onChangePage(numPages - 1);
   };
 
-const handlePageLoad: NonNullable<PageProps["onLoadSuccess"]> = (page) => {
+  const handlePageLoad: NonNullable<PageProps["onLoadSuccess"]> = (page) => {
     if (type !== "pdf") return;
     const vp = page.getViewport({ scale: 1 });
     setNaturalW(vp.width);
@@ -100,7 +93,6 @@ const handlePageLoad: NonNullable<PageProps["onLoadSuccess"]> = (page) => {
     <div className={styles.viewer}>
       <div ref={stageRef} className={styles.stage}>
         <div className={styles.docBox} data-doc-box style={docBoxStyle}>
-          {type === "pdf" && (
             <PDFDocument file={fileUrl} onLoadSuccess={handleDocLoad} loading="로딩 중…">
               <PDFPage
                 pageNumber={currentPage + 1}
@@ -110,17 +102,6 @@ const handlePageLoad: NonNullable<PageProps["onLoadSuccess"]> = (page) => {
                 onLoadSuccess={handlePageLoad}
               />
             </PDFDocument>
-          )}
-
-          {type === "pptx" && (
-            <iframe
-              title="PPTX Viewer"
-              className={styles.pptxFrame}
-              src={`https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(
-                toAbsoluteUrl(fileUrl)
-              )}`}
-            />
-          )}
         </div>
       </div>
     </div>

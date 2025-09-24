@@ -27,8 +27,8 @@ export default function LectureMainGrid() {
   const [count, setCount] = useState(1);
   const [currentPage, setCurrentPage] = useState(0);
 
-  const resolvedType: "pdf" | "pptx" | undefined =
-    doc.type === "pdf" || doc.type === "pptx" ? doc.type : undefined;
+  const resolvedType: "pdf" | undefined =
+    doc.type === "pdf" ? doc.type : undefined;
 
   useEffect(() => {
     const resetOnDocChange = () => setCurrentPage(0);

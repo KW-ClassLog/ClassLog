@@ -2,9 +2,10 @@
 
 import styles from "./LectureNotePopover.module.scss";
 import FileDisplay from "@/components/FileDisplay/FileDisplay";
-import { useLive } from "../../LectureLiveProvider";
+import { DocType, useLive } from "../../LectureLiveProvider";
+import { useState } from "react";
 
-type Item = { name: string; url: string; type: "pdf" | "pptx" };
+type Item = { name: string; url: string; type: DocType };
 
 interface Props {
   notes: {
@@ -19,8 +20,14 @@ interface Props {
 
 export default function LectureNotePopover({ notes, onPicked, onUploadRequest }: Props) {
   const { setDoc, doc } = useLive();
+  const [unsupportedFile, setUnsupportedFile] = useState<string | null>(null);
 
   const pick = (it: Item) => {
+    if (it.type !== "pdf") {
+      setUnsupportedFile(it.name);
+      return;
+    }
+    setUnsupportedFile(null);
     setDoc({ url: it.url, type: it.type, name: it.name });
     onPicked?.();
   };
@@ -34,7 +41,7 @@ export default function LectureNotePopover({ notes, onPicked, onUploadRequest }:
     <div className={styles.pop}>
       <div className={styles.list}>
         {notes.map((note) => {
-          const ext = note.lectureNoteName.toLowerCase().endsWith(".pptx") ? "pptx" : "pdf";
+          const ext = note.lectureNoteName.toLowerCase().endsWith(".pdf") ? "pdf" : "unknown";
           return (
             <div key={note.lectureNoteId}>
               <button
@@ -54,6 +61,13 @@ export default function LectureNotePopover({ notes, onPicked, onUploadRequest }:
           );
         })}
       </div>
+
+      {unsupportedFile && (
+        <div className={styles.unsupported}>
+          <strong>{unsupportedFile}</strong> 은(는) 지원하지 않습니다.<br />
+          PDF 파일만 선택할 수 있습니다.
+        </div>
+      )}
 
       <div className={styles.divider} />
 
