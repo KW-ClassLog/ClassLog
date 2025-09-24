@@ -8,14 +8,16 @@ import ConfirmModal from "@/components/Modal/ConfirmModal/ConfirmModal";
 import { AudioLines } from "lucide-react";
 import styles from "./RecordingButton.module.scss";
 import { getRecordingEngine } from "../recordingEngine";
+import { saveAudioFile } from "@/api/lectures/saveAudioFile";
+import { useParams } from "next/navigation";
 
 export default function RecordingButton() {
   const engine = useMemo(() => getRecordingEngine(), []);
   const anchorRef = useRef<HTMLSpanElement>(null);
+  const { lectureId } = useParams<{ lectureId: string }>();
 
   const [open, setOpen] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
-
 
   const [isRecording, setIsRecording] = useState(
     engine.getSnapshot().state === "recording"
@@ -25,6 +27,18 @@ export default function RecordingButton() {
     const off = engine.subscribe("state", (s) => setIsRecording(s === "recording"));
     return () => off();
   }, [engine]);
+
+  useEffect(() => {
+    const off = engine.subscribe("done", async (blob) => {
+      if (!lectureId) return;
+  
+      try {
+        await saveAudioFile(lectureId, blob);
+      } catch (err) {
+      }
+    });
+    return () => off();
+  }, [engine, lectureId]);
 
   const handleRequestConfirmStop = () => {
     setOpen(false);
@@ -57,16 +71,11 @@ export default function RecordingButton() {
         align="start"
         side="bottom"
       >
-        <RecordingPopover
-          onRequestConfirmStop={handleRequestConfirmStop}
-        />
+        <RecordingPopover onRequestConfirmStop={handleRequestConfirmStop} />
       </ToolPopover>
 
       {confirmOpen && (
-        <ConfirmModal
-          onConfirm={confirmStopAndSave}
-          onClose={cancelConfirm}
-        >
+        <ConfirmModal onConfirm={confirmStopAndSave} onClose={cancelConfirm}>
           확인 버튼을 누르면
           <br />
           이 강의의 녹음은 저장됩니다.

@@ -14,6 +14,7 @@ import { getRecordingEngine, type RecState } from "../Recording/recordingEngine"
 import { ROUTES } from "@/constants/routes";
 import { Tool } from "../LectureLiveProvider";
 import LectureNoteButton from "../LectureNote/LectureNoteButton/LectureNoteButton";
+import { saveAudioFile } from "@/api/lectures/saveAudioFile";
 
 export default function LectureLiveHeader({
   onToggleChat,
@@ -27,6 +28,8 @@ export default function LectureLiveHeader({
   const { tool, setTool } = useLive();
 
   const [endOpen, setEndOpen] = useState(false);
+  const [saving, setSaving] = useState(false);
+
 
   const engine = useMemo(() => getRecordingEngine(), []);
   const [recState, setRecState] = useState<RecState>(engine.getSnapshot().state);
@@ -51,14 +54,33 @@ export default function LectureLiveHeader({
   const handleConfirmEnd = async () => {
     if (isRecording) {
       try {
-        await engine.stop();
+        setSaving(true); // 저장 중 표시
+        await new Promise<void>((resolve, reject) => {
+          const off = engine.subscribe("done", async (blob, url) => {
+            try {
+              if (lectureId) {
+                await saveAudioFile(lectureId, blob);
+                console.log("🎤 녹음 파일 저장 완료");
+              }
+              off();
+              resolve();
+            } catch (e) {
+              console.error("❌ 녹음 파일 저장 실패:", e);
+              reject(e);
+            }
+          });
+
+          engine.stop().catch(reject);
+        });
       } catch (e) {
-        console.error(e);
+        console.error("녹음 종료 중 오류:", e);
+      } finally {
+        setSaving(false);
       }
     }
+
     setEndOpen(false);
     onEndLecture?.();
-
     router.push(ROUTES.teacherLectureDetail(lectureId));
   };
 
@@ -92,8 +114,13 @@ export default function LectureLiveHeader({
       </div>
 
       {endOpen && (
-        <ConfirmModal onConfirm={handleConfirmEnd} onClose={handleCancelEnd}>
-          {isRecording ? (
+        <ConfirmModal
+          onConfirm={handleConfirmEnd}
+          onClose={handleCancelEnd}
+        >
+          {saving ? (
+            <>녹음 파일 저장 중입니다... ⏳</>
+          ) : isRecording ? (
             <>
               지금 녹음이 진행 중입니다.
               <br />
