@@ -34,7 +34,8 @@ export default function RecordingButton() {
   
       try {
         await saveAudioFile(lectureId, blob);
-      } catch (err) {
+      } catch(e) {
+        console.error(e);
       }
     });
     return () => off();

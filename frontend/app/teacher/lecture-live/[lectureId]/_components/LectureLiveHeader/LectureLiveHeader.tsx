@@ -54,9 +54,9 @@ export default function LectureLiveHeader({
   const handleConfirmEnd = async () => {
     if (isRecording) {
       try {
-        setSaving(true); // 저장 중 표시
+        setSaving(true);
         await new Promise<void>((resolve, reject) => {
-          const off = engine.subscribe("done", async (blob, url) => {
+          const off = engine.subscribe("done", async (blob) => {
             try {
               if (lectureId) {
                 await saveAudioFile(lectureId, blob);
