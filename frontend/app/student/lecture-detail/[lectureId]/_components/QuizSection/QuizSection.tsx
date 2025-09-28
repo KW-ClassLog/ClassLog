@@ -4,20 +4,27 @@ import { useLectureStatusStore } from "@/store/useLectureStatusStore";
 import dayjs from "dayjs";
 import { fetchQuizList } from "@/api/quizzes/fetchQuizList";
 import { fetchQuizListResult } from "@/types/quizzes/fetchQuizListTypes";
+import { submitQuiz } from "@/api/quizzes/submitQuiz";
+import { SubmitQuizRequest } from "@/types/quizzes/submitQuizTypes";
 import QuizToggleCard from "@/components/QuizToggleCard/QuizToggleCard";
 import styles from "./QuizSection.module.scss";
 import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
 import NoDataView from "@/components/NoDataView/NoDataView";
+import AlertModal from "@/components/Modal/AlertModal/AlertModal";
 import { CheckCircle, Clock } from "lucide-react";
 import FullWidthButton from "@/components/Button/FullWidthButton/FullWidthButton";
 
 interface QuizSectionProps {
   lectureId: string;
+  onRefresh?: () => void;
 }
 
 export type QuizStatus = "notYet" | "solve" | "waitingResult" | "viewResult";
 
-export default function QuizSection({ lectureId }: QuizSectionProps) {
+export default function QuizSection({
+  lectureId,
+  onRefresh,
+}: QuizSectionProps) {
   const { lectureStatus, lectureDate } = useLectureStatusStore();
   const [quizStatus, setQuizStatus] = useState<QuizStatus>("notYet");
   const [quizData, setQuizData] = useState<fetchQuizListResult | null>(null);
@@ -25,6 +32,10 @@ export default function QuizSection({ lectureId }: QuizSectionProps) {
     {}
   );
   const [loading, setLoading] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [showResultModal, setShowResultModal] = useState(false);
+  const [resultMessage, setResultMessage] = useState("");
+  const [refreshKey, setRefreshKey] = useState(0);
 
   useEffect(() => {
     const canViewResult = () => {
@@ -91,6 +102,37 @@ export default function QuizSection({ lectureId }: QuizSectionProps) {
     }));
   };
 
+  // 퀴즈 제출 핸들러
+  const handleSubmitQuiz = async () => {
+    if (!quizData) return;
+
+    setSubmitting(true);
+    try {
+      const submitData: SubmitQuizRequest = {
+        answers: Object.entries(userAnswers).map(([quizId, answer]) => ({
+          quizId,
+          answer,
+        })),
+      };
+
+      const response = await submitQuiz(submitData);
+
+      if (response.isSuccess && response.result) {
+        setResultMessage(
+          `성공적으로 제출되었습니다. 12시 이후 퀴즈 결과를 확인할 수 있습니다.`
+        );
+      } else {
+        setResultMessage(response.message || "퀴즈 제출에 실패했습니다.");
+      }
+    } catch (error) {
+      console.error("퀴즈 제출 오류:", error);
+      setResultMessage("퀴즈 제출 중 오류가 발생했습니다.");
+    } finally {
+      setSubmitting(false);
+      setShowResultModal(true);
+    }
+  };
+
   if (loading) {
     return <LoadingSpinner text="퀴즈를 불러오는 중..." />;
   }
@@ -132,7 +174,7 @@ export default function QuizSection({ lectureId }: QuizSectionProps) {
   }
 
   return (
-    <div className={styles.quizSection}>
+    <div key={refreshKey} className={styles.quizSection}>
       {quizStatus === "solve" && quizData && (
         <div className={styles.quizContainer}>
           {quizData.quizzes.map((quiz) => (
@@ -158,14 +200,27 @@ export default function QuizSection({ lectureId }: QuizSectionProps) {
       )}
       <div className={styles.buttonContainer}>
         <FullWidthButton
-          onClick={() => {}}
+          onClick={handleSubmitQuiz}
           disabled={
-            Object.keys(userAnswers).length !== quizData?.quizzes.length
+            Object.keys(userAnswers).length !== quizData?.quizzes.length ||
+            submitting
           }
         >
-          퀴즈 제출
+          {submitting ? "제출 중..." : "퀴즈 제출"}
         </FullWidthButton>
       </div>
+
+      {showResultModal && (
+        <AlertModal
+          onClose={() => {
+            setShowResultModal(false);
+            setRefreshKey((prev) => prev + 1);
+            onRefresh?.();
+          }}
+        >
+          {resultMessage}
+        </AlertModal>
+      )}
     </div>
   );
 }
