@@ -1,6 +1,6 @@
 "use client";
 import { useParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import LectureInfoSection from "./_components/LectureInfoSection/LectureInfoSection";
 import LectureNoteListSection from "./_components/LectureNoteListSection/LectureNoteListSection";
 import QuestionListSection from "./_components/QuestionListSection/QuestionListSection";
@@ -9,6 +9,7 @@ import QuizSection from "./_components/QuizSection/QuizSection";
 import style from "./page.module.scss";
 import Tab from "@/components/Tab/Tab";
 import { useClassTitleStore } from "@/store/useClassTitleStore";
+import { fetchClassNameByLectureId } from "@/api/classes/fetchClassNameByLectureId";
 
 export default function StudentLectureDetailPage() {
   const params = useParams();
@@ -17,7 +18,18 @@ export default function StudentLectureDetailPage() {
   const [selectedTab, setSelectedTab] = useState(0);
   const [quizRefreshKey, setQuizRefreshKey] = useState(0);
 
-  // TODO: lectureId로 클래스타이틀 불러오고, 이를 setClassTitle 이용해서 스토어에 저장해야 함
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetchClassNameByLectureId(lectureId);
+        if (res.isSuccess) {
+          setClassTitle(res.result?.className || "");
+        }
+      } catch (error) {
+        console.error("클래스 이름을 불러오는 중 오류 발생:", error);
+      }
+    })();
+  }, [lectureId, setClassTitle]);
 
   const tabs = ["수업 자료", "질문하기", "강의 녹음", "복습 퀴즈"];
 

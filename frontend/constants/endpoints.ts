@@ -48,6 +48,7 @@ export const ENDPOINTS = {
     GET_ALL_NOTES: (classId: string) => `${BASE_API}/classes/${classId}/notes`,
     GET_MY_CLASSES: `${BASE_API}/classes/teacher/myclass`,
     GET_QUIZZES: (classId: string) => `${BASE_API}/classes/${classId}/quiz`,
+    GET_CLASS_NAME: (lectureId: string) => `${BASE_API}/classes/${lectureId}`,
   },
 
   // 학생 클래스 관련

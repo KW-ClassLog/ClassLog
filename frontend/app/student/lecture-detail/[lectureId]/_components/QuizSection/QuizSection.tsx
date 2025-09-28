@@ -1,18 +1,28 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useLectureStatusStore } from "@/store/useLectureStatusStore";
 import dayjs from "dayjs";
+import { CheckCircle, Clock } from "lucide-react";
+
+// API
 import { fetchQuizList } from "@/api/quizzes/fetchQuizList";
-import { fetchQuizListResult } from "@/types/quizzes/fetchQuizListTypes";
 import { submitQuiz } from "@/api/quizzes/submitQuiz";
+
+// Types
+import { fetchQuizListResult } from "@/types/quizzes/fetchQuizListTypes";
 import { SubmitQuizRequest } from "@/types/quizzes/submitQuizTypes";
+
+// Components
 import QuizToggleCard from "@/components/QuizToggleCard/QuizToggleCard";
-import styles from "./QuizSection.module.scss";
 import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
 import NoDataView from "@/components/NoDataView/NoDataView";
 import AlertModal from "@/components/Modal/AlertModal/AlertModal";
-import { CheckCircle, Clock } from "lucide-react";
 import FullWidthButton from "@/components/Button/FullWidthButton/FullWidthButton";
+
+// Store
+import { useLectureStatusStore } from "@/store/useLectureStatusStore";
+
+// Styles
+import styles from "./QuizSection.module.scss";
 
 interface QuizSectionProps {
   lectureId: string;
@@ -37,6 +47,7 @@ export default function QuizSection({
   const [resultMessage, setResultMessage] = useState("");
   const [refreshKey, setRefreshKey] = useState(0);
 
+  // 강의 상태에 따른 퀴즈 상태 설정
   useEffect(() => {
     const canViewResult = () => {
       if (!lectureDate) return false;
@@ -46,6 +57,7 @@ export default function QuizSection({
       );
       return now.isAfter(midnight);
     };
+
     switch (lectureStatus) {
       case "beforeLecture":
       case "onLecture":
@@ -56,16 +68,12 @@ export default function QuizSection({
         setQuizStatus("solve");
         break;
       case "viewMyQuizResult":
-        if (canViewResult()) {
-          setQuizStatus("viewResult");
-        } else {
-          setQuizStatus("waitingResult");
-        }
+        setQuizStatus(canViewResult() ? "viewResult" : "waitingResult");
         break;
     }
   }, [lectureStatus, lectureDate]);
 
-  // quizStatus가 solve로 변경될 때 퀴즈 데이터 로드
+  // 퀴즈 데이터 로드
   useEffect(() => {
     const loadQuizData = async () => {
       if (quizStatus !== "solve") return;
@@ -86,7 +94,7 @@ export default function QuizSection({
     loadQuizData();
   }, [quizStatus, lectureId]);
 
-  // 퀴즈 답변 선택 핸들러
+  // 퀴즈 답변 핸들러
   const handleQuizSelect = (quizId: string, answer: string) => {
     setUserAnswers((prev) => ({
       ...prev,
@@ -94,7 +102,6 @@ export default function QuizSection({
     }));
   };
 
-  // 단답형 퀴즈 입력 변경 핸들러
   const handleQuizInputChange = (quizId: string, inputAnswer: string) => {
     setUserAnswers((prev) => ({
       ...prev,
@@ -102,7 +109,7 @@ export default function QuizSection({
     }));
   };
 
-  // 퀴즈 제출 핸들러
+  // 퀴즈 제출
   const handleSubmitQuiz = async () => {
     if (!quizData) return;
 
@@ -119,7 +126,7 @@ export default function QuizSection({
 
       if (response.isSuccess && response.result) {
         setResultMessage(
-          `성공적으로 제출되었습니다. 12시 이후 퀴즈 결과를 확인할 수 있습니다.`
+          "성공적으로 제출되었습니다. 12시 이후 퀴즈 결과를 확인할 수 있습니다."
         );
       } else {
         setResultMessage(response.message || "퀴즈 제출에 실패했습니다.");
@@ -133,10 +140,12 @@ export default function QuizSection({
     }
   };
 
+  // 로딩 상태
   if (loading) {
     return <LoadingSpinner text="퀴즈를 불러오는 중..." />;
   }
 
+  // 퀴즈 시작 전
   if (quizStatus === "notYet") {
     return (
       <div className={styles.quizSection}>
@@ -149,6 +158,7 @@ export default function QuizSection({
     );
   }
 
+  // 결과 대기 중
   if (quizStatus === "waitingResult") {
     return (
       <div className={styles.quizSection}>
@@ -161,6 +171,7 @@ export default function QuizSection({
     );
   }
 
+  // 결과 확인 가능
   if (quizStatus === "viewResult") {
     return (
       <div className={styles.quizSection}>
@@ -173,6 +184,7 @@ export default function QuizSection({
     );
   }
 
+  // 퀴즈 풀이 화면
   return (
     <div key={refreshKey} className={styles.quizSection}>
       {quizStatus === "solve" && quizData && (
@@ -198,6 +210,7 @@ export default function QuizSection({
           ))}
         </div>
       )}
+
       <div className={styles.buttonContainer}>
         <FullWidthButton
           onClick={handleSubmitQuiz}
