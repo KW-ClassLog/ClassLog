@@ -1,5 +1,6 @@
 package org.example.backend.domain.notification.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 import org.example.backend.domain.lecture.entity.Lecture;
@@ -33,6 +34,7 @@ public class Notification extends BaseEntity {
     @Column(name = "alarm_type", nullable = false)
     private AlarmType alarmType;
 
+    @JsonProperty("isRead")
     @Column(name = "is_read", nullable = false)
     private boolean isRead;
 

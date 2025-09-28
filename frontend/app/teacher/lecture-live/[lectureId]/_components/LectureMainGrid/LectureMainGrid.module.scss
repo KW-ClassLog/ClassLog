@@ -1,0 +1,54 @@
+@import "@/styles/variables";
+
+.grid {
+  --left-col: 200px;
+  --right-col: 360px;
+
+  --grid-gap: 10px;
+  --grid-pad: 10px;
+
+
+  width: 100%;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+
+  display: grid;
+  grid-template-columns: var(--left-col) 1fr var(--right-col);
+  gap: var(--grid-gap);
+  padding: var(--grid-pad);
+}
+
+
+.left, .center, .right {
+  border: 1px solid $color-neutral-7;
+  border-radius: 16px;
+  background: $color-white;
+
+
+  min-height: 0;
+  overflow: hidden;
+}
+
+
+.left { overflow-y: auto; }
+.right { overflow-y: auto; }
+
+
+.center {
+  display: flex;
+  flex-direction: column;
+  padding: $spacing-xs;
+  min-height: 0;
+  position: relative;
+  isolation: isolate;
+}
+
+
+@media (max-width: 767px) {
+  .grid {
+    --left-col: 0px;
+    --right-col: 0px;
+    grid-template-columns: 1fr;
+  }
+}

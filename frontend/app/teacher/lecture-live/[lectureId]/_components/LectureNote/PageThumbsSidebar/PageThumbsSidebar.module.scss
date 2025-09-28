@@ -1,0 +1,72 @@
+@import "@/styles/variables";
+
+.wrap {
+  height: 100%;
+  display: grid;
+  grid-template-rows: 1fr;
+}
+
+.list {
+  overflow: auto;
+  padding: $spacing-sm $spacing-xs $spacing-sm $spacing-sm;
+  display: grid;
+
+  row-gap: $spacing-sm;
+  column-gap: 0;
+
+  justify-items: center;
+
+  min-height: 0;
+  scrollbar-gutter: stable;
+}
+
+.docAsContents {
+  display: contents;
+}
+
+.thumb {
+  display: block;
+  width: 90%;
+  margin-inline: auto;
+
+  border: 1px solid $color-neutral-7;
+  border-radius: 10px;
+  background: $color-white;
+  padding: 6px;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color $transition-fast, box-shadow $transition-fast;
+
+  &:hover { transform: translateY(-1px); box-shadow: 0 4px 10px rgba(0,0,0,0.06); }
+}
+
+.thumb.active {
+  outline: 2px solid $color-blue;
+  outline-offset: 1px;
+}
+
+.thumb canvas { 
+  width: 100% !important; 
+  height: auto !important; 
+  display: block; 
+}
+
+
+.pageIndex {
+  font-size: $font-size-xs;
+  color: $color-neutral-5;
+  margin-top: 6px;
+  margin-bottom: 6px;
+  line-height: 1;
+}
+
+.pagePreview {
+  aspect-ratio: 3 / 4;
+  width: 100%;
+  background: #f5f7fb;
+  border: 1px dashed $color-neutral-7;
+  display: grid;
+  place-items: center;
+}
+
+.pageLabel { display: none; }

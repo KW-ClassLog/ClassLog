@@ -22,7 +22,8 @@ export const TEACHER_ROUTE_CONFIG: Record<
     | "teacherLectureDetail"
     | "teacherSetting"
     | "teacherStudentManagement"
-  >,
+    | "teacherLectureLive"
+    >,
   RouteConfig
 > = {
   teacherHome: {
@@ -52,6 +53,11 @@ export const TEACHER_ROUTE_CONFIG: Record<
   },
   teacherLectureDetail: {
     path: ROUTES.teacherLectureDetail,
+    headerType: TeacherHeaderType.NONE,
+    sidebarType: SiderbarType.NONE,
+  },
+  teacherLectureLive: {
+    path: ROUTES.teacherLectureLive,
     headerType: TeacherHeaderType.NONE,
     sidebarType: SiderbarType.NONE,
   },

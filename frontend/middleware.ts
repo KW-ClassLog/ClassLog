@@ -26,6 +26,7 @@ const TEACHER_PATHS = [
   ROUTES.teacherLectureNoteManagement,
   "/teacher/quiz-dashboard",
   "/teacher/lecture-detail",
+  "/teacher/lecture-live",
   ROUTES.teacherSetting,
   ROUTES.teacherStudentManagement,
 ];

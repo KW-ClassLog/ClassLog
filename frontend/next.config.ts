@@ -18,7 +18,13 @@ const nextConfig: NextConfig = {
     @use "@/styles/_mixins.scss" as *;`,
   },
   images: {
-    domains: ["kwclasslog.s3.ap-southeast-2.amazonaws.com"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "kwclasslog.s3.ap-southeast-2.amazonaws.com",
+        pathname: "/**",
+      },
+    ],
   },
 };
 

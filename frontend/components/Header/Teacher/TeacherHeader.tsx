@@ -85,6 +85,10 @@ const TeacherHeader: React.FC<TeacherHeaderProps> = ({ mode }) => {
     };
   }, []);
 
+  const handleNotificationClick = () => {
+    router.push(ROUTES.teacherNotification);
+  }
+
   const handleSettingsClick = () => {
     router.push(ROUTES.teacherSetting);
     setIsDropdownOpen(false);
@@ -163,7 +167,7 @@ const TeacherHeader: React.FC<TeacherHeaderProps> = ({ mode }) => {
       )}
 
       <div className={styles.notificationAndProfile}>
-        <Bell className={styles.icon} />
+        <Bell className={styles.icon} onClick={handleNotificationClick}/>
         <div
           ref={profileRef}
           className={styles.profile}
