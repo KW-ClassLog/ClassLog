@@ -117,6 +117,7 @@ export default function LectureLiveHeader({
         <ConfirmModal
           onConfirm={handleConfirmEnd}
           onClose={handleCancelEnd}
+          disableActions={saving}
         >
           {saving ? (
             <>녹음 파일 저장 중입니다... ⏳</>
