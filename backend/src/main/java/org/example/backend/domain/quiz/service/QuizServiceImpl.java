@@ -7,6 +7,8 @@ import org.example.backend.domain.lectureNote.entity.LectureNote;
 import org.example.backend.domain.lectureNote.repository.LectureNoteRepository;
 import org.example.backend.domain.lectureNoteMapping.entity.LectureNoteMapping;
 import org.example.backend.domain.lectureNoteMapping.repository.LectureNoteMappingRepository;
+import org.example.backend.domain.notification.entity.AlarmType;
+import org.example.backend.domain.notification.service.NotificationService;
 import org.example.backend.domain.option.entity.Option;
 import org.example.backend.domain.option.repository.OptionRepository;
 import org.example.backend.domain.quiz.converter.QuizConverter;
@@ -26,9 +28,11 @@ import org.example.backend.domain.user.entity.Role;
 import org.example.backend.global.security.auth.CustomSecurityUtil;
 import org.example.backend.infra.langchain.LangChainClient;
 import org.example.backend.global.S3.service.S3Service;
+import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -50,6 +54,8 @@ public class QuizServiceImpl implements QuizService {
     private final CustomSecurityUtil customSecurityUtil;
     private final QuizConverter quizConverter;
 
+    private final TaskScheduler taskScheduler;
+    private final NotificationService notificationService;
 
     // 퀴즈 생성 및 재생성
     @Override
@@ -172,12 +178,26 @@ public class QuizServiceImpl implements QuizService {
                 }
             }
         }
+        scheduleQuizAnswerUploadNotification(lecture);
+
 
         return QuizSaveResponseDTO.builder()
                 .lectureId(lectureId)
                 .savedCount(savedQuizIds.size())
                 .quizIds(savedQuizIds)
                 .build();
+    }
+    private void scheduleQuizAnswerUploadNotification(Lecture lecture) {
+        Instant triggerTime = Instant.now().plusSeconds(12 * 60 * 60);
+
+        taskScheduler.schedule(() -> {
+            notificationService.sendAlarmToProfessor(
+                    lecture.getId(),
+                    AlarmType.quizAnswerUpload,
+                    "시스템",
+                    lecture.getLectureName() + " 퀴즈 대시보드가 업로드 되었습니다."
+            );
+        }, triggerTime);
     }
 
     // 퀴즈 문제 조회

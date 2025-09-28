@@ -6,6 +6,7 @@ import org.example.backend.domain.notification.service.NotificationService;
 import org.example.backend.global.ApiResponse;
 import org.example.backend.global.security.auth.CustomSecurityUtil;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,5 +28,11 @@ public class NotificationController {
 
         List<NotificationResponseDTO> notifications = notificationService.getNotificationsByUserId(userId);
         return ApiResponse.onSuccess(notifications);
+    }
+
+    @PatchMapping("/read-all")
+    public void markAllAsRead() {
+        UUID userId = customSecurityUtil.getUserId();
+        notificationService.markAllAsRead(userId);
     }
 }

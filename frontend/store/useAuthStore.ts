@@ -6,6 +6,7 @@ import useLectureListStore from "./useLectureListStore";
 import useSelectedClassStore from "./useSelectedClassStore";
 import useClassListStore from "./useClassListStore";
 import { useSignupStore } from "./useSignupStore";
+import {registerFcmToken} from "@/api/notifications/fcm";
 
 interface AuthState {
   accessToken: string | null;
@@ -99,6 +100,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     });
     // localStorage에도 저장
     localStorage.setItem("accessToken", token);
+    registerFcmToken();
 
     // 기존 타이머가 있으면 제거
     if (refreshTimeout) clearTimeout(refreshTimeout);

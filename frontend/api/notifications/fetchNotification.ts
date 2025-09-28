@@ -15,7 +15,7 @@ const alarmTypeLabels: Record<string, string> = {
     quizUpload: "새 퀴즈가 업로드되었습니다",
     quizAnswerUpload: "퀴즈 답안이 업로드되었습니다",
     lectureNoteUpload: "새 강의자료가 올라왔습니다",
-    startLecture: "강의가 시작되었습니다",
+    startLecture: "강의가 10분 후 시작됩니다.",
     recordUpload: "녹음 파일이 업로드되었습니다",
 };
 
