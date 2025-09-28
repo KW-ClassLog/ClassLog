@@ -15,6 +15,7 @@ export default function StudentLectureDetailPage() {
   const { setClassTitle } = useClassTitleStore();
   const lectureId = params.lectureId as string;
   const [selectedTab, setSelectedTab] = useState(0);
+  const [quizRefreshKey, setQuizRefreshKey] = useState(0);
 
   // TODO: lectureId로 클래스타이틀 불러오고, 이를 setClassTitle 이용해서 스토어에 저장해야 함
 
@@ -34,7 +35,13 @@ export default function StudentLectureDetailPage() {
       case 2:
         return <LecrureRecordSection lectureId={lectureId} />;
       case 3:
-        return <QuizSection lectureId={lectureId} />;
+        return (
+          <QuizSection
+            key={quizRefreshKey}
+            lectureId={lectureId}
+            onRefresh={() => setQuizRefreshKey((prev) => prev + 1)}
+          />
+        );
       default:
         return <LectureNoteListSection lectureId={lectureId} />;
     }
