@@ -9,6 +9,7 @@ import styles from "./QuizSection.module.scss";
 import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
 import NoDataView from "@/components/NoDataView/NoDataView";
 import { CheckCircle, Clock } from "lucide-react";
+import FullWidthButton from "@/components/Button/FullWidthButton/FullWidthButton";
 
 interface QuizSectionProps {
   lectureId: string;
@@ -94,10 +95,46 @@ export default function QuizSection({ lectureId }: QuizSectionProps) {
     return <LoadingSpinner text="퀴즈를 불러오는 중..." />;
   }
 
+  if (quizStatus === "notYet") {
+    return (
+      <div className={styles.quizSection}>
+        <NoDataView
+          icon={Clock}
+          title="아직 퀴즈를 풀 수 없습니다."
+          description="강의 시작 시간 전입니다."
+        />
+      </div>
+    );
+  }
+
+  if (quizStatus === "waitingResult") {
+    return (
+      <div className={styles.quizSection}>
+        <NoDataView
+          icon={Clock}
+          title="퀴즈 결과를 기다리는 중입니다."
+          description="강의 종료 시간 전입니다."
+        />
+      </div>
+    );
+  }
+
+  if (quizStatus === "viewResult") {
+    return (
+      <div className={styles.quizSection}>
+        <NoDataView
+          icon={CheckCircle}
+          title="퀴즈 결과를 확인할 수 있습니다."
+          description="강의 종료 시간 후입니다."
+        />
+      </div>
+    );
+  }
+
   return (
-    <div>
+    <div className={styles.quizSection}>
       {quizStatus === "solve" && quizData && (
-        <div className={styles.quizSection}>
+        <div className={styles.quizContainer}>
           {quizData.quizzes.map((quiz) => (
             <QuizToggleCard
               key={quiz.quizId}
@@ -119,30 +156,16 @@ export default function QuizSection({ lectureId }: QuizSectionProps) {
           ))}
         </div>
       )}
-
-      {quizStatus === "notYet" && (
-        <NoDataView
-          icon={Clock}
-          title="아직 퀴즈를 풀 수 없습니다."
-          description="강의 시작 시간 전입니다."
-        />
-      )}
-
-      {quizStatus === "waitingResult" && (
-        <NoDataView
-          icon={Clock}
-          title="퀴즈 결과를 기다리는 중입니다."
-          description="강의 종료 시간 전입니다."
-        />
-      )}
-
-      {quizStatus === "viewResult" && (
-        <NoDataView
-          icon={CheckCircle}
-          title="퀴즈 결과를 확인할 수 있습니다."
-          description="강의 종료 시간 후입니다."
-        />
-      )}
+      <div className={styles.buttonContainer}>
+        <FullWidthButton
+          onClick={() => {}}
+          disabled={
+            Object.keys(userAnswers).length !== quizData?.quizzes.length
+          }
+        >
+          퀴즈 제출
+        </FullWidthButton>
+      </div>
     </div>
   );
 }
