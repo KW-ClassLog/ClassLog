@@ -7,5 +7,11 @@ export interface FetchLectureDetailResult {
   session: number;
   startTime: string;
   endTime: string;
-  status: "beforeLecture" | "onLecture" | "makeQuiz" | "checkDashboard";
+  status: LectureStatus;
 }
+
+export type LectureStatus =
+  | "beforeLecture"
+  | "onLecture"
+  | "makeQuiz"
+  | "checkDashboard";
