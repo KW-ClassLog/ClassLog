@@ -9,7 +9,9 @@ import org.springframework.http.HttpStatus;
 @Getter
 @AllArgsConstructor
 public enum S3ErrorCode implements BaseErrorCode {
-    UPLOAD_FAIL(HttpStatus.BAD_REQUEST, "S3_404", "업로드 실패하였습니다.");
+    UPLOAD_FAIL(HttpStatus.BAD_REQUEST, "S3_404", "업로드 실패하였습니다."),
+    _S3_NOT_FOUND(HttpStatus.NOT_FOUND,"S3400","파일이 존재하지 않습니다")
+    ;
 
 
 
