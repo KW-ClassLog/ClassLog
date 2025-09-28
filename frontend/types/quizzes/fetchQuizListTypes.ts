@@ -1,6 +1,6 @@
 export interface fetchQuizListResult {
   lectureId: string;
-  quizList: Quiz[];
+  quizzes: Quiz[];
 }
 
 type Quiz = {

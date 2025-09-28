@@ -2,6 +2,13 @@
 import React, { useEffect, useState } from "react";
 import { useLectureStatusStore } from "@/store/useLectureStatusStore";
 import dayjs from "dayjs";
+import { fetchQuizList } from "@/api/quizzes/fetchQuizList";
+import { fetchQuizListResult } from "@/types/quizzes/fetchQuizListTypes";
+import QuizToggleCard from "@/components/QuizToggleCard/QuizToggleCard";
+import styles from "./QuizSection.module.scss";
+import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
+import NoDataView from "@/components/NoDataView/NoDataView";
+import { CheckCircle, Clock } from "lucide-react";
 
 interface QuizSectionProps {
   lectureId: string;
@@ -12,12 +19,16 @@ export type QuizStatus = "notYet" | "solve" | "waitingResult" | "viewResult";
 export default function QuizSection({ lectureId }: QuizSectionProps) {
   const { lectureStatus, lectureDate } = useLectureStatusStore();
   const [quizStatus, setQuizStatus] = useState<QuizStatus>("notYet");
+  const [quizData, setQuizData] = useState<fetchQuizListResult | null>(null);
+  const [userAnswers, setUserAnswers] = useState<{ [quizId: string]: string }>(
+    {}
+  );
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // lectureDate 당일의 밤 12시가 지나면 true, 아니면 false 반환
     const canViewResult = () => {
       if (!lectureDate) return false;
-      const midnight = dayjs(lectureDate + " 00:00").add(1, "day"); // 강의일의 다음날 0시(=강의일 밤 12시)
+      const midnight = dayjs(lectureDate + " 00:00").add(1, "day");
       const now = dayjs(
         new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" }))
       );
@@ -35,21 +46,103 @@ export default function QuizSection({ lectureId }: QuizSectionProps) {
       case "viewMyQuizResult":
         if (canViewResult()) {
           setQuizStatus("viewResult");
-          console.log("viewResult");
         } else {
           setQuizStatus("waitingResult");
-          console.log("waitingResult");
         }
         break;
     }
   }, [lectureStatus, lectureDate]);
 
+  // quizStatus가 solve로 변경될 때 퀴즈 데이터 로드
+  useEffect(() => {
+    const loadQuizData = async () => {
+      if (quizStatus !== "solve") return;
+
+      setLoading(true);
+      try {
+        const response = await fetchQuizList(lectureId);
+        if (response.isSuccess && response.result) {
+          setQuizData(response.result);
+        }
+      } catch (error) {
+        console.error("퀴즈 데이터 로드 실패:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadQuizData();
+  }, [quizStatus, lectureId]);
+
+  // 퀴즈 답변 선택 핸들러
+  const handleQuizSelect = (quizId: string, answer: string) => {
+    setUserAnswers((prev) => ({
+      ...prev,
+      [quizId]: answer,
+    }));
+  };
+
+  // 단답형 퀴즈 입력 변경 핸들러
+  const handleQuizInputChange = (quizId: string, inputAnswer: string) => {
+    setUserAnswers((prev) => ({
+      ...prev,
+      [quizId]: inputAnswer,
+    }));
+  };
+
+  if (loading) {
+    return <LoadingSpinner text="퀴즈를 불러오는 중..." />;
+  }
+
   return (
     <div>
-      <h3>복습 퀴즈</h3>
-      <p>현재 강의 상태: {lectureStatus}</p>
-      <p>강의 ID: {lectureId}</p>
-      {/* 여기에 복습 퀴즈 관련 로직 추가 */}
+      {quizStatus === "solve" && quizData && (
+        <div className={styles.quizSection}>
+          {quizData.quizzes.map((quiz) => (
+            <QuizToggleCard
+              key={quiz.quizId}
+              quizId={quiz.quizId}
+              quizIndex={quiz.quizOrder}
+              mode="quiz"
+              type={quiz.type}
+              question={quiz.quizBody}
+              labels={
+                quiz.type === "trueFalse"
+                  ? ["O", "X"]
+                  : quiz.options.map((option) => option.text)
+              }
+              onSelect={(label) => handleQuizSelect(quiz.quizId, label)}
+              onInputChange={(inputAnswer) =>
+                handleQuizInputChange(quiz.quizId, inputAnswer)
+              }
+            />
+          ))}
+        </div>
+      )}
+
+      {quizStatus === "notYet" && (
+        <NoDataView
+          icon={Clock}
+          title="아직 퀴즈를 풀 수 없습니다."
+          description="강의 시작 시간 전입니다."
+        />
+      )}
+
+      {quizStatus === "waitingResult" && (
+        <NoDataView
+          icon={Clock}
+          title="퀴즈 결과를 기다리는 중입니다."
+          description="강의 종료 시간 전입니다."
+        />
+      )}
+
+      {quizStatus === "viewResult" && (
+        <NoDataView
+          icon={CheckCircle}
+          title="퀴즈 결과를 확인할 수 있습니다."
+          description="강의 종료 시간 후입니다."
+        />
+      )}
     </div>
   );
 }

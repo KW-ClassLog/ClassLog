@@ -89,7 +89,7 @@ const QuizToggleCard: React.FC<QuizToggleCardProps> = (props) => {
       return (
         <div className="mixed-layout-3">
           {props.type === "multipleChoice" || props.type === "trueFalse" ? (
-            getLabels()?.map((label) => (
+            props.labels?.map((label) => (
               <QuizChoiceButton
                 key={label}
                 label={label}
