@@ -7,10 +7,12 @@ export interface FetchStudentLectureDetailResult {
   session: number;
   startTime: string;
   endTime: string;
-  status:
-    | "beforeLecture"
-    | "onLecture"
-    | "afterLectureBeforeQuiz"
-    | "quizReadyForSubmission"
-    | "viewMyQuizResult";
+  status: StudentLectureStatus;
 }
+
+export type StudentLectureStatus =
+  | "beforeLecture"
+  | "onLecture"
+  | "afterLectureBeforeQuiz"
+  | "quizReadyForSubmission"
+  | "viewMyQuizResult";
