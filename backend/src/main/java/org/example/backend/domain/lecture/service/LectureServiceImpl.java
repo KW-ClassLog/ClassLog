@@ -152,25 +152,28 @@ public class LectureServiceImpl implements LectureService {
 
     //녹음본 저장
     public LectureRecordingResponseDTO uploadLectureRecording(UUID lectureId, MultipartFile file) {
+
         Lecture lecture = lectureRepository.findById(lectureId)
                 .orElseThrow(() -> new LectureException(LectureErrorCode.LECTURE_NOT_FOUND));
 
-        String key = "recordings/" + lectureId +"/" + UUID.randomUUID() + "/" + file.getOriginalFilename();
+        String safeLectureName = lecture.getLectureName().replaceAll("\\s+", "_");
+        String uploadFileName = safeLectureName + ".mp3";
+
+        String key = "recordings/" + lectureId + "/" + UUID.randomUUID() + "/" + uploadFileName;
 
         try {
-            s3Service.uploadFile(file, key); // private 업로드
+            s3Service.uploadFile(file, key);
         } catch (IOException e) {
             throw new S3Exception(S3ErrorCode.UPLOAD_FAIL);
         }
 
         lecture.setAudioUrl(key);
         lectureRepository.save(lecture);
-
-        String audioName = key.substring(key.lastIndexOf('/') + 1);
+        lecture.setSaveAudio(true);
 
         return LectureRecordingResponseDTO.builder()
                 .lectureId(lecture.getId())
-                .audioName(audioName)
+                .audioName(uploadFileName)
                 .audioUrl(s3Service.getPresignedUrl(key))
                 .build();
     }
