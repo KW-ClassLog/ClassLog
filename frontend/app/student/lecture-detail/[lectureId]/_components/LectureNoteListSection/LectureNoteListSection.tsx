@@ -1,3 +1,5 @@
+"use client";
+
 import { fetchLectureNoteByLectureId } from "@/api/lectures/fetchLectureNoteByLectureId";
 import FileDisplay from "@/components/FileDisplay/FileDisplay";
 import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";

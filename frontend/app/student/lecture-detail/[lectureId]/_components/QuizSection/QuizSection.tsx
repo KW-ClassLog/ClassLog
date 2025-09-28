@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useState } from "react";
 import { useLectureStatusStore } from "@/store/useLectureStatusStore";
 import dayjs from "dayjs";
@@ -9,15 +10,17 @@ interface QuizSectionProps {
 export type QuizStatus = "notYet" | "solve" | "waitingResult" | "viewResult";
 
 export default function QuizSection({ lectureId }: QuizSectionProps) {
-  const { lectureStatus } = useLectureStatusStore();
+  const { lectureStatus, lectureDate } = useLectureStatusStore();
   const [quizStatus, setQuizStatus] = useState<QuizStatus>("notYet");
 
   useEffect(() => {
+    // lectureDate 당일의 밤 12시가 지나면 true, 아니면 false 반환
     const canViewResult = () => {
+      if (!lectureDate) return false;
+      const midnight = dayjs(lectureDate + " 00:00").add(1, "day"); // 강의일의 다음날 0시(=강의일 밤 12시)
       const now = dayjs(
         new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" }))
       );
-      const midnight = now.startOf("day").add(1, "day");
       return now.isAfter(midnight);
     };
     switch (lectureStatus) {
@@ -32,12 +35,14 @@ export default function QuizSection({ lectureId }: QuizSectionProps) {
       case "viewMyQuizResult":
         if (canViewResult()) {
           setQuizStatus("viewResult");
+          console.log("viewResult");
         } else {
           setQuizStatus("waitingResult");
+          console.log("waitingResult");
         }
         break;
     }
-  }, [lectureStatus]);
+  }, [lectureStatus, lectureDate]);
 
   return (
     <div>
