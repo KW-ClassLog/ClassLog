@@ -39,8 +39,10 @@ public class Lecture extends BaseEntity {
     @Column(name = "audio_url")
     private String audioUrl;
 
+    @Column(name = "is_lecture_start")
     private Boolean isLectureStart;
 
+    @Column(name = "save_audio")
     private Boolean saveAudio;
 
     @Column(name = "lecture_date", nullable = false)
