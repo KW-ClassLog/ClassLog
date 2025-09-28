@@ -29,7 +29,12 @@ interface QuizSectionProps {
   onRefresh?: () => void;
 }
 
-export type QuizStatus = "notYet" | "solve" | "waitingResult" | "viewResult";
+export type QuizStatus =
+  | "before"
+  | "notYet"
+  | "solve"
+  | "waitingResult"
+  | "viewResult";
 
 export default function QuizSection({
   lectureId,
@@ -61,6 +66,8 @@ export default function QuizSection({
     switch (lectureStatus) {
       case "beforeLecture":
       case "onLecture":
+        setQuizStatus("before");
+        break;
       case "afterLectureBeforeQuiz":
         setQuizStatus("notYet");
         break;
@@ -146,13 +153,25 @@ export default function QuizSection({
   }
 
   // 퀴즈 시작 전
-  if (quizStatus === "notYet") {
+  if (quizStatus === "before") {
     return (
       <div className={styles.quizSection}>
         <NoDataView
           icon={Clock}
           title="아직 퀴즈를 풀 수 없습니다."
           description="강의 시작 시간 전입니다."
+        />
+      </div>
+    );
+  }
+
+  if (quizStatus === "notYet") {
+    return (
+      <div className={styles.quizSection}>
+        <NoDataView
+          icon={Clock}
+          title="아직 퀴즈가 생성되지 않았습니다."
+          description="강사가 퀴즈를 생성할 때까지 기다려주세요."
         />
       </div>
     );
