@@ -55,10 +55,6 @@ export default function TeacherNotificationPage() {
                   {formattedDate} {formattedTime}
                 </span>
                   </div>
-                    <div
-                        className={styles.newIndicator}
-                        style={{ visibility: notification.isRead ? "hidden" : "visible" }}
-                    />
                 </li>
             );
           })}
