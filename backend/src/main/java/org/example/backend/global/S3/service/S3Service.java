@@ -5,6 +5,8 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.backend.global.S3.exception.S3ErrorCode;
+import org.example.backend.global.S3.exception.S3Exception;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -53,6 +55,9 @@ public class S3Service {
      * Presigned URL 발급 (다운로드용)
      */
     public String getPresignedUrl(String key) {
+        if(!amazonS3Client.doesObjectExist(bucket, key)) {
+            throw new S3Exception(S3ErrorCode._S3_NOT_FOUND);
+        }
         Date expiration = new Date(System.currentTimeMillis() + 1000 * 60 * 60); // 1시간
 
         GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(bucket, key)
