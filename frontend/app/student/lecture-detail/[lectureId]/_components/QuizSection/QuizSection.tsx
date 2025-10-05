@@ -6,10 +6,12 @@ import { CheckCircle, Clock } from "lucide-react";
 // API
 import { fetchQuizList } from "@/api/quizzes/fetchQuizList";
 import { submitQuiz } from "@/api/quizzes/submitQuiz";
+import { getMyQuizResult } from "@/api/quizzes/getMyQuizResult";
 
 // Types
 import { fetchQuizListResult } from "@/types/quizzes/fetchQuizListTypes";
 import { SubmitQuizRequest } from "@/types/quizzes/submitQuizTypes";
+import { getMyQuizResultResult } from "@/types/quizzes/getMyQuizResultTypes";
 
 // Components
 import QuizToggleCard from "@/components/QuizToggleCard/QuizToggleCard";
@@ -43,6 +45,8 @@ export default function QuizSection({
   const { lectureStatus, lectureDate } = useLectureStatusStore();
   const [quizStatus, setQuizStatus] = useState<QuizStatus>("notYet");
   const [quizData, setQuizData] = useState<fetchQuizListResult | null>(null);
+  const [quizResultData, setQuizResultData] =
+    useState<getMyQuizResultResult | null>(null);
   const [userAnswers, setUserAnswers] = useState<{ [quizId: string]: string }>(
     {}
   );
@@ -99,6 +103,27 @@ export default function QuizSection({
     };
 
     loadQuizData();
+  }, [quizStatus, lectureId]);
+
+  // 퀴즈 결과 데이터 로드
+  useEffect(() => {
+    const loadQuizResultData = async () => {
+      if (quizStatus !== "viewResult") return;
+
+      setLoading(true);
+      try {
+        const response = await getMyQuizResult(lectureId);
+        if (response.isSuccess && response.result) {
+          setQuizResultData(response.result);
+        }
+      } catch (error) {
+        console.error("퀴즈 결과 데이터 로드 실패:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadQuizResultData();
   }, [quizStatus, lectureId]);
 
   // 퀴즈 답변 핸들러
@@ -192,13 +217,45 @@ export default function QuizSection({
 
   // 결과 확인 가능
   if (quizStatus === "viewResult") {
+    if (loading) {
+      return <LoadingSpinner text="퀴즈 결과를 불러오는 중..." />;
+    }
+
+    if (!quizResultData) {
+      return (
+        <div className={styles.quizSection}>
+          <NoDataView
+            icon={CheckCircle}
+            title="퀴즈 결과를 불러올 수 없습니다."
+            description="퀴즈 결과 데이터가 없습니다."
+          />
+        </div>
+      );
+    }
+
     return (
       <div className={styles.quizSection}>
-        <NoDataView
-          icon={CheckCircle}
-          title="퀴즈 결과를 확인할 수 있습니다."
-          description="강의 종료 시간 후입니다."
-        />
+        <div className={styles.quizContainer}>
+          {quizResultData.quizzes.map((quiz) => (
+            <QuizToggleCard
+              key={quiz.quizId}
+              quizId={quiz.quizId}
+              quizIndex={quiz.quizOrder}
+              mode="result"
+              type={quiz.type}
+              question={quiz.quizBody}
+              labels={
+                quiz.type === "trueFalse"
+                  ? ["O", "X"]
+                  : quiz.type === "multipleChoice"
+                  ? quiz.options.map((option) => option.text)
+                  : undefined
+              }
+              userAnswer={quiz.studentAnswer}
+              correctAnswer={quiz.solution}
+            />
+          ))}
+        </div>
       </div>
     );
   }
