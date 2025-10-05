@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useLectureStatusStore } from "@/store/useLectureStatusStore";
-import { useLectureChat } from "@/hooks/useLectureChat";
+import { ChatMessage, useLectureChat } from "@/hooks/useLectureChat";
 import NoDataView from "@/components/NoDataView/NoDataView";
 import { MessageCircle, Send } from "lucide-react";
 import styles from "./QuestionListSection.module.scss";
 import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
 import BasicInput from "@/components/Input/BasicInput/BasicInput";
 import IconButton from "@/components/Button/IconButton/IconButton";
+import { fetchChattingList } from "@/api/lectures/fetchChattingList";
 
 export default function QuestionListSection({
   lectureId,
@@ -17,6 +18,7 @@ export default function QuestionListSection({
   const { messages, connected, sendMessage } = useLectureChat(lectureId);
   const [questionInput, setQuestionInput] = useState<string>("");
   const [loading, setLoading] = useState(true);
+  const [previousMessages, setPreviousMessages] = useState<ChatMessage[]>([]);
 
   // 질문 전송 함수
   const sendQuestion = () => {
@@ -27,9 +29,40 @@ export default function QuestionListSection({
   };
 
   useEffect(() => {
-    // TODO: API 호출로 변경 - 기존 질문 목록 불러오기
-    setLoading(false);
+    let isMounted = true;
+    const loadPreviousMessages = async () => {
+      try {
+        const res = await fetchChattingList(lectureId);
+        if (!isMounted) return;
+        if (res.isSuccess && Array.isArray(res.result)) {
+          const mapped: ChatMessage[] = res.result.map((m) => ({
+            senderId: null,
+            senderName: null,
+            content: m.content,
+            role: m.role,
+            timestamp: m.timestamp,
+          }));
+          setPreviousMessages(mapped);
+        } else {
+          setPreviousMessages([]);
+        }
+      } catch {
+        if (!isMounted) return;
+        setPreviousMessages([]);
+      } finally {
+        if (isMounted) setLoading(false);
+      }
+    };
+    loadPreviousMessages();
+    return () => {
+      isMounted = false;
+    };
   }, [lectureId]);
+
+  const combinedMessages = useMemo(() => {
+    // 과거 메시지 이후에 실시간 메시지 순서로 노출
+    return [...previousMessages, ...messages];
+  }, [previousMessages, messages]);
 
   // 시간 포맷팅 함수
   const formatTime = (timestamp: string) => {
@@ -50,7 +83,7 @@ export default function QuestionListSection({
       {lectureStatus === "onLecture" ? (
         <div className={styles.questionListContainer}>
           <ul className={styles.questionList}>
-            {messages.map((message, index) => (
+            {combinedMessages.map((message, index) => (
               <li key={index} className={styles.questionItem}>
                 <div className={styles.message}>
                   <div className={styles.content}>{message.content}</div>
