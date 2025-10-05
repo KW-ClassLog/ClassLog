@@ -1,0 +1,86 @@
+.container {
+  display: flex; 
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh; 
+  background-color: #f8f9fa;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.header {
+  position: relative;
+  width: 100%;
+  max-width: 800px; 
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  padding: 40px 0;
+  height: auto;
+}
+
+.backButton {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: #333;
+}
+
+.divider {
+  width: 100%;
+  max-width: 800px;
+  border: 0;
+  border-top: 1px dashed #ccc;
+  margin-bottom: 15px;
+}
+
+.notificationList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  max-width: 800px;
+}
+
+.notificationItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 0;
+  border-bottom: 1px solid #f0f0f0;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-grow: 1; /* 남은 공간을 모두 차지 */
+  font-size: 16px;
+  color: #555;
+  padding-right: 20px; /* newIndicator와의 간격 */
+}
+
+.dateTime {
+  font-size: 12px;
+  color: #999;
+  white-space: nowrap;
+  margin-left: 10px;
+}
+
+.newIndicator {
+  width: 5px;
+  height: 5px;
+  background-color: #e53e3e;
+  border-radius: 50%;
+  flex-shrink: 0;
+}

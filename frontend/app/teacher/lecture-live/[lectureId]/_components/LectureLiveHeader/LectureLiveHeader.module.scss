@@ -1,0 +1,48 @@
+@import "@/styles/variables";
+
+.container {
+    width: 100%;
+    background: $color-white;
+    border-bottom: 1px solid $color-neutral-7;
+}
+
+.inner {
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 3px $spacing-md;
+}
+
+.left {
+    display: flex;
+    align-items: center;
+    gap: $spacing-xs;
+}
+
+.divider {
+    width: 1px;
+    height: 20px;
+    background: $color-neutral-7;
+    margin: 0 $spacing-xs;
+}
+
+
+.left svg[data-active="true"] {
+    color: $color-blue;
+    stroke: $color-blue;
+}
+
+
+.endBtn {
+    align-self: center;           
+    height: auto !important;    
+    min-height: 0 !important;
+    line-height: 2;               
+    padding-block: 3px !important; 
+}
+
+.docBtnZ {
+    position: relative;
+    z-index: 2000;
+  }

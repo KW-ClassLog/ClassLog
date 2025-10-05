@@ -1,0 +1,33 @@
+@import "@/styles/variables";
+
+.container {
+  position: fixed;
+  z-index: 1500;
+  filter: drop-shadow($shadow-md);
+}
+
+.panel {
+  position: relative;
+  background: $color-skyblue;
+  z-index: 2; 
+  border-radius: 16px;
+  overflow: visible;
+}
+
+.content {
+  padding: $spacing-sm $spacing-md;
+  min-width: 160px;
+}
+
+.cap {
+  position: absolute;
+  width: var(--cap-w);
+  height: var(--cap-h);
+  left: var(--cap-left);
+  top: calc(-1 * var(--cap-h) + var(--seam-overlap));
+  z-index: 1; 
+  background: $color-skyblue;
+  border-bottom: none;
+  border-top-left-radius: 18px;
+  border-top-right-radius: 18px;
+}

@@ -1,0 +1,60 @@
+@import "@/styles/variables";
+
+.wrap {
+  height: 100%;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+}
+
+.header {
+  padding: $spacing-sm $spacing-sm 0 $spacing-sm;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.headerTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-medium;
+  color: $color-neutral-1;
+}
+
+.closeBtn :global(button) {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+
+  &:hover { background: $color-neutral-7; }
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  padding: $spacing-sm;
+  gap: $spacing-xs;
+}
+
+.row {
+  display: flex;
+}
+
+.teacher { justify-content: flex-end; }
+.student { justify-content: flex-start; }
+
+.inputRow {
+  padding: $spacing-sm;
+  border-top: 1px solid $color-neutral-7;
+
+  :global(.inputBox) {
+    padding-right: 6px;
+  }
+}
+
+.inputRow :global(.iconRight) {
+  display: inline-flex;
+  align-items: center;
+}

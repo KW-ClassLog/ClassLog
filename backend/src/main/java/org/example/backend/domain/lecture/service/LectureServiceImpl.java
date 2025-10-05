@@ -6,6 +6,7 @@ import org.example.backend.domain.classroom.entity.Classroom;
 import org.example.backend.domain.classroom.repository.ClassroomRepository;
 import org.example.backend.domain.lecture.converter.LectureConverter;
 import org.example.backend.domain.lecture.dto.request.LectureRequestDTO;
+import org.example.backend.domain.lecture.dto.response.ClassNameResponseDTO;
 import org.example.backend.domain.lecture.dto.response.LectureRecordingResponseDTO;
 import org.example.backend.domain.lecture.dto.response.LectureResponseDTO;
 import org.example.backend.domain.lecture.dto.response.TodayLectureResponseDTO;
@@ -303,5 +304,17 @@ public class LectureServiceImpl implements LectureService {
         lectureRepository.saveAll(lectures);
     }
 
+    // 강의 id 기반 클래스 id 조회
+    @Override
+    public ClassNameResponseDTO getClassId(UUID lectureId) {
+        // 1. 강의 조회
+        Lecture lecture = lectureRepository.findById(lectureId)
+                .orElseThrow(() -> new LectureException(LectureErrorCode.LECTURE_NOT_FOUND));
+        // 2. 클래스 조회
+        Classroom classroom = lecture.getClassroom();
 
+        return ClassNameResponseDTO.builder()
+                .className(classroom.getClassName())
+                .build();
+    }
 }

@@ -8,6 +8,7 @@ interface FitContentButtonProps {
   onClick: () => void;
   disabled?: boolean;
   type?: "button" | "submit" | "reset";
+  className?: string;
 }
 
 const FitContentButton: React.FC<FitContentButtonProps> = ({
@@ -15,10 +16,11 @@ const FitContentButton: React.FC<FitContentButtonProps> = ({
   onClick,
   disabled = false,
   type = "button",
+  className,
 }) => {
   return (
     <button
-      className={`${styles.button} ${disabled ? styles.disabled : ""}`}
+      className={`${styles.button} ${disabled ? styles.disabled : ""} ${className ?? ""}`}
       onClick={onClick}
       disabled={disabled}
       type={type}
