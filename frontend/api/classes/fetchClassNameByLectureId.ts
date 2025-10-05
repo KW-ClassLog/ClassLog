@@ -8,7 +8,7 @@ export async function fetchClassNameByLectureId(lectureId: string) {
   try {
     const response = await axiosInstance.get<
       ApiResponse<FetchClassNameByLectureIdResult>
-    >(ENDPOINTS.CLASSES.GET_CLASS_NAME(lectureId));
+    >(ENDPOINTS.LECTURES.GET_CLASS_NAME(lectureId));
     return response.data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error) && error.response) {

@@ -48,7 +48,6 @@ export const ENDPOINTS = {
     GET_ALL_NOTES: (classId: string) => `${BASE_API}/classes/${classId}/notes`,
     GET_MY_CLASSES: `${BASE_API}/classes/teacher/myclass`,
     GET_QUIZZES: (classId: string) => `${BASE_API}/classes/${classId}/quiz`,
-    GET_CLASS_NAME: (lectureId: string) => `${BASE_API}/classes/${lectureId}`,
   },
 
   // 학생 클래스 관련
@@ -71,6 +70,8 @@ export const ENDPOINTS = {
       `${BASE_API}/lectures/student/today?date=${date}`,
     GET_STUDENT_LECTURE_DETAIL: (lectureId: string) =>
       `${BASE_API}/lectures/student/${lectureId}`,
+    GET_CLASS_NAME: (lectureId: string) =>
+      `${BASE_API}/lectures/classes/${lectureId}`,
 
     // 노트 관련
     UPLOAD_NOTE: (classId: string) =>
