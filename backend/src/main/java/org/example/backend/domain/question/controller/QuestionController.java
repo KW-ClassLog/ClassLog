@@ -9,10 +9,7 @@ import org.example.backend.global.ApiResponse;
 import org.example.backend.global.security.auth.CustomUserDetails;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -37,5 +34,19 @@ public class QuestionController {
             List<QuestionResponseDTO.student> result = questionService.getStudentQuestions(lectureId,user);
             return ApiResponse.onSuccess(result);
         }
+    }
+
+    // 이전 내용 불러오기
+    @GetMapping("/chatting/before/{lectureId}")
+    public ApiResponse<List<QuestionResponseDTO.beforeChatting>> getBeforeChatting(@PathVariable("lectureId") UUID lectureId) {
+        List<QuestionResponseDTO.beforeChatting> result = questionService.getBeforeChatting(lectureId);
+        return ApiResponse.onSuccess(result);
+    }
+
+    // 채팅 내용 저장하기
+    @PostMapping("/chatting/after/{lectureId}")
+    public ApiResponse<String> afterChatting(@PathVariable("lectureId") UUID lectureId) {
+        questionService.saveChatting(lectureId);
+        return ApiResponse.onSuccess(null);
     }
 }
