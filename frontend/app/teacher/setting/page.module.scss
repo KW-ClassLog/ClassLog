@@ -1,0 +1,188 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  background-color: #f8f9fa;
+  padding: 16px;
+}
+
+.header {
+  position: relative;
+  width: 100%;
+  max-width: 800px;
+  padding: 40px 0;
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
+.backButton {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+
+  color: #333;
+}
+
+.profileCard {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 800px;
+  background-color: #4a90e2;
+  border-radius: 12px;
+  padding: 16px;
+  color: white;
+  margin-bottom: 24px;
+  cursor: pointer;
+}
+
+.avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 16px;
+}
+
+.profileInfo {
+  flex-grow: 1;
+}
+
+.name {
+  font-size: 16px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.role {
+  font-size: 14px;
+  margin: 4px 0 0 0;
+  opacity: 0.9;
+}
+
+.menuList {
+  width: 100%;
+  max-width: 800px;
+  background-color: white;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.menuItem {
+  padding: 16px;
+  cursor: pointer;
+  font-size: 16px;
+  border-bottom: 1px solid #f1f1f1;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.menuItemWithArrow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  cursor: pointer;
+  font-size: 16px;
+  border-bottom: 1px solid #f1f1f1;
+}
+
+.arrow {
+  transition: transform 0.2s ease-in-out;
+}
+
+.arrow.open {
+  transform: rotate(180deg);
+}
+
+.toggleMenu {
+  padding: 10px 16px;
+  background-color: #f9f9f9;
+  border-bottom: 1px solid #f1f1f1;
+  display: block;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+}
+
+.toggleMenu label {
+  margin-right: 10px;
+}
+
+.toggleRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px; // 항목 간 간격
+}
+
+.toggleSwitch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+
+  input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  border-radius: 24px;
+  transition: 0.3s;
+
+  &::before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    border-radius: 50%;
+    transition: 0.3s;
+  }
+}
+
+.toggleSwitch input:checked + .slider {
+  background-color: #4a90e2;
+}
+
+.toggleSwitch input:checked + .slider::before {
+  transform: translateX(20px);
+}
+
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.slideDown {
+  animation: slideDown 0.3s ease-out forwards;
+}

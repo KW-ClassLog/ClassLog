@@ -1,0 +1,17 @@
+@import "@/styles/variables";
+
+.wrap {
+  position: relative;
+  z-index: 2000;
+}
+
+.badge {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 6px;
+  height: 6px;
+  background: #ef4444;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px white;
+}

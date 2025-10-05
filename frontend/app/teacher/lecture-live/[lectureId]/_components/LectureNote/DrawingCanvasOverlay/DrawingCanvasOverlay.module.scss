@@ -1,0 +1,14 @@
+.overlay {
+    position: absolute;
+    inset: 0;
+  }
+  
+.eraserCursor {
+    position: absolute;
+    pointer-events: none;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.10);
+    border: 1px solid rgba(0,0,0,0.45);
+    transform: translate(-50%, -50%);
+    z-index: 1210;
+}
