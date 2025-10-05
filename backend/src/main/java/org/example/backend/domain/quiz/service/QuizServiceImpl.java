@@ -33,6 +33,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -188,7 +191,13 @@ public class QuizServiceImpl implements QuizService {
                 .build();
     }
     private void scheduleQuizAnswerUploadNotification(Lecture lecture) {
-        Instant triggerTime = Instant.now().plusSeconds(12 * 60 * 60);
+        // 현재 시간 기준으로 "오늘 밤 12시(자정)" 계산
+        LocalDateTime midnight = LocalDate.now()
+                .plusDays(1) // 내일 0시 (오늘 밤 12시)
+                .atStartOfDay();
+
+        ZoneId zone = ZoneId.systemDefault();
+        Instant triggerTime = midnight.atZone(zone).toInstant();
 
         taskScheduler.schedule(() -> {
             notificationService.sendAlarmToProfessor(
@@ -199,6 +208,7 @@ public class QuizServiceImpl implements QuizService {
             );
         }, triggerTime);
     }
+
 
     // 퀴즈 문제 조회
     @Override
