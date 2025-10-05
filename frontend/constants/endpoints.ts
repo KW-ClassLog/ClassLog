@@ -109,6 +109,6 @@ export const ENDPOINTS = {
     GET: (lectureId: string) => `${BASE_API}/quizzes/${lectureId}`,
     SUBMIT: `${BASE_API}/quizzes/submit`,
     GET_RESULT: (lectureId: string) =>
-      `${BASE_API}/quizzes/${lectureId}/result`,
+      `${BASE_API}/quizzes/${lectureId}/result/student`,
   },
 };
