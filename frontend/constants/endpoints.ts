@@ -68,6 +68,12 @@ export const ENDPOINTS = {
       `${BASE_API}/lectures/teacher/today?date=${date}`,
     GET_STUDENT_LECTURES_BY_DATE: (date: string) =>
       `${BASE_API}/lectures/student/today?date=${date}`,
+    GET_STUDENT_LECTURE_DETAIL: (lectureId: string) =>
+      `${BASE_API}/lectures/student/${lectureId}`,
+    GET_CLASS_NAME: (lectureId: string) =>
+      `${BASE_API}/lectures/classes/${lectureId}`,
+    GET_CHATTING_LIST: (lectureId: string) =>
+      `${BASE_API}/lectures/chatting/before/${lectureId}`,
 
     // 노트 관련
     UPLOAD_NOTE: (classId: string) =>
@@ -104,8 +110,8 @@ export const ENDPOINTS = {
     SAVE: (lectureId: string) => `${BASE_API}/quizzes/${lectureId}/save`,
     UPDATE: (lectureId: string) => `${BASE_API}/quizzes/${lectureId}`,
     GET: (lectureId: string) => `${BASE_API}/quizzes/${lectureId}`,
-    SUBMIT: (lectureId: string) => `${BASE_API}/quizzes/${lectureId}/submit`,
+    SUBMIT: `${BASE_API}/quizzes/submit`,
     GET_RESULT: (lectureId: string) =>
-      `${BASE_API}/quizzes/${lectureId}/result`,
+      `${BASE_API}/quizzes/${lectureId}/result/student`,
   },
 };

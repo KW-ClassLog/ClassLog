@@ -1,22 +1,20 @@
 "use client";
 
-import { useState, useRef, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import styles from "./LectureLiveHeader.module.scss";
 import FitContentButton from "@/components/Button/FitContentButton/FitContentButton";
-import IconButton from "@/components/Button/IconButton/IconButton";
 import { DocumentSideButtonConnected } from "../DocumentSideButton/DocumentSideButton";
 import PenToolButtons from "../PenTool/PenToolButtons/PenToolButtons";
 import { useLive } from "../LectureLiveProvider";
-import { FileText } from "lucide-react";
-import ToolPopover from "../ToolPopover/ToolPopover";
-import LectureNotePopover from "../LectureNote/LectureNotePopover/LectureNotePopover";
 import ChatingButton from "../Chating/ChatingButton/ChatingButton";
 import RecordingButton from "../Recording/RecordingButton/RecordingButton";
 import ConfirmModal from "@/components/Modal/ConfirmModal/ConfirmModal";
 import { getRecordingEngine, type RecState } from "../Recording/recordingEngine";
 import { ROUTES } from "@/constants/routes";
 import { Tool } from "../LectureLiveProvider";
+import LectureNoteButton from "../LectureNote/LectureNoteButton/LectureNoteButton";
+import { saveAudioFile } from "@/api/lectures/saveAudioFile";
 
 export default function LectureLiveHeader({
   onToggleChat,
@@ -28,10 +26,10 @@ export default function LectureLiveHeader({
   onEndLecture?: () => void;
 }) {
   const { tool, setTool } = useLive();
-  const docBtnRef = useRef<HTMLSpanElement>(null);
-  const [openDoc, setOpenDoc] = useState(false);
 
   const [endOpen, setEndOpen] = useState(false);
+  const [saving, setSaving] = useState(false);
+
 
   const engine = useMemo(() => getRecordingEngine(), []);
   const [recState, setRecState] = useState<RecState>(engine.getSnapshot().state);
@@ -56,14 +54,33 @@ export default function LectureLiveHeader({
   const handleConfirmEnd = async () => {
     if (isRecording) {
       try {
-        await engine.stop();
+        setSaving(true);
+        await new Promise<void>((resolve, reject) => {
+          const off = engine.subscribe("done", async (blob) => {
+            try {
+              if (lectureId) {
+                await saveAudioFile(lectureId, blob);
+                console.log("🎤 녹음 파일 저장 완료");
+              }
+              off();
+              resolve();
+            } catch (e) {
+              console.error("❌ 녹음 파일 저장 실패:", e);
+              reject(e);
+            }
+          });
+
+          engine.stop().catch(reject);
+        });
       } catch (e) {
-        console.error(e);
+        console.error("녹음 종료 중 오류:", e);
+      } finally {
+        setSaving(false);
       }
     }
+
     setEndOpen(false);
     onEndLecture?.();
-
     router.push(ROUTES.teacherLectureDetail(lectureId));
   };
 
@@ -75,23 +92,7 @@ export default function LectureLiveHeader({
         <div className={styles.left}>
           <DocumentSideButtonConnected />
 
-          <span ref={docBtnRef} className={styles.docBtnZ}>
-            <IconButton
-              ariaLabel="문서 불러오기"
-              onClick={() => setOpenDoc((v) => !v)}
-              icon={<FileText />}
-            />
-          </span>
-
-          <ToolPopover
-            open={openDoc}
-            anchorRef={docBtnRef}
-            onClose={() => setOpenDoc(false)}
-            align="start"
-            side="bottom"
-          >
-            <LectureNotePopover onPicked={() => setOpenDoc(false)} />
-          </ToolPopover>
+          <LectureNoteButton />
 
           <span className={styles.divider} />
           <PenToolButtons value={tool} onChange={selectTool} />
@@ -113,8 +114,14 @@ export default function LectureLiveHeader({
       </div>
 
       {endOpen && (
-        <ConfirmModal onConfirm={handleConfirmEnd} onClose={handleCancelEnd}>
-          {isRecording ? (
+        <ConfirmModal
+          onConfirm={handleConfirmEnd}
+          onClose={handleCancelEnd}
+          disableActions={saving}
+        >
+          {saving ? (
+            <>녹음 파일 저장 중입니다... ⏳</>
+          ) : isRecording ? (
             <>
               지금 녹음이 진행 중입니다.
               <br />

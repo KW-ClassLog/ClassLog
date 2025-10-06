@@ -1,84 +1,79 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
 import styles from "./LectureNotePopover.module.scss";
 import FileDisplay from "@/components/FileDisplay/FileDisplay";
-import { useLive } from "../../LectureLiveProvider";
+import { DocType, useLive } from "../../LectureLiveProvider";
+import { useState } from "react";
 
-type Item = { name: string; url: string; type: "pdf" | "pptx" };
+type Item = { name: string; url: string; type: DocType };
 
-export default function LectureNotePopover({
-  onPicked,
-}: {
+interface Props {
+  notes: {
+    lectureNoteId: string;
+    lectureNoteName: string;
+    lectureNoteUrl: string;
+    fileSize: string;
+  }[];
   onPicked?: () => void;
-}) {
+  onUploadRequest?: () => void;
+}
+
+export default function LectureNotePopover({ notes, onPicked, onUploadRequest }: Props) {
   const { setDoc, doc } = useLive();
-
-  const initialItems = useMemo<Item[]>(
-    () => [
-      { name: "2024-DA-2-2-Probability.pdf", url: "/file/2024-DA-2-2-Probability.pdf", type: "pdf" },
-      { name: "기말보고서_졸업을하자.pdf", url: "/file/기말보고서_졸업을하자.pdf", type: "pdf" },
-    ],
-    []
-  );
-
-  const [items, setItems] = useState<Item[]>(initialItems);
+  const [unsupportedFile, setUnsupportedFile] = useState<string | null>(null);
 
   const pick = (it: Item) => {
+    if (it.type !== "pdf") {
+      setUnsupportedFile(it.name);
+      return;
+    }
+    setUnsupportedFile(null);
     setDoc({ url: it.url, type: it.type, name: it.name });
-    window.dispatchEvent(new Event("live:doc-changed"));
     onPicked?.();
   };
 
-  const inputRef = useRef<HTMLInputElement>(null);
-  const objUrlsRef = useRef<string[]>([]);
-
-  const onUploadClick = () => inputRef.current?.click();
-  const onUploadChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-    const f = e.target.files?.[0];
-    if (!f) return;
-    const ext = f.name.toLowerCase().endsWith(".pptx") ? "pptx" : "pdf";
-    const url = URL.createObjectURL(f);
-    objUrlsRef.current.push(url);
-    const it: Item = { name: f.name, url, type: ext as "pdf" | "pptx" };
-    setItems((prev) => [it, ...prev]);
-    pick(it);
-    e.currentTarget.value = "";
+  const handleAddMaterials = () => {
+    onUploadRequest?.();
+    onPicked?.();
   };
-
-  useEffect(() => {
-    return () => objUrlsRef.current.forEach((u) => URL.revokeObjectURL(u));
-  }, []);
 
   return (
     <div className={styles.pop}>
       <div className={styles.list}>
-        {items.map((it) => (
-          <div key={it.url}>
-            <button
-              type="button"
-              onClick={() => pick(it)}
-              className={`${styles.row} ${doc?.url === it.url ? styles.active : ""}`}
-              aria-label={`${it.name} 열기`}
-            >
-                
-              <FileDisplay fileName={it.name} />
-            </button>
-          </div>
-        ))}
+        {notes.map((note) => {
+          const ext = note.lectureNoteName.toLowerCase().endsWith(".pdf") ? "pdf" : "unknown";
+          return (
+            <div key={note.lectureNoteId}>
+              <button
+                type="button"
+                onClick={() =>
+                  pick({
+                    name: note.lectureNoteName,
+                    url: note.lectureNoteUrl,
+                    type: ext,
+                  })
+                }
+                className={`${styles.row} ${doc?.name === note.lectureNoteName ? styles.active : ""}`}
+              >
+                <FileDisplay fileName={note.lectureNoteName} />
+              </button>
+            </div>
+          );
+        })}
       </div>
 
+      {unsupportedFile && (
+        <div className={styles.unsupported}>
+          <strong>{unsupportedFile}</strong> 은(는) 지원하지 않습니다.<br />
+          PDF 파일만 선택할 수 있습니다.
+        </div>
+      )}
+
       <div className={styles.divider} />
-      <button type="button" className={styles.uploadBtn} onClick={onUploadClick}>
+
+      <button type="button" className={styles.uploadBtn} onClick={handleAddMaterials}>
         강의자료 업로드
       </button>
-      <input
-        ref={inputRef}
-        type="file"
-        accept=".pdf,.pptx"
-        hidden
-        onChange={onUploadChange}
-      />
     </div>
   );
 }
