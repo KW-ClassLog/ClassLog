@@ -147,6 +147,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     useSignupStore.getState().reset();
     useLectureStatusStore.getState().clearLectureStatus();
     useClassTitleStore.getState().clearClassTitle();
+    useSelectedClassStore.getState().reset();
 
     console.log("로그아웃: 모든 스토어가 초기화되었습니다.");
   },
