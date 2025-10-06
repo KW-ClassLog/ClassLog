@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import styles from "./ChatingPanel.module.scss";
+import styles from "./chattingPanel.module.scss";
 import IconButton from "@/components/Button/IconButton/IconButton";
 import { X, SendHorizontal } from "lucide-react";
 import { useLive } from "../../LectureLiveProvider";
@@ -10,7 +10,7 @@ import BasicInput from "@/components/Input/BasicInput/BasicInput";
 import { useParams } from "next/navigation";
 import { useLectureChat } from "@/hooks/useLectureChat";
 
-export default function ChatPanel() {
+export default function ChattingPanel() {
   const { togglePanel } = useLive();
   const { lectureId } = useParams<{ lectureId: string }>();
 
