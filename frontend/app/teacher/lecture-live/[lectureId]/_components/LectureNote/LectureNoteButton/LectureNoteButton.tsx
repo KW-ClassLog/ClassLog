@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useParams } from "next/navigation";
 import IconButton from "@/components/Button/IconButton/IconButton";
 import ToolPopover from "../../ToolPopover/ToolPopover";
@@ -10,6 +10,7 @@ import { FileText } from "lucide-react";
 import { fetchLectureNoteByLectureId } from "@/api/lectures/fetchLectureNoteByLectureId";
 import { FetchLectureNoteByLectureIdResult } from "@/types/lectures/fetchLectureNoteByLectureIdTypes";
 import styles from "./LectureNoteButton.module.scss";
+import useSelectedClassStore from "@/store/useSelectedClassStore";
 
 export default function LectureNoteButton() {
   const { lectureId } = useParams<{ lectureId: string }>();
@@ -17,22 +18,12 @@ export default function LectureNoteButton() {
 
   const [openDoc, setOpenDoc] = useState(false);
   const [uploadOpen, setUploadOpen] = useState(false);
-  const [classId, setClassId] = useState<string | null>(null);
-  const [lectureNotes, setLectureNotes] = useState<FetchLectureNoteByLectureIdResult[]>([]);
+  const [lectureNotes, setLectureNotes] = useState<
+    FetchLectureNoteByLectureIdResult[]
+  >([]);
+  const { selectedClassId } = useSelectedClassStore();
 
-  useEffect(() => {
-    const raw = localStorage.getItem("class-storage");
-    if (raw) {
-      try {
-        const parsed = JSON.parse(raw);
-        setClassId(parsed.state?.selectedClassId ?? null);
-      } catch (err) {
-        console.error("class-storage 파싱 실패:", err);
-      }
-    }
-  }, []);
-
-  const fetchLectureNotes = async () => {
+  const fetchLectureNotes = useCallback(async () => {
     try {
       const response = await fetchLectureNoteByLectureId(lectureId);
       if (response.isSuccess && response.result) {
@@ -45,11 +36,11 @@ export default function LectureNoteButton() {
       console.error("강의자료 조회 오류:", err);
       setLectureNotes([]);
     }
-  };
+  }, [lectureId]);
 
   useEffect(() => {
     if (lectureId) fetchLectureNotes();
-  }, [lectureId]);
+  }, [lectureId, fetchLectureNotes]);
 
   return (
     <>
@@ -69,15 +60,15 @@ export default function LectureNoteButton() {
         side="bottom"
       >
         <LectureNotePopover
-            notes={lectureNotes} 
-            onPicked={() => setOpenDoc(false)}
-            onUploadRequest={() => setUploadOpen(true)}
+          notes={lectureNotes}
+          onPicked={() => setOpenDoc(false)}
+          onUploadRequest={() => setUploadOpen(true)}
         />
       </ToolPopover>
 
-      {uploadOpen && classId && (
+      {uploadOpen && selectedClassId && (
         <FileSelectModal
-          classId={classId}
+          classId={selectedClassId}
           lectureId={lectureId}
           onClose={() => setUploadOpen(false)}
           registeredFiles={lectureNotes.map((n) => n.lectureNoteName)}
