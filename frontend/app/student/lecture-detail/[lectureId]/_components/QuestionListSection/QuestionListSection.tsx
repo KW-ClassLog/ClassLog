@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useLectureStatusStore } from "@/store/useLectureStatusStore";
 import { ChatMessage, useLectureChat } from "@/hooks/useLectureChat";
 import NoDataView from "@/components/NoDataView/NoDataView";
@@ -19,6 +19,7 @@ export default function QuestionListSection({
   const [questionInput, setQuestionInput] = useState<string>("");
   const [loading, setLoading] = useState(true);
   const [previousMessages, setPreviousMessages] = useState<ChatMessage[]>([]);
+  const listEndRef = useRef<HTMLLIElement | null>(null);
 
   // 질문 전송 함수
   const sendQuestion = () => {
@@ -64,6 +65,11 @@ export default function QuestionListSection({
     return [...previousMessages, ...messages];
   }, [previousMessages, messages]);
 
+  // 새로운 메시지가 추가될 때 항상 맨 아래로 스크롤
+  useEffect(() => {
+    listEndRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+  }, [combinedMessages]);
+
   // 시간 포맷팅 함수
   const formatTime = (timestamp: string) => {
     try {
@@ -98,6 +104,7 @@ export default function QuestionListSection({
                 )}
               </li>
             ))}
+            <li ref={listEndRef} className={styles.bottomSpacer} />
           </ul>
           <div className={styles.questionInputContainer}>
             <BasicInput
