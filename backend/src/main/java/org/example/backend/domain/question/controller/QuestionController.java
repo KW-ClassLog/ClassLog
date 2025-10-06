@@ -38,4 +38,11 @@ public class QuestionController {
             return ApiResponse.onSuccess(result);
         }
     }
+
+    // 이전 내용 불러오기
+    @GetMapping("/chatting/before/{lectureId}")
+    public ApiResponse<List<QuestionResponseDTO.beforeChatting>> getBeforeChatting(@PathVariable("lectureId") UUID lectureId) {
+        List<QuestionResponseDTO.beforeChatting> result = questionService.getBeforeChatting(lectureId);
+        return ApiResponse.onSuccess(result);
+    }
 }
