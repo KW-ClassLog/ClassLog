@@ -40,11 +40,6 @@ function getInitialAuthState() {
           // 토큰이 만료되었으면 localStorage에서 제거하고 초기 상태 반환
           localStorage.removeItem("accessToken");
 
-          // refresh_token 쿠키 삭제
-          if (typeof document !== "undefined") {
-            document.cookie =
-              "refresh_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-          }
           return {
             accessToken: null,
             userId: null,
@@ -65,11 +60,6 @@ function getInitialAuthState() {
         // 토큰 파싱 실패 시 localStorage에서 제거하고 초기 상태 반환
         localStorage.removeItem("accessToken");
 
-        // refresh_token 쿠키 삭제
-        if (typeof document !== "undefined") {
-          document.cookie =
-            "refresh_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-        }
         return {
           accessToken: null,
           userId: null,
@@ -145,12 +135,6 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   logout: () => {
     set({ accessToken: null, userId: null, role: null, iat: null, exp: null });
     localStorage.removeItem("accessToken");
-
-    // refresh_token 쿠키 삭제
-    if (typeof document !== "undefined") {
-      document.cookie =
-        "refresh_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    }
 
     if (refreshTimeout) clearTimeout(refreshTimeout);
     if (expirationCheckInterval) clearInterval(expirationCheckInterval);
