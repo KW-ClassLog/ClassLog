@@ -48,6 +48,12 @@ export function useLectureChat(lectureId: string | undefined) {
           try {
             const parsed: ChatMessage = JSON.parse(message.body);
             setMessages((prev) => [...prev, parsed]);
+            
+            if (typeof window !== "undefined") {
+              if (parsed.role !== "TEACHER") {
+              window.dispatchEvent(new CustomEvent("live:chat:new", { detail: parsed }));
+              }
+            }
           } catch (e) {
             console.error("❌ 메시지 파싱 실패:", e);
           }
