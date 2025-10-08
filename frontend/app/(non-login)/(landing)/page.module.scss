@@ -38,11 +38,138 @@
 }
 
 .contents {
-  margin-top: 8vh;
   width: 100%;
   background-color: $color-white;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+.heroSection {
+  width: 100%;
+  height: 100vh;
+  background-color: $color-blue;
+  padding: calc(8vh + $spacing-xl) $spacing-xl $spacing-xl $spacing-xl;
+}
+
+.heroInner {
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: $spacing-2xl;
+  align-items: center;
+}
+
+.heroLeft {
+  color: $color-white;
+}
+
+.textWrapper {
+  h1 {
+    font-size: 96px;
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin-bottom: $spacing-xs;
+  }
+  h2 {
+    font-size: 56px;
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: $spacing-md;
+  }
+  p {
+    font-size: $font-size-lg;
+    line-height: 1.6;
+    opacity: 0.95;
+  }
+}
+
+.heroDesc {
+  max-width: 560px;
+  margin-bottom: $spacing-xl;
+}
+
+.heroCtas {
+  display: flex;
+  align-items: center;
+  gap: $spacing-lg;
+}
+
+.primaryCta {
+  background-color: $color-white;
+  color: $color-blue;
+  padding: $spacing-md $spacing-2xl;
+  border-radius: $radius-full;
+  font-weight: $font-weight-bold;
+  font-size: $font-size-lg;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  transition: $transition-default;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12);
+  }
+}
+
+.arrow {
+  margin-left: $spacing-sm;
+}
+
+.heroRight {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.introImageWrapper {
+  width: 100%;
+  max-width: 650px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.heroImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.scrollIndicator {
+  position: absolute;
+  left: 50%;
+  bottom: $spacing-lg;
+  transform: translateX(-50%);
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background-color: $color-white;
+  color: $color-blue;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.scrollDot {
+  width: 8px;
+  height: 16px;
+  border-radius: 8px;
+  background-color: $color-blue;
+  animation: bounce 1.4s infinite;
+}
+
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translateY(10px);
+    opacity: 1;
+  }
 }
