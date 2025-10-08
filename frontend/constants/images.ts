@@ -2,6 +2,7 @@
 import logo1 from "@/public/images/logo1.png";
 import logo2 from "@/public/images/logo2.png";
 import logo3 from "@/public/images/logo3.png";
+import logo4 from "@/public/images/logo4.png";
 import logo5 from "@/public/images/logo5.png";
 import introImage from "@/public/images/intro_image.png";
 import qrCode from "@/public/images/QRcode.png";
@@ -26,6 +27,7 @@ export const IMAGES = {
   logo1,
   logo2,
   logo3,
+  logo4,
   logo5,
   introImage,
   qrCode,
