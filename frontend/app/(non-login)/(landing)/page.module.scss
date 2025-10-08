@@ -14,7 +14,10 @@
   align-items: center;
   padding: $spacing-sm $spacing-xl;
   .logo {
-    height: 100%;
+    height: auto;
+    max-height: 100%;
+    width: auto;
+    object-fit: contain;
   }
   .login {
     border: 2px solid $color-white;
@@ -38,4 +41,8 @@
   margin-top: 8vh;
   width: 100%;
   background-color: $color-white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
