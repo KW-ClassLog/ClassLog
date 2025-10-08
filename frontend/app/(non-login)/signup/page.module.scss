@@ -23,6 +23,9 @@
   display: flex;
   gap: $spacing-md;
   width: 100%;
+  @media (max-width: 300px) {
+    flex-direction: column;
+  }
 }
 
 .teacherButton,
