@@ -59,10 +59,14 @@
   grid-template-columns: 1.1fr 0.9fr;
   gap: $spacing-2xl;
   align-items: center;
+  margin: 0 auto;
 }
 
 .heroLeft {
   color: $color-white;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xl;
 }
 
 .textWrapper {
