@@ -1,0 +1,41 @@
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 8vh;
+  background-color: $color-blue;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: $z-header;
+  overflow: hidden;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $spacing-sm $spacing-xl;
+  .logo {
+    height: 100%;
+  }
+  .login {
+    border: 2px solid $color-white;
+    padding: $spacing-sm $spacing-lg;
+    border-radius: $radius-full;
+    color: $color-white;
+    font-weight: $font-weight-medium;
+    font-size: $font-size-md;
+    cursor: pointer;
+    transition: $transition-default;
+    font-weight: $font-weight-bold;
+
+    &:hover {
+      background-color: $color-white;
+      color: $color-blue;
+    }
+  }
+}
+
+.contents {
+  margin-top: 8vh;
+  width: 100%;
+  background-color: $color-white;
+}
