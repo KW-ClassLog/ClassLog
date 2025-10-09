@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useMemo } from "react";
-import styles from "./chattingPanel.module.scss";
+import styles from "./ChattingPanel.module.scss";
 import IconButton from "@/components/Button/IconButton/IconButton";
 import { X, SendHorizontal } from "lucide-react";
 import { useLive } from "../../LectureLiveProvider";
