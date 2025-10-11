@@ -61,7 +61,7 @@ public class ChatServiceImpl implements ChatService {
             // 2. 메시지 전파
             // 메시지 구성
             MessageRequestDTO.MessageDTO maskMessage = MessageRequestDTO.MessageDTO.builder()
-                    .senderId(null)
+                    .senderId(userId)
                     .senderName(null)
                     .content(messageDTO.getContent())
                     .role(sender.getRole())
