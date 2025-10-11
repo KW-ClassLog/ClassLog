@@ -51,32 +51,36 @@
   height: 100vh;
   background-color: $color-blue;
   padding: calc(8vh + $spacing-xl) $spacing-xl $spacing-xl $spacing-xl;
+  overflow: hidden;
 }
 
 .heroInner {
-  height: 100%;
-  display: grid;
-  grid-template-columns: 1.1fr 0.9fr;
+  height: calc(100vh - 8vh - $spacing-xl);
+  display: flex;
+  flex-direction: row;
   gap: $spacing-2xl;
-  align-items: center;
+  align-items: start;
   margin: 0 auto;
+  @include respond-to(md) {
+    flex-direction: column;
+  }
 }
 
 .heroLeft {
+  padding: $spacing-3xl;
   color: $color-white;
   display: flex;
   flex-direction: column;
   gap: $spacing-xl;
+  width: 100%;
+  justify-content: flex-start;
+  align-items: flex-start;
+  @include respond-to(sm) {
+    padding: $spacing-md;
+  }
 }
 
 .textWrapper {
-  h1 {
-    font-size: 96px;
-    font-weight: 900;
-    line-height: 1;
-    letter-spacing: -0.02em;
-    margin-bottom: $spacing-xs;
-  }
   h2 {
     font-size: 56px;
     font-weight: 800;
@@ -89,11 +93,6 @@
     line-height: 1.6;
     opacity: 0.95;
   }
-}
-
-.heroDesc {
-  max-width: 560px;
-  margin-bottom: $spacing-xl;
 }
 
 .heroCtas {
@@ -122,18 +121,38 @@
   margin-left: $spacing-sm;
 }
 
-.heroRight {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 .introImageWrapper {
   width: 100%;
-  max-width: 650px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  height: 100%;
+  position: relative;
+
+  img {
+    transition: $transition-default;
+    height: auto;
+    object-fit: contain;
+    right: -20%;
+    bottom: -8%;
+    position: absolute;
+    width: 800px;
+
+    @include respond-to(lg) {
+      width: 600px;
+      right: -25%;
+      bottom: -10%;
+    }
+
+    @include respond-to(md) {
+      width: 500px;
+      right: -10%;
+      bottom: -10%;
+    }
+
+    @include respond-to(sm) {
+      width: 400px;
+      right: -10%;
+      bottom: -10%;
+    }
+  }
 }
 
 .heroImage {
@@ -156,24 +175,22 @@
   align-items: center;
   justify-content: center;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  transition: $transition-default;
 }
 
-.scrollDot {
-  width: 8px;
-  height: 16px;
-  border-radius: 8px;
-  background-color: $color-blue;
+.downArrow {
   animation: bounce 1.4s infinite;
 }
 
 @keyframes bounce {
   0%,
   100% {
-    transform: translateY(0);
+    transform: translateY(-5px);
     opacity: 0.6;
   }
   50% {
-    transform: translateY(10px);
+    transform: translateY(5px);
     opacity: 1;
   }
 }

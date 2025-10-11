@@ -1,9 +1,12 @@
+"use client";
+
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import styles from "../page.module.scss";
 import { IMAGES } from "@/constants/images";
 import { ROUTES } from "@/constants/routes";
+import { MoveDown } from "lucide-react";
 
 export default function HeroSection() {
   return (
@@ -31,22 +34,21 @@ export default function HeroSection() {
             </Link>
           </div>
         </div>
-        <div className={styles.heroRight}>
-          <div className={styles.introImageWrapper}>
-            <Image
-              src={IMAGES.introImage}
-              alt="소개 이미지"
-              width={650}
-              height={300}
-              className={styles.heroImage}
-              priority
-            />
-          </div>
+
+        <div className={styles.introImageWrapper}>
+          <Image
+            src={IMAGES.introImage}
+            alt="소개 이미지"
+            width={650}
+            height={300}
+            className={styles.heroImage}
+            priority
+          />
         </div>
       </div>
 
       <div className={styles.scrollIndicator}>
-        <span className={styles.scrollDot} />
+        <MoveDown className={styles.downArrow} size={30} strokeWidth={2.5} />
       </div>
     </section>
   );
