@@ -15,6 +15,26 @@
   padding: $spacing-sm $spacing-xl;
   transition: all 0.3s ease;
 
+  // 스크롤 상태일 때의 스타일
+  &.scrolled {
+    background-color: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+
+    .login {
+      border: 2px solid $color-blue;
+      color: $color-blue;
+
+      &:hover {
+        background-color: $color-blue;
+        color: $color-white;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+    }
+  }
+
   .logo {
     height: auto;
     max-height: 100%;
