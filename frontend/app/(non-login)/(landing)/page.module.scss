@@ -383,3 +383,168 @@
   line-height: 1.5;
   margin: 0;
 }
+
+.roadMapSection {
+  width: 100%;
+  min-height: 100vh;
+  background-color: $color-neutral-8;
+  padding: calc($spacing-xl + $spacing-3xl);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-3xl;
+
+  @include respond-to(md) {
+    padding: calc(8vh + $spacing-2xl) $spacing-lg $spacing-2xl $spacing-lg;
+    gap: $spacing-2xl;
+  }
+}
+
+.roadMapHeader {
+  width: 100%;
+  text-align: center;
+  margin-bottom: $spacing-3xl;
+}
+
+.roadMapTitle {
+  font-size: 96px;
+  font-weight: 700;
+  color: $color-blue;
+  margin-bottom: $spacing-2xl;
+
+  @include respond-to(md) {
+    font-size: 64px;
+  }
+
+  @include respond-to(sm) {
+    font-size: 48px;
+  }
+}
+
+.roadMapDescription {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: $spacing-2xl;
+  margin: 0 auto;
+
+  @include respond-to(md) {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+}
+
+.roadMapText {
+  flex: 1;
+  text-align: left;
+
+  @include respond-to(md) {
+    text-align: center;
+  }
+
+  p {
+    font-size: $font-size-lg;
+    line-height: 1.6;
+    color: #333;
+    margin: 0;
+  }
+}
+
+.roadMapCta {
+  flex-shrink: 0;
+
+  p {
+    font-size: 64px;
+    text-align: right;
+    font-weight: 700;
+    color: #000;
+    margin: 0;
+    line-height: 1.2;
+
+    @include respond-to(lg) {
+      font-size: 48px;
+    }
+
+    @include respond-to(md) {
+      display: none;
+    }
+  }
+}
+
+.roadMapCards {
+  display: flex;
+  gap: $spacing-3xl;
+  width: 100%;
+  height: 100%;
+
+  @include respond-to(md) {
+    flex-direction: column;
+    gap: $spacing-2xl;
+  }
+}
+
+.roadMapCard {
+  flex: 1;
+  background-color: $color-white;
+  border-radius: 16px;
+  padding: $spacing-2xl;
+  transition: $transition-default;
+  height: fit-content;
+
+  @include respond-to(md) {
+    padding: $spacing-xl;
+  }
+}
+
+.cardTitle {
+  font-size: 24px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: $spacing-xl;
+
+  @include respond-to(sm) {
+    font-size: 20px;
+  }
+}
+
+.stepsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+}
+
+.stepItem {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+}
+
+.stepNumber {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  background-color: $color-blue;
+  color: $color-white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: $font-size-md;
+}
+
+.stepText {
+  flex: 1;
+  font-size: $font-size-lg;
+  line-height: 1.5;
+  color: $color-neutral-3;
+
+  @include respond-to(sm) {
+    font-size: $font-size-md;
+  }
+}
