@@ -226,7 +226,7 @@
   gap: $spacing-3xl;
 
   @include respond-to(md) {
-    padding: $spacing-2xl $spacing-lg;
+    padding: calc(8vh + $spacing-2xl) $spacing-lg $spacing-2xl $spacing-lg;
     gap: $spacing-2xl;
   }
 }

@@ -8,7 +8,19 @@ import { IMAGES } from "@/constants/images";
 import { ROUTES } from "@/constants/routes";
 import { MoveDown } from "lucide-react";
 
-export default function HeroSection() {
+interface HeroSectionProps {
+  introSectionRef?: React.RefObject<HTMLElement | null>;
+}
+
+export default function HeroSection({ introSectionRef }: HeroSectionProps) {
+  const handleScrollToIntro = () => {
+    if (introSectionRef?.current) {
+      introSectionRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+  };
   return (
     <section className={styles.heroSection}>
       <div className={styles.heroInner}>
@@ -47,7 +59,7 @@ export default function HeroSection() {
         </div>
       </div>
 
-      <div className={styles.scrollIndicator}>
+      <div className={styles.scrollIndicator} onClick={handleScrollToIntro}>
         <MoveDown className={styles.downArrow} size={30} strokeWidth={2.5} />
       </div>
     </section>

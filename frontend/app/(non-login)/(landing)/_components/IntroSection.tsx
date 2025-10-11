@@ -1,3 +1,4 @@
+import React from "react";
 import styles from "../page.module.scss";
 import {
   MessageCircle,
@@ -33,9 +34,13 @@ const FEATURES = [
   },
 ];
 
-export default function IntroSection() {
+export default function IntroSection({
+  ref,
+}: {
+  ref: React.RefObject<HTMLElement | null>;
+}) {
   return (
-    <section className={styles.introSection}>
+    <section ref={ref} className={styles.introSection}>
       <div className={styles.introHeader}>
         <h2 className={styles.introTitle}>
           What You Can Do
