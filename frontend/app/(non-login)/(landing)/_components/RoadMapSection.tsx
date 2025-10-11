@@ -31,11 +31,12 @@ export default function RoadMapSection() {
         <h2 className={styles.roadMapTitle}>HOW IT WORKS?</h2>
         <div className={styles.roadMapDescription}>
           <div className={styles.roadMapText}>
-            <p>
-              ClassLog, 어떻게 활용할 수 있을까요? 강사와 학생 각각의 흐름에
-              맞춰 스마트한 학습 경험을 제공합니다. 수업 전부터 수업 중, 수업
-              후까지 — 모든 과정을 ClassLog 하나로 완성하세요.
-            </p>
+            ClassLog, 어떻게 활용할 수 있을까요?
+            <br />
+            강사와 학생 각각의 흐름에 맞춰 스마트한 학습 경험을 제공합니다.
+            <br />
+            수업 전부터 수업 중, 수업 후까지 — 모든 과정을 ClassLog 하나로
+            완성하세요.
           </div>
           <div className={styles.roadMapCta}>
             <p>
