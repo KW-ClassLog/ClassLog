@@ -1,0 +1,23 @@
+.materialList {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+  height: 100%;
+}
+
+.materialItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: $spacing-xs;
+  border-bottom: 1px solid $color-neutral-7;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.size {
+  color: $color-neutral-6;
+  font-size: $font-size-sm;
+}

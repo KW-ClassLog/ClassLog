@@ -4,6 +4,10 @@ import { useParams } from "next/navigation";
 import { fetchLectureNotesByClass } from "@/api/lectures/fetchLectureNotesByClass";
 import FileDisplay from "@/components/FileDisplay/FileDisplay";
 import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
+import IconButton from "@/components/Button/IconButton/IconButton";
+import { Download } from "lucide-react";
+import { FetchLectureNoteByLectureIdResult } from "@/types/lectures/fetchLectureNoteByLectureIdTypes";
+import { downloadFileWithErrorHandling } from "@/utils/downloadUtils";
 
 interface LectureNote {
   lectureNoteId: string;
@@ -44,8 +48,11 @@ export default function LectureNote() {
     );
   }
 
-  const handleNoteClick = (lectureNoteUrl: string) => {
-    window.open(lectureNoteUrl, "_blank");
+  const handleDownload = async (note: FetchLectureNoteByLectureIdResult) => {
+    await downloadFileWithErrorHandling(
+      note.lectureNoteUrl,
+      note.lectureNoteName || "강의자료"
+    );
   };
 
   return (
@@ -53,15 +60,16 @@ export default function LectureNote() {
       {lectureNotes.length > 0 ? (
         <div className={styles.fileList}>
           {lectureNotes.map((note) => (
-            <div
-              key={note.lectureNoteId}
-              className={styles.fileItem}
-              onClick={() => handleNoteClick(note.lectureNoteUrl)}
-            >
-              <FileDisplay fileName={note.lectureNoteName} />
-              <div className={styles.fileInfo}>
-                <span className={styles.fileSize}>{note.fileSize}</span>
-              </div>
+            <div key={note.lectureNoteId} className={styles.fileItem}>
+              <FileDisplay
+                fileName={note.lectureNoteName}
+                size={note.fileSize}
+              />
+              <IconButton
+                icon={<Download />}
+                onClick={() => handleDownload(note)}
+                ariaLabel={"강의자료 다운로드"}
+              />
             </div>
           ))}
         </div>

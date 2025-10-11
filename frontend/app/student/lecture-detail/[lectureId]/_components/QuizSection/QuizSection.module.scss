@@ -1,0 +1,19 @@
+.quizSection {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.quizContainer {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.buttonContainer {
+  margin-top: $spacing-md;
+  flex: 1;
+}

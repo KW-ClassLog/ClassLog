@@ -1,0 +1,66 @@
+.questionListSection {
+  height: 100%;
+}
+
+.questionListContainer {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.questionList {
+  height: 100%;
+  overflow-y: scroll;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+}
+
+.questionItem {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+  width: fit-content;
+  padding: $spacing-sm;
+  border: 1px solid $color-neutral-7;
+  border-radius: $radius-md;
+  box-shadow: $shadow-sm;
+
+  &:last-child {
+    border-bottom: none;
+    margin-bottom: $spacing-sm;
+  }
+}
+
+.bottomSpacer {
+  height: 1px;
+}
+
+.timestamp {
+  font-size: $font-size-sm;
+  color: $color-neutral-5;
+}
+
+.message {
+  font-size: $font-size-md;
+  line-height: 1.4;
+  word-break: break-word;
+  font-weight: $font-weight-light;
+}
+
+.teacherName {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $color-blue;
+}
+
+.questionInputContainer {
+  display: flex;
+  gap: $spacing-sm;
+  align-items: center;
+}

@@ -23,9 +23,10 @@ const fileIcons: { [key: string]: StaticImageData } = {
 
 type FileDisplayProps = {
   fileName: string;
+  size?: string;
 };
 
-const FileDisplay: React.FC<FileDisplayProps> = ({ fileName }) => {
+const FileDisplay: React.FC<FileDisplayProps> = ({ fileName, size }) => {
   // 파일 확장자 추출
   const fileExtension = fileName.split(".").pop()?.toLowerCase();
 
@@ -81,8 +82,10 @@ const FileDisplay: React.FC<FileDisplayProps> = ({ fileName }) => {
           height={24}
         />
       </div>
-
-      <span className={styles.fileName}>{fileName}</span>
+      <div className={styles.fileInfoContainer}>
+        <span className={styles.fileName}>{fileName}</span>
+        <span className={styles.size}>{size}</span>
+      </div>
     </div>
   );
 };

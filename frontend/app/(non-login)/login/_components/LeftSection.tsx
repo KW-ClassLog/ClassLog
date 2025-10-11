@@ -8,7 +8,13 @@ export default function LeftSection() {
   return (
     <div className={styles.leftSection}>
       <div className={styles.textWrapper}>
-        <h1>CLASSLOG,</h1>
+        <Image
+          src={IMAGES.logo4}
+          alt="ClassLog Logo"
+          width={500}
+          height={120}
+          className={styles.logo}
+        />
         <h2>당신의 강의를 더 스마트하게</h2>
 
         <p>수업 녹음, 실시간 소통, AI 기반 퀴즈 생성을 통해</p>
