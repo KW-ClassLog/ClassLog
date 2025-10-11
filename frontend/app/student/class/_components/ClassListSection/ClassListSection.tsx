@@ -86,7 +86,9 @@ export default function ClassListSection() {
             <div className={styles.classHeader}>
               <div className={styles.classTitle}>
                 <span className={styles.className}>{classItem.className}</span>
-                <span className={styles.teacherName}>박재성</span>
+                <span className={styles.teacherName}>
+                  {classItem.professorName}
+                </span>
               </div>
               <ChevronRight size={20} className={styles.arrowIcon} />
             </div>
@@ -94,12 +96,14 @@ export default function ClassListSection() {
             <div className={styles.classDetails}>
               <div className={styles.detailItem}>
                 <Clock size={16} />
-                <span>월 (10:15~11:45)/수 (12:00~13:15)</span>
+                <span>{classItem.classDate}</span>
               </div>
 
               <div className={styles.detailItem}>
                 <Calendar size={16} />
-                <span>2024.03.04 ~ 2025.06.13</span>
+                <span>
+                  {classItem.startDate} ~ {classItem.endDate}
+                </span>
               </div>
             </div>
           </div>

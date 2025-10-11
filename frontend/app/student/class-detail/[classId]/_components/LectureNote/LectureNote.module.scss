@@ -24,11 +24,7 @@
   border: 1px solid $color-neutral-7;
   border-radius: $radius-md;
   background-color: $color-white;
-  cursor: pointer;
   transition: background-color 0.3s ease;
-  &:hover {
-    background-color: $color-skyblue;
-  }
 }
 
 .fileItem > :first-child {

@@ -27,3 +27,14 @@
     text-overflow: ellipsis;
   }
 }
+
+.fileInfoContainer {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+}
+
+.size {
+  font-size: $font-size-sm;
+  color: $color-neutral-6;
+}
