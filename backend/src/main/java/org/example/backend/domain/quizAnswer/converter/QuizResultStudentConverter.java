@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Component
 public class QuizResultStudentConverter {
@@ -21,9 +20,13 @@ public class QuizResultStudentConverter {
             UUID lectureId,
             List<QuizResultStudentResponseDTO.QuizDTO> quizzes
     ) {
+        List<QuizResultStudentResponseDTO.QuizDTO> sortedQuizzes = quizzes.stream()
+                .sorted((q1, q2) -> Integer.compare(q1.getQuizOrder(), q2.getQuizOrder()))
+                .collect(Collectors.toList());
+
         return QuizResultStudentResponseDTO.builder()
                 .lectureId(lectureId)
-                .quizzes(quizzes)
+                .quizzes(sortedQuizzes)
                 .build();
     }
 
@@ -36,6 +39,7 @@ public class QuizResultStudentConverter {
         boolean isCollect = (myAnswer != null) && Boolean.TRUE.equals(myAnswer.getIsCollect());
 
         List<QuizResultStudentResponseDTO.OptionDTO> optionDTOs = options.stream()
+                .sorted((o1, o2) -> Integer.compare(o1.getOptionOrder(), o2.getOptionOrder()))
                 .map(o -> QuizResultStudentResponseDTO.OptionDTO.builder()
                         .id(o.getId())
                         .optionOrder(o.getOptionOrder())
