@@ -2,12 +2,7 @@ import { useRouter } from "next/navigation";
 import { ROUTES } from "@/constants/routes";
 import dayjs from "dayjs";
 import { ChevronRight } from "lucide-react";
-
-export type LectureStatus =
-  | "beforeLecture"
-  | "onLecture"
-  | "makeQuiz"
-  | "checkDashboard";
+import { LectureStatus } from "@/types/lectures/fetchLectureDetailTypes";
 
 interface UseLectureStatusActionProps {
   status: LectureStatus;

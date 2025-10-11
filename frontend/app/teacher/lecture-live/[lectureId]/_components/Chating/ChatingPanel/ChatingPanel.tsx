@@ -7,57 +7,53 @@ import { X, SendHorizontal } from "lucide-react";
 import { useLive } from "../../LectureLiveProvider";
 import ChatBox from "@/components/ChatBox/ChatBox";
 import BasicInput from "@/components/Input/BasicInput/BasicInput";
-
-type Msg = {
-  id: string;
-  text: string;
-  role: "teacher" | "student";
-  ts?: number;
-};
+import { useParams } from "next/navigation";
+import { useLectureChat } from "@/hooks/useLectureChat";
 
 export default function ChatPanel() {
   const { togglePanel } = useLive();
+  const { lectureId } = useParams<{ lectureId: string }>();
 
-  const [msgs, setMsgs] = useState<Msg[]>([
-    { id: "seed1", text: "질문이요~", role: "student", ts: Date.now()},
-  ]);
+  // 소켓 연결
+  const { messages, connected, sendMessage } = useLectureChat(lectureId);
+
   const [text, setText] = useState("");
-
   const bodyRef = useRef<HTMLDivElement>(null);
 
   const closeChat = () => togglePanel("chat");
 
+  // 메시지 전송
   const send = () => {
     const t = text.trim();
     if (!t) return;
-    setMsgs((m) => [
-      ...m,
-      { id: String(Date.now()), text: t, role: "teacher", ts: Date.now() },
-    ]);
+    sendMessage(t);
     setText("");
   };
 
+  // Enter로 전송
   const onSubmit: React.FormEventHandler = (e) => {
     e.preventDefault();
     send();
   };
 
+  // 새로운 메시지 오면 스크롤 맨 아래로 이동
   useEffect(() => {
     const el = bodyRef.current;
     if (!el) return;
     el.scrollTop = el.scrollHeight;
-  }, [msgs]);
+  }, [messages]);
 
-  const pad = (n: number) => n.toString().padStart(2, "0");
-  const fmt = (ts: number) => {
+
+  const fmt = (ts: string) => {
     const d = new Date(ts);
-    const yy = pad(d.getFullYear() % 100);
-    const MM = pad(d.getMonth() + 1);
-    const dd = pad(d.getDate());
-    const hh = pad(d.getHours());
-    const mm = pad(d.getMinutes());
-    const ss = pad(d.getSeconds());
-    return `${yy}.${MM}.${dd} ${hh}:${mm}:${ss}`;
+    return d.toLocaleString("ko-KR", {
+      year: "2-digit",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    });
   };
 
   return (
@@ -70,38 +66,37 @@ export default function ChatPanel() {
       </div>
 
       <div ref={bodyRef} className={styles.body}>
-        {msgs.map((m) => {
-          const tsText = m.ts ? fmt(m.ts) : "";
-          return (
-            <div
-              key={m.id}
-              className={`${styles.row} ${
-                m.role === "teacher" ? styles.teacher : styles.student
-              }`}
-            >
-              <ChatBox
-                isAnonymous={true}
-                nickname=""
-                profilePicture=""
-                message={m.text}
-                timestamp={tsText}
-                variant={m.role === "teacher" ? "teacher" : "student"}
-              />
-            </div>
-          );
-        })}
+        {messages.map((m, i) => (
+          <div
+            key={i}
+            className={`${styles.row} ${
+              m.role === "TEACHER" ? styles.teacher : styles.student
+            }`}
+          >
+            <ChatBox
+              isAnonymous={true}
+              nickname={m.senderName ?? ""}
+              profilePicture=""
+              message={m.content}
+              timestamp={fmt(m.timestamp)}
+              variant={m.role === "TEACHER" ? "teacher" : "student"}
+            />
+          </div>
+        ))}
       </div>
 
       <form className={styles.inputRow} onSubmit={onSubmit}>
         <BasicInput
           value={text}
           onChange={(e) => setText(e.target.value)}
-          placeholder="답변 입력하기"
+          placeholder={connected ? "답변 입력하기" : "연결 중..."}
+          disabled={!connected}
           iconRight={
             <IconButton
               ariaLabel="전송"
               onClick={send}
               icon={<SendHorizontal size={18} color="#9AA4B2" />}
+              disabled={!connected}
             />
           }
         />

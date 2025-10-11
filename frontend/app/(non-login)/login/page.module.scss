@@ -24,10 +24,19 @@
     margin: $spacing-3xl 0px;
   }
 
-  h1 {
-    font-size: clamp(60px, 7.5vw, 100px);
-    font-weight: bold;
-    font-family: $font-logo;
+  .logo {
+    width: clamp(400px, 7.5vw, 300px);
+    height: auto;
+    object-fit: contain;
+    transition: $transition-default;
+
+    @include respond-to(lg) {
+      width: clamp(300px, 7.5vw, 200px);
+    }
+
+    @include respond-to(md) {
+      width: clamp(200px, 7.5vw, 100px);
+    }
   }
 
   h2 {

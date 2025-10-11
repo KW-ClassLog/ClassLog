@@ -4,4 +4,5 @@ export interface FetchMyClassListResult {
   startDate: string;
   endDate: string;
   classDate: string;
+  professorName: string;
 }

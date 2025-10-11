@@ -83,7 +83,6 @@ const QuizInput: React.FC<QuizInputProps> = (props) => {
       {isResultMode(props) && props.userAnswer !== props.correctAnswer && (
         <div className={styles.answerInfo}>
           <p className={styles.correctAnswer}>정답: {props.correctAnswer}</p>
-          <p className={styles.count}>({props.count}명)</p>
         </div>
       )}
     </div>

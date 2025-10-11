@@ -1,0 +1,36 @@
+.recordSection {
+  height: 100%;
+}
+
+.card {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 16px;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: #333;
+}
+
+.audioItem {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.audioName {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.audioPlayer {
+  width: 100%;
+  height: 40px;
+}

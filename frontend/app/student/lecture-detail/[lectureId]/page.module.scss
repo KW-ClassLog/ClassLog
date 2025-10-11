@@ -1,0 +1,12 @@
+.lectureDetailPage {
+  height: 94vh;
+  display: flex;
+  flex-direction: column;
+  padding: $spacing-lg;
+}
+
+.content {
+  height: 100%;
+  margin-top: $spacing-lg;
+  overflow-y: auto;
+}

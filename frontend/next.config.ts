@@ -20,9 +20,9 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'kwclasslog.s3.ap-southeast-2.amazonaws.com',
-        pathname: '/**',
+        protocol: "https",
+        hostname: "kwclasslog.s3.ap-southeast-2.amazonaws.com",
+        pathname: "/**",
       },
     ],
   },
