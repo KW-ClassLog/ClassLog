@@ -41,7 +41,7 @@ export default function QuestionList() {
         .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
 
         setQuestions(mapped);
-      } catch (e) {
+      } catch {
         if (!alive) return;
         setQuestions([]);
       } finally {
