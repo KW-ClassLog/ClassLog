@@ -6,6 +6,7 @@ import IntroSection from "./_components/IntroSection";
 import Navbar from "./_components/Navbar";
 import styles from "./page.module.scss";
 import RoadMapSection from "./_components/RoadMapSection";
+import { StartButtonSection } from "./_components/StartButtonSection";
 
 export default function LandingPage() {
   const introSectionRef = useRef<HTMLElement>(null);
@@ -17,6 +18,7 @@ export default function LandingPage() {
         <HeroSection introSectionRef={introSectionRef} />
         <IntroSection ref={introSectionRef} />
         <RoadMapSection />
+        <StartButtonSection />
       </div>
     </div>
   );

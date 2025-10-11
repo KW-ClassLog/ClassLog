@@ -50,7 +50,7 @@
   width: 100%;
   height: 100vh;
   background-color: $color-blue;
-  padding: calc(8vh + $spacing-xl) $spacing-xl $spacing-xl $spacing-xl;
+  padding: calc(8vh + $spacing-xl) $spacing-3xl $spacing-3xl $spacing-3xl;
   overflow: hidden;
 }
 
@@ -218,7 +218,7 @@
   width: 100%;
   min-height: 100vh;
   background-color: $color-white;
-  padding: calc($spacing-xl + $spacing-3xl);
+  padding: calc($spacing-3xl + $spacing-3xl);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -388,7 +388,7 @@
   width: 100%;
   min-height: 100vh;
   background-color: $color-neutral-8;
-  padding: calc($spacing-xl + $spacing-3xl);
+  padding: calc($spacing-3xl + $spacing-3xl);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -545,5 +545,173 @@
 
   @include respond-to(sm) {
     font-size: $font-size-md;
+  }
+}
+
+.startButtonSection {
+  width: 100%;
+  min-height: 100vh;
+  background-color: $color-black;
+  padding: calc($spacing-3xl + $spacing-3xl);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: calc($spacing-3xl * 5);
+  text-align: center;
+  margin: 0 auto;
+
+  @include respond-to(lg) {
+    gap: calc($spacing-3xl * 3);
+  }
+
+  @include respond-to(md) {
+    padding: calc(8vh + $spacing-2xl) $spacing-lg;
+    gap: $spacing-2xl;
+    flex-direction: column;
+  }
+
+  @include respond-to(sm) {
+    padding: calc(8vh + $spacing-xl) $spacing-md;
+    gap: $spacing-xl;
+  }
+
+  // 로고 스타일
+  img:first-child {
+    display: none;
+
+    @include respond-to(md) {
+      display: block;
+      width: calc(98px * 3);
+      height: calc(28px * 3);
+      margin-bottom: $spacing-2xl;
+    }
+
+    @include respond-to(sm) {
+      width: calc(98px * 2);
+      height: calc(28px * 2);
+    }
+  }
+
+  // 텍스트 컨테이너
+  > div {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    gap: $spacing-xl;
+    width: fit-content;
+    text-align: left;
+
+    @include respond-to(md) {
+      align-items: center;
+    }
+
+    @include respond-to(sm) {
+      gap: $spacing-lg;
+      max-width: 100%;
+    }
+
+    h2 {
+      font-size: 64px;
+      font-weight: 700;
+      color: $color-white;
+      line-height: 1.2;
+      margin: 0;
+
+      @include respond-to(lg) {
+        font-size: 40px;
+      }
+
+      @include respond-to(md) {
+        font-size: 36px;
+        text-align: center;
+      }
+
+      @include respond-to(sm) {
+        font-size: 28px;
+        line-height: 1.3;
+      }
+    }
+
+    p {
+      font-size: $font-size-lg;
+      color: #cccccc;
+      line-height: 1.6;
+      margin: 0;
+
+      @include respond-to(md) {
+        font-size: $font-size-md;
+        text-align: center;
+      }
+
+      @include respond-to(sm) {
+        font-size: $font-size-sm;
+        line-height: 1.5;
+      }
+    }
+
+    button {
+      background: linear-gradient(to right, #87ceeb, #9370db);
+      border: none;
+      border-radius: 50px;
+      padding: $spacing-sm $spacing-2xl;
+      color: $color-white;
+      font-size: $font-size-lg;
+      font-weight: 600;
+      cursor: pointer;
+      transition: $transition-default;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      display: flex;
+      align-items: center;
+      gap: $spacing-sm;
+      width: fit-content;
+      font-family: $font-default;
+
+      @include respond-to(sm) {
+        padding: $spacing-sm $spacing-xl;
+        font-size: $font-size-md;
+        margin-top: $spacing-md;
+      }
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+      }
+
+      p {
+        margin: 0;
+        color: $color-white;
+        font-size: inherit;
+        font-weight: inherit;
+      }
+
+      svg {
+        width: 20px;
+        height: 20px;
+        color: $color-white;
+
+        @include respond-to(sm) {
+          width: 18px;
+          height: 18px;
+        }
+      }
+    }
+  }
+
+  // 큰 로고 이미지 (오른쪽)
+  img:last-child {
+    display: block;
+    width: 293px;
+    height: 320px;
+    object-fit: contain;
+
+    @include respond-to(lg) {
+      width: 200px;
+      height: 220px;
+    }
+
+    @include respond-to(md) {
+      display: none;
+    }
   }
 }
