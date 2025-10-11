@@ -97,11 +97,11 @@ export const ENDPOINTS = {
 
     // 채팅 관련
     SAVE_CHAT: (lectureId: string) =>
-      `${BASE_API}/lectures/${lectureId}/chating`,
+      `${BASE_API}/lectures/chatting/after/${lectureId}`,
     GET_CHAT: (lectureId: string) =>
       `${BASE_API}/lectures/${lectureId}/questions`,
   },
-  
+
   // 퀴즈 관련
   QUIZZES: {
     CREATE: (lectureId: string) => `${BASE_API}/quizzes/${lectureId}/create`,
