@@ -87,11 +87,30 @@
     line-height: 1.1;
     letter-spacing: -0.02em;
     margin-bottom: $spacing-md;
+
+    @include respond-to(lg) {
+      font-size: 48px;
+    }
+
+    @include respond-to(sm) {
+      font-size: 32px;
+    }
   }
   p {
     font-size: $font-size-lg;
     line-height: 1.6;
     opacity: 0.95;
+  }
+  .logo {
+    width: 500px;
+    height: auto;
+    object-fit: contain;
+    @include respond-to(lg) {
+      width: 400px;
+    }
+    @include respond-to(sm) {
+      width: 300px;
+    }
   }
 }
 
