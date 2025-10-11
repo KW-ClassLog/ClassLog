@@ -34,4 +34,11 @@ public interface StudentClassRepository extends JpaRepository<StudentClass, Stud
       )
 """)
     boolean existsByUserIdAndLectureId(@Param("userId") UUID userId, @Param("lectureId") UUID lectureId);
+
+    // 해당 클래스에 속한 학생들의 userId만 조회
+    @Query("select sc.userId from StudentClass sc where sc.classId = :classId")
+    List<UUID> findUserIdsByClassId(UUID classId);
+
+    // 특정 학생이 해당 클래스에 속해있는지 여부
+    boolean existsByClassIdAndUserId(UUID classId, UUID userId);
 }
