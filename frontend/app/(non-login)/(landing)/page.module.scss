@@ -213,3 +213,173 @@
     opacity: 1;
   }
 }
+
+.introSection {
+  width: 100%;
+  min-height: 100vh;
+  background-color: $color-white;
+  padding: calc($spacing-xl + $spacing-3xl);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-3xl;
+
+  @include respond-to(md) {
+    padding: $spacing-2xl $spacing-lg;
+    gap: $spacing-2xl;
+  }
+}
+
+.introHeader {
+  width: 100%;
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: space-between;
+
+  @include respond-to(md) {
+    flex-direction: column;
+    align-items: center;
+    // gap: $spacing-xl;
+  }
+}
+
+.introTitle {
+  font-size: 64px;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: left;
+  margin-bottom: calc($spacing-3xl * 2);
+
+  @include respond-to(lg) {
+    font-size: 56px;
+  }
+
+  @include respond-to(md) {
+    font-size: 40px;
+    text-align: center;
+    margin-bottom: $spacing-xl;
+  }
+
+  @include respond-to(sm) {
+    font-size: 32px;
+  }
+}
+
+.introDescription {
+  text-align: right;
+  max-width: 600px;
+
+  @include respond-to(md) {
+    text-align: center;
+  }
+}
+
+.introSubtitle {
+  font-size: $font-size-lg;
+  font-weight: 600;
+  margin-bottom: $spacing-md;
+  line-height: 1.4;
+
+  @include respond-to(md) {
+    font-size: $font-size-lg;
+  }
+  @include respond-to(sm) {
+    font-size: $font-size-md;
+  }
+}
+
+.introText {
+  font-size: $font-size-md;
+  line-height: 1.6;
+  font-weight: $font-weight-regular;
+  margin: 0;
+
+  @include respond-to(md) {
+    font-size: $font-size-md;
+  }
+  @include respond-to(sm) {
+    font-size: $font-size-sm;
+  }
+}
+
+.featuresContainer {
+  display: flex;
+  flex-direction: row;
+  gap: $spacing-lg;
+  width: 100%;
+
+  @include respond-to(md) {
+    flex-direction: column;
+  }
+}
+
+.featureCard {
+  width: 25%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: $spacing-lg;
+  background-color: $color-neutral-8;
+  border-radius: 16px;
+  padding: $spacing-xl;
+  transition: $transition-default;
+  border: 1px solid $color-neutral-7;
+
+  @include respond-to(md) {
+    width: 100%;
+    padding: $spacing-md;
+  }
+
+  @include respond-to(sm) {
+    gap: $spacing-sm;
+  }
+}
+
+.featureIcon {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  background-color: $color-white;
+  border-radius: $radius-full;
+  border: 1px solid $color-neutral-7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.featureIcon svg {
+  width: 24px;
+  height: 24px;
+  color: $color-blue;
+}
+
+.featureContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+
+  @include respond-to(md) {
+    gap: 0;
+  }
+}
+
+.featureTitle {
+  font-size: $font-size-xl;
+  font-weight: 600;
+  margin: 0 0 $spacing-sm 0;
+
+  @include respond-to(sm) {
+    font-size: $font-size-lg;
+  }
+}
+
+.featureDescription {
+  font-size: $font-size-md;
+  color: $color-neutral-4;
+  line-height: 1.5;
+  margin: 0;
+}
