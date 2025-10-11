@@ -183,7 +183,7 @@ public class QuizServiceImpl implements QuizService {
         }
         notificationService.sendAlarmToAllStudentsInLecture(
                 lecture.getId(),
-                AlarmType.quizUpload,             // 새 enum (아래 2) 참고)
+                AlarmType.quizUpload,
                 "시스템",
                 lecture.getLectureName() + " 퀴즈가 게시되었습니다. 풀어보러 갈까요?."
         );

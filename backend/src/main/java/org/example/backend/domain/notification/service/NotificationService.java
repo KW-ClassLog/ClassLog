@@ -145,6 +145,66 @@ public class NotificationService implements NotificationServiceImpl{
         var tokens = tokenRepository.findAllByUserIdAndIsActiveTrue(userId);
         tokens.forEach(token -> fcmService.sendNotification(token.getFcmToken(), title, body));
     }
+    @Transactional
+    public void sendAlarmToAllStudentsInClass(UUID classId,
+                                              AlarmType type,
+                                              String senderName,
+                                              String extra) {
+        // 1) 반 로딩
+        Classroom classroom = classroomRepository.findById(classId)
+                .orElseThrow(() -> new RuntimeException("Classroom not found"));
+
+        // 2) 템플릿 생성
+        String title = templateService.getTitle(type);
+        String body  = templateService.getBody(type, senderName, extra);
+
+        // 3) 학생 userId 조회 (null 제거 + 중복 제거)
+        List<UUID> studentIds = studentClassRepository.findUserIdsByClassId(classId)
+                .stream()
+                .filter(java.util.Objects::nonNull)
+                .distinct()
+                .toList();
+
+        log.info("[Notification] classId={}, studentCount={}", classId, studentIds.size());
+        log.debug("[Notification] studentIds={}", studentIds);
+
+        if (studentIds.isEmpty()) return;
+
+        // 4) 푸시 발송 (유저별 활성 토큰에 전송)
+        studentIds.forEach(id -> sendToUser(id, title, body));
+
+        // 5) Notification 저장 (lecture는 클래스 단위이므로 null 가능해야 함)
+        var students = userRepository.findAllById(studentIds);
+        var userMap = students.stream().collect(
+                java.util.stream.Collectors.toMap(
+                        org.example.backend.domain.user.entity.User::getId,
+                        java.util.function.Function.identity()
+                )
+        );
+
+        List<Notification> notifications = studentIds.stream()
+                .map(id -> {
+                    User u = userMap.get(id);
+                    if (u == null) {
+                        log.warn("[Notification] user not found for userId={} (skipped)", id);
+                        return null;
+                    }
+                    return Notification.builder()
+                            .user(u)
+                            .lecture(null)     // 특정 회차가 없으므로 null (엔티티가 nullable이어야 함)
+                            .alarmType(type)
+                            .isRead(false)
+                            .build();
+                })
+                .filter(java.util.Objects::nonNull)
+                .toList();
+
+        notificationRepository.saveAll(notifications);
+        log.info("[Notification] saved notifications={}", notifications.size());
+    }
+
+
+
 
 
 
