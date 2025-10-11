@@ -7,7 +7,7 @@ import FitContentButton from "@/components/Button/FitContentButton/FitContentBut
 import { DocumentSideButtonConnected } from "../DocumentSideButton/DocumentSideButton";
 import PenToolButtons from "../PenTool/PenToolButtons/PenToolButtons";
 import { useLive } from "../LectureLiveProvider";
-import ChatingButton from "../Chating/ChatingButton/ChatingButton";
+import ChattingButton from "../Chatting/ChattingButton/ChattingButton";
 import RecordingButton from "../Recording/RecordingButton/RecordingButton";
 import ConfirmModal from "@/components/Modal/ConfirmModal/ConfirmModal";
 import { getRecordingEngine, type RecState } from "../Recording/recordingEngine";
@@ -15,6 +15,7 @@ import { ROUTES } from "@/constants/routes";
 import { Tool } from "../LectureLiveProvider";
 import LectureNoteButton from "../LectureNote/LectureNoteButton/LectureNoteButton";
 import { saveAudioFile } from "@/api/lectures/saveAudioFile";
+import { saveChatting } from "@/api/lectures/saveChatting";
 
 export default function LectureLiveHeader({
   onToggleChat,
@@ -52,36 +53,50 @@ export default function LectureLiveHeader({
   const { lectureId } = useParams<{ lectureId: string }>();
 
   const handleConfirmEnd = async () => {
-    if (isRecording) {
-      try {
-        setSaving(true);
+    if (!lectureId) {
+      console.error("lectureId가 없습니다.");
+      return;
+    }
+  
+    setSaving(true);
+
+    try {        
+      // 녹음 중일 경우 녹음 저장
+      if (isRecording) {
+
+
         await new Promise<void>((resolve, reject) => {
           const off = engine.subscribe("done", async (blob) => {
             try {
-              if (lectureId) {
-                await saveAudioFile(lectureId, blob);
-                console.log("🎤 녹음 파일 저장 완료");
-              }
+              await saveAudioFile(lectureId, blob);
+              console.log("🎤 녹음 파일 저장 완료");
               off();
               resolve();
             } catch (e) {
               console.error("❌ 녹음 파일 저장 실패:", e);
+              off();
               reject(e);
             }
           });
-
           engine.stop().catch(reject);
         });
-      } catch (e) {
-        console.error("녹음 종료 중 오류:", e);
-      } finally {
-        setSaving(false);
       }
-    }
+  
+      // 채팅 저장
+      const chatRes = await saveChatting(lectureId);
 
-    setEndOpen(false);
-    onEndLecture?.();
-    router.push(ROUTES.teacherLectureDetail(lectureId));
+      if (!chatRes?.isSuccess) {
+        console.warn("채팅 저장 실패:", chatRes?.code, chatRes?.message);
+      }
+
+      setEndOpen(false);
+      onEndLecture?.();
+      router.push(ROUTES.teacherLectureDetail(lectureId));
+    } catch (e) {
+      console.error("강의 종료 처리 중 오류:", e);
+    } finally {
+      setSaving(false);
+    }
   };
 
   const handleCancelEnd = () => setEndOpen(false);
@@ -100,7 +115,7 @@ export default function LectureLiveHeader({
 
           <RecordingButton />
 
-          <ChatingButton
+          <ChattingButton
             onPress={() => {
               closePen();
               onToggleChat?.();
@@ -120,7 +135,7 @@ export default function LectureLiveHeader({
           disableActions={saving}
         >
           {saving ? (
-            <>녹음 파일 저장 중입니다... ⏳</>
+            <>저장 중입니다... ⏳</>
           ) : isRecording ? (
             <>
               지금 녹음이 진행 중입니다.
