@@ -22,6 +22,9 @@
 }
 
 .questionItem {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
   width: fit-content;
   padding: $spacing-sm;
   border: 1px solid $color-neutral-7;
@@ -30,11 +33,15 @@
 
   &:last-child {
     border-bottom: none;
+    margin-bottom: $spacing-sm;
   }
 }
 
+.bottomSpacer {
+  height: 1px;
+}
+
 .timestamp {
-  margin-top: $spacing-xs;
   font-size: $font-size-sm;
   color: $color-neutral-5;
 }
@@ -44,6 +51,12 @@
   line-height: 1.4;
   word-break: break-word;
   font-weight: $font-weight-light;
+}
+
+.teacherName {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $color-blue;
 }
 
 .questionInputContainer {

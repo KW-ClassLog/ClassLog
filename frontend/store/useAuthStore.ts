@@ -6,6 +6,8 @@ import useLectureListStore from "./useLectureListStore";
 import useSelectedClassStore from "./useSelectedClassStore";
 import useClassListStore from "./useClassListStore";
 import { useSignupStore } from "./useSignupStore";
+import { useLectureStatusStore } from "./useLectureStatusStore";
+import { useClassTitleStore } from "./useClassTitleStore";
 
 interface AuthState {
   accessToken: string | null;
@@ -37,6 +39,7 @@ function getInitialAuthState() {
         if (decodedToken.exp < currentTime) {
           // 토큰이 만료되었으면 localStorage에서 제거하고 초기 상태 반환
           localStorage.removeItem("accessToken");
+
           return {
             accessToken: null,
             userId: null,
@@ -56,6 +59,7 @@ function getInitialAuthState() {
       } catch {
         // 토큰 파싱 실패 시 localStorage에서 제거하고 초기 상태 반환
         localStorage.removeItem("accessToken");
+
         return {
           accessToken: null,
           userId: null,
@@ -131,6 +135,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   logout: () => {
     set({ accessToken: null, userId: null, role: null, iat: null, exp: null });
     localStorage.removeItem("accessToken");
+
     if (refreshTimeout) clearTimeout(refreshTimeout);
     if (expirationCheckInterval) clearInterval(expirationCheckInterval);
 
@@ -140,6 +145,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     useSelectedClassStore.getState().reset();
     useClassListStore.getState().reset();
     useSignupStore.getState().reset();
+    useLectureStatusStore.getState().clearLectureStatus();
+    useClassTitleStore.getState().clearClassTitle();
+    useSelectedClassStore.getState().reset();
 
     console.log("로그아웃: 모든 스토어가 초기화되었습니다.");
   },

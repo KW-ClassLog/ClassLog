@@ -72,6 +72,8 @@ export const ENDPOINTS = {
       `${BASE_API}/lectures/student/${lectureId}`,
     GET_CLASS_NAME: (lectureId: string) =>
       `${BASE_API}/lectures/classes/${lectureId}`,
+    GET_CHATTING_LIST: (lectureId: string) =>
+      `${BASE_API}/lectures/chatting/before/${lectureId}`,
 
     // 노트 관련
     UPLOAD_NOTE: (classId: string) =>
