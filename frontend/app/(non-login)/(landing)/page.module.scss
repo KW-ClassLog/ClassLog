@@ -13,12 +13,16 @@
   justify-content: space-between;
   align-items: center;
   padding: $spacing-sm $spacing-xl;
+  transition: all 0.3s ease;
+
   .logo {
     height: auto;
     max-height: 100%;
     width: auto;
     object-fit: contain;
+    transition: all 0.3s ease;
   }
+
   .login {
     border: 2px solid $color-white;
     padding: $spacing-sm $spacing-lg;
@@ -27,12 +31,14 @@
     font-weight: $font-weight-medium;
     font-size: $font-size-md;
     cursor: pointer;
-    transition: $transition-default;
+    transition: all 0.3s ease;
     font-weight: $font-weight-bold;
 
     &:hover {
       background-color: $color-white;
       color: $color-blue;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
   }
 }
@@ -52,6 +58,7 @@
   background-color: $color-blue;
   padding: calc(8vh + $spacing-xl) $spacing-3xl $spacing-3xl $spacing-3xl;
   overflow: hidden;
+  transition: all 0.3s ease;
 }
 
 .heroInner {
@@ -61,6 +68,8 @@
   gap: $spacing-2xl;
   align-items: start;
   margin: 0 auto;
+  transition: all 0.4s ease;
+
   @include respond-to(md) {
     flex-direction: column;
   }
@@ -75,6 +84,8 @@
   width: 100%;
   justify-content: flex-start;
   align-items: flex-start;
+  transition: all 0.3s ease;
+
   @include respond-to(sm) {
     padding: $spacing-md;
   }
@@ -87,6 +98,7 @@
     line-height: 1.1;
     letter-spacing: -0.02em;
     margin-bottom: $spacing-md;
+    transition: all 0.3s ease;
 
     @include respond-to(lg) {
       font-size: 48px;
@@ -96,18 +108,24 @@
       font-size: 32px;
     }
   }
+
   p {
     font-size: $font-size-lg;
     line-height: 1.6;
     opacity: 0.95;
+    transition: all 0.3s ease;
   }
+
   .logo {
     width: 500px;
     height: auto;
     object-fit: contain;
+    transition: all 0.3s ease;
+
     @include respond-to(lg) {
       width: 400px;
     }
+
     @include respond-to(sm) {
       width: 300px;
     }
@@ -128,7 +146,7 @@
   font-weight: $font-weight-bold;
   font-size: $font-size-lg;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-  transition: $transition-default;
+  transition: all 0.3s ease;
 
   &:hover {
     transform: translateY(-2px);
@@ -144,9 +162,10 @@
   width: 100%;
   height: 100%;
   position: relative;
+  transition: all 0.3s ease;
 
   img {
-    transition: $transition-default;
+    transition: all 0.4s ease;
     height: auto;
     object-fit: contain;
     right: -20%;
@@ -224,6 +243,7 @@
   align-items: center;
   justify-content: center;
   gap: $spacing-3xl;
+  transition: all 0.3s ease;
 
   @include respond-to(md) {
     padding: calc(8vh + $spacing-2xl) $spacing-lg;
@@ -238,6 +258,7 @@
   flex-direction: row;
   align-items: flex-end;
   justify-content: space-between;
+  transition: all 0.4s ease;
 
   @include respond-to(md) {
     flex-direction: column;
@@ -252,6 +273,7 @@
   line-height: 1.2;
   text-align: left;
   margin-bottom: calc($spacing-3xl * 2);
+  transition: all 0.3s ease;
 
   @include respond-to(lg) {
     font-size: 56px;
@@ -271,6 +293,7 @@
 .introDescription {
   text-align: right;
   max-width: 600px;
+  transition: all 0.3s ease;
 
   @include respond-to(md) {
     text-align: center;
@@ -282,6 +305,7 @@
   font-weight: 600;
   margin-bottom: $spacing-md;
   line-height: 1.4;
+  transition: all 0.3s ease;
 
   @include respond-to(md) {
     font-size: $font-size-lg;
@@ -296,6 +320,7 @@
   line-height: 1.6;
   font-weight: $font-weight-regular;
   margin: 0;
+  transition: all 0.3s ease;
 
   @include respond-to(md) {
     font-size: $font-size-md;
@@ -310,6 +335,7 @@
   flex-direction: row;
   gap: $spacing-lg;
   width: 100%;
+  transition: all 0.4s ease;
 
   @include respond-to(md) {
     flex-direction: column;
@@ -321,11 +347,11 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: $spacing-lg;
+  gap: $spacing-3xl;
   background-color: $color-neutral-8;
   border-radius: 16px;
   padding: $spacing-xl;
-  transition: $transition-default;
+  transition: all 0.3s ease;
   border: 1px solid $color-neutral-7;
 
   @include respond-to(md) {
@@ -371,6 +397,7 @@
   font-size: $font-size-xl;
   font-weight: 600;
   margin: 0 0 $spacing-sm 0;
+  transition: all 0.3s ease;
 
   @include respond-to(sm) {
     font-size: $font-size-lg;
@@ -382,6 +409,7 @@
   color: $color-neutral-4;
   line-height: 1.5;
   margin: 0;
+  transition: all 0.3s ease;
 }
 
 .roadMapSection {
@@ -394,6 +422,7 @@
   align-items: center;
   justify-content: center;
   gap: $spacing-2xl;
+  transition: all 0.3s ease;
 
   @include respond-to(md) {
     padding: calc(8vh + $spacing-2xl) $spacing-lg;
@@ -412,6 +441,7 @@
   font-weight: 700;
   color: $color-blue;
   margin-bottom: $spacing-2xl;
+  transition: all 0.3s ease;
 
   @include respond-to(md) {
     font-size: 64px;
@@ -428,6 +458,7 @@
   align-items: flex-start;
   gap: $spacing-2xl;
   margin: 0 auto;
+  transition: all 0.4s ease;
 
   @include respond-to(md) {
     flex-direction: column;
@@ -439,11 +470,11 @@
 .roadMapText {
   flex: 1;
   text-align: left;
-
   font-size: $font-size-lg;
   line-height: 1.6;
   font-weight: $font-weight-regular;
   margin: 0;
+  transition: all 0.3s ease;
 
   @include respond-to(md) {
     text-align: center;
@@ -453,6 +484,7 @@
 
 .roadMapCta {
   flex-shrink: 0;
+  transition: all 0.3s ease;
 
   p {
     font-size: 64px;
@@ -461,6 +493,7 @@
     color: #000;
     margin: 0;
     line-height: 1.2;
+    transition: all 0.3s ease;
 
     @include respond-to(lg) {
       font-size: 48px;
@@ -477,6 +510,8 @@
   gap: $spacing-3xl;
   width: 100%;
   height: 100%;
+  transition: all 0.4s ease;
+  justify-content: center;
 
   @include respond-to(md) {
     flex-direction: column;
@@ -489,7 +524,8 @@
   background-color: $color-white;
   border-radius: 16px;
   padding: $spacing-2xl;
-  transition: $transition-default;
+  max-width: 600px;
+  transition: all 0.3s ease;
   height: fit-content;
 
   @include respond-to(md) {
@@ -502,6 +538,7 @@
   font-weight: 700;
   text-align: center;
   margin-bottom: $spacing-xl;
+  transition: all 0.3s ease;
 
   @include respond-to(sm) {
     font-size: 20px;
@@ -542,6 +579,7 @@
   font-size: $font-size-lg;
   line-height: 1.5;
   color: $color-neutral-3;
+  transition: all 0.3s ease;
 
   @include respond-to(sm) {
     font-size: $font-size-md;
@@ -560,6 +598,7 @@
   gap: calc($spacing-3xl * 5);
   text-align: center;
   margin: 0 auto;
+  transition: all 0.4s ease;
 
   @include respond-to(lg) {
     gap: calc($spacing-3xl * 3);
@@ -579,6 +618,7 @@
   // 로고 스타일
   img:first-child {
     display: none;
+    transition: all 0.3s ease;
 
     @include respond-to(md) {
       display: block;
@@ -601,6 +641,7 @@
     gap: $spacing-xl;
     width: fit-content;
     text-align: left;
+    transition: all 0.3s ease;
 
     @include respond-to(md) {
       align-items: center;
@@ -617,6 +658,7 @@
       color: $color-white;
       line-height: 1.2;
       margin: 0;
+      transition: all 0.3s ease;
 
       @include respond-to(lg) {
         font-size: 40px;
@@ -638,6 +680,7 @@
       color: #cccccc;
       line-height: 1.6;
       margin: 0;
+      transition: all 0.3s ease;
 
       @include respond-to(md) {
         font-size: $font-size-md;
@@ -659,7 +702,7 @@
       font-size: $font-size-lg;
       font-weight: 600;
       cursor: pointer;
-      transition: $transition-default;
+      transition: all 0.3s ease;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
       display: flex;
       align-items: center;
@@ -689,6 +732,7 @@
         width: 20px;
         height: 20px;
         color: $color-white;
+        transition: all 0.3s ease;
 
         @include respond-to(sm) {
           width: 18px;
@@ -704,6 +748,7 @@
     width: 293px;
     height: 320px;
     object-fit: contain;
+    transition: all 0.3s ease;
 
     @include respond-to(lg) {
       width: 200px;
