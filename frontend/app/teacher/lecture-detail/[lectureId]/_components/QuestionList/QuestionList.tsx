@@ -6,7 +6,7 @@ import Image from "next/image";
 import { IMAGES } from "@/constants/images";
 import { useLectureDetail } from "../LectureDetailContext";
 
-interface Question {
+export interface Question {
   sender: string;
   message: string;
   timestamp: string;

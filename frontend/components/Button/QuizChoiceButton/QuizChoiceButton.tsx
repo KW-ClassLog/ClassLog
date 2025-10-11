@@ -15,7 +15,6 @@ type ResultModeProps = {
   label: string;
   userAnswer: string; // 사용자 답변
   correctAnswer: string; // 정답
-  count: number; // 선택한 사람 수
 };
 
 type TeacherModeProps = {
@@ -99,10 +98,9 @@ const QuizChoiceButton: React.FC<QuizChoiceButtonProps> = (props) => {
       disabled={isDisabled}
     >
       {props.label}
-      {(isResultMode(props) || isTeacherMode(props)) &&
-        props.count !== undefined && (
-          <span className={styles.count}>({props.count}명)</span>
-        )}
+      {isTeacherMode(props) && props.count !== undefined && (
+        <span className={styles.count}>({props.count}명)</span>
+      )}
     </button>
   );
 };

@@ -20,27 +20,31 @@ public class QuizConverter {
     private final OptionRepository optionRepository;
 
     public QuizListResponseDTO toQuizListResponseDTO(UUID lectureId, List<Quiz> quizList) {
-        List<QuizListResponseDTO.QuizDTO> quizDTOs = quizList.stream().map(quiz -> {
-            List<OptionResponseDTO> options = new ArrayList<>();
-            if (quiz.getType() == QuizType.MULTIPLE_CHOICE) {
-                options = optionRepository.findByQuizId(quiz.getId())
-                        .stream()
-                        .map(option -> new OptionResponseDTO(
-                                option.getId(),
-                                option.getOptionOrder(),
-                                option.getText()
-                        ))
-                        .toList();
-            }
-            return new QuizListResponseDTO.QuizDTO(
-                    quiz.getId(),
-                    quiz.getQuizOrder(),
-                    quiz.getQuiz(),
-                    quiz.getSolution(),
-                    QuizResultStudentConverter.toCamelCase(quiz.getType()),
-                    options
-            );
-        }).toList();
+        List<QuizListResponseDTO.QuizDTO> quizDTOs = quizList.stream()
+                .sorted((q1, q2) -> Integer.compare(q1.getQuizOrder(), q2.getQuizOrder()))
+                .map(quiz -> {
+                    List<OptionResponseDTO> options = new ArrayList<>();
+                    if (quiz.getType() == QuizType.MULTIPLE_CHOICE) {
+                        options = optionRepository.findByQuizId(quiz.getId())
+                                .stream()
+                                .map(option -> new OptionResponseDTO(
+                                        option.getId(),
+                                        option.getOptionOrder(),
+                                        option.getText()
+                                ))
+                                .sorted((o1, o2) -> Integer.compare(o1.getOptionOrder(), o2.getOptionOrder()))
+                                .toList();
+                    }
+                    return new QuizListResponseDTO.QuizDTO(
+                            quiz.getId(),
+                            quiz.getQuizOrder(),
+                            quiz.getQuiz(),
+                            quiz.getSolution(),
+                            QuizResultStudentConverter.toCamelCase(quiz.getType()),
+                            options
+                    );
+                })
+                .toList();
 
         return new QuizListResponseDTO(lectureId, quizDTOs);
     }

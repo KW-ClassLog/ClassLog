@@ -1,4 +1,4 @@
-export interface FetchLectureDetailResult {
+export interface FetchStudentLectureDetailResult {
   lectureId: string;
   classId: string;
   lectureName: string;
@@ -7,11 +7,12 @@ export interface FetchLectureDetailResult {
   session: number;
   startTime: string;
   endTime: string;
-  status: LectureStatus;
+  status: StudentLectureStatus;
 }
 
-export type LectureStatus =
+export type StudentLectureStatus =
   | "beforeLecture"
   | "onLecture"
-  | "makeQuiz"
-  | "checkDashboard";
+  | "afterLectureBeforeQuiz"
+  | "quizReadyForSubmission"
+  | "viewMyQuizResult";

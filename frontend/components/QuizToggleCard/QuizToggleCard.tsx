@@ -25,8 +25,6 @@ type ResultModeProps = {
   labels?: string[]; // multipleChoice 타입일때만 필요
   userAnswer: string; // 사용자 답변
   correctAnswer: string; // 정답
-  counts: { [key: string]: number }; // 각 라벨에 대한 선택자 수
-  correctRate: number; // 정답률
 };
 
 type TeacherModeProps = {
@@ -89,7 +87,7 @@ const QuizToggleCard: React.FC<QuizToggleCardProps> = (props) => {
       return (
         <div className="mixed-layout-3">
           {props.type === "multipleChoice" || props.type === "trueFalse" ? (
-            getLabels()?.map((label) => (
+            props.labels?.map((label) => (
               <QuizChoiceButton
                 key={label}
                 label={label}
@@ -119,7 +117,6 @@ const QuizToggleCard: React.FC<QuizToggleCardProps> = (props) => {
                 label={label}
                 userAnswer={props.userAnswer}
                 correctAnswer={props.correctAnswer}
-                count={props.counts[label]} // 해당 label에 대한 선택자 수
                 mode="result"
               />
             ))
@@ -177,7 +174,7 @@ const QuizToggleCard: React.FC<QuizToggleCardProps> = (props) => {
             />
           )}
           <h1 className={styles.index}>퀴즈 {props.quizIndex}</h1>
-          {(props.mode === "result" || props.mode === "teacher") && (
+          {props.mode === "teacher" && (
             <p className={styles.correctRate}>정답률: {props.correctRate}%</p>
           )}
         </div>
