@@ -76,7 +76,7 @@ public class SecurityConfig {
                         .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                         .requestMatchers("/actuator/health").permitAll()
                         .requestMatchers("/ws-connect/**").permitAll()
-                        .requestMatchers("/api/users","/api/users/verify-email","/api/users/login","/api/users/password/temp").permitAll()
+                        .requestMatchers("/api/users","/api/users/verify-email","/api/users/login","/api/users/password/temp","/api/users/refresh").permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(new FilterExceptionHandler(), LogoutFilter.class) // 예외처리 필터
                 .addFilterBefore(jwtFilter(),UsernamePasswordAuthenticationFilter.class) // 미들웨어
