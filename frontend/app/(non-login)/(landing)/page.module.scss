@@ -1,0 +1,782 @@
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 8vh;
+  background-color: $color-blue;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: $z-header;
+  overflow: hidden;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $spacing-sm $spacing-xl;
+  transition: all 0.3s ease;
+
+  // 스크롤 상태일 때의 스타일
+  &.scrolled {
+    background-color: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+
+    .login {
+      border: 2px solid $color-blue;
+      color: $color-blue;
+
+      &:hover {
+        background-color: $color-blue;
+        color: $color-white;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+    }
+  }
+
+  .logo {
+    height: auto;
+    max-height: 100%;
+    width: auto;
+    object-fit: contain;
+    transition: all 0.3s ease;
+  }
+
+  .login {
+    border: 2px solid $color-white;
+    padding: $spacing-sm $spacing-lg;
+    border-radius: $radius-full;
+    color: $color-white;
+    font-weight: $font-weight-medium;
+    font-size: $font-size-md;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: $font-weight-bold;
+
+    &:hover {
+      background-color: $color-white;
+      color: $color-blue;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+  }
+}
+
+.contents {
+  width: 100%;
+  background-color: $color-white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.heroSection {
+  width: 100%;
+  height: 100vh;
+  background-color: $color-blue;
+  padding: calc(8vh + $spacing-xl) $spacing-3xl $spacing-3xl $spacing-3xl;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.heroInner {
+  height: calc(100vh - 8vh - $spacing-xl);
+  display: flex;
+  flex-direction: row;
+  gap: $spacing-2xl;
+  align-items: start;
+  margin: 0 auto;
+  transition: all 0.4s ease;
+
+  @include respond-to(md) {
+    flex-direction: column;
+  }
+}
+
+.heroLeft {
+  padding: $spacing-3xl;
+  color: $color-white;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xl;
+  width: 100%;
+  justify-content: flex-start;
+  align-items: flex-start;
+  transition: all 0.3s ease;
+
+  @include respond-to(sm) {
+    padding: $spacing-md;
+  }
+}
+
+.textWrapper {
+  h2 {
+    font-size: 56px;
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: $spacing-md;
+    transition: all 0.3s ease;
+
+    @include respond-to(lg) {
+      font-size: 48px;
+    }
+
+    @include respond-to(sm) {
+      font-size: 26px;
+    }
+  }
+
+  p {
+    font-size: $font-size-lg;
+    line-height: 1.6;
+    opacity: 0.95;
+    transition: all 0.3s ease;
+  }
+
+  .logo {
+    width: 500px;
+    height: auto;
+    object-fit: contain;
+    transition: all 0.3s ease;
+
+    @include respond-to(lg) {
+      width: 400px;
+    }
+
+    @include respond-to(sm) {
+      width: 300px;
+    }
+  }
+}
+
+.heroCtas {
+  display: flex;
+  align-items: center;
+  gap: $spacing-lg;
+}
+
+.primaryCta {
+  background-color: $color-white;
+  color: $color-blue;
+  padding: $spacing-md $spacing-2xl;
+  border-radius: $radius-full;
+  font-weight: $font-weight-bold;
+  font-size: $font-size-lg;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12);
+  }
+}
+
+.arrow {
+  margin-left: $spacing-sm;
+}
+
+.introImageWrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transition: all 0.3s ease;
+
+  img {
+    transition: all 0.4s ease;
+    height: auto;
+    object-fit: contain;
+    right: -20%;
+    bottom: -8%;
+    position: absolute;
+    width: 800px;
+
+    @include respond-to(lg) {
+      width: 600px;
+      right: -25%;
+      bottom: -10%;
+    }
+
+    @include respond-to(md) {
+      width: 500px;
+      right: -10%;
+      bottom: -10%;
+    }
+
+    @include respond-to(sm) {
+      width: 400px;
+      right: -10%;
+      bottom: -10%;
+    }
+  }
+}
+
+.heroImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.scrollIndicator {
+  position: absolute;
+  left: 50%;
+  bottom: $spacing-lg;
+  transform: translateX(-50%);
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background-color: $color-white;
+  color: $color-blue;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  transition: $transition-default;
+}
+
+.downArrow {
+  animation: bounce 1.4s infinite;
+}
+
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(-5px);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translateY(5px);
+    opacity: 1;
+  }
+}
+
+.introSection {
+  width: 100%;
+  min-height: 100vh;
+  background-color: $color-white;
+  padding: calc($spacing-3xl + $spacing-3xl);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-3xl;
+  transition: all 0.3s ease;
+
+  @include respond-to(md) {
+    padding: calc(8vh + $spacing-2xl) $spacing-lg;
+    gap: $spacing-2xl;
+  }
+}
+
+.introHeader {
+  width: 100%;
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: space-between;
+  transition: all 0.4s ease;
+
+  @include respond-to(md) {
+    flex-direction: column;
+    align-items: center;
+    // gap: $spacing-xl;
+  }
+}
+
+.introTitle {
+  font-size: 64px;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: left;
+  margin-bottom: calc($spacing-3xl * 2);
+  transition: all 0.3s ease;
+
+  @include respond-to(lg) {
+    font-size: 56px;
+  }
+
+  @include respond-to(md) {
+    font-size: 40px;
+    text-align: center;
+    margin-bottom: $spacing-xl;
+  }
+
+  @include respond-to(sm) {
+    font-size: 32px;
+  }
+}
+
+.introDescription {
+  text-align: right;
+  max-width: 600px;
+  transition: all 0.3s ease;
+
+  @include respond-to(md) {
+    text-align: center;
+  }
+}
+
+.introSubtitle {
+  font-size: $font-size-lg;
+  font-weight: 600;
+  margin-bottom: $spacing-md;
+  line-height: 1.4;
+  transition: all 0.3s ease;
+
+  @include respond-to(md) {
+    font-size: $font-size-lg;
+  }
+  @include respond-to(sm) {
+    font-size: $font-size-md;
+  }
+}
+
+.introText {
+  font-size: $font-size-md;
+  line-height: 1.6;
+  font-weight: $font-weight-regular;
+  margin: 0;
+  transition: all 0.3s ease;
+
+  @include respond-to(md) {
+    font-size: $font-size-md;
+  }
+  @include respond-to(sm) {
+    font-size: $font-size-sm;
+  }
+}
+
+.featuresContainer {
+  display: flex;
+  flex-direction: row;
+  gap: $spacing-lg;
+  width: 100%;
+  transition: all 0.4s ease;
+
+  @include respond-to(md) {
+    flex-direction: column;
+  }
+}
+
+.featureCard {
+  width: 25%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: $spacing-3xl;
+  background-color: $color-neutral-8;
+  border-radius: 16px;
+  padding: $spacing-xl;
+  transition: all 0.3s ease;
+  border: 1px solid $color-neutral-7;
+
+  @include respond-to(md) {
+    width: 100%;
+    padding: $spacing-md;
+  }
+
+  @include respond-to(sm) {
+    gap: $spacing-sm;
+  }
+}
+
+.featureIcon {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  background-color: $color-white;
+  border-radius: $radius-full;
+  border: 1px solid $color-neutral-7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.featureIcon svg {
+  width: 24px;
+  height: 24px;
+  color: $color-blue;
+}
+
+.featureContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+
+  @include respond-to(md) {
+    gap: 0;
+  }
+}
+
+.featureTitle {
+  font-size: $font-size-xl;
+  font-weight: 600;
+  margin: 0 0 $spacing-sm 0;
+  transition: all 0.3s ease;
+
+  @include respond-to(sm) {
+    font-size: $font-size-lg;
+  }
+}
+
+.featureDescription {
+  font-size: $font-size-md;
+  color: $color-neutral-4;
+  line-height: 1.5;
+  margin: 0;
+  transition: all 0.3s ease;
+}
+
+.roadMapSection {
+  width: 100%;
+  min-height: 100vh;
+  background-color: $color-neutral-8;
+  padding: calc($spacing-3xl + $spacing-3xl);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-2xl;
+  transition: all 0.3s ease;
+
+  @include respond-to(md) {
+    padding: calc(8vh + $spacing-2xl) $spacing-lg;
+    gap: $spacing-2xl;
+  }
+}
+
+.roadMapHeader {
+  width: 100%;
+  text-align: center;
+  margin-bottom: $spacing-3xl;
+}
+
+.roadMapTitle {
+  font-size: 96px;
+  font-weight: 700;
+  color: $color-blue;
+  margin-bottom: $spacing-2xl;
+  transition: all 0.3s ease;
+
+  @include respond-to(md) {
+    font-size: 64px;
+  }
+
+  @include respond-to(sm) {
+    font-size: 48px;
+  }
+}
+
+.roadMapDescription {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: $spacing-2xl;
+  margin: 0 auto;
+  transition: all 0.4s ease;
+
+  @include respond-to(md) {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+}
+
+.roadMapText {
+  flex: 1;
+  text-align: left;
+  font-size: $font-size-lg;
+  line-height: 1.6;
+  font-weight: $font-weight-regular;
+  margin: 0;
+  transition: all 0.3s ease;
+
+  @include respond-to(md) {
+    text-align: center;
+    font-size: $font-size-md;
+  }
+}
+
+.roadMapCta {
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+
+  p {
+    font-size: 64px;
+    text-align: right;
+    font-weight: 700;
+    color: #000;
+    margin: 0;
+    line-height: 1.2;
+    transition: all 0.3s ease;
+
+    @include respond-to(lg) {
+      font-size: 48px;
+    }
+
+    @include respond-to(md) {
+      display: none;
+    }
+  }
+}
+
+.roadMapCards {
+  display: flex;
+  gap: $spacing-3xl;
+  width: 100%;
+  height: 100%;
+  transition: all 0.4s ease;
+  justify-content: center;
+
+  @include respond-to(md) {
+    flex-direction: column;
+    gap: $spacing-2xl;
+  }
+}
+
+.roadMapCard {
+  flex: 1;
+  background-color: $color-white;
+  border-radius: 16px;
+  padding: $spacing-2xl;
+  max-width: 600px;
+  transition: all 0.3s ease;
+  height: fit-content;
+
+  @include respond-to(md) {
+    padding: $spacing-xl;
+  }
+}
+
+.cardTitle {
+  font-size: 24px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: $spacing-xl;
+  transition: all 0.3s ease;
+
+  @include respond-to(sm) {
+    font-size: 20px;
+  }
+}
+
+.stepsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+}
+
+.stepItem {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+}
+
+.stepNumber {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  background-color: $color-blue;
+  color: $color-white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: $font-size-md;
+}
+
+.stepText {
+  flex: 1;
+  font-size: $font-size-lg;
+  line-height: 1.5;
+  color: $color-neutral-3;
+  transition: all 0.3s ease;
+
+  @include respond-to(sm) {
+    font-size: $font-size-md;
+  }
+}
+
+.startButtonSection {
+  width: 100%;
+  min-height: 100vh;
+  background-color: $color-black;
+  padding: calc($spacing-3xl + $spacing-3xl);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: calc($spacing-3xl * 5);
+  text-align: center;
+  margin: 0 auto;
+  transition: all 0.4s ease;
+
+  @include respond-to(lg) {
+    gap: calc($spacing-3xl * 3);
+  }
+
+  @include respond-to(md) {
+    padding: calc(8vh + $spacing-2xl) $spacing-lg;
+    gap: $spacing-2xl;
+    flex-direction: column;
+  }
+
+  @include respond-to(sm) {
+    padding: calc(8vh + $spacing-xl) $spacing-md;
+    gap: $spacing-xl;
+  }
+
+  // 로고 스타일
+  img:first-child {
+    display: none;
+    transition: all 0.3s ease;
+
+    @include respond-to(md) {
+      display: block;
+      width: calc(98px * 3);
+      height: calc(28px * 3);
+      margin-bottom: $spacing-2xl;
+    }
+
+    @include respond-to(sm) {
+      width: calc(98px * 2);
+      height: calc(28px * 2);
+    }
+  }
+
+  // 텍스트 컨테이너
+  > div {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    gap: $spacing-xl;
+    width: fit-content;
+    text-align: left;
+    transition: all 0.3s ease;
+
+    @include respond-to(md) {
+      align-items: center;
+    }
+
+    @include respond-to(sm) {
+      gap: $spacing-lg;
+      max-width: 100%;
+    }
+
+    h2 {
+      font-size: 64px;
+      font-weight: 700;
+      color: $color-white;
+      line-height: 1.2;
+      margin: 0;
+      transition: all 0.3s ease;
+
+      @include respond-to(lg) {
+        font-size: 40px;
+      }
+
+      @include respond-to(md) {
+        font-size: 36px;
+        text-align: center;
+      }
+
+      @include respond-to(sm) {
+        font-size: 28px;
+        line-height: 1.3;
+      }
+    }
+
+    p {
+      font-size: $font-size-lg;
+      color: #cccccc;
+      line-height: 1.6;
+      margin: 0;
+      transition: all 0.3s ease;
+
+      @include respond-to(md) {
+        font-size: $font-size-md;
+        text-align: center;
+      }
+
+      @include respond-to(sm) {
+        font-size: $font-size-sm;
+        line-height: 1.5;
+      }
+    }
+
+    button {
+      background: linear-gradient(to right, #87ceeb, #9370db);
+      border: none;
+      border-radius: 50px;
+      padding: $spacing-sm $spacing-2xl;
+      color: $color-white;
+      font-size: $font-size-lg;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      display: flex;
+      align-items: center;
+      gap: $spacing-sm;
+      width: fit-content;
+      font-family: $font-default;
+
+      @include respond-to(sm) {
+        padding: $spacing-sm $spacing-xl;
+        font-size: $font-size-md;
+        margin-top: $spacing-md;
+      }
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+      }
+
+      p {
+        margin: 0;
+        color: $color-white;
+        font-size: inherit;
+        font-weight: inherit;
+      }
+
+      svg {
+        width: 20px;
+        height: 20px;
+        color: $color-white;
+        transition: all 0.3s ease;
+
+        @include respond-to(sm) {
+          width: 18px;
+          height: 18px;
+        }
+      }
+    }
+  }
+
+  // 큰 로고 이미지 (오른쪽)
+  img:last-child {
+    display: block;
+    width: 293px;
+    height: 320px;
+    object-fit: contain;
+    transition: all 0.3s ease;
+
+    @include respond-to(lg) {
+      width: 200px;
+      height: 220px;
+    }
+
+    @include respond-to(md) {
+      display: none;
+    }
+  }
+}

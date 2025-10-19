@@ -95,12 +95,12 @@ export const ENDPOINTS = {
       `${BASE_API}/lectures/${lectureId}/recordings`,
     GET_RECORDING: (lectureId: string) =>
       `${BASE_API}/lectures/${lectureId}/recordings`,
-
+    
     // 채팅 관련
     SAVE_CHAT: (lectureId: string) =>
-      `${BASE_API}/lectures/${lectureId}/chating`,
+      `${BASE_API}/lectures/chatting/after/${lectureId}`,
     GET_CHAT: (lectureId: string) =>
-      `${BASE_API}/lectures/${lectureId}/chating`,
+      `${BASE_API}/lectures/${lectureId}/chatting`,
   },
 
   // 퀴즈 관련

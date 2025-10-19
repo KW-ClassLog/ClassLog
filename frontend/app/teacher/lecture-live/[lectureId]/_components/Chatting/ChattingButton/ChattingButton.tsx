@@ -4,9 +4,9 @@ import { useEffect, useState } from "react";
 import IconButton from "@/components/Button/IconButton/IconButton";
 import { MessageCircleMore } from "lucide-react";
 import { useLive } from "../../LectureLiveProvider";
-import styles from "./ChatingButton.module.scss";
+import styles from "./ChattingButton.module.scss";
 
-export default function ChatingButton({
+export default function ChattingButton({
   className,
   onPress,
 }: {
