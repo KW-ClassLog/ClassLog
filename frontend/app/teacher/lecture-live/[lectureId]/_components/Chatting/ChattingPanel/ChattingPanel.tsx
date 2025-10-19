@@ -1,16 +1,17 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import styles from "./ChatingPanel.module.scss";
+import { useEffect, useRef, useState, useMemo } from "react";
+import styles from "./ChattingPanel.module.scss";
 import IconButton from "@/components/Button/IconButton/IconButton";
 import { X, SendHorizontal } from "lucide-react";
 import { useLive } from "../../LectureLiveProvider";
 import ChatBox from "@/components/ChatBox/ChatBox";
 import BasicInput from "@/components/Input/BasicInput/BasicInput";
 import { useParams } from "next/navigation";
-import { useLectureChat } from "@/hooks/useLectureChat";
+import { useLectureChat, type ChatMessage } from "@/hooks/useLectureChat";
+import { fetchChattingList } from "@/api/lectures/fetchChattingList";
 
-export default function ChatPanel() {
+export default function ChattingPanel() {
   const { togglePanel } = useLive();
   const { lectureId } = useParams<{ lectureId: string }>();
 
@@ -19,6 +20,9 @@ export default function ChatPanel() {
 
   const [text, setText] = useState("");
   const bodyRef = useRef<HTMLDivElement>(null);
+
+  const [previousMessages, setPreviousMessages] = useState<ChatMessage[]>([]);
+  const fetchedOnceRef = useRef(false);
 
   const closeChat = () => togglePanel("chat");
 
@@ -36,13 +40,53 @@ export default function ChatPanel() {
     send();
   };
 
+  // 연결 직후 과거 대화 불러오기
+  useEffect(() => {
+    if (!lectureId || !connected || fetchedOnceRef.current) return;
+
+    let isMounted = true;
+    (async () => {
+      try {
+        const res = await fetchChattingList(lectureId);
+        if (!isMounted) return;
+
+        if (res.isSuccess && Array.isArray(res.result)) {
+          const mapped: ChatMessage[] = res.result.map((m) => ({
+            senderId: null,
+            senderName: null,
+            content: m.content,
+            role: m.role,
+            timestamp: m.timestamp,
+          }));
+          setPreviousMessages(mapped);
+        } else {
+          setPreviousMessages([]);
+        }
+      } catch (e) {
+        setPreviousMessages([]);
+        console.error("과거 채팅 불러오기 실패:", e);
+      } finally {
+        fetchedOnceRef.current = true;
+      }
+    })();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [lectureId, connected]);
+
+  // 과거 + 실시간 합친 배열
+  const combinedMessages = useMemo(
+    () => [...previousMessages, ...messages],
+    [previousMessages, messages]
+  );
+
   // 새로운 메시지 오면 스크롤 맨 아래로 이동
   useEffect(() => {
     const el = bodyRef.current;
     if (!el) return;
     el.scrollTop = el.scrollHeight;
-  }, [messages]);
-
+  }, [combinedMessages]);
 
   const fmt = (ts: string) => {
     const d = new Date(ts);
@@ -66,7 +110,7 @@ export default function ChatPanel() {
       </div>
 
       <div ref={bodyRef} className={styles.body}>
-        {messages.map((m, i) => (
+        {combinedMessages.map((m, i) => (
           <div
             key={i}
             className={`${styles.row} ${
