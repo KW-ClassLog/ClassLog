@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import styles from "./LectureMainGrid.module.scss";
 import { useLive } from "../LectureLiveProvider";
-import ChatPanel from "../Chating/ChatingPanel/ChatingPanel";
+import ChattingPanel from "../Chatting/ChattingPanel/ChattingPanel";
 import dynamic from "next/dynamic";
 import { FileText } from "lucide-react";
 
@@ -119,7 +119,7 @@ export default function LectureMainGrid() {
       </section>
 
       <aside className={styles.right}>
-        <ChatPanel />
+        <ChattingPanel />
       </aside>
     </main>
   );

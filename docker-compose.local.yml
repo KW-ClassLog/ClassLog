@@ -31,7 +31,7 @@ services:
 
 
   ai:
-    image: classlog/ai:v3.4
+    image: classlog/ai:v4.1
     container_name: classlog-ai
     ports:
       - 8000:8000
