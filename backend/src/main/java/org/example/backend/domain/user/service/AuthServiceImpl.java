@@ -181,8 +181,12 @@ public class AuthServiceImpl implements AuthService {
         response.addHeader("Authorization","Bearer "+accessToken);
 
         // refresh token 응답 Header
+//        response.addHeader("Set-Cookie","refresh_token="+refreshToken+
+//                "; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=" + (14 * 24 * 60 * 60));
+
+        // 테스트용 쿠키 설정
         response.addHeader("Set-Cookie","refresh_token="+refreshToken+
-                "; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=" + (14 * 24 * 60 * 60));
+                "; HttpOnly; SameSite=Lax; Path=/; Max-Age=" + (14 * 24 * 60 * 60));
 
         // role 기반으로 온보딩 여부 판단
         boolean onboardingRequired = user.getRole() == Role.UNKNOWN;
@@ -218,7 +222,11 @@ public class AuthServiceImpl implements AuthService {
         response.addHeader("Authorization","Bearer "+accessToken);
 
         // refresh token 응답 Header
+//        response.addHeader("Set-Cookie","refresh_token="+refreshToken+
+//                "; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=" + (14 * 24 * 60 * 60));
+
+        // 테스트용 쿠키 설정
         response.addHeader("Set-Cookie","refresh_token="+refreshToken+
-                "; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=" + (14 * 24 * 60 * 60));
+                "; HttpOnly; SameSite=Lax; Path=/; Max-Age=" + (14 * 24 * 60 * 60));
     }
 }
