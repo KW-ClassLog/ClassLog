@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.example.backend.global.entitiy.BaseEntity;
 
+import java.util.UUID;
+
 @Entity
 @Table(name = "notification_setting")
 @Data
@@ -14,10 +16,8 @@ public class NotificationSetting extends BaseEntity {
 
     @Id
     @Column(name = "user_id")
-    private String userId;
+    private UUID userId;
 
-    @Column(name = "token", nullable = false, unique = true, length = 512)
-    private String token;
 
     @Column(name = "quiz_upload", nullable = false)
     @Builder.Default

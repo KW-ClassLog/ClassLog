@@ -7,6 +7,8 @@ import org.example.backend.domain.lectureNote.entity.LectureNote;
 import org.example.backend.domain.lectureNote.repository.LectureNoteRepository;
 import org.example.backend.domain.lectureNoteMapping.entity.LectureNoteMapping;
 import org.example.backend.domain.lectureNoteMapping.repository.LectureNoteMappingRepository;
+import org.example.backend.domain.notification.entity.AlarmType;
+import org.example.backend.domain.notification.service.NotificationService;
 import org.example.backend.domain.option.entity.Option;
 import org.example.backend.domain.option.repository.OptionRepository;
 import org.example.backend.domain.quiz.converter.QuizConverter;
@@ -26,9 +28,14 @@ import org.example.backend.domain.user.entity.Role;
 import org.example.backend.global.security.auth.CustomSecurityUtil;
 import org.example.backend.infra.langchain.LangChainClient;
 import org.example.backend.global.S3.service.S3Service;
+import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -50,6 +57,8 @@ public class QuizServiceImpl implements QuizService {
     private final CustomSecurityUtil customSecurityUtil;
     private final QuizConverter quizConverter;
 
+    private final TaskScheduler taskScheduler;
+    private final NotificationService notificationService;
 
     // 퀴즈 생성 및 재생성
     @Override
@@ -172,6 +181,14 @@ public class QuizServiceImpl implements QuizService {
                 }
             }
         }
+        notificationService.sendAlarmToAllStudentsInLecture(
+                lecture.getId(),
+                AlarmType.quizUpload,
+                "시스템",
+                lecture.getLectureName() + " 퀴즈가 게시되었습니다. 풀어보러 갈까요?."
+        );
+        scheduleQuizAnswerUploadNotification(lecture);
+
 
         return QuizSaveResponseDTO.builder()
                 .lectureId(lectureId)
@@ -179,6 +196,32 @@ public class QuizServiceImpl implements QuizService {
                 .quizIds(savedQuizIds)
                 .build();
     }
+    private void scheduleQuizAnswerUploadNotification(Lecture lecture) {
+        // 현재 시간 기준으로 "오늘 밤 12시(자정)" 계산
+        LocalDateTime midnight = LocalDate.now()
+                .plusDays(1) // 내일 0시 (오늘 밤 12시)
+                .atStartOfDay();
+
+        ZoneId zone = ZoneId.systemDefault();
+        Instant triggerTime = midnight.atZone(zone).toInstant();
+
+        taskScheduler.schedule(() -> {
+            notificationService.sendAlarmToProfessor(
+                    lecture.getId(),
+                    AlarmType.quizAnswerUpload,
+                    "시스템",
+                    lecture.getLectureName() + " 퀴즈 대시보드가 업로드 되었습니다."
+            );
+
+            notificationService.sendAlarmToAllStudentsInLecture(
+                    lecture.getId(),
+                    AlarmType.quizAnswerUpload,
+                    "시스템",
+                    lecture.getLectureName() + " 퀴즈 정답이 공개되었습니다."
+            );
+        }, triggerTime);
+    }
+
 
     // 퀴즈 문제 조회
     @Override

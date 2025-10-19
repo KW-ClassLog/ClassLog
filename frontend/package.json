@@ -16,6 +16,7 @@
     "date-fns": "^4.1.0",
     "date-fns-tz": "^3.2.0",
     "dayjs": "^1.11.13",
+    "firebase": "^12.3.0",
     "flatpickr": "^4.6.13",
     "jsonwebtoken": "^9.0.2",
     "jsqr": "^1.4.0",

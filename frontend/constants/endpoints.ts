@@ -31,6 +31,7 @@ export const ENDPOINTS = {
     UPDATE_SETTINGS: `${BASE_API}/notifications/setting`,
     LIST: `${BASE_API}/notifications`,
     UPDATE_READ_STATUS: `${BASE_API}/notifications`,
+    REGISTER_FCM_TOKEN: `${BASE_API}/push/register`,
   },
 
   // 클래스 관련

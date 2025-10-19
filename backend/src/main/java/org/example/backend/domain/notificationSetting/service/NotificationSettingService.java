@@ -17,9 +17,9 @@ public class NotificationSettingService implements NotificationSettingServiceImp
 
     @Override
     public NotificationSettingResponseDTO getNotiSetting(UUID userId) {
-        NotificationSetting setting = notificationSettingRepository.findById(userId.toString())
+        NotificationSetting setting = notificationSettingRepository.findById(userId)
                 .orElseGet(() -> NotificationSetting.builder()
-                        .userId(userId.toString())
+                        .userId(userId)
                         .quizUpload(true)
                         .quizAnswerUpload(true)
                         .lectureNoteUpload(true)
@@ -32,7 +32,7 @@ public class NotificationSettingService implements NotificationSettingServiceImp
 
     @Transactional
     public void patchSettings(UUID userId, NotificationSettingPatchRequest req) {
-        NotificationSetting entity = notificationSettingRepository.findById(userId.toString())
+        NotificationSetting entity = notificationSettingRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("알림 설정이 존재하지 않습니다."));
 
         if (req.quizUpload() != null) entity.setQuizUpload(req.quizUpload());
@@ -40,5 +40,21 @@ public class NotificationSettingService implements NotificationSettingServiceImp
         if (req.lectureNoteUpload() != null) entity.setLectureNoteUpload(req.lectureNoteUpload());
         if (req.lectureUpload() != null) entity.setLectureUpload(req.lectureUpload());
         if (req.recordUpload() != null) entity.setRecordUpload(req.recordUpload());
+    }
+
+    public void initializeDefaultSettings(UUID userId) {
+        // 이미 존재하는 설정이 있으면 중복 생성 방지
+        if (notificationSettingRepository.existsByUserId(userId)) return;
+
+        NotificationSetting notificationSetting = NotificationSetting.builder()
+                .userId(userId)
+                .quizUpload(true)
+                .quizAnswerUpload(true)
+                .lectureNoteUpload(true)
+                .lectureUpload(true)
+                .recordUpload(true)
+                .build();
+
+        notificationSettingRepository.save(notificationSetting);
     }
 }

@@ -35,8 +35,7 @@ export default function MenuSection() {
     <div className={styles.menuSection}>
       <ul>
         <li>
-          <Link href="#">알림 설정</Link>
-          {/* TODO: 추후 실제 알림설정 경로명으로 수정 */}
+          <Link href="/student/profile/notification-setting">알림 설정</Link>
         </li>
         <li>
           <button onClick={handleLogoutClick} className={styles.logoutButton}>
