@@ -16,8 +16,6 @@ public class NotificationSetting extends BaseEntity {
     @Column(name = "user_id")
     private String userId;
 
-    @Column(name = "token", nullable = false, unique = true, length = 512)
-    private String token;
 
     @Column(name = "quiz_upload", nullable = false)
     @Builder.Default
