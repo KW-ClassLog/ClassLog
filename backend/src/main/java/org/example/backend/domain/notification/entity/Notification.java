@@ -26,8 +26,8 @@ public class Notification extends BaseEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "lecture_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "lecture_id", nullable = true)
     private Lecture lecture;
 
     @Enumerated(EnumType.STRING)

@@ -3,6 +3,7 @@ package org.example.backend.global.userdeviceToken.controller;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.example.backend.domain.notificationSetting.service.NotificationSettingService;
 import org.example.backend.global.security.auth.CustomSecurityUtil;
 import org.example.backend.global.security.auth.CustomUserDetails;
 import org.example.backend.global.userdeviceToken.dto.request.TokenRegisterRequest;
@@ -23,12 +24,14 @@ public class UserDeviceTokenController {
 
     private final UserDeviceTokenService tokenService;
     private final CustomSecurityUtil customSecurityUtil;
+    private final NotificationSettingService notificationSettingService;
 
     @PostMapping("/register")
     public ResponseEntity<String> registerToken(@RequestBody TokenRegisterRequest dto,
                                                 @AuthenticationPrincipal CustomUserDetails userDetails) {
         UUID userId = customSecurityUtil.getUserId();
         tokenService.registerToken(userId, dto.getToken());
+       notificationSettingService.initializeDefaultSettings(userId);
         return ResponseEntity.ok("Token registered successfully");
     }
 }

@@ -9,4 +9,5 @@ public interface NotificationSettingServiceImpl {
     NotificationSettingResponseDTO getNotiSetting(UUID userId);
 
     void patchSettings(UUID userId, NotificationSettingPatchRequest req);
+    void initializeDefaultSettings(UUID userId);
 }

@@ -181,6 +181,12 @@ public class QuizServiceImpl implements QuizService {
                 }
             }
         }
+        notificationService.sendAlarmToAllStudentsInLecture(
+                lecture.getId(),
+                AlarmType.quizUpload,
+                "시스템",
+                lecture.getLectureName() + " 퀴즈가 게시되었습니다. 풀어보러 갈까요?."
+        );
         scheduleQuizAnswerUploadNotification(lecture);
 
 
@@ -205,6 +211,13 @@ public class QuizServiceImpl implements QuizService {
                     AlarmType.quizAnswerUpload,
                     "시스템",
                     lecture.getLectureName() + " 퀴즈 대시보드가 업로드 되었습니다."
+            );
+
+            notificationService.sendAlarmToAllStudentsInLecture(
+                    lecture.getId(),
+                    AlarmType.quizAnswerUpload,
+                    "시스템",
+                    lecture.getLectureName() + " 퀴즈 정답이 공개되었습니다."
             );
         }, triggerTime);
     }

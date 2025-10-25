@@ -37,6 +37,13 @@ public class LectureScheduler {
                     "시스템",
                     lecture.getLectureName() + " 강의가 10분 후 시작됩니다."
             );
+
+            notificationService.sendAlarmToAllStudentsInLecture(
+                    lecture.getId(),
+                    AlarmType.startLecture,
+                    "시스템",
+                    lecture.getLectureName() + " 수업이 10분 후 시작됩니다."
+            );
         }
     }
 }
