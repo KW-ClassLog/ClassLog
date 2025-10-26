@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { IMAGES } from "@/constants/images";
 import { useLectureDetail } from "../LectureDetailContext";
+import { FetchQuestionsResult } from "@/types/lectures/fetchQuestionsTypes";
+import { fetchQuestions } from "@/api/lectures/fetchQuestions";
 
 export interface Question {
   sender: string;
@@ -19,10 +21,40 @@ export default function QuestionList() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // TODO: API 호출로 변경
-    setQuestions([]);
-    setLoading(false);
+    let alive = true;
+
+    const load = async () => {
+      setLoading(true);
+
+      try {
+        const res = await fetchQuestions(lectureId);
+        if (!alive) return;
+
+        const list = (res.result ?? []) as FetchQuestionsResult[];
+
+        const mapped: Question[] = list.map((q) => ({
+          sender: q.studentName,
+          message: q.content,
+          timestamp: q.timestamp,
+          profileUrl: q.studentProfile ?? "",
+        }))
+        .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+
+        setQuestions(mapped);
+      } catch {
+        if (!alive) return;
+        setQuestions([]);
+      } finally {
+        if (alive) setLoading(false);
+      }
+    };
+
+    load();
+    return () => {
+      alive = false;
+    };
   }, [lectureId]);
+
 
   const formatTimestamp = (timestamp: string) => {
     try {
