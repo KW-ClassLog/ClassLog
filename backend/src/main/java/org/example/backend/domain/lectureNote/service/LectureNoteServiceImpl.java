@@ -5,6 +5,8 @@ import org.example.backend.domain.classroom.entity.Classroom;
 import org.example.backend.domain.classroom.exception.ClassroomErrorCode;
 import org.example.backend.domain.classroom.exception.ClassroomException;
 import org.example.backend.domain.classroom.repository.ClassroomRepository;
+import org.example.backend.domain.lectureNote.converter.FileToMultipartFileConverter;
+import org.example.backend.domain.lectureNote.converter.LibreOfficeConverter;
 import org.example.backend.domain.lectureNote.dto.response.LectureNoteKeyResponseDTO;
 import org.example.backend.domain.lectureNote.dto.response.LectureNoteResponseDTO;
 import org.example.backend.domain.lectureNote.entity.LectureNote;
@@ -17,6 +19,7 @@ import org.example.backend.global.S3.service.S3Service;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,31 +32,67 @@ public class LectureNoteServiceImpl implements LectureNoteService {
 
     private final S3Service s3Service;
     private final LectureNoteRepository lectureNoteRepository;
-    private final ClassroomRepository classroomRepository; // ✅ 추가
+    private final ClassroomRepository classroomRepository;
     private final LectureNoteMappingRepository lectureNoteMappingRepository;
+    private final LibreOfficeConverter libreOfficeConverter;
 
     public List<LectureNote> uploadLectureNotes(UUID classId, List<MultipartFile> files) throws IOException {
-        // 1. 여러 파일에 대해 처리
         List<LectureNote> lectureNotes = new ArrayList<>();
 
-        // 2. 각 파일 업로드 처리
         for (MultipartFile file : files) {
-            // 1) S3에 업로드
-            String key = "lecture_note/" + classId + "/" + UUID.randomUUID() + "/" + file.getOriginalFilename();
-            String fileUrl = s3Service.uploadFile(file, key);
+            String originalFilename = Objects.requireNonNull(file.getOriginalFilename(), "파일명이 필요합니다");
+            boolean isPptx = originalFilename.toLowerCase().endsWith(".pptx");
 
-            // 2) classId로 Classroom 엔티티 조회
-            Classroom classroom = classroomRepository.findById(classId)
-                    .orElseThrow(() -> new ClassroomException(ClassroomErrorCode.CLASS_NOT_FOUND));
+            File tempSrc = null;
+            File convertedPdf = null;
+            String uploadFileName;
+            String key;
+            MultipartFile pdfMultipart;
 
-            // 3) LectureNote 객체 생성
-            LectureNote lectureNote = LectureNote.builder()
-                    .noteUrl(key)
-                    .classroom(classroom) // Classroom 객체 넣기
-                    .build();
+            try {
+                if (isPptx) {
+                    // MultipartFile -> File
+                    tempSrc = new File(System.getProperty("java.io.tmpdir"), originalFilename);
+                    file.transferTo(tempSrc);
 
-            // 4) LectureNote 저장
-            lectureNotes.add(lectureNoteRepository.save(lectureNote));
+                    try {
+                        // PPTX → PDF 변환
+                        convertedPdf = libreOfficeConverter.convertPptxToPdf(tempSrc);
+
+                        // File -> MultipartFile
+                        pdfMultipart = new FileToMultipartFileConverter(convertedPdf, "application/pdf");
+                    } catch (Exception e) {
+                        throw new IOException("PPTX→PDF 변환 실패: " + originalFilename, e);
+                    }
+
+                    uploadFileName = convertedPdf.getName();
+
+                    // S3 업로드
+                    key = "lecture_note/" + classId + "/" + UUID.randomUUID() + "/" + uploadFileName;
+                    s3Service.uploadFile(pdfMultipart, key);
+
+                } else {
+                    // pptx 외 다른 파일들 그대로 업로드
+                    uploadFileName = originalFilename;
+                    key = "lecture_note/" + classId + "/" + UUID.randomUUID() + "/" + uploadFileName;
+                    s3Service.uploadFile(file, key);
+                }
+
+                Classroom classroom = classroomRepository.findById(classId)
+                        .orElseThrow(() -> new ClassroomException(ClassroomErrorCode.CLASS_NOT_FOUND));
+
+                LectureNote lectureNote = LectureNote.builder()
+                        .noteUrl(key)
+                        .classroom(classroom)
+                        .build();
+
+                lectureNotes.add(lectureNoteRepository.save(lectureNote));
+
+            } finally {
+                // pdf로 변환하며 생긴 임시 파일 삭제
+                if (tempSrc != null && tempSrc.exists()) tempSrc.delete();
+                if (convertedPdf != null && convertedPdf.exists()) convertedPdf.delete();
+            }
         }
 
         return lectureNotes;
