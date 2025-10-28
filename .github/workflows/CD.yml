@@ -100,6 +100,20 @@ jobs:
             NEXT_PUBLIC_API_BASE_URL=${{secrets.NEXT_PUBLIC_API_BASE_URL}}
             NEXT_PUBLIC_WS_URL=${{secrets.NEXT_PUBLIC_WS_URL}}
             EOF
+
+      - name: Create .env for docker compose
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            mkdir -p /home/ubuntu/classlog
+            cat > /home/ubuntu/classlog/.env <<EOF
+            DOCKERHUB_USERNAME=${{ secrets.DOCKER_USERNAME }}
+            IMAGE_TAG=${{ github.sha }}
+            EOF
+
       - name: Deploy containers
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -107,11 +121,7 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            cd /home/ubuntu/classlog
-            export DOCKERHUB_USERNAME="${{ secrets.DOCKER_USERNAME }}"
-            export IMAGE_TAG="${{ github.sha }}"
-            
-            echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${DOCKERHUB_USERNAME}" --password-stdin
+            echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}"  --password-stdin
             docker compose down
             docker compose pull
             docker compose up -d
