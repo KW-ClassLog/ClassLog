@@ -98,6 +98,7 @@ jobs:
             mkdir -p /home/ubuntu/classlog/frontend
             cat > /home/ubuntu/classlog/frontend/.env <<EOF
             NEXT_PUBLIC_API_BASE_URL=${{secrets.NEXT_PUBLIC_API_BASE_URL}}
+            NEXT_PUBLIC_WS_URL=${{secrets.NEXT_PUBLIC_WS_URL}}
             EOF
       - name: Deploy containers
         uses: appleboy/ssh-action@v1.0.3
