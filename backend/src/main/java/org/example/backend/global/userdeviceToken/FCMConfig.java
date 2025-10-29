@@ -5,6 +5,7 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -16,11 +17,13 @@ public class FCMConfig {
     public FirebaseApp firebaseApp() throws IOException {
         if (FirebaseApp.getApps().isEmpty()) {
             // 서비스 계정 키 JSON 파일 경로
-            FileInputStream serviceAccount =
-                    new FileInputStream("src/main/resources/claog-1e23b-firebase-adminsdk-fbsvc-25a8b72901.json");
+//            FileInputStream serviceAccount =
+//                    new FileInputStream("src/main/resources/claog-1e23b-firebase-adminsdk-fbsvc-25a8b72901.json");
 
             FirebaseOptions options = FirebaseOptions.builder()
-                    .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+                    .setCredentials(GoogleCredentials.fromStream(
+                            new ClassPathResource("claog-1e23b-firebase-adminsdk-fbsvc-25a8b72901.json").getInputStream()
+                    ))
                     .build();
 
             return FirebaseApp.initializeApp(options);
