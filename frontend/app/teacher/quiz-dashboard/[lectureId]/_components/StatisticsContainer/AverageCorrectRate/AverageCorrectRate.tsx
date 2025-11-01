@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { PieChart, Pie, Cell } from "recharts";
 import styles from "./AverageCorrectRate.module.scss";
 
@@ -14,29 +14,40 @@ export default function AverageCorrectRate({
   averageCorrectRate,
   totalQuizCount,
 }: AverageCorrectRateProps) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const data = [
     { name: "정답률", value: averageCorrectRate },
     { name: "오답률", value: 100 - averageCorrectRate },
   ];
+
   return (
     <div className={styles.chartCard}>
       <div className={styles.pieWrapper}>
-        <PieChart width={100} height={100}>
-          <Pie
-            data={data}
-            cx="50%"
-            cy="50%"
-            innerRadius={35}
-            outerRadius={48}
-            startAngle={90}
-            endAngle={-270}
-            dataKey="value"
-          >
-            {data.map((entry, idx) => (
-              <Cell key={`cell-${idx}`} fill={COLORS[idx % COLORS.length]} />
-            ))}
-          </Pie>
-        </PieChart>
+        {mounted ? (
+          <PieChart width={100} height={100}>
+            <Pie
+              data={data}
+              cx="50%"
+              cy="50%"
+              innerRadius={35}
+              outerRadius={48}
+              startAngle={90}
+              endAngle={-270}
+              dataKey="value"
+            >
+              {data.map((entry, idx) => (
+                <Cell key={`cell-${idx}`} fill={COLORS[idx % COLORS.length]} />
+              ))}
+            </Pie>
+          </PieChart>
+        ) : (
+          <div style={{ width: 100, height: 100 }} />
+        )}
         <div className={styles.pieCenterText}>{averageCorrectRate}%</div>
       </div>
       <div className={styles.averageCorrectRateTextBox}>
