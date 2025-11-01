@@ -44,12 +44,16 @@ export default function TeacherLayout({
   const showSidebar = currentRoute?.sidebarType === SiderbarType.DEFAULT;
   const showHeader = currentRoute?.headerType !== TeacherHeaderType.NONE;
 
+  const bodyClassName = [
+    "teacher-body",
+    showSidebar && "show-sidebar",
+    showHeader && "show-header",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
   return (
-    <body
-      className={`teacher-body ${showSidebar ? "show-sidebar" : ""} ${
-        showHeader ? "show-header" : ""
-      }`}
-    >
+    <body className={bodyClassName}>
       {showSidebar && <SideBar />}
       {renderHeader()}
       <div className="content">{children}</div>
