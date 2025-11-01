@@ -111,6 +111,8 @@ export const ENDPOINTS = {
     SAVE: (lectureId: string) => `${BASE_API}/quizzes/${lectureId}/save`,
     UPDATE: (lectureId: string) => `${BASE_API}/quizzes/${lectureId}`,
     GET: (lectureId: string) => `${BASE_API}/quizzes/${lectureId}`,
+    GET_FOR_DASHBOARD: (lectureId: string) =>
+      `${BASE_API}/quizzes/${lectureId}/result`,
     SUBMIT: `${BASE_API}/quizzes/submit`,
     GET_RESULT: (lectureId: string) =>
       `${BASE_API}/quizzes/${lectureId}/result/student`,
