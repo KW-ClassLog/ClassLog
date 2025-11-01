@@ -27,12 +27,17 @@ export default function QuizInfo() {
 
   return (
     <div className={styles.infoRow}>
-      <div className={styles.title}>
-        [{data?.title}] <span className={styles.dashboard}>퀴즈 대시보드</span>
-      </div>
-      <div className={styles.date}>
-        {formatDate(data?.quizDate || "", data?.quizDay || "")}
-      </div>
+      {data && (
+        <>
+          <div className={styles.title}>
+            [{data.title}]
+            <span className={styles.dashboard}>퀴즈 대시보드</span>
+          </div>
+          <div className={styles.date}>
+            {formatDate(data.quizDate, data.quizDay)}
+          </div>
+        </>
+      )}
     </div>
   );
 }
