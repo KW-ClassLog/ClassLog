@@ -105,6 +105,8 @@ export const ENDPOINTS = {
 
   // 퀴즈 관련
   QUIZZES: {
+    GET_INFO: (lectureId: string) =>
+      `${BASE_API}/quizzes/${lectureId}/result/info`,
     CREATE: (lectureId: string) => `${BASE_API}/quizzes/${lectureId}/create`,
     RECREATE: (lectureId: string) =>
       `${BASE_API}/quizzes/${lectureId}/re-create`,
