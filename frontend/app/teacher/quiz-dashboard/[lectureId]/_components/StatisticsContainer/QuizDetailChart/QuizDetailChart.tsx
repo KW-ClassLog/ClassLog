@@ -1,23 +1,20 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { PieChart, Pie, Cell, Legend } from "recharts";
 import styles from "./QuizDetailChart.module.scss";
-
-// 타입 정의 예시
-export type QuizType = "multipleChoice" | "shortAnswer" | "trueFalse";
-export interface Quiz {
-  quizId: string;
-  quizOrder: number;
-  type: QuizType;
-  [key: string]: unknown;
-}
+import {
+  MultipleChoiceQuizDetail,
+  QuizDetailStat,
+  ShortAnswerQuizDetail,
+  TrueFalseQuizDetail,
+} from "@/types/quizzes/fetchQuizDetailStatTypes";
 
 // 색상 팔레트
 const COLORS = ["#6C5CE7", "#4F8CFF", "#6AD1C9", "#B983FF"];
 const OX_COLORS = ["#6AD1C9", "#4F8CFF"];
 
 // MultipleChoiceChart: 파이차트
-function MultipleChoiceChart({ data }: { data: Quiz }) {
+function MultipleChoiceChart({ data }: { data: MultipleChoiceQuizDetail }) {
   const chartData = [
     { name: "1번", value: Number(data["1"] ?? 0) },
     { name: "2번", value: Number(data["2"] ?? 0) },
@@ -58,7 +55,7 @@ function MultipleChoiceChart({ data }: { data: Quiz }) {
 }
 
 // TrueFalseChart: OX 파이차트
-function TrueFalseChart({ data }: { data: Quiz }) {
+function TrueFalseChart({ data }: { data: TrueFalseQuizDetail }) {
   const chartData = [
     { name: "O", value: Number(data.O ?? 0) },
     { name: "X", value: Number(data.X ?? 0) },
@@ -100,7 +97,7 @@ function TrueFalseChart({ data }: { data: Quiz }) {
 }
 
 // ShortAnswerTop3: 리스트
-function ShortAnswerTop3({ data }: { data: Quiz }) {
+function ShortAnswerTop3({ data }: { data: ShortAnswerQuizDetail }) {
   const top3 = data.top3Answers as { answer: string; rate: number }[];
   const etcAnswers = data.etcAnswers as string[] | undefined;
   return (
@@ -135,7 +132,21 @@ function ShortAnswerTop3({ data }: { data: Quiz }) {
 }
 
 // 실제 QuizDetailChart 컴포넌트
-export default function QuizDetailChart({ quiz }: { quiz: Quiz }) {
+export default function QuizDetailChart({ quiz }: { quiz: QuizDetailStat }) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return (
+      <div className={styles.chartCard}>
+        <div className={styles.chartTitle}>퀴즈{quiz.quizOrder}</div>
+      </div>
+    );
+  }
+
   if (quiz.type === "multipleChoice") {
     return <MultipleChoiceChart data={quiz} />;
   }
