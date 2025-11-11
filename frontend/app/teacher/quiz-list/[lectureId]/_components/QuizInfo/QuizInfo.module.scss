@@ -1,0 +1,20 @@
+.infoRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.title {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+}
+
+.dashboard {
+  font-weight: $font-weight-medium;
+}
+
+.date {
+  font-size: $font-size-lg;
+  color: $color-blue;
+}
