@@ -3,14 +3,14 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { fetchQuizList } from "@/api/quizzes/fetchQuizList";
-import { Quiz } from "@/types/quizzes/createQuizTypes";
+import { fetchQuizListResult } from "@/types/quizzes/fetchQuizListTypes";
 import styles from "./QuizSection.module.scss";
 import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
 import AlertModal from "@/components/Modal/AlertModal/AlertModal";
 
 export default function QuizSection() {
   const { lectureId } = useParams();
-  const [quizzes, setQuizzes] = useState<Quiz[]>([]);
+  const [quizzes, setQuizzes] = useState<fetchQuizListResult["quizzes"][number][]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -24,10 +24,11 @@ export default function QuizSection() {
         if (res.isSuccess && res.result?.quizzes) {
           const mapped = res.result.quizzes.map((q) => ({
             quizId: q.quizId,
+            quizOrder: q.quizOrder,
             quizBody: q.quizBody,
             solution: q.solution,
             type: q.type,
-            options: q.options?.map((opt) => opt.text) || [],
+            options: q.options,
           }));
 
           setQuizzes(mapped);
@@ -69,10 +70,8 @@ export default function QuizSection() {
       <h3 className={styles.sectionTitle}>객관식</h3>
       <div className={styles.quizGrid}>
         {multipleChoice.map((quiz) => (
-          <div className={styles.quizBox}>
-            <div className={styles.question}>
-              {quiz.quizBody}
-            </div>
+          <div key={quiz.quizId} className={styles.quizBox}>
+            <div className={styles.question}>{quiz.quizBody}</div>
 
             <div className={styles.optionList}>
               {quiz.options?.map((opt, i) => (
@@ -80,10 +79,10 @@ export default function QuizSection() {
                   <span className={styles.optionNumber}>{i + 1}</span>
                   <div
                     className={`${styles.optionText} ${
-                      opt === quiz.solution ? styles.selectedOption : ""
+                      opt.text === quiz.solution ? styles.selectedOption : ""
                     }`}
                   >
-                    {opt}
+                    {opt.text}
                   </div>
                 </div>
               ))}
@@ -101,10 +100,8 @@ export default function QuizSection() {
       <h3 className={styles.sectionTitle}>O/X</h3>
       <div className={styles.quizGrid}>
         {ox.map((quiz) => (
-          <div className={`${styles.quizBox} ${styles.oxBox}`}>
-            <div className={styles.question}>
-              {quiz.quizBody}
-            </div>
+          <div key={quiz.quizId} className={`${styles.quizBox} ${styles.oxBox}`}>
+            <div className={styles.question}>{quiz.quizBody}</div>
             <div className={styles.answerRow}>
               <span className={styles.label}>정답:</span>
               {["O", "X"].map((v) => (
@@ -126,10 +123,8 @@ export default function QuizSection() {
       <h3 className={styles.sectionTitle}>단답형</h3>
       <div className={styles.quizGrid}>
         {short.map((quiz) => (
-          <div className={`${styles.quizBox} ${styles.shortBox}`}>
-            <div className={styles.question}>
-              {quiz.quizBody}
-            </div>
+          <div key={quiz.quizId} className={`${styles.quizBox} ${styles.shortBox}`}>
+            <div className={styles.question}>{quiz.quizBody}</div>
             <div className={styles.answerRow}>
               <span className={styles.label}>정답:</span>
               <span className={styles.shortAnswer}>{quiz.solution}</span>
