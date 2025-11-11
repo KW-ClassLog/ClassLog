@@ -46,6 +46,7 @@ const QuizPreview = ({
 
   const [showAlert, setShowAlert] = useState(false);
   const [showPreviewModal, setShowPreviewModal] = useState(false);
+  const [hasClickedMore, setHasClickedMore] = useState(false);
 
   // 현재 lectureId의 퀴즈 가져오기
   const quizzes = getQuizzes(lectureId);
@@ -56,6 +57,10 @@ const QuizPreview = ({
 
     setIsLoading(true);
     setError(null);
+
+    // 현재 시간
+    const startTime = Date.now();
+
     createQuiz({ lectureId, useAudio })
       .then((res) => {
         if (res.isSuccess && res.result && Array.isArray(res.result.quizzes)) {
@@ -70,8 +75,16 @@ const QuizPreview = ({
         setError("퀴즈 생성 중 오류가 발생했습니다.");
       })
       .finally(() => {
+
+        // 로딩 시간
+        const elapsed = Date.now() - startTime;
+        const minLoadingTime = 40000 + Math.random() * 10000;
+        const remaining = Math.max(0, minLoadingTime - elapsed);
+
+        setTimeout(() => {
         setIsLoading(false);
-      });
+      }, remaining);
+    });
   }, [
     lectureId,
     shouldGenerateQuiz,
@@ -101,9 +114,10 @@ const QuizPreview = ({
   };
 
   const handleMoreQuiz = () => {
-    if (!quizzes) return;
+    if (isLoadingMore || !quizzes || hasClickedMore) return;
 
     setIsLoadingMore(true);
+    setHasClickedMore(true);
     setError(null);
 
     recreateQuiz({ lectureId, useAudio })
@@ -213,17 +227,20 @@ const QuizPreview = ({
                   </div>
                 ))}
               </Masonry>
-              <div className={styles.moreQuiz} onClick={handleMoreQuiz}>
+
+              {!hasClickedMore && (
+                <div className={styles.moreQuiz} onClick={handleMoreQuiz}>
                 <p>
                   {isLoadingMore
                     ? "추가 퀴즈를 생성하고 있어요..."
                     : "+ 다른 퀴즈도 보고싶어요"}
                 </p>
               </div>
+              )}
             </div>
           )}
         </div>
-        {quizzes !== null && (
+        {quizzes !== null && !isLoading && (
           <div className={styles.buttonSection}>
             <button
               className={styles.customizing}
@@ -244,7 +261,7 @@ const QuizPreview = ({
       </div>
 
       {/* 제출 전 미리보기 모달 */}
-      {showPreviewModal && (
+      {showPreviewModal && !isLoading && (
         <QuizPreviewModal
           quizzes={selectedQuizzes}
           onClose={() => setShowPreviewModal(false)}
