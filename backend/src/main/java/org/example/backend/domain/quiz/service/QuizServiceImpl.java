@@ -24,6 +24,7 @@ import org.example.backend.domain.quiz.exception.QuizErrorCode;
 import org.example.backend.domain.quiz.exception.QuizException;
 import org.example.backend.domain.quiz.repository.QuizRepository;
 import org.example.backend.domain.quizAnswer.repository.QuizAnswerRepository;
+import org.example.backend.domain.quizList.repository.QuizListRepository;
 import org.example.backend.domain.user.entity.Role;
 import org.example.backend.global.security.auth.CustomSecurityUtil;
 import org.example.backend.infra.langchain.LangChainClient;
@@ -56,6 +57,7 @@ public class QuizServiceImpl implements QuizService {
     private final QuizAnswerRepository quizAnswerRepository;
     private final CustomSecurityUtil customSecurityUtil;
     private final QuizConverter quizConverter;
+    private final QuizListRepository quizListRepository;
 
     private final TaskScheduler taskScheduler;
     private final NotificationService notificationService;
@@ -183,6 +185,7 @@ public class QuizServiceImpl implements QuizService {
         }
         scheduleQuizAnswerUploadNotification(lecture);
 
+        quizListRepository.resetAllUsedFlags();
 
         return QuizSaveResponseDTO.builder()
                 .lectureId(lectureId)
@@ -190,6 +193,7 @@ public class QuizServiceImpl implements QuizService {
                 .quizIds(savedQuizIds)
                 .build();
     }
+
     private void scheduleQuizAnswerUploadNotification(Lecture lecture) {
         // 현재 시간 기준으로 "오늘 밤 12시(자정)" 계산
         LocalDateTime midnight = LocalDate.now()

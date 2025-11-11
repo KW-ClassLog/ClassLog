@@ -26,41 +26,41 @@ public class QuizController {
     private final QuizService quizService;
     private final QuizEditService quizEditService;
 
-    // 퀴즈 생성
-    @PostMapping("/{lectureId}/create")
-    public ResponseEntity<ApiResponse<QuizResponseDTO>> generateQuiz(@PathVariable("lectureId") UUID lectureId,
-                                                                     @RequestBody QuizRequestDTO request) {
-        try {
-            QuizResponseDTO response = quizService.generateQuiz(lectureId, request, false);
-            return ResponseEntity.ok(ApiResponse.onSuccess(response));
-        } catch (QuizException e) {
-            return ResponseEntity
-                    .status(e.getErrorCode().getReasonHttpStatus().getHttpStatus())
-                    .body(ApiResponse.onFailure(e.getErrorCode()));
-        } catch (Exception e) {
-            return ResponseEntity
-                    .status(FailureCode._INTERNAL_SERVER_ERROR.getReasonHttpStatus().getHttpStatus())
-                    .body(ApiResponse.onFailure(FailureCode._INTERNAL_SERVER_ERROR));
-        }
-    }
-
-    // 퀴즈 재생성
-    @PostMapping("/{lectureId}/re-create")
-    public ResponseEntity<ApiResponse<QuizResponseDTO>> regenerateQuiz(@PathVariable("lectureId") UUID lectureId,
-                                                                       @RequestBody QuizRequestDTO request) {
-        try {
-            QuizResponseDTO response = quizService.generateQuiz(lectureId, request, true);
-            return ResponseEntity.ok(ApiResponse.onSuccess(response));
-        } catch (QuizException e) {
-            return ResponseEntity
-                    .status(e.getErrorCode().getReasonHttpStatus().getHttpStatus())
-                    .body(ApiResponse.onFailure(e.getErrorCode()));
-        } catch (Exception e) {
-            return ResponseEntity
-                    .status(FailureCode._INTERNAL_SERVER_ERROR.getReasonHttpStatus().getHttpStatus())
-                    .body(ApiResponse.onFailure(FailureCode._INTERNAL_SERVER_ERROR));
-        }
-    }
+//    // 퀴즈 생성
+//    @PostMapping("/{lectureId}/create")
+//    public ResponseEntity<ApiResponse<QuizResponseDTO>> generateQuiz(@PathVariable("lectureId") UUID lectureId,
+//                                                                     @RequestBody QuizRequestDTO request) {
+//        try {
+//            QuizResponseDTO response = quizService.generateQuiz(lectureId, request, false);
+//            return ResponseEntity.ok(ApiResponse.onSuccess(response));
+//        } catch (QuizException e) {
+//            return ResponseEntity
+//                    .status(e.getErrorCode().getReasonHttpStatus().getHttpStatus())
+//                    .body(ApiResponse.onFailure(e.getErrorCode()));
+//        } catch (Exception e) {
+//            return ResponseEntity
+//                    .status(FailureCode._INTERNAL_SERVER_ERROR.getReasonHttpStatus().getHttpStatus())
+//                    .body(ApiResponse.onFailure(FailureCode._INTERNAL_SERVER_ERROR));
+//        }
+//    }
+//
+//    // 퀴즈 재생성
+//    @PostMapping("/{lectureId}/re-create")
+//    public ResponseEntity<ApiResponse<QuizResponseDTO>> regenerateQuiz(@PathVariable("lectureId") UUID lectureId,
+//                                                                       @RequestBody QuizRequestDTO request) {
+//        try {
+//            QuizResponseDTO response = quizService.generateQuiz(lectureId, request, true);
+//            return ResponseEntity.ok(ApiResponse.onSuccess(response));
+//        } catch (QuizException e) {
+//            return ResponseEntity
+//                    .status(e.getErrorCode().getReasonHttpStatus().getHttpStatus())
+//                    .body(ApiResponse.onFailure(e.getErrorCode()));
+//        } catch (Exception e) {
+//            return ResponseEntity
+//                    .status(FailureCode._INTERNAL_SERVER_ERROR.getReasonHttpStatus().getHttpStatus())
+//                    .body(ApiResponse.onFailure(FailureCode._INTERNAL_SERVER_ERROR));
+//        }
+//    }
 
     // 퀴즈 저장
     @PostMapping("/{lectureId}/save")
