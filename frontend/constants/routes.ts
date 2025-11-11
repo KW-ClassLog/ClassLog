@@ -26,6 +26,8 @@ export const ROUTES = {
     `/teacher/lecture-detail/${lectureId}`, // 강사 강의 상세
   teacherLectureLive: (lectureId: string) => 
     `/teacher/lecture-live/${lectureId}`, // 강사 실시간 강의
+  teacherQuizList: (lectureId: string) =>
+    `/teacher/quiz-list/${lectureId}`, // 강사 퀴즈 문제
   teacherSetting: "/teacher/setting", // 강사 설정
   teacherStudentManagement: "/teacher/student-management", // 강사 학생 관리
   teacherNotification: "/teacher/notification", // 강사 알림 관리
