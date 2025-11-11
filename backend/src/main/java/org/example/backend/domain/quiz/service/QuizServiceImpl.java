@@ -131,6 +131,7 @@ public class QuizServiceImpl implements QuizService {
 
     // 퀴즈 저장
     @Override
+    @Transactional
     public QuizSaveResponseDTO saveQuiz(UUID lectureId, QuizSaveRequestDTO request) {
 
         Role role = customSecurityUtil.getUserRole();

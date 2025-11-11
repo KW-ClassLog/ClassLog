@@ -122,6 +122,8 @@ public class QuizListServiceImpl implements QuizListService {
                 })
                 .toList();
 
+        quizListRepository.resetAllUsedFlags();
+
         return QuizResponseDTO.builder()
                 .lectureId(lectureId)
                 .quizzes(quizDTOs)
