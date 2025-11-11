@@ -1,0 +1,32 @@
+.quizListContainer {
+  background-color: white;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  border: 1px solid $color-neutral-7;
+  height: calc(94vh - $spacing-lg);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.quizListContainerInner {
+  height: 100%;
+  display: flex;
+  gap: $spacing-md;
+}
+
+.leftSection {
+  width: 55%;
+  height: 100%;
+  display: flex;
+  gap: $spacing-md;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60vh;
+}
+
