@@ -103,7 +103,7 @@ export default function QuizSection() {
         {ox.map((quiz) => (
           <div className={`${styles.quizBox} ${styles.oxBox}`}>
             <div className={styles.question}>
-              <strong>문제:</strong> {quiz.quizBody}
+              {quiz.quizBody}
             </div>
             <div className={styles.answerRow}>
               <span className={styles.label}>정답:</span>
@@ -128,7 +128,7 @@ export default function QuizSection() {
         {short.map((quiz) => (
           <div className={`${styles.quizBox} ${styles.shortBox}`}>
             <div className={styles.question}>
-              <strong>문제:</strong> {quiz.quizBody}
+              {quiz.quizBody}
             </div>
             <div className={styles.answerRow}>
               <span className={styles.label}>정답:</span>
