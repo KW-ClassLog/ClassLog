@@ -105,12 +105,20 @@ export const ENDPOINTS = {
 
   // 퀴즈 관련
   QUIZZES: {
+    GET_DETAIL_STAT: (lectureId: string) =>
+      `${BASE_API}/quizzes/${lectureId}/result/statistics`,
+    GET_SUBMIT_LIST: (lectureId: string) =>
+      `${BASE_API}/quizzes/${lectureId}/result/list`,
+    GET_INFO: (lectureId: string) =>
+      `${BASE_API}/quizzes/${lectureId}/result/info`,
     CREATE: (lectureId: string) => `${BASE_API}/quizzes/${lectureId}/create`,
     RECREATE: (lectureId: string) =>
       `${BASE_API}/quizzes/${lectureId}/re-create`,
     SAVE: (lectureId: string) => `${BASE_API}/quizzes/${lectureId}/save`,
     UPDATE: (lectureId: string) => `${BASE_API}/quizzes/${lectureId}`,
     GET: (lectureId: string) => `${BASE_API}/quizzes/${lectureId}`,
+    GET_FOR_DASHBOARD: (lectureId: string) =>
+      `${BASE_API}/quizzes/${lectureId}/result`,
     SUBMIT: `${BASE_API}/quizzes/submit`,
     GET_RESULT: (lectureId: string) =>
       `${BASE_API}/quizzes/${lectureId}/result/student`,
