@@ -1,0 +1,118 @@
+.wrapper {
+    width: 100%;
+    margin: 0;
+    max-width: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
+}
+  
+.sectionTitle {
+    font-size: $font-size-lg;
+    font-weight: bold;
+    margin-bottom: $spacing-sm;
+    border-bottom: 1px solid $color-neutral-6;
+    padding-bottom: $spacing-xs;
+    color: $color-neutral-2;
+}
+  
+.quizGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: $spacing-lg;
+  
+    @include respond-to(md) {
+      grid-template-columns: 1fr;
+    }
+}
+  
+.quizBox {
+    background: $color-skyblue;
+    border-radius: $radius-md;
+    padding: $spacing-lg;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-sm;
+    border: 1px solid lighten($color-blue, 35%);
+}
+  
+.question::before {
+    content: "문제: ";
+    color: $color-blue;
+    font-weight: 800;
+    margin-right: $spacing-xs;
+}
+  
+.optionList {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-xs;
+}
+  
+.optionRow {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+  
+    .optionNumber {
+      font-weight: bold;
+      color: $color-blue;
+      width: $spacing-lg;
+      text-align: right;
+    }
+  
+    .optionText {
+        flex: 1;
+        background: $color-white;
+        border-radius: $radius-sm;
+        padding: $spacing-xs $spacing-sm;
+        border: 1px solid $color-neutral-6;
+        font-size: $font-size-md;
+    }
+}
+  
+.answerRow {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    margin-top: $spacing-xs;
+  
+    .label {
+      font-weight: bold;
+      color: $color-neutral-5;
+    }
+  
+    .answerBtn {
+        border: 1px solid $color-neutral-6;
+        background: $color-white;
+        border-radius: $radius-full;
+        padding: $spacing-xs $spacing-sm;
+        font-size: $font-size-md;
+        color: $color-neutral-5;
+        transition: border 0.2s, color 0.2s;
+    
+        &.selected {
+            border: 2px solid $color-blue;
+            color: $color-blue;
+            font-weight: bold;
+            background: $color-skyblue;
+        }
+    }
+  
+    .shortAnswer {
+      display: inline-block;
+      background: $color-white;
+      border: 1px solid $color-neutral-6;
+      border-radius: $radius-sm;
+      padding: $spacing-xs $spacing-sm;
+      font-size: $font-size-sm;
+      color: $color-neutral-2;
+    }
+}
+  
+.oxBox,
+.shortBox {
+    background: $color-skyblue;
+    border: 1px solid lighten($color-blue, 35%);
+}

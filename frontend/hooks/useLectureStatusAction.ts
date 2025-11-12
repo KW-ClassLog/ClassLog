@@ -59,15 +59,18 @@ export const useLectureStatusAction = ({
         const midnight = lectureDateObj.add(1, "day").startOf("day");
         const isBeforeMidnight = now.isBefore(midnight);
 
+        // 아직 자정 전이라면 -> "퀴즈 확인하기"
         if (isToday && isBeforeMidnight) {
           return {
-            text: "오늘 밤 12:00 확인 가능",
-            disabled: true,
-            className: "showDashboardNotYet",
+            text: "퀴즈 확인하기",
+            onClick: () => router.push(ROUTES.teacherQuizList(lectureId)),
+            icon: ChevronRight,
+            className: "checkQuiz",
           };
         }
       }
 
+      // 자정 이후 -> "대시보드 확인하기"
       return {
         text: "대시보드 확인하기",
         onClick: () => router.push(ROUTES.teacherQuizDashboard(lectureId)),

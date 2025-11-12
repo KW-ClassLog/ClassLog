@@ -23,6 +23,7 @@ export const TEACHER_ROUTE_CONFIG: Record<
     | "teacherSetting"
     | "teacherStudentManagement"
     | "teacherLectureLive"
+    | "teacherQuizList"
     >,
   RouteConfig
 > = {
@@ -58,6 +59,11 @@ export const TEACHER_ROUTE_CONFIG: Record<
   },
   teacherLectureLive: {
     path: ROUTES.teacherLectureLive,
+    headerType: TeacherHeaderType.NONE,
+    sidebarType: SiderbarType.NONE,
+  },
+  teacherQuizList: {
+    path: ROUTES.teacherQuizList,
     headerType: TeacherHeaderType.NONE,
     sidebarType: SiderbarType.NONE,
   },
