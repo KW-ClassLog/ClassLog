@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import QuizCorrectRates from "./QuizCorrectRates/QuizCorrectRates";
 import AverageCorrectRate from "./AverageCorrectRate/AverageCorrectRate";
 import QuizDetailChart from "./QuizDetailChart/QuizDetailChart";
@@ -76,9 +76,17 @@ export default function StatisticsContainer({
   statData,
 }: StatisticsContainerProps) {
   // 두 번째 데이터: 퀴즈별 분포/상세용
-  const [detailData] = useState<fetchQuizDetailStatResult | null>(
+  const [detailData,setDetailData] = useState<fetchQuizDetailStatResult | null>(
     mockDetailData,
   );
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDetailData(mockDetailData);
+    }, 4000);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <Masonry
@@ -92,6 +100,8 @@ export default function StatisticsContainer({
       />
       <QuizCorrectRates quizList={statData.quizList} />
 
+
+  
       {detailData && detailData.length > 0 ? (
         detailData.map((quiz: QuizDetailStat) => (
           <QuizDetailChart key={quiz.quizId} quiz={quiz} />
