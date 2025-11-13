@@ -33,3 +33,12 @@ export interface ShortAnswerQuizDetail {
   }>;
   etcAnswers: string[];
 }
+
+export interface FetchQuizDetailStatResponse {
+  isSuccess: boolean;
+  code: string;
+  message: string;
+  result: {
+    result: fetchQuizDetailStatResult;
+  };
+}
